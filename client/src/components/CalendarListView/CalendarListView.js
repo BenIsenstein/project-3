@@ -12,15 +12,29 @@ const CalendarListView = () => {
 
   const SingleEntry = (props) => (
     <div {...props}>
-      <h2>{props.title || "No title"}</h2>   
+      <h3>{props.task || "No title"}</h3>   
       <p>{props.date || "No date"}</p> 
       <p>{props.item || "No item"}</p>
-      <p>{props.task || "No task"}</p>
     </div>
   )
 
   useEffect(() => {
     const fetchCalendarEntries = async () => {
+      const monthsObject = {
+        0: "January",
+        1: "February",
+        2: "March",
+        3: "April",
+        4: "May",
+        5: "June",
+        6: "July",
+        7: "August",
+        8: "September",
+        9: "October",
+        10: "November",
+        11: "December"
+      }
+
       const setNoneFound = () => setEntries([{
         title: "No Calendar Entries Found",
         date: " ",
@@ -32,8 +46,19 @@ const CalendarListView = () => {
         let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
 
-        if (resObject.entries) setEntries(resObject.entries)
-        else setNoneFound()
+        if (resObject.calendarEntryList) {
+            let list = resObject.calendarEntryList
+
+            for (let entry of list) {
+                let date = new Date(entry.date)
+                entry.date = `${monthsObject[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
+            }
+
+            setEntries(list)
+        }
+        else {
+            setNoneFound()
+        }
       }  
       catch (err) {
         setNoneFound()
