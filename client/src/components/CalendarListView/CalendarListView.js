@@ -29,7 +29,7 @@ const CalendarListView = () => {
       }])
 
       try {
-        let entriesResponse = await fetch("./api/calendar/entries/:id")
+        let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
 
         if (resObject.entries) setEntries(resObject.entries)
