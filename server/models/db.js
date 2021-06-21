@@ -52,7 +52,7 @@ const addUser = async (newUser) => {
 
 const closeDb = async () => await db.close({ force: true })
 
-const searchByFragment = async (model, attribute, fragment) => await model.find({ [attribute]: new RegExp(`.*${fragment}.*`, "i") })
+const searchByFragment = async (Model, attribute, fragment) => await Model.find({ [attribute]: new RegExp(`.*${fragment}.*`, "i") })
   
 
 module.exports = {
