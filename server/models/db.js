@@ -1,5 +1,5 @@
 require("dotenv").config()
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 /* Moved credentials to .env */
 
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     dateSignedUp: String
 })
-  
+
 userSchema.methods.validPassword = function (pwd) {
   return this.password === pwd
 }
@@ -47,6 +47,32 @@ const addUser = async (newUser) => {
   return result.username + " succesfully added to database!"
 }
 
+// -------------------------------------------------------------------
+// Define CalendarEntries Collection Schema
+const calendarEntriesSchema = new mongoose.Schema({
+  date: String,
+  item: String,
+  task: String,
+  description: String
+})
+
+// Define functions
+// const CalendarEntry = mongoose.model("CalendarEntry", calendarEntriesSchema)
+const CalendarEntry = mongoose.model("CalendarEntry", calendarEntriesSchema, "CalendarEntries")
+// module.exports = mongoose.model ('Cart', cartSchema, 'carts')
+
+const listAllCalendarEntries = async () => await CalendarEntry.find({})
+
+const addCalendarEntry = async (newCalendarEntry) => await newCalendarEntry.save()
+
+const deleteCalendarEntry = async (id) => await CalendarEntry.deleteOne({ _id: id })
+
+// const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
+// const findGardenByAddress = async (address) => await CalendarEntry.findOne({ address: address })
+
+// -------------------------------------------------------------------
+
+
 
 // General db functions
 
@@ -61,5 +87,9 @@ module.exports = {
     findUserByName,
     addUser,
     closeDb,
-    searchByFragment
+    searchByFragment,
+    CalendarEntry,
+    listAllCalendarEntries,
+    addCalendarEntry,
+    deleteCalendarEntry
 }
