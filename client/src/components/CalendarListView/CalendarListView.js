@@ -24,21 +24,6 @@ const CalendarListView = () => {
   // Effect to fetch all entries
   useEffect(() => {
     const fetchCalendarEntries = async () => {
-      const monthsObject = {
-        0: "January",
-        1: "February",
-        2: "March",
-        3: "April",
-        4: "May",
-        5: "June",
-        6: "July",
-        7: "August",
-        8: "September",
-        9: "October",
-        10: "November",
-        11: "December"
-      }
-
       try {
         let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
@@ -48,12 +33,8 @@ const CalendarListView = () => {
 
         // Make a Date object out of the entry.date string,
         // Use built-in methods to grab month/day/year
-        for (let entry of list) {
-          let date = new Date(entry.date)
-
-          entry.date = date.toDateString()
-        }
-
+        for (let entry of list) entry.date = new Date(entry.date).toDateString()
+        
         setEntries(list) 
       }  
       catch (err) {
