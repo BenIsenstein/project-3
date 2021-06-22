@@ -50,7 +50,7 @@ const addUser = async (newUser) => {
 // -------------------------------------------------------------------
 // Define CalendarEntries Collection Schema
 const calendarEntriesSchema = new mongoose.Schema({
-  date: String,
+  date: Date,
   item: String,
   task: String,
   description: String
