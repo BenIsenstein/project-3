@@ -58,7 +58,7 @@ router.get('/get/:id', async (req, res) => {
 
 
 // Delete Calendar Entry by ID
-router.delete('/deleteCalendarEntry/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
   try {
 
     /*res.json({ deletedCalendarEntry: await deleteCalendarEntry(req.params.id) })*/
