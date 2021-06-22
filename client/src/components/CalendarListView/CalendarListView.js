@@ -8,19 +8,22 @@ import DeleteEntryButton from '../DeleteEntryButton'
 const CalendarListView = () => {
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
-    return { title: " ", date: " ", item: " ", task: " " }
+    return { 
+      date: " ", 
+      entries: [{ title: " ", date: " ", item: " ", task: " " }] 
+    }
   }, [])
 
   // State for entries
-  const [entries, setEntries] = useState([{ 
-    title: "Loading...", 
+  const [dates, setDates] = useState([{ 
+    date: "Loading...", 
     ...entryTemplate 
   }])
 
   // Function in case the user's calendar is empty
   const setNoneFound = useMemo(() => 
-    () => setEntries([{ 
-      title: "No Calendar Entries Found", 
+    () => setDates([{ 
+      date: "No Calendar Entries Found", 
       ...entryTemplate 
     }]), 
 
@@ -38,9 +41,26 @@ const CalendarListView = () => {
 
         // Make a Date object out of the entry.date ISO string,
         // Use built-in method to grab nice-looking string
-        for (let entry of list) entry.date = new Date(entry.date).toDateString()
+        let datesArray = []
+
+        for (let entry of list) { 
+          let date = new Date(entry.date).toDateString()
+          entry.date = date
+          if (!datesArray.includes(date)) datesArray.push(date)
+        }
+
+        datesArray = datesArray.map(date => {return {date: date, entries: [] }})
+          
+        for (let date of datesArray) {
+          for (let entry of list) {
+            if (entry.date === date.date) {
+              delete entry.date
+              date.entries.push(entry)
+            }
+          }
+        }
         
-        setEntries(list) 
+        setDates(datesArray) 
       }  
       catch (err) {
         setNoneFound()
@@ -58,8 +78,7 @@ const CalendarListView = () => {
 
   // Little component for a single calendar entry
   const SingleEntry = (props) => {
-    let h2 = { fontSize: "20px" }
-    let marginRight = { marginRight: '15px' }
+    let h3 = { fontSize: "20px" }
 
     return (
       <Accordion {...props}>
@@ -67,15 +86,13 @@ const CalendarListView = () => {
           expandIcon={<ExpandMoreIcon />}
           id="Single-entry"
         >
-          <div style={marginRight}>
-            <h2 style={h2}>
+          <div>
+            <h3 style={h3}>
               {props.task || "No task"}
-            </h2> 
+            </h3> 
             <p>{props.item || "No item"}</p>  
           </div>
-          <p>
-            {props.date || "No date"}
-          </p>     
+             
         </AccordionSummary>
         <AccordionDetails>
           {props.description} 
@@ -90,7 +107,15 @@ const CalendarListView = () => {
   
 
   return <>
-    { entries.map((entry, index) => <SingleEntry key={index} {...entry} />) }
+    {dates.map((date, index) => {
+        return (
+          <div key={index}>
+            <h2>{date.date || "No date"}</h2>
+            {date.entries.map((entry, index) => <SingleEntry key={index} {...entry} />)}
+          </div>
+        )
+      }) 
+    }
   </>
 }
 
