@@ -9,16 +9,15 @@ const CalendarListView = () => {
       task: " "
   }])
 
-  const SingleEntry = (props) => (
-    <div {...props}>
-      <h3>{props.task || "No title"}</h3>   
-      <p>{props.date || "No date"}</p> 
-      <p>{props.item || "No item"}</p>
-    </div>
-  )
-
   useEffect(() => {
     const fetchCalendarEntries = async () => {
+      const setNoneFound = () => setEntries([{
+        title: "No Calendar Entries Found",
+        date: " ",
+        item: " ",
+        task: " "
+      }])
+
       const monthsObject = {
         0: "January",
         1: "February",
@@ -33,13 +32,6 @@ const CalendarListView = () => {
         10: "November",
         11: "December"
       }
-
-      const setNoneFound = () => setEntries([{
-        title: "No Calendar Entries Found",
-        date: " ",
-        item: " ",
-        task: " "
-      }])
 
       try {
         let entriesResponse = await fetch("./api/calendarEntry/get")
@@ -68,6 +60,18 @@ const CalendarListView = () => {
 
     fetchCalendarEntries()
   }, [])
+
+  let entryH2 = {fontSize: "20px"}
+
+  const SingleEntry = (props) => (
+    <div {...props}>
+      <h2 style={entryH2}>
+        {props.task || "No title"}
+      </h2>   
+      <p>{props.date || "No date"}</p> 
+      <p>{props.item || "No item"}</p>
+    </div>
+  )
 
   return <> {entries.map((entry, index) => <SingleEntry key={index} {...entry} />)} </>
 }
