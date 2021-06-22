@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-
-import "./CalendarListView.css";
+import React, { useEffect, useState } from "react"
+import "./CalendarListView.css"
 
 const CalendarListView = () => {
   const [entries, setEntries] = useState([{
@@ -8,7 +7,7 @@ const CalendarListView = () => {
       date: " ",
       item: " ",
       task: " "
-  }]);
+  }])
 
   const SingleEntry = (props) => (
     <div {...props}>
@@ -45,20 +44,20 @@ const CalendarListView = () => {
       try {
         let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
+        let list = resObject.calendarEntryList
 
-        if (resObject.calendarEntryList) {
-            let list = resObject.calendarEntryList
+        if (!list) return setNoneFound()
+        
+        for (let entry of list) {
+          let date = new Date(entry.date)
+          let month = monthsObject[date.getMonth()]
+          let day = date.getDate()
+          let year = date.getFullYear()
 
-            for (let entry of list) {
-                let date = new Date(entry.date)
-                entry.date = `${monthsObject[date.getMonth()]} ${date.getDate()} ${date.getFullYear()}`
-            }
-
-            setEntries(list)
+          entry.date = `${month} ${day} ${year}`
         }
-        else {
-            setNoneFound()
-        }
+
+        setEntries(list) 
       }  
       catch (err) {
         setNoneFound()
@@ -70,11 +69,7 @@ const CalendarListView = () => {
     fetchCalendarEntries()
   }, [])
 
-  return (
-    <div>
-        {entries.map((entry, index) => <SingleEntry key={index} {...entry} />)}
-    </div>
-  )
-};
+  return <> {entries.map((entry, index) => <SingleEntry key={index} {...entry} />)} </>
+}
 
-export default CalendarListView;
+export default CalendarListView
