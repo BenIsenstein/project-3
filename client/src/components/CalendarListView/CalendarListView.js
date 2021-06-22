@@ -1,55 +1,92 @@
-import React, { useEffect, useState } from "react";
-
-import "./CalendarListView.css";
+import React, { useEffect, useState, useMemo } from "react"
+import "./CalendarListView.css"
 
 const CalendarListView = () => {
-  const [entries, setEntries] = useState([{
-      title: "Loading...",
-      date: " ",
-      item: " ",
-      task: " "
-  }]);
+  // Template for declaring useState() and setNoneFound()
+  const entryTemplate = useMemo(() => {
+    return { title: " ", date: " ", item: " ", task: " " }
+  }, [])
 
-  const SingleEntry = (props) => (
-    <div {...props}>
-      <h2>{props.title || "No title"}</h2>   
-      <p>{props.date || "No date"}</p> 
-      <p>{props.item || "No item"}</p>
-      <p>{props.task || "No task"}</p>
-    </div>
-  )
+  // State for entries
+  const [entries, setEntries] = useState([{ 
+    title: "Loading...", 
+    ...entryTemplate 
+  }])
 
+  // Function in case the user's calendar is empty
+  const setNoneFound = useMemo(() => 
+    () => setEntries([{ 
+      title: "No Calendar Entries Found", 
+      ...entryTemplate 
+    }]), 
+  [entryTemplate])
+
+  // Effect to fetch all entries
   useEffect(() => {
     const fetchCalendarEntries = async () => {
-      const setNoneFound = () => setEntries([{
-        title: "No Calendar Entries Found",
-        date: " ",
-        item: " ",
-        task: " "
-      }])
+      const monthsObject = {
+        0: "January",
+        1: "February",
+        2: "March",
+        3: "April",
+        4: "May",
+        5: "June",
+        6: "July",
+        7: "August",
+        8: "September",
+        9: "October",
+        10: "November",
+        11: "December"
+      }
 
       try {
-        let entriesResponse = await fetch("./api/calendar/entries/:id")
+        let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
+        let list = resObject.calendarEntryList
 
-        if (resObject.entries) setEntries(resObject.entries)
-        else setNoneFound()
+        if (!list) return setNoneFound()
+
+        // Make a Date object out of the entry.date string,
+        // Use built-in methods to grab month/day/year
+        for (let entry of list) {
+          let date = new Date(entry.date)
+          let month = monthsObject[date.getMonth()]
+          let day = date.getDate()
+          let year = date.getFullYear()
+
+          entry.date = `${month} ${day} ${year}`
+        }
+
+        setEntries(list) 
       }  
       catch (err) {
         setNoneFound()
         console.log(err)
-        alert("There was an error loading your calendar. We're fixing it as fast as we can.")
+        alert(`
+          There was an error loading your calendar. 
+          We're fixing it as fast as we can.
+        `)
       }
     }
 
     fetchCalendarEntries()
-  }, [])
+  }, [entryTemplate, setNoneFound])
 
-  return (
-    <div>
-        {entries.map((entry, index) => <SingleEntry key={index} {...entry} />)}
+  // Little component for a single calendar entry
+  const SingleEntry = (props) => (
+    <div {...props}>
+      <h2 style={{fontSize: "20px"}}
+      >
+        {props.task || "No task"}
+      </h2>   
+      <p>{props.date || "No date"}</p> 
+      <p>{props.item || "No item"}</p>
     </div>
   )
-};
 
-export default CalendarListView;
+  return <>
+    { entries.map((entry, index) => <SingleEntry key={index} {...entry} />) }
+  </>
+}
+
+export default CalendarListView
