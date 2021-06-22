@@ -59,17 +59,12 @@ const calendarEntriesSchema = new mongoose.Schema({
 // Define functions
 // const CalendarEntry = mongoose.model("CalendarEntry", calendarEntriesSchema)
 const CalendarEntry = mongoose.model("CalendarEntry", calendarEntriesSchema, "CalendarEntries")
-// module.exports = mongoose.model ('Cart', cartSchema, 'carts')
-
-const listAllCalendarEntries = async () => await CalendarEntry.find({})
 
 const addCalendarEntry = async (newCalendarEntry) => await newCalendarEntry.save()
-
+const listAllCalendarEntries = async () => await CalendarEntry.find({})
+const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
 const deleteCalendarEntry = async (id) => await CalendarEntry.deleteOne({ _id: id })
-
-// const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
-// const findGardenByAddress = async (address) => await CalendarEntry.findOne({ address: address })
-
+// const deleteCalendarEntry = async (id) => await CalendarEntry.findByIdAndDelete({ _id: id })
 // -------------------------------------------------------------------
 
 
@@ -89,7 +84,8 @@ module.exports = {
     closeDb,
     searchByFragment,
     CalendarEntry,
-    listAllCalendarEntries,
     addCalendarEntry,
+    listAllCalendarEntries,
+    findCalendarEntryById,
     deleteCalendarEntry
 }

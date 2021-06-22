@@ -1,5 +1,5 @@
 const express = require('express')
-const {CalendarEntry, listAllCalendarEntries, addCalendarEntry, deleteCalendarEntry} = require('../models/db')
+const {CalendarEntry, addCalendarEntry, listAllCalendarEntries, findCalendarEntryById, deleteCalendarEntry} = require('../models/db')
 let router = express.Router()
 
 
@@ -15,23 +15,40 @@ router.post('/add', async (req, res) => {
     res.json({successMessage: 'Added!'})
   }
   catch(err) {
-    console.log("Error adding a garden:", err)
+    console.log("Error adding a calendar entry:", err)
   }
 })
 
+
+// get all calendar entries 
+router.get('/get', async (req, res) => {
+  try { res.json({ calendarEntryList: await listAllCalendarEntries() }) }
+  
+  catch(err) {console.log('error getting all calendar entries:', err)}
+})
+
+
+// get Calendar Entry by ID
+router.get('/get/:id', async (req, res) => {
+  try { res.json({ calendarEntry: await findCalendarEntryById(req.params.id) }) }
+
+  catch(err) {console.log('ERROR get Calendar Entry by ID:', err)}
+})
+
+
 // update calendar entry by id
 // router.put('/edit/:id', async (req, res) => {
-//   let gardenToUpdate = req.body
+//   let calendarEntryToUpdate = req.body
   
 //   try {
-//     await Garden.findByIdAndUpdate(req.params.id, gardenToUpdate, {new: true});
+//     await CalendarEntry.findByIdAndUpdate(req.params.id, calendarEntryToUpdate, {new: true});
 //     res.json({message: 'success!'})
 //   }
 //   catch(err) {
 //     console.log(err)
 
 //     if (err.code === 11000) {
-//       res.status(409).json({message: 'Garden ' + gardenToUpdate.name + ' already exists'});      
+//       res.status(409).json({message: 'Calendar entry already exists'});      
 //     }
 //     else {
 //       res.status(500).json({message: '500 error.'})
@@ -39,12 +56,31 @@ router.post('/add', async (req, res) => {
 //   }
 // })
 
-// get all calendar entries 
-router.get('/get', async (req, res) => {
-  try { res.json({ calendarEntryList: await listAllCalendarEntries() }) }
-  
-  catch(err) {console.log('error getting all gardens:', err)}
+
+// Delete Calendar Entry by ID
+router.delete('/deleteCalendarEntry/:id', async (req, res) => {
+  try {
+
+    /*res.json({ deletedCalendarEntry: await deleteCalendarEntry(req.params.id) })*/
+    let deletedCalendarEntry = await deleteCalendarEntry(req.params.id)
+    // let deletedCalendarEntry = await CalendarEntry.findByIdAndDelete(req.params.id)
+    if (!deletedCalendarEntry) {
+      res.sendStatus(404)
+    } 
+    else {
+      /*res.send(deletedCalendarEntry)*/
+      res.json({successMessage: 'Delete was succesful!'})
+    }
+  }
+  catch (err) {
+    console.log(err)
+    /*res.sendStatus(500)*/
+    res.status(500).json({message: '500 error.'})
+  }
 })
+
+
+
 
 
 
@@ -73,34 +109,7 @@ router.get('/get', async (req, res) => {
 //   }
 // })
 
-// delete task
-// router.delete('/deleteTask/:id', async (req, res)  => {
-//   try {
-//     let currentGarden = await Garden.findById(req.params.id)
 
-//     currentGarden.tasks = currentGarden.tasks.filter(task => task.id !== req.body.taskId)
-
-//     await currentGarden.save()
-//     res.json({successMessage: 'Delete was succesful!'})
-//   }
-//   catch(err) {
-//     console.log(err)
-
-//     if (err.code === 11000) {
-//       res.status(409).json({message: 'Task ' + taskToUpdate.name + ' already deleted'});      
-//     }
-//     else {
-//       res.status(500).json({message: '500 error.'})
-//     }
-//   }
-// })
-
-// get Calendar Entry by ID
-// router.get('/get/:id', async (req, res) => {
-//   try { res.json({ calendarEntry: await findCalendarEntryById(req.params.id) }) }
-
-//   catch(err) {console.log('ERROR get Calendar Entry by ID:', err)}
-// })
 
 module.exports = router
 
