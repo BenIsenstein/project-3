@@ -21,6 +21,7 @@ const CalendarListView = () => {
       title: "No Calendar Entries Found", 
       ...entryTemplate 
     }]), 
+
   [entryTemplate])
 
   // Effect to fetch all entries
@@ -33,8 +34,8 @@ const CalendarListView = () => {
 
         if (!list) return setNoneFound()
 
-        // Make a Date object out of the entry.date string,
-        // Use built-in methods to grab month/day/year
+        // Make a Date object out of the entry.date ISO string,
+        // Use built-in method to grab nice-looking string
         for (let entry of list) entry.date = new Date(entry.date).toDateString()
         
         setEntries(list) 
@@ -50,37 +51,26 @@ const CalendarListView = () => {
     }
 
     fetchCalendarEntries()
+    
   }, [entryTemplate, setNoneFound])
 
   // Little component for a single calendar entry
-  const descriptionPanel = (props) => (
-    <Accordion>
-      <AccordionSummary
-          expandIcon={ExpandMoreIcon}
-          id="Single-entry"
-        >
-          
-        </AccordionSummary>
-        <AccordionDetails>
-          
-        </AccordionDetails>
-    </Accordion>
-  )
-
   const SingleEntry = (props) => {
     const h2 = { fontSize: "20px" }
 
     return (
       <Accordion {...props}>
         <AccordionSummary
-        expandIcon={ExpandMoreIcon}
-        id="Single-entry"
+          expandIcon={<ExpandMoreIcon />}
+          id="Single-entry"
         >
-          <h2 style={h2}>
-            {props.task || "No task"}
-          </h2>   
-          <p>{props.date || "No date"}</p> 
-          < p>{props.item || "No item"}</p>
+          <div style={{marginRight: '10px'}}>
+            <h2 style={h2}>
+              {props.task || "No task"}
+            </h2> 
+            <p>{props.item || "No item"}</p>  
+          </div>
+          <p>{props.date || "No date"}</p>     
         </AccordionSummary>
         <AccordionDetails>
           {props.description} 
