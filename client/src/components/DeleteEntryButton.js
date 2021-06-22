@@ -1,15 +1,15 @@
 import React from "react"
 
-export default function DeleteEntryButton ( {entryId} ) {
+export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
 
   async function DeleteEntry() {
     try {
       let response = await fetch(`/api/calendarEntry/delete/${entryId}`,
-        {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          // body: JSON.stringify(update, null, 2)
-        })
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        // body: JSON.stringify(update, null, 2)
+      })
       if(!response){
         console.log("Error on DELETE method.")
       }
@@ -17,14 +17,16 @@ export default function DeleteEntryButton ( {entryId} ) {
         let data = await response.json()
         console.log(response)
         console.log(data)
+        
+        // Remove calendar entry from STATE and trigger a REFRESH of the list on the screen
+        setDates(dates.filter((item) => item._id !== entryId))
+        
       }    
 
     }
     catch (err) {
       console.log("Problem DELETING entry!")
     }
-
-    /* Trigger REFRESH of Calendar entries in STATE! */
 
   }
 

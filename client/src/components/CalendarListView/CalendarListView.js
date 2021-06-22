@@ -96,7 +96,7 @@ const CalendarListView = () => {
         </AccordionSummary>
         <AccordionDetails>
           {props.description} 
-          <DeleteEntryButton entryId="60d21df7b32d0c334cde6928" />
+          <DeleteEntryButton entryId={props._id} dates={dates} setDates={setDates} />
         
 
         </AccordionDetails>
