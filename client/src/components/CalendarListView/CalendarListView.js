@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react"
+import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
+import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
 import "./CalendarListView.css"
 
 const CalendarListView = () => {
@@ -19,26 +21,12 @@ const CalendarListView = () => {
       title: "No Calendar Entries Found", 
       ...entryTemplate 
     }]), 
+
   [entryTemplate])
 
   // Effect to fetch all entries
   useEffect(() => {
     const fetchCalendarEntries = async () => {
-      const monthsObject = {
-        0: "January",
-        1: "February",
-        2: "March",
-        3: "April",
-        4: "May",
-        5: "June",
-        6: "July",
-        7: "August",
-        8: "September",
-        9: "October",
-        10: "November",
-        11: "December"
-      }
-
       try {
         let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
@@ -46,14 +34,10 @@ const CalendarListView = () => {
 
         if (!list) return setNoneFound()
 
-        // Make a Date object out of the entry.date string,
-        // Use built-in methods to grab month/day/year
-        for (let entry of list) {
-          let date = new Date(entry.date)
-
-          entry.date = date.toDateString()
-        }
-
+        // Make a Date object out of the entry.date ISO string,
+        // Use built-in method to grab nice-looking string
+        for (let entry of list) entry.date = new Date(entry.date).toDateString()
+        
         setEntries(list) 
       }  
       catch (err) {
@@ -67,19 +51,35 @@ const CalendarListView = () => {
     }
 
     fetchCalendarEntries()
+    
   }, [entryTemplate, setNoneFound])
 
   // Little component for a single calendar entry
-  const SingleEntry = (props) => (
-    <div {...props}>
-      <h2 style={{fontSize: "20px"}}
-      >
-        {props.task || "No task"}
-      </h2>   
-      <p>{props.date || "No date"}</p> 
-      <p>{props.item || "No item"}</p>
-    </div>
-  )
+  const SingleEntry = (props) => {
+    const h2 = { fontSize: "20px" }
+
+    return (
+      <Accordion {...props}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          id="Single-entry"
+        >
+          <div style={{marginRight: '10px'}}>
+            <h2 style={h2}>
+              {props.task || "No task"}
+            </h2> 
+            <p>{props.item || "No item"}</p>  
+          </div>
+          <p>{props.date || "No date"}</p>     
+        </AccordionSummary>
+        <AccordionDetails>
+          {props.description} 
+        </AccordionDetails>
+      </Accordion>    
+    )
+  }
+
+  
 
   return <>
     { entries.map((entry, index) => <SingleEntry key={index} {...entry} />) }
