@@ -61,11 +61,12 @@ const CalendarListView = () => {
     fetchCalendarEntries()
   }, [])
 
-  let entryH2 = {fontSize: "20px"}
+  let h2 = {fontSize: "20px"}
 
   const SingleEntry = (props) => (
     <div {...props}>
-      <h2 style={entryH2}>
+      <h2 style={{fontSize: "20px"}}
+      >
         {props.task || "No title"}
       </h2>   
       <p>{props.date || "No date"}</p> 
