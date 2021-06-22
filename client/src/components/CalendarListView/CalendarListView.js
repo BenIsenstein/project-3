@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo } from "react"
 import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
 import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
 import "./CalendarListView.css"
+import DeleteEntryButton from '../DeleteEntryButton'
+
 
 const CalendarListView = () => {
   // Template for declaring useState() and setNoneFound()
@@ -74,6 +76,9 @@ const CalendarListView = () => {
         </AccordionSummary>
         <AccordionDetails>
           {props.description} 
+          <DeleteEntryButton entryId="60d21df7b32d0c334cde6928" />
+        
+
         </AccordionDetails>
       </Accordion>    
     )
