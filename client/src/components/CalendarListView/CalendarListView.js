@@ -53,12 +53,13 @@ const CalendarListView = () => {
     }
 
     fetchCalendarEntries()
-    
+
   }, [entryTemplate, setNoneFound])
 
   // Little component for a single calendar entry
   const SingleEntry = (props) => {
-    const h2 = { fontSize: "20px" }
+    let h2 = { fontSize: "20px" }
+    let marginRight = { marginRight: '15px' }
 
     return (
       <Accordion {...props}>
@@ -66,13 +67,15 @@ const CalendarListView = () => {
           expandIcon={<ExpandMoreIcon />}
           id="Single-entry"
         >
-          <div style={{marginRight: '10px'}}>
+          <div style={marginRight}>
             <h2 style={h2}>
               {props.task || "No task"}
             </h2> 
             <p>{props.item || "No item"}</p>  
           </div>
-          <p>{props.date || "No date"}</p>     
+          <p>
+            {props.date || "No date"}
+          </p>     
         </AccordionSummary>
         <AccordionDetails>
           {props.description} 
