@@ -50,11 +50,8 @@ const CalendarListView = () => {
         // Use built-in methods to grab month/day/year
         for (let entry of list) {
           let date = new Date(entry.date)
-          let month = monthsObject[date.getMonth()]
-          let day = date.getDate()
-          let year = date.getFullYear()
 
-          entry.date = `${month} ${day} ${year}`
+          entry.date = date.toDateString()
         }
 
         setEntries(list) 
