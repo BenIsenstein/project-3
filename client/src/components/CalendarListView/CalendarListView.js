@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react"
+import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
+import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
 import "./CalendarListView.css"
 
 const CalendarListView = () => {
@@ -51,16 +53,43 @@ const CalendarListView = () => {
   }, [entryTemplate, setNoneFound])
 
   // Little component for a single calendar entry
-  const SingleEntry = (props) => (
-    <div {...props}>
-      <h2 style={{fontSize: "20px"}}
-      >
-        {props.task || "No task"}
-      </h2>   
-      <p>{props.date || "No date"}</p> 
-      <p>{props.item || "No item"}</p>
-    </div>
+  const descriptionPanel = (props) => (
+    <Accordion>
+      <AccordionSummary
+          expandIcon={ExpandMoreIcon}
+          id="Single-entry"
+        >
+          
+        </AccordionSummary>
+        <AccordionDetails>
+          
+        </AccordionDetails>
+    </Accordion>
   )
+
+  const SingleEntry = (props) => {
+    const h2 = { fontSize: "20px" }
+
+    return (
+      <Accordion {...props}>
+        <AccordionSummary
+        expandIcon={ExpandMoreIcon}
+        id="Single-entry"
+        >
+          <h2 style={h2}>
+            {props.task || "No task"}
+          </h2>   
+          <p>{props.date || "No date"}</p> 
+          < p>{props.item || "No item"}</p>
+        </AccordionSummary>
+        <AccordionDetails>
+          {props.description} 
+        </AccordionDetails>
+      </Accordion>    
+    )
+  }
+
+  
 
   return <>
     { entries.map((entry, index) => <SingleEntry key={index} {...entry} />) }
