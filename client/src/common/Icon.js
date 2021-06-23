@@ -1,8 +1,13 @@
 import styled from 'styled-components'
-import {ListUI} from '@styled-icons/boxicons-regular/ListUl'
+import {ListUl} from '@styled-icons/boxicons-regular/ListUl'
+import {Calendar} from '@styled-icons/boxicons-regular/Calendar'
 
-const Icon = styled(ListUI)`
-    color: yellow;
+const ListIcon = styled(ListUl)`
+    height: 2em;
 `
 
-export {Icon}
+const CalendarIcon = styled(Calendar)`
+    height: 2em;
+`
+
+export {ListIcon, CalendarIcon}

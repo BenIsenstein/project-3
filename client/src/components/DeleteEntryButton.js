@@ -1,4 +1,5 @@
 import React from "react"
+import { Button } from '../common'
 
 export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
 
@@ -32,7 +33,7 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
 
     return ( 
     <div>
-        <button 
+        <Button 
           className='delete-button'
           type='button'
           // onClick={VerifyDelete()}
@@ -42,7 +43,7 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
           }
         >
           Delete
-        </button>
+        </Button>
     </div>
     )
 }
