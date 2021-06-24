@@ -22,6 +22,7 @@ router.post('/add', async (req, res) => {
 
 // get all calendar entries 
 router.get('/get', async (req, res) => {
+  console.log("Call to Fetch DB Calendar Entries!")
   try { res.json({ calendarEntryList: await listAllCalendarEntries() }) }
   
   catch(err) {console.log('error getting all calendar entries:', err)}
