@@ -43,14 +43,17 @@ const CalendarListView = () => {
         // Use built-in method to grab nice-looking string
         let datesArray = []
 
+        // Fill datesArray with a string for each unique date
         for (let entry of list) { 
           let date = new Date(entry.date).toDateString()
           entry.date = date
           if (!datesArray.includes(date)) datesArray.push(date)
         }
 
+        // Turn each date string into the full structure with an empty array for <SingleEntries />
         datesArray = datesArray.map(date => {return {date: date, entries: [] }})
           
+        // Fill each date with matching entries
         for (let date of datesArray) {
           for (let entry of list) {
             if (entry.date === date.date) {
