@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
-import { ListIcon, CalendarIcon, SwitchViewButton, Button } from '../common'
+import { ListIcon, CalendarIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
 import './Calendar.css'
 
 import AddEntryModal from '../components/modals/AddEntryModal'
 import useAddEntryModal from '../components/modals/useAddEntryModal'
 
 const Calendar = () => {
-    const [calendarView, setCalendarView] = useState('ListView')
+    const [viewMode, setViewMode] = useState('ListView')
     const {isShowing, toggle} = useAddEntryModal()
 
     return (
-        <div className='calendar-pg'>
-            <div className='calendar-pg-container'>
+        <Page>
+            <PageContainer>
                 <div className='calendar-view-ctrl'>
                     <Button onClick={toggle}>New Task</Button>
                     <AddEntryModal
@@ -21,23 +21,23 @@ const Calendar = () => {
                         hide={toggle}
                     />
                     <SwitchViewButton 
-                        activeView={calendarView === 'ListView' ? true : false } 
-                        onClick={() => setCalendarView('ListView')}
+                        activeView={viewMode === 'ListView'} 
+                        onClick={() => setViewMode('ListView')}
                     >
                         <ListIcon />
                     </SwitchViewButton>
                     <SwitchViewButton 
-                        activeView={calendarView === 'CalendarView' ? true : false } 
-                        onClick={() => setCalendarView('CalendarView')}
+                        activeView={viewMode === 'CalendarView'} 
+                        onClick={() => setViewMode('CalendarView')}
                     >
                         <CalendarIcon />
                     </SwitchViewButton>
                 </div>
                 <div className='calendar-view-content'>
-                    {calendarView === 'ListView' && <CalendarListView />}
+                    {viewMode === 'ListView' && <CalendarListView />}
                 </div>
-            </div>
-        </div>
+            </PageContainer>
+        </Page>
     )
 }
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react"
-import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
-import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
-import "./CalendarListView.css"
-import DeleteEntryButton from '../DeleteEntryButton'
+// import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
+// import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
 
+// import DeleteEntryButton from '../DeleteEntryButton'
+import CustomAccordion from '../Accordion/Accordion'
 
 const CalendarListView = () => {
   // Template for declaring useState() and setNoneFound()
@@ -17,14 +17,14 @@ const CalendarListView = () => {
   // State for entries
   const [dates, setDates] = useState([{ 
     date: "Loading...", 
-    ...entryTemplate 
+    entries: entryTemplate.entries 
   }])
 
   // Function in case the user's calendar is empty
   const setNoneFound = useMemo(() => 
     () => setDates([{ 
       date: "No Calendar Entries Found", 
-      ...entryTemplate 
+      entries: entryTemplate.entries  
     }]), 
 
   [entryTemplate])
@@ -43,14 +43,17 @@ const CalendarListView = () => {
         // Use built-in method to grab nice-looking string
         let datesArray = []
 
+        // Fill datesArray with a string for each unique date
         for (let entry of list) { 
           let date = new Date(entry.date).toDateString()
           entry.date = date
           if (!datesArray.includes(date)) datesArray.push(date)
         }
 
+        // Turn each date string into the full structure with an empty array for <SingleEntries />
         datesArray = datesArray.map(date => {return {date: date, entries: [] }})
           
+        // Fill each date with matching entries
         for (let date of datesArray) {
           for (let entry of list) {
             if (entry.date === date.date) {
@@ -77,45 +80,36 @@ const CalendarListView = () => {
   }, [entryTemplate, setNoneFound])
 
   // Little component for a single calendar entry
-  const SingleEntry = (props) => {
-    let h3 = { fontSize: "20px" }
-
-    return (
-      <Accordion {...props}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          id="Single-entry"
-        >
-          <div>
-            <h3 style={h3}>
-              {props.item || "No item"}
-            </h3> 
-            <p>{props.task || "No task"}</p>  
-          </div>
+  // const SingleEntry = (props) => {
+  //   return (
+  //     <Accordion {...props}>
+  //       <AccordionSummary
+  //         expandIcon={<ExpandMoreIcon />}
+  //         id="Single-entry"
+  //       >
+  //         <div>
+  //           <h3>{props.item || "No item"}</h3> 
+  //           <p>{props.task || "No task"}</p>  
+  //         </div>
              
-        </AccordionSummary>
-        <AccordionDetails>
-          {props.description} 
-          <DeleteEntryButton entryId={props._id} dates={dates} setDates={setDates} />
-        
-
-        </AccordionDetails>
-      </Accordion>    
-    )
-  }
-
-  
+  //       </AccordionSummary>
+  //       <AccordionDetails>
+  //         {props.description} 
+  //         <DeleteEntryButton entryId={props._id} dates={dates} setDates={setDates} />
+  //       </AccordionDetails>
+  //     </Accordion>   
+  //   )
+  // }
 
   return <>
     {dates.map((date, index) => {
         return (
           <div key={index}>
-            <h2>{date.date || "No date"}</h2>
-            {date.entries.map((entry, index) => <SingleEntry key={index} {...entry} />)}
+              <h5>{date.date || "No date"}</h5>
+              {date.entries.map((entry, index) => <CustomAccordion key={index} dates={dates} setDates={setDates} {...entry} />)}              
           </div>
         )
-      }) 
-    }
+    })}
   </>
 }
 
