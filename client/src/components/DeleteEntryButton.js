@@ -1,6 +1,9 @@
 import React from "react"
 import { Button } from '../common'
 
+// import ConfirmDeleteModal from '../components/modals/ConfirmDeleteModal'
+// import useConfirmDeleteModal from '../components/modals/useConfirmDeleteModal'
+
 export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
 
   async function DeleteEntry() {
@@ -37,13 +40,19 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
           className='delete-button'
           type='button'
           // onClick={VerifyDelete()}
-          onClick={() =>
-            window.confirm("Are you sure you wish to delete this item?") &&
-            DeleteEntry()
-          }
+          onClick=          
+            {() =>
+              window.confirm("Are you sure you wish to delete this item?") &&
+              DeleteEntry()
+            } 
+          /*onClick={toggle}*/
         >
           Delete
         </Button>
+        {/* <ConfirmDeleteModal
+          isShowing={isShowing}
+          hide={toggle}
+        /> */}
     </div>
     )
 }

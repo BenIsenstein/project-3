@@ -88,9 +88,9 @@ const CalendarListView = () => {
         >
           <div>
             <h3 style={h3}>
-              {props.task || "No task"}
+              {props.item || "No item"}
             </h3> 
-            <p>{props.item || "No item"}</p>  
+            <p>{props.task || "No task"}</p>  
           </div>
              
         </AccordionSummary>
