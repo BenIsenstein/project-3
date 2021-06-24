@@ -17,14 +17,14 @@ const CalendarListView = () => {
   // State for entries
   const [dates, setDates] = useState([{ 
     date: "Loading...", 
-    ...entryTemplate 
+    entries: entryTemplate.entries 
   }])
 
   // Function in case the user's calendar is empty
   const setNoneFound = useMemo(() => 
     () => setDates([{ 
       date: "No Calendar Entries Found", 
-      ...entryTemplate 
+      entries: entryTemplate.entries  
     }]), 
 
   [entryTemplate])
