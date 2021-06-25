@@ -22,7 +22,12 @@ const Calendar = () => {
                             hide={toggle}
                         />                    
                     </div>
-                    <div className='calendar-view-ctrl'>
+
+                    <button onClick={() => setViewMode(viewMode)}> 
+                        Test refresh
+                    </button>
+
+                    <div className='calendar-view-ctrl'>  
                         <SwitchViewButton 
                             activeView={viewMode === 'ListView'} 
                             onClick={() => setViewMode('ListView')}

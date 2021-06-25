@@ -62,22 +62,18 @@ router.get('/get/:id', async (req, res) => {
 // Delete Calendar Entry by ID
 router.delete('/delete/:id', async (req, res) => {
   try {
-
-    /*res.json({ deletedCalendarEntry: await deleteCalendarEntry(req.params.id) })*/
     let deletedCalendarEntry = await deleteCalendarEntry(req.params.id)
-    // let deletedCalendarEntry = await CalendarEntry.findByIdAndDelete(req.params.id)
+
     if (!deletedCalendarEntry) {
-      res.sendStatus(404)
+      res.status(404).json({ success: false })
     } 
     else {
-      /*res.send(deletedCalendarEntry)*/
-      res.json({successMessage: 'Delete was succesful!'})
+      res.json({ success: true })
     }
   }
   catch (err) {
     console.log(err)
-    /*res.sendStatus(500)*/
-    res.status(500).json({message: '500 error.'})
+    res.status(500).json({ success: false })
   }
 })
 

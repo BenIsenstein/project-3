@@ -12,6 +12,10 @@ const CalendarListView = () => {
 
   const testEntriesList = userCalContext.calendarEntries
 
+  //define state for refreshing the component
+  const [refresh, setRefresh] = useState()
+  const reRenderList = () => setRefresh({})
+  
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
     return { 
@@ -93,7 +97,7 @@ const CalendarListView = () => {
               <h5>{date.date || "No date"}</h5>
             </div>
             <div className='list-entry'>
-              {date.entries.map((entry, index) => <Accordion key={index} dates={dates} setDates={setDates} {...entry} />)}               
+              {date.entries.map((entry, index) => <Accordion reRenderList={reRenderList} key={index} {...entry} />)}               
             </div>
              
           </div>

@@ -5,7 +5,7 @@ import './DeleteEntryButton.css'
 import ConfirmModal from './modals/ConfirmModal'
 import useConfirmModal from './modals/useConfirmModal'
 
-export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
+export default function DeleteEntryButton ({ entryId, reRenderList }) {
 
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
   
@@ -20,29 +20,32 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
       if(!response){
         console.log("Error on DELETE method.")
       }
-      else{
-        let data = await response.json()
-        console.log(response)
-        console.log(data)
+      else {
+        let resObject = await response.json()
         
+        if (!resObject.success) alert("Your entry wasn't deleted for some reason. We're working on it.")
+
         // Remove calendar entry from STATE and trigger a REFRESH of the list on the screen
        // setDates(dates.filter((item) => item._id !== entryId))
-        setDates(dates
-          .map((item) => {
-            return {
-              date: item.date,
-              entries: item.entries.filter(entry => entry._id !== entryId)
-            } 
-          })
-          .filter(item => {
-            return item.entries.length > 0
-          })
-        )
+        // setDates(dates
+        //   .map((item) => {
+        //     return {
+        //       date: item.date,
+        //       entries: item.entries.filter(entry => entry._id !== entryId)
+        //     } 
+        //   })
+        //   .filter(item => {
+        //     return item.entries.length > 0
+        //   })
+        // )
       }    
     }
     catch (err) {
       console.log("Problem DELETING entry!")
     }
+
+    reRenderList()
+    //window.location.reload()
 
   }
 
