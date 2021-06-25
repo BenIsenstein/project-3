@@ -1,6 +1,5 @@
 import React from "react"
 import { Button } from '../common'
-import { useHistory } from "react-router-dom"
 import './DeleteEntryButton.css'
 
 import ConfirmModal from './modals/ConfirmModal'
@@ -9,8 +8,6 @@ import useConfirmModal from './modals/useConfirmModal'
 export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
 
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
-
-  let history = useHistory()
   
   async function DeleteEntry() {
     try {
@@ -30,12 +27,17 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
         
         // Remove calendar entry from STATE and trigger a REFRESH of the list on the screen
        // setDates(dates.filter((item) => item._id !== entryId))
-          setDates(dates.map((item) => {
-          if item.entries.findIndex(_id !== entryId
-          
-        }))
-
-       // history.push(`/`)
+        setDates(dates
+          .map((item) => {
+            return {
+              date: item.date,
+              entries: item.entries.filter(entry => entry._id !== entryId)
+            } 
+          })
+          .filter(item => {
+            return item.entries.length > 0
+          })
+        )
       }    
     }
     catch (err) {
