@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import DateTimePicker from 'react-datetime-picker'
 //import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
-const AddEntryModal = ({ isShowing, hide }) => {
+const AddEntryModal = ({ isShowing, hide, reRenderList }) => {
   const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
   const [date, setDate] = useState()
 
@@ -31,6 +31,8 @@ const AddEntryModal = ({ isShowing, hide }) => {
       console.log('error adding calendar entry: ', err)
       alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
+
+    reRenderList()
   }
 
   if (isShowing) {

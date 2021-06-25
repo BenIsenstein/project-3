@@ -5,16 +5,14 @@ import './CalendarListView.css'
 
 import UserCalendarContext from "../../UserCalendarContext"
 
-const CalendarListView = () => {
+const CalendarListView = ({ reRenderList}) => {
 
   // Access global state in CONTEXT
   const userCalContext = useContext(UserCalendarContext)
 
   const testEntriesList = userCalContext.calendarEntries
 
-  //define state for refreshing the component
-  const [refresh, setRefresh] = useState()
-  const reRenderList = () => setRefresh({})
+  
   
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
@@ -42,6 +40,11 @@ const CalendarListView = () => {
   // Effect to fetch all entries
   useEffect(() => {
     const fetchCalendarEntries = async () => {
+      setDates([{ 
+        date: "Loading...", 
+        entries: entryTemplate.entries 
+      }])
+      
       try {
         let entriesResponse = await fetch("./api/calendarEntry/get")
         let resObject = await entriesResponse.json()
@@ -87,7 +90,7 @@ const CalendarListView = () => {
 
     fetchCalendarEntries()
 
-  }, [entryTemplate, setNoneFound])
+  }, [entryTemplate, setNoneFound, reRenderList])
 
   return <>
     {dates.map((date, index) => {

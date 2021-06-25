@@ -10,6 +10,10 @@ import useAddEntryModal from '../components/modals/useAddEntryModal'
 const Calendar = () => {
     const [viewMode, setViewMode] = useState('ListView')
     const {isShowing, toggle} = useAddEntryModal()
+    
+    //define state for refreshing the component
+    const [refresh, setRefresh] = useState()
+    const reRenderList = () => setRefresh({})
 
     return (
         <Page>
@@ -20,6 +24,7 @@ const Calendar = () => {
                         <AddEntryModal
                             isShowing={isShowing}
                             hide={toggle}
+                            reRenderList={reRenderList}
                         />                    
                     </div>
 
@@ -43,7 +48,7 @@ const Calendar = () => {
                     </div>                    
                 </div>
                 <div className='calendar-view-content'>
-                    {viewMode === 'ListView' && <CalendarListView />}
+                    {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}
                 </div>
             </PageContainer>
         </Page>
