@@ -1,0 +1,9 @@
+.calendar-list-entry-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.list-entry {
+    width: 100%;
+}

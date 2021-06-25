@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
 
 import Accordion from '../Accordion/Accordion'
+import './CalendarListView.css'
 
 import UserCalendarContext from "../../UserCalendarContext"
 
@@ -49,7 +50,7 @@ const CalendarListView = () => {
         let datesArray = []
 
         // Fill datesArray with a string for each unique date
-        for (let entry of list) { 
+        for (let entry of list) {
           let date = new Date(entry.date).toDateString()
           entry.date = date
           if (!datesArray.includes(date)) datesArray.push(date)
@@ -87,9 +88,14 @@ const CalendarListView = () => {
   return <>
     {dates.map((date, index) => {
         return (
-          <div key={index}>
+          <div key={index} className='calendar-list-entry-container'>
+            <div className='list-date'>
               <h5>{date.date || "No date"}</h5>
-              {date.entries.map((entry, index) => <Accordion key={index} dates={dates} setDates={setDates} {...entry} />)}              
+            </div>
+            <div className='list-entry'>
+              {date.entries.map((entry, index) => <Accordion key={index} dates={dates} setDates={setDates} {...entry} />)}               
+            </div>
+             
           </div>
         )
     })}

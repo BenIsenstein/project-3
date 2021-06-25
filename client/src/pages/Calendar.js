@@ -14,24 +14,28 @@ const Calendar = () => {
     return (
         <Page>
             <PageContainer>
-                <div className='calendar-view-ctrl'>
-                    <Button onClick={toggle}><AddIcon />New Task</Button>
-                    <AddEntryModal
-                        isShowing={isShowing}
-                        hide={toggle}
-                    />
-                    <SwitchViewButton 
-                        activeView={viewMode === 'ListView'} 
-                        onClick={() => setViewMode('ListView')}
-                    >
-                        <ListIcon />
-                    </SwitchViewButton>
-                    <SwitchViewButton 
-                        activeView={viewMode === 'CalendarView'} 
-                        onClick={() => setViewMode('CalendarView')}
-                    >
-                        <CalendarIcon />
-                    </SwitchViewButton>
+                <div className='calendar-top-options'>
+                    <div className='calendar-add-task'>
+                        <Button onClick={toggle}><AddIcon />New Task</Button>
+                        <AddEntryModal
+                            isShowing={isShowing}
+                            hide={toggle}
+                        />                    
+                    </div>
+                    <div className='calendar-view-ctrl'>
+                        <SwitchViewButton 
+                            activeView={viewMode === 'ListView'} 
+                            onClick={() => setViewMode('ListView')}
+                        >
+                            <ListIcon />
+                        </SwitchViewButton>
+                        <SwitchViewButton 
+                            activeView={viewMode === 'CalendarView'} 
+                            onClick={() => setViewMode('CalendarView')}
+                        >
+                            <CalendarIcon />
+                        </SwitchViewButton>
+                    </div>                    
                 </div>
                 <div className='calendar-view-content'>
                     {viewMode === 'ListView' && <CalendarListView />}

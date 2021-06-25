@@ -1,3 +1,9 @@
+.calendar-top-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
