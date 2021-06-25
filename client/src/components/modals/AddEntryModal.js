@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { Button } from '../../common'
 import { useForm } from "react-hook-form"
+import DateTimePicker from 'react-datetime-picker'
+//import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
 const AddEntryModal = ({ isShowing, hide }) => {
-  const { register, formState: { errors }, handleSubmit } = useForm({})
+  const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
+  const [date, setDate] = useState()
+
+  // update 'date' input field whenever the piece of state is changed
+  useEffect(() => setValue('date', date), [setValue, date])
 
   const onSubmit = async (data) => {
     let action = "/api/calendarEntry/add"
@@ -13,8 +19,6 @@ const AddEntryModal = ({ isShowing, hide }) => {
       headers: { "content-type": "application/json" },
       body: JSON.stringify(data)
     }
-
-    data.date = new Date().toString()
 
     try {
       let res = await fetch(action, options)
@@ -27,7 +31,6 @@ const AddEntryModal = ({ isShowing, hide }) => {
       console.log('error adding calendar entry: ', err)
       alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
-
   }
 
   if (isShowing) {
@@ -61,15 +64,17 @@ const AddEntryModal = ({ isShowing, hide }) => {
                 {errors.description && <p className="">{errors.description.message}</p>}
 
                 <label htmlFor="date">Date</label>
-                <input id="date" {...register("date", {required: "You must choose a date."})} name="date"/>
+                <DateTimePicker
+                  id="date"
+                  onChange={setDate}
+                  value={date}
+                />
+                <input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
                 {errors.date && <p className="">{errors.date.message}</p>}
 
-                <input type="submit" value="add entry" />
+                <Button important type="submit" value="add entry">Add Entry</Button>
+                <Button onClick={() => hide()}>Cancel</Button>
               </form>
-          </div>
-          <div>
-              <Button important>DONE</Button>
-              <Button>Cancel</Button>
           </div>
         </div>
       </div>
