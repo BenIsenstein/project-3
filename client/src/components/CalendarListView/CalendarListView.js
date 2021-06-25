@@ -1,11 +1,20 @@
-import React, { useEffect, useState, useMemo } from "react"
+import React, { useEffect, useState, useMemo, useContext } from "react"
+
 // import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core'
 // import  ExpandMoreIcon  from '@material-ui/icons/ExpandMore'
 
 // import DeleteEntryButton from '../DeleteEntryButton'
 import CustomAccordion from '../Accordion/Accordion'
 
+import UserCalendarContext from "../../UserCalendarContext"
+
 const CalendarListView = () => {
+
+  // Access global state in CONTEXT
+  const userCalContext = useContext(UserCalendarContext)
+
+  const testEntriesList = userCalContext.calendarEntries
+
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
     return { 
@@ -110,6 +119,19 @@ const CalendarListView = () => {
           </div>
         )
     })}
+
+    {/* <div>
+      {testEntriesList.map(mapItem => {
+        return (
+          <div key={mapItem.id}>
+            {mapItem}
+          </div>
+        )
+      })}                        
+    </div> */}
+
+
+
   </>
 }
 

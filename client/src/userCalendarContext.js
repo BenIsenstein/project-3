@@ -1,9 +1,10 @@
 import React from 'react'
 
-const userCalendarContext = React.createContext({
-    // username: '',
-    isAgent: false,
-    logIn: (username, isAgent) => {}
+const UserCalendarContext = React.createContext({
+    username: '',
+    calendarEntries: [{}],
+    logIn: (username, userType) => {},
+    logOut: () => {}
 })
 
-export default userCalendarContext
+export default UserCalendarContext
