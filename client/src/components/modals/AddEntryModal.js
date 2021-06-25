@@ -19,7 +19,7 @@ const AddEntryModal = ({ isShowing, hide }) => isShowing ? ReactDOM.createPortal
             ...INSERT FORM HERE...
         </div>
         <div>
-            <Button>SAVE</Button>
+            <Button important>DONE</Button>
             <Button>Cancel</Button>
         </div>
       </div>

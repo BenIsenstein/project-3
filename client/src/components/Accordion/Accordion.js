@@ -12,10 +12,8 @@ const AccordionContainer = styled.div`
 `
 
 const AccordionHeader = styled.button`
-  padding: 0.2em 1em;
-  background-color: #f8e8ff;
+  background-color: ${props => props.theme.scd};
   color: black;
-  cursor: pointer;
   display: flex;
   align-items: center;
   border: none;
@@ -72,7 +70,7 @@ const Accordion = props => {
 
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
-          {props.description}
+          <p>{props.description}</p>
           <DeleteEntryButton entryId={props._id} dates={props.dates} setDates={props.setDates} />
           <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>          
         </AccordionContentContainer>

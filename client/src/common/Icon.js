@@ -4,6 +4,7 @@ import {Calendar} from '@styled-icons/boxicons-regular/Calendar'
 import {NavigateNext} from '@styled-icons/material-rounded/NavigateNext'
 import {NavigateBefore} from '@styled-icons/material-rounded/NavigateBefore'
 import {Plus} from '@styled-icons/heroicons-solid/Plus'
+import {Trash} from '@styled-icons/octicons/Trash'
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
@@ -29,4 +30,9 @@ const AddIcon = styled(Plus)`
     margin-left: -0.5em;
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon}
+const TrashIcon = styled(Trash)`
+    height: 1em;
+    margin: 0 -0.4em;
+`
+
+export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon}

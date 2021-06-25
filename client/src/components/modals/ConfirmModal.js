@@ -17,9 +17,9 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, message, action
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <h3>
+              {/* <h3>
                 Confirm Action
-              </h3>
+              </h3> */}
               <p>
                 {message}
               </p>
@@ -29,7 +29,7 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, message, action
                   hideConfirmModal();
                   actionOnConfirm();
                 }}>
-                  OK
+                  Remove
                 </Button>
                 <Button important onClick={()=>{
                   hideConfirmModal()

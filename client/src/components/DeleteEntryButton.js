@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from '../common'
+import { Button, TrashIcon } from '../common'
 import './DeleteEntryButton.css'
 
 import ConfirmModal from './modals/ConfirmModal'
@@ -51,7 +51,7 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
       <ConfirmModal
         isConfirmModalShowing={isConfirmModalShowing}
         hideConfirmModal={toggleConfirmModal}
-        message="Are you sure you wish to delete this item?"
+        message="Are you sure you wish to remove this task?"
         actionOnConfirm={DeleteEntry}
       />
       <Button 
@@ -65,7 +65,7 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
         //   } 
         onClick={toggleConfirmModal}
       >
-        Delete
+        <TrashIcon />
       </Button>
     </div>
   )
