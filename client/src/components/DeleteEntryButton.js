@@ -29,8 +29,13 @@ export default function DeleteEntryButton ( {entryId, dates, setDates} ) {
         console.log(data)
         
         // Remove calendar entry from STATE and trigger a REFRESH of the list on the screen
-        setDates(dates.filter((item) => item._id !== entryId))
-        history.push(`/`)
+       // setDates(dates.filter((item) => item._id !== entryId))
+          setDates(dates.map((item) => {
+          if item.entries.findIndex(_id !== entryId
+          
+        }))
+
+       // history.push(`/`)
       }    
     }
     catch (err) {
