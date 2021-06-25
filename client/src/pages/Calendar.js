@@ -11,7 +11,7 @@ const Calendar = () => {
     const [viewMode, setViewMode] = useState('ListView')
     const {isShowing, toggle} = useAddEntryModal()
     
-    //define state for refreshing the component
+    //define state for refreshing the list view
     const [refresh, setRefresh] = useState()
     const reRenderList = () => setRefresh({})
 
