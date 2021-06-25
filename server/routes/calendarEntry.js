@@ -12,10 +12,11 @@ router.post('/add', async (req, res) => {
     body.messages = [] 
 
     await addCalendarEntry(new CalendarEntry(body))
-    res.json({successMessage: 'Added!'})
+    res.json({ success: true })
   }
   catch(err) {
     console.log("Error adding a calendar entry:", err)
+    res.json({ success: false })
   }
 })
 

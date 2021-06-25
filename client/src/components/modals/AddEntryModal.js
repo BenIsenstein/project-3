@@ -14,11 +14,14 @@ const AddEntryModal = ({ isShowing, hide }) => {
       body: JSON.stringify(data)
     }
 
+    data.date = new Date().toString()
+
     try {
       let res = await fetch(action, options)
       let resObject = await res.json()
 
-      if (resObject.success) hide()
+      hide()
+      if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
     }
     catch(err) {
       console.log('error adding calendar entry: ', err)
