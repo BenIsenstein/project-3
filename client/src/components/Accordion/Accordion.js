@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useHistory } from "react-router-dom"
 import styled, {css} from 'styled-components'
 
 import DeleteEntryButton from '../DeleteEntryButton'
-import { NextIcon } from '../../common'
+import { NextIcon, Button, slideInTop } from '../../common'
 
 const AccordionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  animation: ${slideInTop} 0.6s ease-in;
 `
 
 const AccordionHeader = styled.button`
   padding: 0.2em 1em;
-  background-color: #ff8cc0;
+  background-color: #f8e8ff;
   color: black;
   cursor: pointer;
   display: flex;
@@ -19,10 +21,6 @@ const AccordionHeader = styled.button`
   border: none;
   outline: none;
   transition: background-color 0.6s ease;
-
-  // &:hover {
-  //   background-color: #A7275E;
-  // }
 `
 
 const AccordionIcon = styled.span`
@@ -35,18 +33,20 @@ const AccordionIcon = styled.span`
 `
 
 const AccordionContent = styled.div`
-  background-color: #FFD4E7;
+  background-color: #fafafa;
   overflow: hidden;
   transition: max-height 0.6s ease;
 `
 
 const AccordionContentContainer = styled.div`
-  padding: 0.2em 1em;
+  padding: 0.5em 1em 0.8em 1em;
 `
 
-const CustomAccordion = props => {
+const Accordion = props => {
   const [active, setActive] = useState(false)
   const contentRef = useRef(null)
+
+  let history = useHistory()
 
   useEffect(() => {
     contentRef.current.style.maxHeight = active ? `${contentRef.current.scrollHeight}px` : '0px'
@@ -58,6 +58,7 @@ const CustomAccordion = props => {
 
   return (
     <AccordionContainer>
+
       <AccordionHeader onClick={toogleActive}>
         {/* <AccordionHeaderContainer>
 
@@ -72,11 +73,13 @@ const CustomAccordion = props => {
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
           {props.description}
-          <DeleteEntryButton entryId={props._id} dates={props.dates} setDates={props.setDates} />          
+          <DeleteEntryButton entryId={props._id} dates={props.dates} setDates={props.setDates} />
+          <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>          
         </AccordionContentContainer>
       </AccordionContent>
+
     </AccordionContainer>
   )
 }
 
-export default CustomAccordion
+export default Accordion

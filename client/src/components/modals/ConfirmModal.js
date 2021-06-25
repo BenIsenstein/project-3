@@ -31,7 +31,7 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, message, action
                 }}>
                   OK
                 </Button>
-                <Button onClick={()=>{
+                <Button important onClick={()=>{
                   hideConfirmModal()
                 }}>
                   Cancel

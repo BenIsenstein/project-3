@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
-import { ListIcon, CalendarIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
+import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
 import './Calendar.css'
 
 import AddEntryModal from '../components/modals/AddEntryModal'
@@ -15,7 +15,7 @@ const Calendar = () => {
         <Page>
             <PageContainer>
                 <div className='calendar-view-ctrl'>
-                    <Button onClick={toggle}>New Task</Button>
+                    <Button onClick={toggle}><AddIcon />New Task</Button>
                     <AddEntryModal
                         isShowing={isShowing}
                         hide={toggle}

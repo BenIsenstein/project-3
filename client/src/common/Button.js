@@ -1,18 +1,34 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const Button = styled.button`
-    padding: 0.2em 1em;
+    display: flex;
+    align-items: center;
+    margin: 0.2em 0;
+    padding: 0.4em 1em;
     background: white;
-    border: 2px solid #A7275E;
-    border-radius: 3px;
-    font-size: 0.9em;
-    color: #A7275E;
+    border: 1px solid #8eb9bf;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-weight: lighter;
+    color: #8eb9bf;
+    text-transform: uppercase;
     cursor: pointer;
+    // transition: background 0.4s linear;
 
     &:hover {
-        background: #A7275E;
-        color: white;
+        border: 1px solid #5c949c;
+        color: #5c949c;
     }
+
+    ${props => props.important && css`
+        background: #8eb9bf;
+        color: white;
+
+        &:hover {
+            background: #5c949c;
+            color: white;
+        }
+    `}
 `
 
 export {Button}

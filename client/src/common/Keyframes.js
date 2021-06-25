@@ -1,0 +1,23 @@
+import { keyframes } from 'styled-components';
+
+const slideInTop = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(0.8em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`
+
+const pageLoad = keyframes`
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+`
+
+export {slideInTop, pageLoad}
