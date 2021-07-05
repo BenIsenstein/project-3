@@ -1,5 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy
 const { findUserById, findUserByName } = require('../models/User')
+
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 
@@ -13,6 +14,7 @@ const verifyUser = async (username, password, done) => {
         }
         else if (await bcrypt.compare(password, user.password)) {
             console.log(`Pasword match for user ${user.username}`)
+            // grab the user profile linked to the authenticated email
             return done(null, user)
         }
         else {

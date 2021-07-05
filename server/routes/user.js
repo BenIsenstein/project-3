@@ -3,6 +3,22 @@ const express = require("express")
 const passport = require("passport")
 const router = express.Router()
 
+
+// ----------------------------------- SIGNUP ---------------------------------
+
+router.post("signup", async (req, res) => {
+  let { password, ...rest } = req.body
+  let newUser = new Auth(rest)
+
+  try {
+    await newUser.save()
+    console.log("new User document saved!")
+  } 
+  catch (err) {
+    console.log("error saving User document: ", err)
+  }
+})
+
 // ----------------------------------- LOGIN -----------------------------------
 
 router.post("/login",
