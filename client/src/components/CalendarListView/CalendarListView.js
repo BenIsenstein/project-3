@@ -3,16 +3,7 @@ import React, { useEffect, useState, useMemo, useContext } from "react"
 import Accordion from '../Accordion/Accordion'
 import './CalendarListView.css'
 
-import UserCalendarContext from "../../UserCalendarContext"
-
 const CalendarListView = ({ reRenderList}) => {
-
-  // Access global state in CONTEXT
-  const userCalContext = useContext(UserCalendarContext)
-
-  const testEntriesList = userCalContext.calendarEntries
-
-  
   
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
@@ -106,19 +97,6 @@ const CalendarListView = ({ reRenderList}) => {
           </div>
         )
     })}
-
-    {/* <div>
-      {testEntriesList.map(mapItem => {
-        return (
-          <div key={mapItem.id}>
-            {mapItem}
-          </div>
-        )
-      })}                        
-    </div> */}
-
-
-
   </>
 }
 
