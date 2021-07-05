@@ -1,5 +1,5 @@
 const LocalStrategy = require("passport-local").Strategy
-const { findUserById, findUserByName } = require('../models/db')
+const { findUserById, findUserByName } = require('../models/User')
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 
