@@ -5,14 +5,13 @@ const bcrypt = require('bcrypt')
 
 
 const verifyUser = async (username, password, done) => {
-    const user = await findUserByName(username)
-
-    if (!user) {
-        return done(null, false, { message: 'There is no user with that name.' })
-    }
-    
     try {
-        if (await bcrypt.compare(password, user.password)) {
+        const user = await findUserByName(username)
+
+        if (!user) {
+            return done(null, false, { message: 'There is no user with that name.' })
+        }
+        else if (await bcrypt.compare(password, user.password)) {
             console.log(`Pasword match for user ${user.username}`)
             return done(null, user)
         }

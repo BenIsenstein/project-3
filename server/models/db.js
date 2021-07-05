@@ -20,10 +20,10 @@ db.on('error', (err) => console.error('MongoDB connection error!', err));
 
 // User model and functions
 const userSchema = new mongoose.Schema({
-    username: { type: String, unique: true }, 
-    password: String,
-    email: String,
-    dateSignedUp: String
+  username: { type: String, unique: true }, 
+  password: String,
+  email: String,
+  dateSignedUp: String
 })
 
 userSchema.methods.validPassword = function (pwd) {
