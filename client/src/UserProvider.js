@@ -31,6 +31,7 @@ const UserProvider = ({ children }) => {
 
     let contextValue = {
         username,
+        userType,
         logIn,
         logOut
     }
