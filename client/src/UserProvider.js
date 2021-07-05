@@ -1,14 +1,10 @@
 import { useState } from 'react'
-import UserCalendarContext from './UserCalendarContext'
+import UserContext from './UserContext'
 
-const UserCalendarProvider = ({ children }) => {
+const UserProvider = ({ children }) => {
 
     let [username, setUsername] = useState()
     let [userType, setUserType] = useState()
-    let [calendarEntries, setCalendarEntries] = useState([{
-            id: "12345", 
-            entry: { title: "titleholder", date: "dateholder", item: "itemholder", task: "taskholder" } 
-        }])
 
     const logIn = (username, password) => {
         // async function logintoserver() {
@@ -35,16 +31,15 @@ const UserCalendarProvider = ({ children }) => {
 
     let contextValue = {
         username,
-        calendarEntries,
         logIn,
         logOut
     }
 
     return (
-        <UserCalendarContext.Provider value={ contextValue }>
+        <UserContext.Provider value={ contextValue }>
             { children }
-        </UserCalendarContext.Provider>
+        </UserContext.Provider>
     )
 }
 
-export default UserCalendarProvider
+export default UserProvider
