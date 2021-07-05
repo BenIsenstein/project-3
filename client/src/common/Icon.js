@@ -32,7 +32,7 @@ const AddIcon = styled(Plus)`
 
 const TrashIcon = styled(Trash)`
     height: 1em;
-    margin: 0 -0.4em;
+    // margin: 0 -0.4em;
 `
 
 export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon}

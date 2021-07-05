@@ -16,7 +16,7 @@ const App = () => {
         <GlobalStyle />
         <Switch>
           <Route exact path='/' component={Calendar} />
-          <Route exact path='/task/:id' component={TaskDetails} />
+          <Route path='/task/:id' component={TaskDetails} />
         </Switch>
       </UserCalendarProvider>      
     </ThemeProvider>

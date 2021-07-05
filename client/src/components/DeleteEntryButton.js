@@ -42,7 +42,7 @@ export default function DeleteEntryButton ({ entryId, reRenderList }) {
         message="Are you sure you wish to remove this task?"
         actionOnConfirm={DeleteEntry}
       />
-      <Button 
+      <Button icon
         className='delete-button'
         // type='button'
         // onClick={VerifyDelete()}

@@ -31,7 +31,7 @@ const AccordionIcon = styled.span`
 `
 
 const AccordionContent = styled.div`
-  background-color: #fafafa;
+  background-color: #cad5e3;
   overflow: hidden;
   transition: max-height 0.6s ease;
 `

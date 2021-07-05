@@ -5,12 +5,12 @@ const Button = styled.button`
     align-items: center;
     margin: 0.2em 0;
     padding: 0.4em 1em;
-    background: white;
+    background: #f7fcff;
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     font-size: 0.8em;
     font-weight: lighter;
-    color: #8eb9bf;
+    color: ${props => props.theme.prm};
     text-transform: uppercase;
     // transition: background 0.4s linear;
 
@@ -28,6 +28,10 @@ const Button = styled.button`
             color: white;
         }
     `}
+
+    ${props => props.icon && css`
+        padding: 0.4em;
+    `}  
 `
 
 export {Button}
