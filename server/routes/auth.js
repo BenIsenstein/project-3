@@ -15,6 +15,7 @@ router.post('/signup', async (req, res) => {
   } 
   catch (err) {
     console.log("error saving Auth document: ", err)
+    res.sendStatus(500)
   }
 })
 

@@ -20,6 +20,7 @@ router.post("/signup", async (req, res) => {
     //delete the Auth document that was created before the User creation failed
     await Auth.findOneAndDelete({ email: rest.email })
     console.log("error saving User document: ", err)
+    res.sendStatus(500)
   }
 })
 
