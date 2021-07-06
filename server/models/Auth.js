@@ -8,7 +8,8 @@ const authSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  password: String
+  password: String,
+  dateSignedUp: Date
 })
 
-module.exports = mongoose.model('Auth', authSchema, 'auth');
+module.exports = mongoose.model('Auth', authSchema);

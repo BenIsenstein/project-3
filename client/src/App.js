@@ -8,6 +8,7 @@ import './App.css';
 
 import Calendar from './pages/Calendar'
 import TaskDetails from './pages/TaskDetails'
+import Signup from './components/User/Signup'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Switch>
           <Route exact path='/' component={Calendar} />
           <Route path='/task/:id' component={TaskDetails} />
+          <Route path='/signup' component={Signup} />
         </Switch>
       </UserProvider>      
     </ThemeProvider>

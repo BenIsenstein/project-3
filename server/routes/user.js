@@ -2,17 +2,18 @@ require('dotenv').config()
 const express = require("express")
 const passport = require("passport")
 const router = express.Router()
+const { User } = require('../models/User')
 
 
 // ----------------------------------- SIGNUP ---------------------------------
 
-router.post("signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   let { password, ...rest } = req.body
-  let newUser = new Auth(rest)
 
   try {
-    await newUser.save()
+    await new User(rest).save()
     console.log("new User document saved!")
+    res.json({ success: true })
   } 
   catch (err) {
     console.log("error saving User document: ", err)
@@ -98,5 +99,9 @@ router.put('/edit/:id',
     }
   }
 )
+
+// ----------------------------------- GET LOGGED IN USER -----------------------------------
+
+router.get("/getloggedinuser", (req, res) => res.json({ user: req.user }))
 
 module.exports = router
