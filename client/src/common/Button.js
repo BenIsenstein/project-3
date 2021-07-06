@@ -5,7 +5,7 @@ const Button = styled.button`
     align-items: center;
     margin: 0.2em 0;
     padding: 0.4em 1em;
-    background: #f7fcff;
+    background: transparent;
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     font-size: 0.8em;

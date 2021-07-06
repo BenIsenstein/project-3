@@ -12,7 +12,7 @@ const AccordionContainer = styled.div`
 `
 
 const AccordionHeader = styled.button`
-  background-color: ${props => props.theme.scd};
+  background: ${props => props.theme.scd};
   color: black;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ const AccordionIcon = styled.span`
 `
 
 const AccordionContent = styled.div`
-  background-color: #cad5e3;
+  background-color: ${props => props.theme.scdLt};
   overflow: hidden;
   transition: max-height 0.6s ease;
 `

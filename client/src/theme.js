@@ -1,12 +1,14 @@
 // hydrophobic teal and pastel lavender
 const theme = {
-    prm: '#e56b6f',
-    prmDk: '#d4393e',
-    prmLt: '#F6CBCC',
-    scd: '#a695b2',
-    scdLt: '#e2dce5',
+    prm: '#969696',
+    prmDk: '#828282',
+    prmLt: '#c9c9c9',
+    scd: '#dbdbdb',
+    scdLt: '#f2f2f2',
     acc: '',
-    bkg: '#f7fcff',
+    bkg: 'white',
+    titleFont: '#1a1a1a',
+    contentFont: '#595959'
 }
 
 export default theme
