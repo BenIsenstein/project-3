@@ -5,7 +5,7 @@ const Button = styled.button`
     align-items: center;
     margin: 0.2em 0;
     padding: 0.4em 1em;
-    background: #f7fcff;
+    background: transparent;
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     font-size: 0.8em;
@@ -31,6 +31,12 @@ const Button = styled.button`
 
     ${props => props.icon && css`
         padding: 0.4em;
+    `}
+
+    ${props => props.constWidth && css`
+        min-width: 14em;
+        display: flex;
+        justify-content: center;
     `}  
 `
 

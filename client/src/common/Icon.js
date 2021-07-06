@@ -5,6 +5,7 @@ import {NavigateNext} from '@styled-icons/material-rounded/NavigateNext'
 import {NavigateBefore} from '@styled-icons/material-rounded/NavigateBefore'
 import {Plus} from '@styled-icons/heroicons-solid/Plus'
 import {Trash} from '@styled-icons/octicons/Trash'
+import {House} from '@styled-icons/material-rounded/House'
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
@@ -18,6 +19,7 @@ const NextIcon = styled(NavigateNext)`
     height: 2em;
     margin-left: auto;
     transition: transform 0.6s ease;
+    fill: ${props => props.theme.prm};
 `
 
 const BackIcon = styled(NavigateBefore)`
@@ -33,6 +35,13 @@ const AddIcon = styled(Plus)`
 const TrashIcon = styled(Trash)`
     height: 1em;
     // margin: 0 -0.4em;
+    fill: ${props => props.theme.prm};
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon}
+const HouseIcon = styled(House)`
+    height: 10em;
+    fill: ${props => props.theme.prm};
+    cursor: pointer;
+`
+
+export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon}

@@ -1,5 +1,5 @@
 const express = require('express')
-const {CalendarEntry, addCalendarEntry, listAllCalendarEntries, findCalendarEntryById, deleteCalendarEntry, updateCalendarEntryById} = require('../models/db')
+const {CalendarEntry, addCalendarEntry, listAllCalendarEntries, findCalendarEntryById, deleteCalendarEntry} = require('../models/CalendarEntry')
 let router = express.Router()
 
 
