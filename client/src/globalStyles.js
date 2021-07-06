@@ -7,13 +7,13 @@ export default createGlobalStyle`
 
     h1, h2, h3, h4, h5, h6 {
         margin: 1em;
-        color: ${props => props.theme.titleFont};
+        color: ${props => props.theme.titleColor};
     }
 
     p {
         margin: 0.8em 0;
         font-size: 1em;
-        color: ${props => props.theme.contentFont};
+        color: ${props => props.theme.contentColor};
     }
 
     button {

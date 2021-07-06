@@ -31,6 +31,12 @@ const Button = styled.button`
 
     ${props => props.icon && css`
         padding: 0.4em;
+    `}
+
+    ${props => props.constWidth && css`
+        min-width: 14em;
+        display: flex;
+        justify-content: center;
     `}  
 `
 

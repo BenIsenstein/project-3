@@ -1,3 +1,7 @@
+/* import fonts here (don't forget the ; at the end or it won't work) ie.  */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap'); */
+/* no need to declare @font-face here, just add the font "'Roboto', sans-serif" straight to theme.js */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

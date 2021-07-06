@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
-import { Form } from "../../common/Form"
-import { Button } from "../../common/Button"
+import { Form, Button } from "../../common"
 
 const Signup = () => {
   const userContext = useContext(UserContext)
