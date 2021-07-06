@@ -27,7 +27,7 @@ const TaskDetails = () => {
                 <Button onClick={() => history.push(`/`)}><BackIcon />Calendar</Button>
                 <p>{task.item}</p>
                 <p>{task.task}</p>
-                <p>{task.date}</p>
+                <p>{new Date(task.date).toString()}</p>
                 <p>{task.description}</p>
                 <Button important>Save Changes</Button>
             </PageContainer>
