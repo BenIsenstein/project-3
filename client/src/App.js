@@ -7,7 +7,7 @@ import UserProvider from './UserProvider'
 import './App.css';
 
 import Landing from './pages/Landing'
-import Signup from './components/User/Signup'
+import Signup from './pages/Signup'
 import Calendar from './pages/Calendar'
 import TaskDetails from './pages/TaskDetails'
 

@@ -27,11 +27,6 @@ const Calendar = () => {
                             reRenderList={reRenderList}
                         />                    
                     </div>
-
-                    <button onClick={() => setViewMode(viewMode)}> 
-                        Test refresh
-                    </button>
-
                     <div className='calendar-view-ctrl'>  
                         <SwitchViewButton 
                             activeView={viewMode === 'ListView'} 
