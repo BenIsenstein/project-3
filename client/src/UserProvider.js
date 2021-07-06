@@ -33,7 +33,7 @@ const UserProvider = ({ children }) => {
         getLoggedInUser()
     }, [])
 
-    const logIn = (username, password) => {
+    const logIn = (email, password) => {
         // async function logintoserver() {
         //     let loginOptions = {
         //         method: 'POST',

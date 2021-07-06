@@ -9,16 +9,16 @@ const Auth = require("../models/Auth")
 // ----------------------------------- SIGNUP ---------------------------------
 
 router.post("/signup", async (req, res) => {
-  let { password, ...rest } = req.body
+  let { password, ...newUser } = req.body
 
   try {
-    await new User(rest).save()
+    await new User(newUser).save()
     console.log("new User document saved!")
     res.json({ success: true })
   } 
   catch (err) {
     //delete the Auth document that was created before the User creation failed
-    await Auth.findOneAndDelete({ email: rest.email })
+    await Auth.findOneAndDelete({ email: newUser.email })
     console.log("error saving User document: ", err)
     res.sendStatus(500)
   }

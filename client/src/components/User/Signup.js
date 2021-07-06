@@ -5,7 +5,7 @@ import { Form, Button } from "../../common"
 
 const Signup = () => {
   const userContext = useContext(UserContext)
-  const { register, formState: { errors }, watch, handleSubmit} = useForm({})
+  const { register, formState: { errors }, watch, handleSubmit } = useForm({})
   const passwordValue = watch('password')
 
   async function onSubmit(data) {

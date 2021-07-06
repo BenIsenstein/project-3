@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Form, Page, PageContainer } from '../common'
+import Signup from "../components/User/Signup"
 
-const Signup = () => {
+const SignupPage = () => {
 
     return (
         <Page>
@@ -12,4 +13,4 @@ const Signup = () => {
     )
 }
 
-export default Signup
+export default SignupPage

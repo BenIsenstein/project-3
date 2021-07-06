@@ -7,7 +7,7 @@ import UserProvider from './UserProvider'
 import './App.css';
 
 import Landing from './pages/Landing'
-import Signup from './pages/Signup'
+import SignupPage from './pages/SignupPage'
 import Calendar from './pages/Calendar'
 import TaskDetails from './pages/TaskDetails'
 
@@ -19,7 +19,7 @@ const App = () => {
         <GlobalStyle />
         <Switch>
           <Route exact path='/' component={Landing} />
-          <Route path='/signup' component={Signup} />
+          <Route path='/signup' component={SignupPage} />
           <Route path='/calendar' component={Calendar} />
           <Route path='/task/:id' component={TaskDetails} />
         </Switch>
