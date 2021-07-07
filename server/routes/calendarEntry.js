@@ -5,12 +5,7 @@ let router = express.Router()
 // add a calendar entry  
 router.post('/add', async (req, res) => {
   try {
-    let body = req.body
-
-    body.members = {}
-    body.messages = [] 
-
-    await addCalendarEntry(new CalendarEntry(body))
+    await addCalendarEntry(new CalendarEntry(req.body))
     res.json({ success: true })
   }
   catch(err) {
@@ -44,14 +39,13 @@ router.get('/get/:id', async (req, res) => {
 
 // update calendar entry by id
  router.put('/update/:id', async (req, res) => {
- 
    try {
       let originalEntry = await findCalendarEntryById(req.params.id)
-        for (let key in req.body) {
-          originalEntry[key]=req.body[key]
-        }
+
+      for (let key in req.body) originalEntry[key] = req.body[key]
+      
       await originalEntry.save()
-      res.json({message: 'success!'})
+      res.json({ success: true })
    }
    catch(err) {
      console.log(err)
