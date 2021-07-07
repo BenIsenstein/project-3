@@ -6,6 +6,7 @@ import {NavigateBefore} from '@styled-icons/material-rounded/NavigateBefore'
 import {Plus} from '@styled-icons/heroicons-solid/Plus'
 import {Trash} from '@styled-icons/octicons/Trash'
 import {House} from '@styled-icons/material-rounded/House'
+import {Pencil} from '@styled-icons/foundation/Pencil'
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
@@ -44,4 +45,8 @@ const HouseIcon = styled(House)`
     cursor: pointer;
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon}
+const PencilIcon = styled(Pencil)`
+    height: 1em;
+`
+
+export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon}

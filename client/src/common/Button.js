@@ -38,6 +38,10 @@ const Button = styled.button`
         display: flex;
         justify-content: center;
     `}  
+
+    ${props => props.round && css`
+        border-radius: 50%;
+    `}
 `
 
 export {Button}

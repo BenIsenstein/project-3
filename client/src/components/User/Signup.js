@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
-import { Form, Button } from "../../common"
+import { Form, Button, Label, Input, PasswordInput } from "../../common"
 
 const Signup = () => {
   const userContext = useContext(UserContext)
@@ -63,37 +63,33 @@ const Signup = () => {
 
   return (
     <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-      <div className="signup-form">
-        <div className="signup-form-content">
-          <div className="form-control">
-            <label htmlFor="firstName">
-              First name
-            </label>
-            <input
+
+            <Label htmlFor="firstName">
+              First Name
+            </Label>
+            <Input
               {...register("firstName", { required: "You must pick a first name." })}
               type="text"
               name="firstName"
               id="firstName"
             />
             {errors.firstName && <p className="signup-form-error-message">{errors.firstName.message}</p>}
-          </div>
-          <div className="form-control">
-            <label htmlFor="lastName">
-              Last name
-            </label>
-            <input
+
+            <Label htmlFor="lastName">
+              Last Name
+            </Label>
+            <Input
               {...register("lastName", { required: "You must pick a last name." })}
               type="text"
               name="lastName"
               id="lastName"
             />
             {errors.lastName && <p className="signup-form-error-message">{errors.lastName.message}</p>}
-          </div>
-          <div className="form-control">
-            <label htmlFor="email">
+
+            <Label htmlFor="email">
               Email
-            </label>
-            <input
+            </Label>
+            <Input
               {...register("email", { 
                 required: "You must provide an email address." })}
               type="email"
@@ -101,11 +97,10 @@ const Signup = () => {
               id="email"
             />
             {errors.email && <p className="signup-form-error-message">{errors.email.message}</p>}
-          </div>
-          <div className="form-control">
-            <label htmlFor="userType">
+
+            <Label htmlFor="userType">
               What type of user are you?
-            </label>
+            </Label>
             <select
               {...register("userType", { required: "You must provide a user type." })}
               name="userType"
@@ -116,30 +111,29 @@ const Signup = () => {
               <option value="insuranceBroker">Insurance broker</option>
             </select>
             {errors.userType && <p className="signup-form-error-message">{errors.userType.message}</p>}
-          </div>
-          <div className="form-control">
-            <label htmlFor="password">
+
+            <Label htmlFor="password">
               Password
-            </label>
-            <input
+            </Label>
+            <PasswordInput
               {...register("password", {
                 required: "You must provide a password.",
                 validate: (value) =>
                   validatePass(value) ||
                   "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long."
               })}
+              passwordInput
               type="password"
               name="password"
               id="password"
             />
             {errors.password && <p className="signup-form-error-message">{errors.password.message}</p>}
-          </div>
-          <div className="form-control">
-            <label htmlFor="confirmPassword">
-              Confirm password
-            </label>
+
+            <Label htmlFor="confirmPassword">
+              Confirm Password
+            </Label>
             <div style={{ display: "flex", color: "red" }}>
-              <input
+              <PasswordInput
                 {...register("confirmPassword", {
                   required: true,
                   validate: (value) => 
@@ -152,12 +146,9 @@ const Signup = () => {
               />
               {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
             </div>
-          </div>
-          <div>
+
             <Button type='submit'>Submit</Button>
-          </div>
-        </div>
-      </div>
+
     </ Form>
   )
 }

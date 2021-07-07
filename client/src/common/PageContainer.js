@@ -7,11 +7,14 @@ const PageContainer = styled.div`
     animation: ${pageLoad} 0.4s linear;
 
     ${props => props.centerPage && css`
-        min-height: 70vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    `}
+    
+    ${props => props.mockMobileView && css`
+        min-height: 70vh;
     `}      
 
     @media (min-width: 641px) {

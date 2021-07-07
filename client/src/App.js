@@ -12,7 +12,6 @@ import SignupPage from './pages/SignupPage'
 import Calendar from './pages/Calendar'
 import TaskDetails from './pages/TaskDetails'
 
-
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
