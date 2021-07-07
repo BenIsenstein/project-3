@@ -3,13 +3,14 @@ const express = require("express")
 const Auth = require("../models/Auth")
 const router = express.Router()
 const bcrypt = require('bcrypt')
+const passport = require('passport')
 
 router.post('/signup', async (req, res) => {
-  let { email, password, dateSignedUp } = req.body
+  let { email, password, dateCreation: dateLastModified } = req.body
   password = await bcrypt.hash(password, 10)
 
   try {
-    await new Auth({ email, password, dateSignedUp }).save()
+    await new Auth({ email, password, dateLastModified }).save()
     console.log("new Auth document saved!")
     res.json({ success: true })
   } 
@@ -18,5 +19,10 @@ router.post('/signup', async (req, res) => {
     res.sendStatus(500)
   }
 })
+
+router.post('/login', 
+  passport.authenticate('local'),
+  (req,res) => res.json( { user: req.user } )
+)
 
 module.exports = router

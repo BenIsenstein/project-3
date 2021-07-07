@@ -5,13 +5,13 @@ import { Form, Button } from "../../common"
 
 const Signup = () => {
   const userContext = useContext(UserContext)
-  const { register, formState: { errors }, watch, handleSubmit} = useForm({})
+  const { register, formState: { errors }, watch, handleSubmit } = useForm({})
   const passwordValue = watch('password')
 
   async function onSubmit(data) {
     const alertError = () => alert("There was an error signing you up. We're fixing it as fast as we can.")
 
-    data.dateSignedUp = new Date()
+    data.dateCreation = new Date()
     delete data.confirmPassword
 
     let authUrl = "/api/auth/signup"

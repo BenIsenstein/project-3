@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
 import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
@@ -6,10 +6,12 @@ import './Calendar.css'
 
 import AddEntryModal from '../components/modals/AddEntryModal'
 import useAddEntryModal from '../components/modals/useAddEntryModal'
+import UserContext from '../UserContext'
 
 const Calendar = () => {
     const [viewMode, setViewMode] = useState('ListView')
     const {isShowing, toggle} = useAddEntryModal()
+    const userContext = useContext(UserContext)
     
     //define state for refreshing the list view
     const [refresh, setRefresh] = useState()
@@ -27,11 +29,6 @@ const Calendar = () => {
                             reRenderList={reRenderList}
                         />                    
                     </div>
-
-                    <button onClick={() => setViewMode(viewMode)}> 
-                        Test refresh
-                    </button>
-
                     <div className='calendar-view-ctrl'>  
                         <SwitchViewButton 
                             activeView={viewMode === 'ListView'} 
@@ -46,6 +43,9 @@ const Calendar = () => {
                             <CalendarIcon />
                         </SwitchViewButton>
                     </div>                    
+                </div>
+                <div>
+                    Displaying calendar for {userContext.userName}
                 </div>
                 <div className='calendar-view-content'>
                     {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}

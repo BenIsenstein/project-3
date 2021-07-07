@@ -3,89 +3,101 @@ import { useHistory } from 'react-router-dom'
 import UserContext from './UserContext'
 
 const UserProvider = ({ children }) => {
-    const history = useHistory()
-    const redirectHome = () => history.push('/')
-    const [user, setUser] = useState()
-    const [username, setUsername] = useState('loading')
-    const [userType, setUserType] = useState()
-    const isLoggedIn = username !== "loading" && username !== "no_user"
-    const isLoading = username === "loading"
+  const history = useHistory()
+  const redirectHome = () => history.push('/calendar')
+  const [user, setUser] = useState()
+  const [userName, setUserName] = useState('loading')
+  const [userType, setUserType] = useState()
+  const isLoggedIn = userName !== "loading" && userName !== "no_user"
+  const isLoading = userName === "loading"
 
-    useEffect(() => {
-        const getLoggedInUser = async () => {
-          try {
-            let response = await fetch('/api/user/getloggedinuser')
-            let resObject = await response.json()
-            let user = resObject.user
-            
-            if (!user) return setUsername("no_user")
+  useEffect(() => {
+    const getLoggedInUser = async () => {
+      try {
+        let response = await fetch('/api/user/getloggedinuser')
+        let resObject = await response.json()
+        let user = resObject.user
 
-            setUser(user)
-            setUsername(user.username) 
-            setUserType(user.userType)
-          }
-          catch(err) {
-            console.log('error running checkLoggedInUser: ', err)
-            alert("There was an error checking your login status. We're fixing it as fast as we can.")
-          }
-        }
-    
-        getLoggedInUser()
-    }, [])
+        if (!user) return setUserName("no_user")
 
-    const logIn = (username, password) => {
-        // async function logintoserver() {
-        //     let loginOptions = {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ username, password })
-        //     }
-        //     let response = await fetch('/api/auth/login', loginOptions)
-        //     let loggedInUser = await response.json()
-        //     console.log('The call to AUTH returned: ', loggedInUser)
-        //     setUsername(loggedInUser.username)
-        //     setUserType(loggedInUser.userType)    
-        // }
-        // logintoserver()
-    }
+        let { firstName, lastName, userType } = user
 
-    const logOut = async () => {
-        try {
-          let response = await fetch("/api/user/logout")
-          let resObject = await response.json()
-    
-          if (resObject.isLoggedOutNow) {
-            setUser(undefined)
-            setUsername('no_user')
-            setUserType(undefined)
-          }
-          else {
-            alert('You are still logged in for some reason. Please try logging out again.')
-          }
-        }
-        catch(err) {
-          console.log(`Error logging out user ${username}: `, err)
-          alert("There was an error logging you out. We're fixing it as fast as we can.")
-        }
+        setUser(user)
+        setUserName(firstName + ' ' + lastName)
+        setUserType(userType)
       }
-
-    let contextValue = {
-        user,
-        username,
-        userType,
-        isLoggedIn,
-        isLoading,
-        logIn,
-        logOut
+      catch (err) {
+        console.log('error running checkLoggedInUser: ', err)
+        alert("There was an error checking your login status. We're fixing it as fast as we can.")
+      }
     }
 
-    return (
-        <UserContext.Provider value={ contextValue }>
-            { children }
-        </UserContext.Provider>
-    )
+    getLoggedInUser()
+  }, [])
+
+  const logIn = async (data) => {
+
+    let loginOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    let response = await fetch('/api/auth/login', loginOptions)
+
+    if (response.status === 401) {
+      return alert('Unable to log in. Please make sure your login info is correct.')
+    }
+
+    let resObject = await response.json()
+    let loggedInUser = resObject.user
+    let { firstName, lastName, userType } = loggedInUser
+
+    console.log('The call to AUTH returned: ', loggedInUser)
+    setUser(loggedInUser)
+    setUserName(firstName + ' ' + lastName)
+    setUserType(userType)
+
+    history.push(`/calendar`)
+  }
+
+  const logOut = async () => {
+    try {
+      let response = await fetch("/api/user/logout")
+      let resObject = await response.json()
+
+      if (resObject.isLoggedOutNow) {
+        setUser(undefined)
+        setUserName('no_user')
+        setUserType(undefined)
+      }
+      else {
+        alert('You are still logged in for some reason. Please try logging out again.')
+      }
+    }
+    catch (err) {
+      console.log(`Error logging out user ${userName}: `, err)
+      alert("There was an error logging you out. We're fixing it as fast as we can.")
+    }
+  }
+
+  let contextValue = {
+    user,
+    userName,
+    userType,
+    isLoggedIn,
+    isLoading,
+    logIn,
+    logOut
+  }
+
+  return (
+    <UserContext.Provider value={contextValue}>
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export default UserProvider
