@@ -59,7 +59,7 @@ const UserProvider = ({ children }) => {
     setUser(loggedInUser)
     setUserName(firstName + ' ' + lastName)
     setUserType(userType)
-
+    
     history.push(`/calendar`)
   }
 
@@ -68,9 +68,8 @@ const UserProvider = ({ children }) => {
       let response = await fetch("/api/auth/logout")
       let resObject = await response.json()
 
-      console.log("UserProvider: Logout response from server = ", resObject)
-      // if (resObject.isLoggedOutNow) {
-      if (true) {
+      if (resObject.isLoggedOutNow) {
+        console.log("UserProvider: Logout on Backend is complete, now removing State values to reset login credentials...")
         setUser(undefined)
         setUserName('no_user')
         setUserType(undefined)
