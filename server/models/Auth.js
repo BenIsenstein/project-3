@@ -9,7 +9,7 @@ const authSchema = new mongoose.Schema({
     unique: true
   },
   password: String,
-  dateSignedUp: Date
+  dateLastModified: Date
 })
 
 module.exports = mongoose.model('Auth', authSchema);

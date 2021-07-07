@@ -1,21 +1,23 @@
 const LocalStrategy = require("passport-local").Strategy
-const { findUserById, findUserByName } = require('../models/User')
+const { User, findUserById } = require('../models/User')
+const Auth = require('../models/Auth')
 
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 
 
 const verifyUser = async (username, password, done) => {
+    console.log("passport-cofig verifying user...")
     try {
-        const user = await findUserByName(username)
+        const authCheck = await Auth.findOne({email: username})
 
-        if (!user) {
-            return done(null, false, { message: 'There is no user with that name.' })
+        if (!authCheck) {
+            return done(null, false, { message: 'There is no user with that email.' })
         }
-        else if (await bcrypt.compare(password, user.password)) {
-            console.log(`Pasword match for user ${user.username}`)
-            // grab the user profile linked to the authenticated email
-            return done(null, user)
+        else if (await bcrypt.compare(password, authCheck.password)) {
+            console.log(`Pasword match for user ${authCheck.email}`)
+            // grab the user profile linked to the authenticated email and send it back
+            return done(null, await User.findOne( { email: username } ))
         }
         else {
             return done(null, false, { message: 'Password incorrect.' })
