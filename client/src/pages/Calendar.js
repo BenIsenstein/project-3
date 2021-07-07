@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
-import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
+import { ListIcon, CalendarIcon, AddIcon, TrashIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
 import './Calendar.css'
 
 import AddEntryModal from '../components/modals/AddEntryModal'
@@ -28,6 +28,9 @@ const Calendar = () => {
                             hide={toggle}
                             reRenderList={reRenderList}
                         />                    
+                    </div>
+                    <div className='calendar-logout'>
+                    <Button onClick={() => userContext.logOut()}><TrashIcon />Log Out</Button>
                     </div>
                     <div className='calendar-view-ctrl'>  
                         <SwitchViewButton 

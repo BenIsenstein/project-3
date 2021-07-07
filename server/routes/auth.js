@@ -25,4 +25,11 @@ router.post('/login',
   (req,res) => res.json( { user: req.user } )
 )
 
+router.get('/logout', function(req, res){
+  console.log("Server: Logging Out User...")
+  req.logout()
+  // res.sendStatus(200)
+  res.json({ isLoggedOutNow : true })
+})
+
 module.exports = router

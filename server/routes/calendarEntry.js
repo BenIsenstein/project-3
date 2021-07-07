@@ -1,7 +1,6 @@
 const express = require('express')
-const {CalendarEntry, addCalendarEntry, listAllCalendarEntries, findCalendarEntryById, deleteCalendarEntry} = require('../models/CalendarEntry')
+const {CalendarEntry, addCalendarEntry, listAllCalendarEntries, listAllCalendarEntriesByUserId, findCalendarEntryById, deleteCalendarEntry} = require('../models/CalendarEntry')
 let router = express.Router()
-
 
 // add a calendar entry  
 router.post('/add', async (req, res) => {
@@ -23,12 +22,17 @@ router.post('/add', async (req, res) => {
 
 // get all calendar entries 
 router.get('/get', async (req, res) => {
-  console.log("Call to Fetch DB Calendar Entries!")
   try { res.json({ calendarEntryList: await listAllCalendarEntries() }) }
   
   catch(err) {console.log('error getting all calendar entries:', err)}
 })
 
+// get all calendar entries for logged in user 
+router.get('/getbyuser/:id', async (req, res) => {
+  try { res.json({ calendarEntryList: await listAllCalendarEntriesByUserId(req.params.id) }) }
+  
+  catch(err) {console.log('error getting all calendar entries:', err)}
+})
 
 // get Calendar Entry by ID
 router.get('/get/:id', async (req, res) => {

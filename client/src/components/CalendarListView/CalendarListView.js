@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
+import UserContext from '../../UserContext'
 
 import Accordion from '../Accordion/Accordion'
 import './CalendarListView.css'
 
 const CalendarListView = ({ reRenderList}) => {
   
+  // Capture the current state of the logged in user
+  let userContext = useContext(UserContext)
+
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
     return { 
@@ -37,7 +41,8 @@ const CalendarListView = ({ reRenderList}) => {
       }])
       
       try {
-        let entriesResponse = await fetch("./api/calendarEntry/get")
+        // fetch all calendar entries for current authenticated user
+        let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
         let resObject = await entriesResponse.json()
         let list = resObject.calendarEntryList
 
