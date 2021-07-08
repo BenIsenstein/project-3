@@ -19,7 +19,7 @@ const EntryDetails = () => {
 
     // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
     useEffect(() => {
-        //for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
+        for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
         
         const decideActive = (state, ref) => {if (state) ref.current.focus()}
 
@@ -31,6 +31,11 @@ const EntryDetails = () => {
         itemActive,
         descriptionActive
     ])
+
+    useEffect(() => {
+        console.log("logging refs:")
+        for (let ref of [taskRef, itemRef, descriptionRef]) console.log(ref)
+    }, [itemActive, taskActive, descriptionActive])
 
     // update 'date' input field whenever the piece of state is changed
     useEffect(() => setValue('date', date), [setValue, date])
