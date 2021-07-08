@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const Label = styled.label`
-    margin-top: .4em;
+    margin: .4em 0 .1em 0;
     font-size: .8em;
 `
 

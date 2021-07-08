@@ -1,10 +1,10 @@
 import styled, {css} from 'styled-components'
-import {pageLoad} from './'
+import {fadeIn} from './'
 
 const PageContainer = styled.div`
     width: 95%;
     margin: 0.5em 0;
-    animation: ${pageLoad} 0.4s linear;
+    animation: ${fadeIn} 0.4s linear;
 
     ${props => props.centerPage && css`
         display: flex;
@@ -14,11 +14,12 @@ const PageContainer = styled.div`
     `}
     
     ${props => props.mockMobileView && css`
-        min-height: 70vh;
+        min-height: 90vh;
     `}      
 
-    @media (min-width: 641px) {
+    @media (min-width: ${props => props.theme.smScreen}) {
         width: 75vw;
+    }
 `
 
 export {PageContainer}

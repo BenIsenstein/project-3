@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
-import { Form, Page, PageContainer } from '../common'
+import { useHistory } from 'react-router-dom'
+import { Page, PageContainer, TextLink } from '../common'
 import Signup from "../components/User/Signup"
 
 const SignupPage = () => {
+    let history = useHistory()
 
     return (
         <Page>
-            <PageContainer>
+            <PageContainer centerPage mockMobileView>
                 <Signup />
+                <p>Already have an account? <TextLink onClick={() => history.push(`/login`)}>Log in</TextLink> here.</p>
             </PageContainer>
         </Page>
     )

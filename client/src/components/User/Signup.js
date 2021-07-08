@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
-import { Form, Button, Label, Input, PasswordInput } from "../../common"
+import { Form, Button, Label, Input, PasswordInput, Select } from "../../common"
 
 const Signup = () => {
   const userContext = useContext(UserContext)
@@ -64,92 +64,78 @@ const Signup = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
+    <Form authForm onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
 
-            <Label htmlFor="firstName">
-              First Name
-            </Label>
-            <Input
-              {...register("firstName", { required: "You must pick a first name." })}
-              type="text"
-              name="firstName"
-              id="firstName"
-            />
-            {errors.firstName && <p className="signup-form-error-message">{errors.firstName.message}</p>}
+      <Label htmlFor="firstName">First Name</Label>
+      <Input
+        {...register("firstName", { required: "You must enter a first name." })}
+        type="text"
+        name="firstName"
+        id="firstName"
+      />
+      {errors.firstName && <p>{errors.firstName.message}</p>}
 
-            <Label htmlFor="lastName">
-              Last Name
-            </Label>
-            <Input
-              {...register("lastName", { required: "You must pick a last name." })}
-              type="text"
-              name="lastName"
-              id="lastName"
-            />
-            {errors.lastName && <p className="signup-form-error-message">{errors.lastName.message}</p>}
+      <Label htmlFor="lastName">Last Name</Label>
+      <Input
+        {...register("lastName", { required: "You must enter a last name." })}
+        type="text"
+        name="lastName"
+        id="lastName"
+      />
+      {errors.lastName && <p>{errors.lastName.message}</p>}
 
-            <Label htmlFor="email">
-              Email
-            </Label>
-            <Input
-              {...register("email", { 
-                required: "You must provide an email address." })}
-              type="email"
-              name="email"
-              id="email"
-            />
-            {errors.email && <p className="signup-form-error-message">{errors.email.message}</p>}
+      <Label htmlFor="email">Email</Label>
+      <Input
+        {...register("email", { 
+          required: "You must provide a valid email address." })}
+        type="email"
+        name="email"
+        id="email"
+      />
+      {errors.email && <p>{errors.email.message}</p>}
 
-            <Label htmlFor="userType">
-              What type of user are you?
-            </Label>
-            <select
-              {...register("userType", { required: "You must provide a user type." })}
-              name="userType"
-              id="userType"
-            >
-              <option value="homeManager">Home manager</option>
-              <option value="serviceProvider">Service provider</option>
-              <option value="insuranceBroker">Insurance broker</option>
-            </select>
-            {errors.userType && <p className="signup-form-error-message">{errors.userType.message}</p>}
+      <Label htmlFor="userType">I am a(n):</Label>
+      <Select
+        {...register("userType", { required: "You must pick an account type." })}
+        name="userType"
+        id="userType"
+      >
+        <option value="homeManager">Home Manager</option>
+        <option value="serviceProvider">Service Provider</option>
+        <option value="insuranceBroker">Insurance Broker</option>
+      </Select>
+      {errors.userType && <p>{errors.userType.message}</p>}
 
-            <Label htmlFor="password">
-              Password
-            </Label>
-            <PasswordInput
-              {...register("password", {
-                required: "You must provide a password.",
-                validate: (value) =>
-                  validatePass(value) ||
-                  "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long."
-              })}
-              passwordInput
-              type="password"
-              name="password"
-              id="password"
-            />
-            {errors.password && <p className="signup-form-error-message">{errors.password.message}</p>}
+      <Label htmlFor="password">Password</Label>
+      <PasswordInput
+        {...register("password", {
+          required: "You must provide a password.",
+          validate: (value) =>
+            validatePass(value) ||
+            "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long."
+        })}
+        passwordInput
+        type="password"
+        name="password"
+        id="password"
+      />
+      {errors.password && <p>{errors.password.message}</p>}
 
-            <Label htmlFor="confirmPassword">
-              Confirm Password
-            </Label>
-            <div style={{ display: "flex", color: "red" }}>
-              <PasswordInput
-                {...register("confirmPassword", {
-                  required: true,
-                  validate: (value) => 
-                    value === passwordValue || 
-                    "The passwords do not match"
-                })}
-                type="password"
-                name="confirmPassword"
-                id="confirmPassword"
-              />
-              {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-            </div>
+      <Label htmlFor="confirmPassword">Confirm Password</Label>
+      <PasswordInput
+        {...register("confirmPassword", {
+          required: true,
+          validate: (value) => 
+            value === passwordValue || 
+            "The passwords do not match."
+        })}
+        type="password"
+        name="confirmPassword"
+        id="confirmPassword"
+      />
+      {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
 
-            <Button type='submit'>Submit</Button>
+      <Button formSubmit type='submit'>CREATE YOUR ACCOUNT</Button>
 
     </ Form>
   )

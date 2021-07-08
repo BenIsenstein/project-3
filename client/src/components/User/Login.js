@@ -1,41 +1,35 @@
 import React, { useContext } from "react"
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
-import { Form, Button } from "../../common"
+import { Form, Button, Label, Input, PasswordInput } from "../../common"
 
 const Login = () => {
   const userContext = useContext(UserContext)
   const { register, formState: { errors }, handleSubmit } = useForm({})
 
   return (
-      <Form onSubmit={handleSubmit(async (data) => await userContext.logIn(data))}>
-        <div className="signup-form">
-          <div className="signup-form-content">
-            <div className="form-control">
-              <label htmlFor="email">Email</label>
-              <input 
+      <Form authForm onSubmit={handleSubmit(async (data) => await userContext.logIn(data))}>
+
+              <Label htmlFor="email">Email</Label>
+              <Input 
                 type="email" 
                 name="username" // this is a hack so passportJS recognizes user's email as 'username'.
                 id="email"
-                {...register("username", {required: "You must input an email."})}
+                {...register("username", {required: "Email is missing."})}
               />
-              {errors.username && <p className="signup-form-error-message">{errors.username.message}</p>}
-            </div>
-            <div className="form-control">
-              <label htmlFor="password">Password</label>
-              <input 
+              {errors.username && <p>{errors.username.message}</p>}
+
+              <Label htmlFor="password">Password</Label>
+              <PasswordInput 
                 type="password" 
                 name="password" 
                 id="password"
-                {...register("password", {required: "You must input a password."})}
+                {...register("password", {required: "Password is missing."})}
               />
-              {errors.password && <p className="signup-form-error-message">{errors.password.message}</p>}
-            </div>
-            <div>
-              <Button type='submit'>Log in</Button>
-            </div>
-          </div>
-        </div>
+              {errors.password && <p>{errors.password.message}</p>}
+
+              <Button formSubmit type='submit'>Log in</Button>
+
       </Form>
   )
 }

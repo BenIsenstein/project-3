@@ -12,7 +12,6 @@ export default createGlobalStyle`
 
     p {
         margin: 0.8em 0;
-        font-size: 1em;
         color: ${props => props.theme.contentColor};
     }
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
-import { ListIcon, CalendarIcon, AddIcon, TrashIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
+import { ListIcon, CalendarIcon, AddIcon, ExitIcon, SwitchViewButton, Button, Page, PageContainer } from '../common'
 import './Calendar.css'
 
 import AddEntryModal from '../components/modals/AddEntryModal'
@@ -30,7 +30,7 @@ const Calendar = () => {
                         />                    
                     </div>
                     <div className='calendar-logout'>
-                    <Button onClick={() => userContext.logOut()}><TrashIcon />Log Out</Button>
+                    <Button onClick={() => userContext.logOut()}><ExitIcon />Log Out</Button>
                     </div>
                     <div className='calendar-view-ctrl'>  
                         <SwitchViewButton 
@@ -48,7 +48,7 @@ const Calendar = () => {
                     </div>                    
                 </div>
                 <div>
-                    Displaying calendar for {userContext.userName}
+                    Displaying home maintenance events for {userContext.userName}
                 </div>
                 <div className='calendar-view-content'>
                     {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}

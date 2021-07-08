@@ -13,9 +13,9 @@ const AccordionContainer = styled.div`
 
 const AccordionHeader = styled.button`
   background: ${props => props.theme.scd};
-  color: black;
   display: flex;
   align-items: center;
+  font-size: 1em;
   border: none;
   outline: none;
   transition: background-color 0.6s ease;
@@ -58,11 +58,8 @@ const Accordion = props => {
     <AccordionContainer>
 
       <AccordionHeader onClick={toogleActive}>
-        {/* <AccordionHeaderContainer>
-
-        </AccordionHeaderContainer> */}
-        <h3>{props.item || "No item"}</h3>
-        <p>{props.task || "No task"}</p>        
+        <h4>{props.item || "No item"}</h4>
+        <p>{props.task || "No task"}</p>            
         <AccordionIcon rotate={active}>
           <NextIcon />
         </AccordionIcon>        
@@ -72,7 +69,7 @@ const Accordion = props => {
         <AccordionContentContainer>
           <p>{props.description}</p>
           <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} dates={props.dates} setDates={props.setDates} />
-          <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>          
+          <Button important onClick={() => history.push(`/event/${props._id}`)}>Details</Button>          
         </AccordionContentContainer>
       </AccordionContent>
 

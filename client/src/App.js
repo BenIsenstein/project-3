@@ -10,7 +10,7 @@ import Landing from './pages/Landing'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import Calendar from './pages/Calendar'
-import TaskDetails from './pages/TaskDetails'
+import EntryDetails from './pages/EntryDetails'
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
             <Route path='/login' component={LoginPage} />
             <Route path='/signup' component={SignupPage} />
             <Route path='/calendar' component={Calendar} />
-            <Route path='/task/:id' component={TaskDetails} />
+            <Route path='/event/:id' component={EntryDetails} />
           </Switch>
         </UserProvider>
       </Router>

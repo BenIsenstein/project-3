@@ -1,14 +1,16 @@
 import styled, {css} from 'styled-components'
+import DateTimePicker from 'react-datetime-picker'
 
-const Input = styled.input`
+const StyledDateTimePicker = styled(DateTimePicker)`
     width: 100%;
+    min-height: 1.8em;
     padding: .4em .6em;
+    font-family: inherit;
     font-size: 1em;
     color: ${props => props.theme.contentColor};
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     outline: none;
-    box-sizing: border-box;
 
     ${props => props.detailedPage && css`
         padding: .4em 0;
@@ -23,8 +25,4 @@ const Input = styled.input`
     }
 `
 
-const PasswordInput = styled(Input)`
-    letter-spacing: .2em;
-`
-
-export {Input, PasswordInput}
+export {StyledDateTimePicker}
