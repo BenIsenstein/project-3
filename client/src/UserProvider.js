@@ -59,19 +59,22 @@ const UserProvider = ({ children }) => {
     setUser(loggedInUser)
     setUserName(firstName + ' ' + lastName)
     setUserType(userType)
-
+    
     history.push(`/calendar`)
   }
 
   const logOut = async () => {
     try {
-      let response = await fetch("/api/user/logout")
+      let response = await fetch("/api/auth/logout")
       let resObject = await response.json()
 
       if (resObject.isLoggedOutNow) {
+        console.log("UserProvider: Logout on Backend is complete, now removing State values to reset login credentials...")
         setUser(undefined)
         setUserName('no_user')
         setUserType(undefined)
+
+        history.push(`/`)
       }
       else {
         alert('You are still logged in for some reason. Please try logging out again.')

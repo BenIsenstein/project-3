@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import UserContext from '../../UserContext'
 import ReactDOM from 'react-dom'
 import { Button } from '../../common'
 import { useForm } from "react-hook-form"
@@ -6,7 +7,22 @@ import DateTimePicker from 'react-datetime-picker'
 //import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
 const AddEntryModal = ({ isShowing, hide, reRenderList }) => {
-  const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
+  // Capture the current state of the logged in user
+  let userContext = useContext(UserContext)
+  
+  // Preload the hidden input field for userid. Also pre-populate HOUSE value for now
+  let user_id = "default"
+  if (userContext.isLoggedIn) {
+    user_id = userContext.user._id
+  }
+
+  const preLoadedValues = {
+    userid: `${user_id}`,
+    house: "1"  // hard code this for now, until Multiple-House functionality is added later
+  }
+
+  // const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
+  const { register, formState: { errors }, handleSubmit, setValue } = useForm({ defaultValues: preLoadedValues })
   const [date, setDate] = useState()
 
   // update 'date' input field whenever the piece of state is changed
@@ -73,6 +89,14 @@ const AddEntryModal = ({ isShowing, hide, reRenderList }) => {
                 />
                 <input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
                 {errors.date && <p className="">{errors.date.message}</p>}
+
+                {/* <label htmlFor="userid">UserID</label> */}
+                <input type="hidden" id="userid" {...register("userid", {required: "You must specify a UserID."})} name="userid"/>
+                {errors.userid && <p className="">{errors.userid.message}</p>}
+
+                {/* <label htmlFor="house">House</label> */}
+                <input type="hidden" id="house" {...register("house", {required: "You must specify a house."})} name="house"/>
+                {errors.house && <p className="">{errors.house.message}</p>}
 
                 <Button important type="submit" value="add entry">Add Entry</Button>
                 <Button onClick={() => hide()}>Cancel</Button>

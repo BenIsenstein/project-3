@@ -43,8 +43,10 @@ const Signup = () => {
       let { email, password, firstName } = data
       let username = email
 
+      // Log the user in
       //alert(`logging you in now, ${firstName}`)
-      //await userContext.logIn({ username, password }) - login needs to be written inside the UserProvider 
+      await userContext.logIn({ username, password })
+      // <Form onSubmit={handleSubmit(async (data) => await userContext.logIn(data))}>
     }
     catch(err) {
       console.log('Error signing up: ', err)
