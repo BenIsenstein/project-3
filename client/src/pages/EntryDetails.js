@@ -1,60 +1,43 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker } from '../common'
 import { useForm } from 'react-hook-form'
+import DeleteEntryButton from '../components/DeleteEntryButton'
 
 const EntryDetails = () => {
-    //declaring test input
-    function TextInputWithFocusButton() {
-        const inputEl = useRef(null);
-        const onButtonClick = () => {
-          // `current` points to the mounted text input element
-          inputEl.current.focus();
-        };
-        return (
-          <>
-            <input ref={inputEl} type="text" />
-            <button onClick={onButtonClick}>Focus the input</button>
-          </>
-        );
-    }
-    const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
+    const { register, formState: { errors }, handleSubmit, setValue, setFocus } = useForm({})
     const [refresh, setRefresh] = useState(null)
     const { id } = useParams()
     let history = useHistory()
     const [date, setDate] = useState()
     const [itemActive, setItemActive] = useState(false)
-    const itemRef = useRef(null)
     const [taskActive, setTaskActive] = useState(false)
-    const taskRef = useRef(null)
     const [descriptionActive, setDescriptionActive] = useState(false)
-    const descriptionRef = useRef(null)
     const [dateActive, setDateActive] = useState(false)
 
-    //const setRef = (element, ref) => ref.current = element
-
-    // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
-    useEffect(() => {
-        //for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
-        
-        const decideActive = (isActive, ref) => {if (isActive) ref.current.focus()}
-
-        decideActive(taskActive, taskRef)
-        decideActive(itemActive, itemRef)
-        decideActive(descriptionActive, descriptionRef)
-    }, [
+    // array of all inputs in the form
+    const inputs = useMemo(() => [
+        {isActive: taskActive, setter: setTaskActive, name: 'task'},
+        {isActive: itemActive, setter: setItemActive, name: 'item'},
+        {isActive: descriptionActive, setter: setDescriptionActive, name: 'description'},
+        {isActive: dateActive, setter: setDateActive, name: 'date'}
+    ], [
         taskActive,
         itemActive,
-        descriptionActive
+        descriptionActive,
+        dateActive
     ])
 
-    // log the value of the refs when the 'active' state changes
-    useEffect(() => {
-        console.log("logging refs:")
-        for (let ref of [taskRef, itemRef, descriptionRef]) console.log(ref)
+    // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
+    useEffect(() => { 
+        const decideActive = (isActive, name) => {if (isActive) setFocus(name)}
+
+        for (let pair of inputs) decideActive(pair.isActive, pair.name)
     }, [
-        itemActive, 
-        taskActive, 
+        inputs,
+        setFocus,
+        taskActive,
+        itemActive,
         descriptionActive
     ])
 
@@ -65,7 +48,6 @@ const EntryDetails = () => {
     useEffect(() => {
         const getEntry = async () => {
             try {
-                console.log('getEntry() is running')
                 setValue('item', '...')
                 setValue('task', '...')
                 setDate(undefined)
@@ -78,7 +60,7 @@ const EntryDetails = () => {
                     item,
                     task,
                     date,
-                    description
+                    description 
                 } = entryDetails
             
                 setValue('item', item)
@@ -96,6 +78,7 @@ const EntryDetails = () => {
         getEntry()
     }, [setRefresh, setValue, id])
 
+    // form submit function
     const onSubmit = async (data) => {
         console.log('data: ', data)
 
@@ -120,35 +103,37 @@ const EntryDetails = () => {
         }
     } 
 
-    const ActivePencil = props => <PencilIcon onClick={() => {props.setter(!props.state)}} />
+    const ActivePencil = props => <PencilIcon 
+        onClick={() => {
+            props.setter(!props.isActive)
+
+            for (let pair of inputs.filter(pair => pair.isActive !== props.isActive)) pair.setter(false)
+        }} 
+    />
 
     if (!refresh) return null
-
-    const {ref: itemRegister, ...rest} = register("item", {required: "You must indicate an item."})
-
+    
     return (
         <Page>
             <PageContainer>
-                <TextInputWithFocusButton />
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.goBack()}><BackIcon />Calendar</Button>
+
                     <Label htmlFor="item">Item</Label>
-                    <ActivePencil state={itemActive} setter={setItemActive}/>
+                    <ActivePencil isActive={itemActive} setter={setItemActive}/>
                     <Input
                         detailedPage
-                        ref={elem => {itemRegister(elem); itemRef.current = elem}}
                         disabled={!itemActive}
                         id="item" 
-                        {...rest}
+                        {...register("item", {required: "You must indicate an item."})}
                         name="item"
                     />
                     {errors.item && <p className="">{errors.item.message}</p>}
                     
                     <Label htmlFor="task">Task</Label>
-                    <ActivePencil state={taskActive} setter={setTaskActive}/>
+                    <ActivePencil isActive={taskActive} setter={setTaskActive}/>
                     <Input 
                         detailedPage
-                        ref={taskRef}
                         disabled={!taskActive}
                         id="task" 
                         {...register("task", {required: "You must indicate a task."})} 
@@ -157,10 +142,9 @@ const EntryDetails = () => {
                     {errors.task && <p className="">{errors.task.message}</p>}
 
                     <Label htmlFor="description">Description</Label>
-                    <ActivePencil state={descriptionActive} setter={setDescriptionActive}/>
+                    <ActivePencil isActive={descriptionActive} setter={setDescriptionActive}/>
                     <Textarea 
                         detailedPage
-                        ref={descriptionRef}
                         disabled={!descriptionActive}
                         id="description" 
                         {...register("description", {required: "You must write a description."})} 
@@ -169,7 +153,7 @@ const EntryDetails = () => {
                     {errors.description && <p className="">{errors.description.message}</p>}
 
                     <Label htmlFor="date">Date</Label>
-                    <ActivePencil state={dateActive} setter={setDateActive}/>
+                    <ActivePencil isActive={dateActive} setter={setDateActive}/>
                     {dateActive
                         ? <StyledDateTimePicker
                           id="date"
@@ -182,7 +166,7 @@ const EntryDetails = () => {
                     {errors.date && <p className="">{errors.date.message}</p>}
             
                     <Button formSubmit important type='submit' >Save Changes</Button>
-                    <Button formSubmit type='submit' >Delete Event</Button>
+                    <DeleteEntryButton entryId={id} />
                 </Form>
             </PageContainer>
         </Page>

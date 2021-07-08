@@ -5,7 +5,7 @@ import './DeleteEntryButton.css'
 import ConfirmModal from './modals/ConfirmModal'
 import useConfirmModal from './modals/useConfirmModal'
 
-export default function DeleteEntryButton ({ entryId, reRenderList }) {
+export default function DeleteEntryButton ({ entryId, reRenderList, ...props }) {
 
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
   
@@ -29,9 +29,7 @@ export default function DeleteEntryButton ({ entryId, reRenderList }) {
       console.log("Problem DELETING entry!")
     }
 
-    reRenderList()
-    //window.location.reload()
-
+    if (reRenderList) reRenderList()
   }
 
   return ( 

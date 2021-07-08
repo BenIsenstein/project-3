@@ -4,7 +4,7 @@ import UserContext from '../../UserContext'
 import Accordion from '../Accordion/Accordion'
 import './CalendarListView.css'
 
-const CalendarListView = ({ reRenderList}) => {
+const CalendarListView = ({ reRenderList }) => {
   
   // Capture the current state of the logged in user
   let userContext = useContext(UserContext)

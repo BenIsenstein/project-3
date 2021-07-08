@@ -68,7 +68,7 @@ const Accordion = props => {
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
           <p>{props.description}</p>
-          <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} dates={props.dates} setDates={props.setDates} />
+          <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} />
           <Button important onClick={() => history.push(`/event/${props._id}`)}>Details</Button>          
         </AccordionContentContainer>
       </AccordionContent>
