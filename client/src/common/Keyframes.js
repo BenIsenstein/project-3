@@ -11,7 +11,7 @@ const slideInTop = keyframes`
   }
 `
 
-const pageLoad = keyframes`
+const fadeIn = keyframes`
   0% {
       opacity: 0;
   }
@@ -20,4 +20,4 @@ const pageLoad = keyframes`
   }
 `
 
-export {slideInTop, pageLoad}
+export {slideInTop, fadeIn}

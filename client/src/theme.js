@@ -12,6 +12,7 @@ const theme = {
     titleFont: "",
     contentFont: "",
     accentFont: "",
+    smScreen: '641px',
 }
 
 export default theme

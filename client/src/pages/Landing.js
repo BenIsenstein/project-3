@@ -20,7 +20,7 @@ const Landing = () => {
 
     return (
         <Page>
-            <PageContainer centerPage>
+            <PageContainer centerPage mockMobileView>
                 <HouseIcon onClick={() => history.push(`/`)} />
                 <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
                 <Button constWidth onClick={() => history.push(`/signup`)}>CREATE AN ACCOUNT</Button>

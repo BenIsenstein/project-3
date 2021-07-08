@@ -1,13 +1,15 @@
 import styled, {css} from 'styled-components'
 
 const Form = styled.form`
+  width: 100%;
   display: flex;
-  align-items: center;
-  margin: 0.2em 0;
-  padding: 0.4em 1em;
-  font-size: 0.8em;
-  background-color: ${props => props.theme.scdLt};
+  flex-direction: column;
+  align-items: flex-start;
   color: ${props => props.theme.prm};
+
+  ${props => props.authForm && css`
+    max-width: 20em;
+  `}
 `
 
 export {Form}

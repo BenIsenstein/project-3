@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form } from '../common'
+import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker } from '../common'
 import { useForm } from 'react-hook-form'
-import DateTimePicker from 'react-datetime-picker'
 
 const TaskDetails = () => {
     const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
@@ -74,34 +73,49 @@ const TaskDetails = () => {
 
     if (!refresh) return null
 
-    
     return (
         <Page>
             <PageContainer>
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.goBack()}><BackIcon />Calendar</Button>
-                    <label htmlFor="item">Item</label>
-                    <input id="item" {...register("item", {required: "You must choose an item."})} name="item"/>
+                    <Label htmlFor="item">Item</Label>
+                    <PencilIcon />
+                    <Input
+                        detailedPage
+                        id="item" {...register("item", {required: "You must indicate an item."})} 
+                        name="item"
+                    />
                     {errors.item && <p className="">{errors.item.message}</p>}
+                    
 
-                    <label htmlFor="task">Task</label>
-                    <input id="task" {...register("task", {required: "You must choose a task."})} name="task"/>
+                    <Label htmlFor="task">Task</Label>
+                    <Textarea 
+                        detailedPage
+                        id="task" {...register("task", {required: "You must indicate a task."})} 
+                        name="task"
+                    />
                     {errors.task && <p className="">{errors.task.message}</p>}
 
-                    <label htmlFor="description">Description</label>
-                    <input id="description" {...register("description", {required: "You must write a description."})} name="description"/>
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea 
+                        detailedPage
+                        id="description" {...register("description", {required: "You must write a description."})} 
+                        name="description"
+                    />
                     {errors.description && <p className="">{errors.description.message}</p>}
 
-                    <label htmlFor="date">Date</label>
-                    <DateTimePicker
+                    <Label htmlFor="date">Date</Label>
+                    <StyledDateTimePicker
                       id="date"
                       onChange={setDate}
                       value={date}
                     />
-                    <input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
+                    <Input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
                     {errors.date && <p className="">{errors.date.message}</p>}
           
-                    <Button important type='submit' >Save Changes</Button>
+                    <Button formSubmit important type='submit' >Save Changes</Button>
+                    <Button formSubmit type='submit' >Delete Event</Button>
+                    
                 </Form>
             </PageContainer>
         </Page>

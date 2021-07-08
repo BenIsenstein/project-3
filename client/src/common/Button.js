@@ -37,7 +37,16 @@ const Button = styled.button`
         min-width: 14em;
         display: flex;
         justify-content: center;
-    `}  
+    `}
+    
+    ${props => props.formSubmit && css`
+        margin-top: 2em;
+        align-self: center;
+    `}
+
+    ${props => props.round && css`
+        border-radius: 50%;
+    `}
 `
 
 export {Button}

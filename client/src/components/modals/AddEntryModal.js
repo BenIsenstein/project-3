@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
 import UserContext from '../../UserContext'
 import ReactDOM from 'react-dom'
-import { Button } from '../../common'
+import { Button, Form, Label, Input, Textarea, StyledDateTimePicker } from '../../common'
 import { useForm } from "react-hook-form"
-import DateTimePicker from 'react-datetime-picker'
 //import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
 const AddEntryModal = ({ isShowing, hide, reRenderList }) => {
@@ -62,45 +61,49 @@ const AddEntryModal = ({ isShowing, hide, reRenderList }) => {
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <p>
-            Add New Calendar Entry
-          </p>
+          <p>New Event</p>
           <div>
-              <form
+              <Form
                 onSubmit={handleSubmit(async (data) => await onSubmit(data))}
               >
-                <label htmlFor="item">Item</label>
-                <input id="item" {...register("item", {required: "You must choose an item."})} name="item"/>
-                {errors.item && <p className="">{errors.item.message}</p>}
+                <Label htmlFor="item">Item</Label>
+                <Input id="item" {...register("item", {required: "You must indicate an item."})} name="item"/>
+                {errors.item && <p>{errors.item.message}</p>}
 
-                <label htmlFor="task">Task</label>
-                <input id="task" {...register("task", {required: "You must choose a task."})} name="task"/>
+                <Label htmlFor="task">Task</Label>
+                <Textarea 
+                  id="task" {...register("task", {required: "You must indicate a task."})} 
+                  name="task"
+                />
                 {errors.task && <p className="">{errors.task.message}</p>}
 
-                <label htmlFor="description">Description</label>
-                <input id="description" {...register("description", {required: "You must write a description."})} name="description"/>
-                {errors.description && <p className="">{errors.description.message}</p>}
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description" {...register("description", {required: "You must write a description."})} 
+                  name="description"
+                />
+                {errors.description && <p>{errors.description.message}</p>}
 
-                <label htmlFor="date">Date</label>
-                <DateTimePicker
+                <Label htmlFor="date">Date</Label>
+                <StyledDateTimePicker
                   id="date"
                   onChange={setDate}
                   value={date}
                 />
                 <input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
-                {errors.date && <p className="">{errors.date.message}</p>}
+                {errors.date && <p>{errors.date.message}</p>}
 
                 {/* <label htmlFor="userid">UserID</label> */}
                 <input type="hidden" id="userid" {...register("userid", {required: "You must specify a UserID."})} name="userid"/>
-                {errors.userid && <p className="">{errors.userid.message}</p>}
+                {errors.userid && <p>{errors.userid.message}</p>}
 
                 {/* <label htmlFor="house">House</label> */}
                 <input type="hidden" id="house" {...register("house", {required: "You must specify a house."})} name="house"/>
-                {errors.house && <p className="">{errors.house.message}</p>}
+                {errors.house && <p>{errors.house.message}</p>}
 
-                <Button important type="submit" value="add entry">Add Entry</Button>
-                <Button onClick={() => hide()}>Cancel</Button>
-              </form>
+                <Button formSubmit constWidth important type="submit" value="add entry">Save</Button>
+                <Button formSubmit constWidth onClick={() => hide()}>Cancel</Button>
+              </Form>
           </div>
         </div>
       </div>
