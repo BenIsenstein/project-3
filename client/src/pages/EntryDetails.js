@@ -117,8 +117,7 @@ const EntryDetails = () => {
         <Page>
             <PageContainer>
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-                    <Button onClick={() => history.goBack()}><BackIcon />Calendar</Button>
-
+                    <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
                     <Label htmlFor="item">Item</Label>
                     <ActivePencil isActive={itemActive} setter={setItemActive}/>
                     <Input
