@@ -21,7 +21,7 @@ const EntryDetails = () => {
     useEffect(() => {
         for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
         
-        const decideActive = (state, ref) => {if (state) ref.current.focus()}
+        const decideActive = (isActive, ref) => {if (isActive) ref.current.focus()}
 
         decideActive(taskActive, taskRef)
         decideActive(itemActive, itemRef)
@@ -32,14 +32,20 @@ const EntryDetails = () => {
         descriptionActive
     ])
 
+    // log the value of the refs when the 'active' state changes
     useEffect(() => {
         console.log("logging refs:")
         for (let ref of [taskRef, itemRef, descriptionRef]) console.log(ref)
-    }, [itemActive, taskActive, descriptionActive])
+    }, [
+        itemActive, 
+        taskActive, 
+        descriptionActive
+    ])
 
     // update 'date' input field whenever the piece of state is changed
     useEffect(() => setValue('date', date), [setValue, date])
 
+    // get the entry from mongoDB
     useEffect(() => {
         const getEntry = async () => {
             try {
@@ -113,7 +119,8 @@ const EntryDetails = () => {
                         detailedPage
                         ref={itemRef}
                         disabled={!itemActive}
-                        id="item" {...register("item", {required: "You must indicate an item."})} 
+                        id="item" 
+                        {...register("item", {required: "You must indicate an item."})} 
                         name="item"
                     />
                     {errors.item && <p className="">{errors.item.message}</p>}
@@ -124,7 +131,8 @@ const EntryDetails = () => {
                         detailedPage
                         ref={taskRef}
                         disabled={!taskActive}
-                        id="task" {...register("task", {required: "You must indicate a task."})} 
+                        id="task" 
+                        {...register("task", {required: "You must indicate a task."})} 
                         name="task"
                     />
                     {errors.task && <p className="">{errors.task.message}</p>}
@@ -135,7 +143,8 @@ const EntryDetails = () => {
                         detailedPage
                         ref={descriptionRef}
                         disabled={!descriptionActive}
-                        id="description" {...register("description", {required: "You must write a description."})} 
+                        id="description" 
+                        {...register("description", {required: "You must write a description."})} 
                         name="description"
                     />
                     {errors.description && <p className="">{errors.description.message}</p>}
@@ -152,7 +161,7 @@ const EntryDetails = () => {
                     }
                     <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
                     {errors.date && <p className="">{errors.date.message}</p>}
-          
+            
                     <Button formSubmit important type='submit' >Save Changes</Button>
                     <Button formSubmit type='submit' >Delete Event</Button>
                 </Form>
