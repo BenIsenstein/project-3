@@ -4,6 +4,20 @@ import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, Pe
 import { useForm } from 'react-hook-form'
 
 const EntryDetails = () => {
+    //declaring test input
+    function TextInputWithFocusButton() {
+        const inputEl = useRef(null);
+        const onButtonClick = () => {
+          // `current` points to the mounted text input element
+          inputEl.current.focus();
+        };
+        return (
+          <>
+            <input ref={inputEl} type="text" />
+            <button onClick={onButtonClick}>Focus the input</button>
+          </>
+        );
+    }
     const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
     const [refresh, setRefresh] = useState(null)
     const { id } = useParams()
@@ -17,9 +31,11 @@ const EntryDetails = () => {
     const descriptionRef = useRef(null)
     const [dateActive, setDateActive] = useState(false)
 
+    //const setRef = (element, ref) => ref.current = element
+
     // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
     useEffect(() => {
-        for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
+        //for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
         
         const decideActive = (isActive, ref) => {if (isActive) ref.current.focus()}
 
@@ -104,23 +120,26 @@ const EntryDetails = () => {
         }
     } 
 
-    const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.state)} />
+    const ActivePencil = props => <PencilIcon onClick={() => {props.setter(!props.state)}} />
 
     if (!refresh) return null
+
+    const {ref: itemRegister, ...rest} = register("item", {required: "You must indicate an item."})
 
     return (
         <Page>
             <PageContainer>
+                <TextInputWithFocusButton />
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.goBack()}><BackIcon />Calendar</Button>
                     <Label htmlFor="item">Item</Label>
                     <ActivePencil state={itemActive} setter={setItemActive}/>
                     <Input
                         detailedPage
-                        ref={itemRef}
+                        ref={elem => {itemRegister(elem); itemRef.current = elem}}
                         disabled={!itemActive}
                         id="item" 
-                        {...register("item", {required: "You must indicate an item."})} 
+                        {...rest}
                         name="item"
                     />
                     {errors.item && <p className="">{errors.item.message}</p>}
