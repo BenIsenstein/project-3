@@ -1,14 +1,36 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker } from '../common'
 import { useForm } from 'react-hook-form'
 
-const TaskDetails = () => {
+const EntryDetails = () => {
     const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
     const [refresh, setRefresh] = useState(null)
     const { id } = useParams()
     let history = useHistory()
     const [date, setDate] = useState()
+    const [itemActive, setItemActive] = useState(false)
+    const itemRef = useRef(null)
+    const [taskActive, setTaskActive] = useState(false)
+    const taskRef = useRef(null)
+    const [descriptionActive, setDescriptionActive] = useState(false)
+    const descriptionRef = useRef(null)
+    const [dateActive, setDateActive] = useState(false)
+
+    // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
+    useEffect(() => {
+        //for (let ref of [taskRef, itemRef, descriptionRef]) if (!ref.current) return
+        
+        const decideActive = (state, ref) => {if (state) ref.current.focus()}
+
+        decideActive(taskActive, taskRef)
+        decideActive(itemActive, itemRef)
+        decideActive(descriptionActive, descriptionRef)
+    }, [
+        taskActive,
+        itemActive,
+        descriptionActive
+    ])
 
     // update 'date' input field whenever the piece of state is changed
     useEffect(() => setValue('date', date), [setValue, date])
@@ -71,6 +93,8 @@ const TaskDetails = () => {
         }
     } 
 
+    const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.state)} />
+
     if (!refresh) return null
 
     return (
@@ -79,47 +103,57 @@ const TaskDetails = () => {
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.goBack()}><BackIcon />Calendar</Button>
                     <Label htmlFor="item">Item</Label>
-                    <PencilIcon />
+                    <ActivePencil state={itemActive} setter={setItemActive}/>
                     <Input
                         detailedPage
+                        ref={itemRef}
+                        disabled={!itemActive}
                         id="item" {...register("item", {required: "You must indicate an item."})} 
                         name="item"
                     />
                     {errors.item && <p className="">{errors.item.message}</p>}
                     
-
                     <Label htmlFor="task">Task</Label>
-                    <Textarea 
+                    <ActivePencil state={taskActive} setter={setTaskActive}/>
+                    <Input 
                         detailedPage
+                        ref={taskRef}
+                        disabled={!taskActive}
                         id="task" {...register("task", {required: "You must indicate a task."})} 
                         name="task"
                     />
                     {errors.task && <p className="">{errors.task.message}</p>}
 
                     <Label htmlFor="description">Description</Label>
+                    <ActivePencil state={descriptionActive} setter={setDescriptionActive}/>
                     <Textarea 
                         detailedPage
+                        ref={descriptionRef}
+                        disabled={!descriptionActive}
                         id="description" {...register("description", {required: "You must write a description."})} 
                         name="description"
                     />
                     {errors.description && <p className="">{errors.description.message}</p>}
 
                     <Label htmlFor="date">Date</Label>
-                    <StyledDateTimePicker
-                      id="date"
-                      onChange={setDate}
-                      value={date}
-                    />
-                    <Input type='hidden' name='date' {...register('date', {required: "You must choose a date."})} />
+                    <ActivePencil state={dateActive} setter={setDateActive}/>
+                    {dateActive
+                        ? <StyledDateTimePicker
+                          id="date"
+                          onChange={setDate}
+                          value={date}
+                        />
+                        : date?.toString()
+                    }
+                    <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
                     {errors.date && <p className="">{errors.date.message}</p>}
           
                     <Button formSubmit important type='submit' >Save Changes</Button>
                     <Button formSubmit type='submit' >Delete Event</Button>
-                    
                 </Form>
             </PageContainer>
         </Page>
     )
 }
 
-export default TaskDetails
+export default EntryDetails
