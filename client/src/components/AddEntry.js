@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
-import { Form, Button } from '../common'
+import { Form, Button, Label, Input, Textarea, StyledDateTimePicker } from '../common'
 import { useForm } from "react-hook-form"
-import DateTimePicker from 'react-datetime-picker'
-//import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
 const AddEntry = () => {
 
@@ -55,33 +53,39 @@ const AddEntry = () => {
 
   return (
     <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-      <label htmlFor="item">Item</label>
-      <input id="item" {...register("item", { required: "You must choose an item." })} name="item" />
+      <Label htmlFor="item">Item</Label>
+      <Input
+        id="item" {...register("item", { required: "You must choose an item." })} 
+        name="item" />
       {errors.item && <p className="">{errors.item.message}</p>}
 
-      <label htmlFor="task">Task</label>
-      <input id="task" {...register("task", { required: "You must choose a task." })} name="task" />
+      <Label htmlFor="task">Task</Label>
+      <Input 
+        id="task" {...register("task", { required: "You must choose a task." })}
+        name="task" />
       {errors.task && <p className="">{errors.task.message}</p>}
 
-      <label htmlFor="description">Description</label>
-      <input id="description" {...register("description", { required: "You must write a description." })} name="description" />
+      <Label htmlFor="description">Description</Label>
+      <Textarea
+        id="description" {...register("description", {required: "You must write a description." })} 
+        name="description" />
       {errors.description && <p className="">{errors.description.message}</p>}
 
-      <label htmlFor="date">Date</label>
-      <DateTimePicker
+      <Label htmlFor="date">Date</Label>
+      <StyledDateTimePicker
         id="date"
         onChange={setDate}
         value={date}
       />
-      <input type='hidden' name='date' {...register('date', { required: "You must choose a date." })} />
+      <Input type='hidden' name='date' {...register('date', { required: "You must choose a date." })} />
       {errors.date && <p className="">{errors.date.message}</p>}
 
-      {/* <label htmlFor="userid">UserID</label> */}
-      <input type="hidden" id="userid" {...register("userid", { required: "You must specify a UserID." })} name="userid" />
+      {/* <Label htmlFor="userid">UserID</Label> */}
+      <Input type="hidden" id="userid" {...register("userid", { required: "You must specify a UserID." })} name="userid" />
       {errors.userid && <p className="">{errors.userid.message}</p>}
 
-      {/* <label htmlFor="house">House</label> */}
-      <input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
+      {/* <Label htmlFor="house">House</Label> */}
+      <Input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
       {errors.house && <p className="">{errors.house.message}</p>}
 
       <Button important type="submit" value="add entry">Submit</Button>
