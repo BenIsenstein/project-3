@@ -34,7 +34,7 @@ const CalendarListView = ({ reRenderList}) => {
 
   // Effect to fetch all entries
   useEffect(() => {
-    if (userContext.isLoggedIn) {
+    if (userContext.user !== undefined) {
       const fetchCalendarEntries = async () => {
         setDates([{ 
           date: "Loading...", 

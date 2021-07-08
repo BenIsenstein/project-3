@@ -7,6 +7,7 @@ const TaskEntryPage = () => {
     return (
         <Page>
             <PageContainer>
+                <h2>Add New Calendar Entry</h2>
                 <TaskEntry />
             </PageContainer>
         </Page>

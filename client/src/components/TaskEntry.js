@@ -54,47 +54,39 @@ const TaskEntry = () => {
   }
 
   return (
-    <div>
-      <p>Add New Calendar Entry</p>
-      <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-        <div className="task-entry-form">
-          <div className="task-entry-form-content">
-            <div className="form-control">
-              <label htmlFor="item">Item</label>
-              <input id="item" {...register("item", { required: "You must choose an item." })} name="item" />
-              {errors.item && <p className="">{errors.item.message}</p>}
+    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
+      <label htmlFor="item">Item</label>
+      <input id="item" {...register("item", { required: "You must choose an item." })} name="item" />
+      {errors.item && <p className="">{errors.item.message}</p>}
 
-              <label htmlFor="task">Task</label>
-              <input id="task" {...register("task", { required: "You must choose a task." })} name="task" />
-              {errors.task && <p className="">{errors.task.message}</p>}
+      <label htmlFor="task">Task</label>
+      <input id="task" {...register("task", { required: "You must choose a task." })} name="task" />
+      {errors.task && <p className="">{errors.task.message}</p>}
 
-              <label htmlFor="description">Description</label>
-              <input id="description" {...register("description", { required: "You must write a description." })} name="description" />
-              {errors.description && <p className="">{errors.description.message}</p>}
+      <label htmlFor="description">Description</label>
+      <input id="description" {...register("description", { required: "You must write a description." })} name="description" />
+      {errors.description && <p className="">{errors.description.message}</p>}
 
-              <label htmlFor="date">Date</label>
-              <DateTimePicker
-                id="date"
-                onChange={setDate}
-                value={date}
-              />
-              <input type='hidden' name='date' {...register('date', { required: "You must choose a date." })} />
-              {errors.date && <p className="">{errors.date.message}</p>}
+      <label htmlFor="date">Date</label>
+      <DateTimePicker
+        id="date"
+        onChange={setDate}
+        value={date}
+      />
+      <input type='hidden' name='date' {...register('date', { required: "You must choose a date." })} />
+      {errors.date && <p className="">{errors.date.message}</p>}
 
-              {/* <label htmlFor="userid">UserID</label> */}
-              <input type="hidden" id="userid" {...register("userid", { required: "You must specify a UserID." })} name="userid" />
-              {errors.userid && <p className="">{errors.userid.message}</p>}
+      {/* <label htmlFor="userid">UserID</label> */}
+      <input type="hidden" id="userid" {...register("userid", { required: "You must specify a UserID." })} name="userid" />
+      {errors.userid && <p className="">{errors.userid.message}</p>}
 
-              {/* <label htmlFor="house">House</label> */}
-              <input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
-              {errors.house && <p className="">{errors.house.message}</p>}
-            </div>
-            <Button important type="submit" value="add entry">Submit</Button>
-            <Button onClick={() => history.goBack()}>Cancel</Button>
-          </div>
-        </div>
-      </ Form>
-    </div>
+      {/* <label htmlFor="house">House</label> */}
+      <input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
+      {errors.house && <p className="">{errors.house.message}</p>}
+
+      <Button important type="submit" value="add entry">Submit</Button>
+      <Button onClick={() => history.goBack()}>Cancel</Button>
+    </ Form>
   )
 }
 
