@@ -8,8 +8,8 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState()
   const [userName, setUserName] = useState('loading')
   const [userType, setUserType] = useState()
-  const isLoggedIn = userName !== "loading" && userName !== "no_user"
-  const isLoading = userName === "loading"
+  let isLoggedIn = userName !== "loading" && userName !== "no_user"
+  let isLoading = userName === "loading"
 
   useEffect(() => {
     const getLoggedInUser = async () => {
@@ -69,7 +69,7 @@ const UserProvider = ({ children }) => {
       let resObject = await response.json()
 
       if (resObject.isLoggedOutNow) {
-        console.log("UserProvider: Logout on Backend is complete, now removing State values to reset login credentials...")
+        isLoggedIn = false
         setUser(undefined)
         setUserName('no_user')
         setUserType(undefined)
