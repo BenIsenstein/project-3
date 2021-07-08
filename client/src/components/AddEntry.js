@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import DateTimePicker from 'react-datetime-picker'
 //import DateTimePicker from 'react-datetime-picker/dist/entry.nostyle'
 
-const TaskEntry = () => {
+const AddEntry = () => {
 
   let history = useHistory()
 
@@ -15,7 +15,7 @@ const TaskEntry = () => {
 
   // Preload the hidden input field for userid. Also pre-populate HOUSE value for now
   let user_id = "default"
-  if (userContext.isLoggedIn) {
+  if (userContext.user !== undefined) {
     user_id = userContext.user._id
   }
 
@@ -90,4 +90,4 @@ const TaskEntry = () => {
   )
 }
 
-export default TaskEntry
+export default AddEntry

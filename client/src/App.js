@@ -11,7 +11,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import Calendar from './pages/Calendar'
 import EntryDetails from './pages/EntryDetails'
-import TaskEntryPage from './pages/TaskEntryPage'
+import AddEntryPage from './pages/AddEntryPage'
 
 const App = () => {
   return (
@@ -25,7 +25,7 @@ const App = () => {
             <Route path='/signup' component={SignupPage} />
             <Route path='/calendar' component={Calendar} />
             <Route path='/event/:id' component={EntryDetails} />
-            <Route path='/taskentry' component={TaskEntryPage} />
+            <Route path='/addentry' component={AddEntryPage} />
           </Switch>
         </UserProvider>
       </Router>
