@@ -6,9 +6,9 @@ import DeleteEntryButton from '../components/DeleteEntryButton'
 
 const EntryDetails = () => {
     const { register, formState: { errors }, handleSubmit, setValue, setFocus } = useForm({})
-    const [refresh, setRefresh] = useState(null)
     const { id } = useParams()
-    let history = useHistory()
+    const history = useHistory()
+    const [refresh, setRefresh] = useState(null)
     const [date, setDate] = useState()
     const [itemActive, setItemActive] = useState(false)
     const [taskActive, setTaskActive] = useState(false)
@@ -31,8 +31,8 @@ const EntryDetails = () => {
     // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
     useEffect(() => { 
         const decideActive = (isActive, name) => {if (isActive) setFocus(name)}
-
-        for (let pair of inputs) decideActive(pair.isActive, pair.name)
+        
+        for (let input of inputs) decideActive(input.isActive, input.name)
     }, [
         inputs,
         setFocus,
@@ -40,9 +40,6 @@ const EntryDetails = () => {
         itemActive,
         descriptionActive
     ])
-
-    // update 'date' input field whenever the piece of state is changed
-    useEffect(() => setValue('date', date), [setValue, date])
 
     // get the entry from mongoDB
     useEffect(() => {
@@ -65,8 +62,8 @@ const EntryDetails = () => {
             
                 setValue('item', item)
                 setValue('task', task)
-                setDate(new Date(date))
                 setValue('description', description)
+                setDate(new Date(date))
 
                 setRefresh({})
             }
@@ -103,26 +100,35 @@ const EntryDetails = () => {
         }
     } 
 
+    //edit icon that makes the desired input field active
     const ActivePencil = props => <PencilIcon 
         onClick={() => {
             props.setter(!props.isActive)
-
-            for (let pair of inputs.filter(pair => pair.isActive !== props.isActive)) pair.setter(false)
+            for (let input of inputs.filter(input => input.isActive !== props.isActive)) input.setter(false)
         }} 
     />
+
+    // update 'date' input field whenever the piece of state is changed
+    useEffect(() => setValue('date', date), [setValue, date])
 
     if (!refresh) return null
     
     return (
         <Page>
             <PageContainer>
-                <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
+                <Form 
+                    onSubmit={async () => {
+                        for (let { setter } of inputs) await setter(true)
+                        handleSubmit(async (data) => await onSubmit(data))()    
+                    }}
+                >
                     <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
                     <Label htmlFor="item">Item</Label>
                     <ActivePencil isActive={itemActive} setter={setItemActive}/>
                     <Input
                         detailedPage
-                        disabled={!itemActive}
+                        readOnly={!itemActive}
+                        shouldBlur={!itemActive}
                         id="item" 
                         {...register("item", {required: "You must indicate an item."})}
                         name="item"
@@ -133,7 +139,8 @@ const EntryDetails = () => {
                     <ActivePencil isActive={taskActive} setter={setTaskActive}/>
                     <Input 
                         detailedPage
-                        disabled={!taskActive}
+                        readOnly={!taskActive}
+                        shouldBlur={!taskActive}
                         id="task" 
                         {...register("task", {required: "You must indicate a task."})} 
                         name="task"
@@ -144,7 +151,8 @@ const EntryDetails = () => {
                     <ActivePencil isActive={descriptionActive} setter={setDescriptionActive}/>
                     <Textarea 
                         detailedPage
-                        disabled={!descriptionActive}
+                        readOnly={!descriptionActive}
+                        shouldBlur={!descriptionActive}
                         id="description" 
                         {...register("description", {required: "You must write a description."})} 
                         name="description"

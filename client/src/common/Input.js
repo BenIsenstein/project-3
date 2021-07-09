@@ -1,6 +1,8 @@
 import styled, {css} from 'styled-components'
 
-const Input = styled.input`
+const Input = styled.input.attrs(props => ({
+    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onFocus
+}))`
     width: 100%;
     padding: .4em .6em;
     font-size: 1em;
@@ -28,3 +30,4 @@ const PasswordInput = styled(Input)`
 `
 
 export {Input, PasswordInput}
+
