@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker } from '../common'
+import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker, FlexSection } from '../common'
 import { useForm } from 'react-hook-form'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 
@@ -118,58 +118,81 @@ const EntryDetails = () => {
             <PageContainer>
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
-                    <Label htmlFor="item">Item</Label>
-                    <ActivePencil isActive={itemActive} setter={setItemActive}/>
-                    <Input
-                        detailedPage
-                        readOnly={!itemActive}
-                        shouldBlur={!itemActive}
-                        id="item" 
-                        {...register("item", {required: "You must indicate an item."})}
-                        name="item"
-                    />
-                    {errors.item && <p className="">{errors.item.message}</p>}
                     
-                    <Label htmlFor="task">Task</Label>
-                    <ActivePencil isActive={taskActive} setter={setTaskActive}/>
-                    <Input 
-                        detailedPage
-                        readOnly={!taskActive}
-                        shouldBlur={!taskActive}
-                        id="task" 
-                        {...register("task", {required: "You must indicate a task."})} 
-                        name="task"
-                    />
-                    {errors.task && <p className="">{errors.task.message}</p>}
-
-                    <Label htmlFor="description">Description</Label>
-                    <ActivePencil isActive={descriptionActive} setter={setDescriptionActive}/>
-                    <Textarea 
-                        detailedPage
-                        readOnly={!descriptionActive}
-                        shouldBlur={!descriptionActive}
-                        id="description" 
-                        {...register("description", {required: "You must write a description."})} 
-                        name="description"
-                    />
-                    {errors.description && <p className="">{errors.description.message}</p>}
-
-                    <Label htmlFor="date">Date</Label>
-                    <ActivePencil isActive={dateActive} setter={setDateActive}/>
-                    {dateActive
-                        ? <StyledDateTimePicker
-                          id="date"
-                          onChange={setDate}
-                          value={date}
+                    <FlexSection>
+                        <Label htmlFor="item">Item</Label>
+                        <ActivePencil isActive={itemActive} setter={setItemActive}/>
+                    </FlexSection>
+                    <FlexSection fullWidth>
+                        <Input
+                            detailedPage
+                            maxLength='50'
+                            readOnly={!itemActive}
+                            shouldBlur={!itemActive}
+                            id="item" 
+                            {...register("item", {required: "You must indicate an item."})}
+                            name="item"
                         />
-                        : date?.toString()
-                    }
-                    <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
-                    {errors.date && <p className="">{errors.date.message}</p>}
-            
-                    <Button formSubmit important type='submit' >Save Changes</Button>
+                    {errors.item && <p className="">{errors.item.message}</p>}                        
+                    </FlexSection>
+                    
+                    <FlexSection>
+                        <Label htmlFor="task">Task</Label>
+                        <ActivePencil isActive={taskActive} setter={setTaskActive}/>                        
+                    </FlexSection>
+                    <FlexSection fullWidth>
+                        <Input 
+                            detailedPage
+                            maxLength='50'
+                            readOnly={!taskActive}
+                            shouldBlur={!taskActive}
+                            id="task" 
+                            {...register("task", {required: "You must indicate a task."})} 
+                            name="task"
+                        />
+                        {errors.task && <p className="">{errors.task.message}</p>}                        
+                    </FlexSection>
+
+                    <FlexSection>
+                        <Label htmlFor="description">Description</Label>
+                        <ActivePencil isActive={descriptionActive} setter={setDescriptionActive}/>                        
+                    </FlexSection>
+                    <FlexSection fullWidth>
+                        <Textarea 
+                            detailedPage
+                            readOnly={!descriptionActive}
+                            shouldBlur={!descriptionActive}
+                            id="description" 
+                            {...register("description", {required: "You must write a description."})} 
+                            name="description"
+                        />
+                        {errors.description && <p className="">{errors.description.message}</p>}                        
+                    </FlexSection>
+
+                    <FlexSection>
+                        <Label htmlFor="date">Date</Label>
+                        <ActivePencil isActive={dateActive} setter={setDateActive}/>                        
+                    </FlexSection>
+                    <FlexSection fullWidth>
+                        {dateActive
+                            ? <StyledDateTimePicker
+                            id="date"
+                            onChange={setDate}
+                            value={date}
+                            />
+                            : date?.toString()
+                        }
+                        <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
+                        {errors.date && <p className="">{errors.date.message}</p>}                        
+                    </FlexSection>
+                    
+                    <Button formSubmit important type='submit'>Save Changes</Button>                        
                 </Form>
-                <DeleteEntryButton entryId={id} />
+
+                <FlexSection justifyCenter>
+                    <DeleteEntryButton formSubmit={true} entryId={id} />                   
+                </FlexSection>
+
             </PageContainer>
         </Page>
     )

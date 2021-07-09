@@ -55,12 +55,14 @@ const AddEntry = () => {
     <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
       <Label htmlFor="item">Item</Label>
       <Input
+        maxLength='50'
         id="item" {...register("item", { required: "You must choose an item." })} 
         name="item" />
       {errors.item && <p className="">{errors.item.message}</p>}
 
       <Label htmlFor="task">Task</Label>
-      <Input 
+      <Input
+        maxLength='50'
         id="task" {...register("task", { required: "You must choose a task." })}
         name="task" />
       {errors.task && <p className="">{errors.task.message}</p>}
@@ -88,9 +90,9 @@ const AddEntry = () => {
       <Input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
       {errors.house && <p className="">{errors.house.message}</p>}
 
-      <Button important type="submit" value="add entry">Submit</Button>
-      <Button onClick={() => history.goBack()}>Cancel</Button>
-    </ Form>
+      <Button formSubmit important type="submit" value="add entry">Save</Button>
+      <Button formSubmit onClick={() => history.goBack()}>Cancel</Button>
+    </Form>
   )
 }
 

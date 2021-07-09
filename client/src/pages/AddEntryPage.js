@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Page, Button, PageContainer } from '../common'
 import AddEntry from "../components/AddEntry"
@@ -14,7 +14,7 @@ const AddEntryPage = () => {
     return (
         <Page>
             <PageContainer>
-                <h2>Add New Calendar Entry</h2>
+                <p>New Event</p>
                 {/* // If user is NOT logged in and accidentally navigated to this page,
                 // redirect them to the LANDING PAGE. */}
                 {userContext.user === undefined &&

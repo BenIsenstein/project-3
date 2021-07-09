@@ -44,8 +44,11 @@ const Button = styled.button`
         align-self: center;
     `}
 
-    ${props => props.round && css`
-        border-radius: 50%;
+    ${props => props.fullWidth && css`
+        width: 100%;
+        margin: .05em;
+        display: flex;
+        justify-content: center;
     `}
 `
 

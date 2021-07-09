@@ -2,10 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
 import styled, {css} from 'styled-components'
 
-import DeleteEntryButton from '../DeleteEntryButton'
-import { NextIcon, Button, slideInTop } from '../../common'
+// import DeleteEntryButton from '../DeleteEntryButton'
+import { NextIcon, Button, slideInTop, FlexSection } from '../../common'
 
 const AccordionContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   animation: ${slideInTop} 0.6s ease-in;
@@ -68,8 +69,10 @@ const Accordion = props => {
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
           <p>{props.description}</p>
-          <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} />
-          <Button important onClick={() => history.push(`/event/${props._id}`)}>Details</Button>          
+          {/* <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} /> */}
+          <FlexSection justifyEnd>
+            <Button important onClick={() => history.push(`/event/${props._id}`)}>Details</Button>              
+          </FlexSection>                  
         </AccordionContentContainer>
       </AccordionContent>
 
