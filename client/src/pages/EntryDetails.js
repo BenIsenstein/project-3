@@ -165,8 +165,8 @@ const EntryDetails = () => {
                     {errors.date && <p className="">{errors.date.message}</p>}
             
                     <Button formSubmit important type='submit' >Save Changes</Button>
-                    <DeleteEntryButton entryId={id} />
                 </Form>
+                <DeleteEntryButton entryId={id} />
             </PageContainer>
         </Page>
     )
