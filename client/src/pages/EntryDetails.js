@@ -121,14 +121,13 @@ const EntryDetails = () => {
                     
                     <FlexSection>
                         <Label htmlFor="item">Item</Label>
-                        <ActivePencil isActive={itemActive} setter={setItemActive}/>
+                        
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Input
                             detailedPage
                             maxLength='50'
-                            readOnly={!itemActive}
-                            shouldBlur={!itemActive}
+                            
                             id="item" 
                             {...register("item", {required: "You must indicate an item."})}
                             name="item"
@@ -138,14 +137,13 @@ const EntryDetails = () => {
                     
                     <FlexSection>
                         <Label htmlFor="task">Task</Label>
-                        <ActivePencil isActive={taskActive} setter={setTaskActive}/>                        
+                                               
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Input 
                             detailedPage
                             maxLength='50'
-                            readOnly={!taskActive}
-                            shouldBlur={!taskActive}
+                           
                             id="task" 
                             {...register("task", {required: "You must indicate a task."})} 
                             name="task"
@@ -155,13 +153,11 @@ const EntryDetails = () => {
 
                     <FlexSection>
                         <Label htmlFor="description">Description</Label>
-                        <ActivePencil isActive={descriptionActive} setter={setDescriptionActive}/>                        
+                                             
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Textarea 
                             detailedPage
-                            readOnly={!descriptionActive}
-                            shouldBlur={!descriptionActive}
                             id="description" 
                             {...register("description", {required: "You must write a description."})} 
                             name="description"
@@ -171,7 +167,7 @@ const EntryDetails = () => {
 
                     <FlexSection>
                         <Label htmlFor="date">Date</Label>
-                        <ActivePencil isActive={dateActive} setter={setDateActive}/>                        
+                        <ActivePencil isActive={dateActive} setter={setDateActive}/>                      
                     </FlexSection>
                     <FlexSection fullWidth>
                         {dateActive

@@ -1,8 +1,6 @@
 import styled, {css} from 'styled-components'
 
-const Input = styled.input.attrs(props => ({
-    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onClick
-}))`
+const Input = styled.input`
     width: 100%;
     padding: .4em .6em;
     font-family: inherit;
@@ -16,12 +14,6 @@ const Input = styled.input.attrs(props => ({
     ${props => props.detailedPage && css`
         background-color: ${props => props.theme.scdLt};
         border: 1px solid ${props => props.theme.prmDk};
-
-        &:disabled {
-            padding: .4em 0;
-            background: none;
-            border: none;
-        }
     `} 
 
     &:focus {
