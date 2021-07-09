@@ -54,7 +54,7 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
         actionOnConfirm={DeleteEntry}
       />
       <Button icon={props.iconButton} formSubmit={props.formSubmit} onClick={toggleConfirmModal}>
-        { props.iconButton ? <TrashIcon /> : 'DELETE' }       
+        { props.iconButton ? <TrashIcon /> : 'Delete Entry' }       
       </Button>
     </div>
   )

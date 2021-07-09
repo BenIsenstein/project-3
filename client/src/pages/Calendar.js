@@ -14,7 +14,6 @@ const Calendar = () => {
     //define state for refreshing the list view
     const [refresh, setRefresh] = useState()
     const reRenderList = () => setRefresh({})
-
     let history = useHistory()
 
     // return (

@@ -1,45 +1,64 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker, FlexSection } from '../common'
+import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, DoneIcon, StyledDateTimePicker, FlexSection } from '../common'
 import { useForm } from 'react-hook-form'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 
 const EntryDetails = () => {
-    const { register, formState: { errors }, handleSubmit, setValue, setFocus } = useForm({})
+    const { register, formState: { errors }, handleSubmit, setValue, setFocus, reset, watch} = useForm({})
     const { id } = useParams()
     const history = useHistory()
     const [refresh, setRefresh] = useState(null)
-    const [date, setDate] = useState()
-    const [itemActive, setItemActive] = useState(false)
-    const [taskActive, setTaskActive] = useState(false)
-    const [descriptionActive, setDescriptionActive] = useState(false)
-    const [dateActive, setDateActive] = useState(false)
+
+    // viewMode can be 'details' or 'edit'
+    const [viewMode, setViewMode] = useState('details')
+    const shouldReadOnly = viewMode !== 'edit'
+
+    const [resetValues, setResetValues] = useState({})
+    const resetForm = () => {
+        reset(resetValues) 
+        setViewMode('edit')
+    }
+
+    // watch the values of every input
+    const watchedItem = watch('item')
+    const watchedTask = watch('task')
+    const watchedDescription = watch('description')
+    const watchedDate = watch('date')
+    const [hasEntryLoaded, setHasEntryLoaded] = useState(false)
+    const [hasBeenChanged, setHasBeenChanged] = useState(false)
+
+    // 'active' inputs boolean values
+    // const [itemActive, setItemActive] = useState(false)
+    // const [taskActive, setTaskActive] = useState(false)
+    // const [descriptionActive, setDescriptionActive] = useState(false)
+    // const [dateActive, setDateActive] = useState(false)
 
     // array of all inputs in the form
-    const inputs = useMemo(() => [
-        {isActive: taskActive, setter: setTaskActive, name: 'task'},
-        {isActive: itemActive, setter: setItemActive, name: 'item'},
-        {isActive: descriptionActive, setter: setDescriptionActive, name: 'description'},
-        {isActive: dateActive, setter: setDateActive, name: 'date'}
-    ], [
-        taskActive,
-        itemActive,
-        descriptionActive,
-        dateActive
-    ])
+    // const inputs = useMemo(() => [
+    //     {isActive: taskActive, setter: setTaskActive, name: 'task'},
+    //     {isActive: itemActive, setter: setItemActive, name: 'item'},
+    //     {isActive: descriptionActive, setter: setDescriptionActive, name: 'description'},
+    //     {isActive: dateActive, setter: setDateActive, name: 'date'}
+    // ], [
+    //     taskActive,
+    //     itemActive,
+    //     descriptionActive,
+    //     dateActive
+    // ])
 
     // effect to focus the right input when the 'active' state changes by clicking on the pencil icon
-    useEffect(() => { 
-        const decideActive = (isActive, name) => {if (isActive) setFocus(name)}
+    // useEffect(() => { 
+    //     const decideActive = (isActive, name) => {if (isActive) setFocus(name)}
         
-        for (let input of inputs) decideActive(input.isActive, input.name)
-    }, [
-        inputs,
-        setFocus,
-        taskActive,
-        itemActive,
-        descriptionActive
-    ])
+    //     for (let input of inputs) decideActive(input.isActive, input.name)
+    // }, [
+    //     inputs,
+    //     setFocus,
+    //     taskActive,
+    //     itemActive,
+    //     descriptionActive
+    // ])
 
     // get the entry from mongoDB
     useEffect(() => {
@@ -47,7 +66,7 @@ const EntryDetails = () => {
             try {
                 setValue('item', '...')
                 setValue('task', '...')
-                setDate(undefined)
+                setValue('date', undefined)
                 setValue('description', '...')
             
                 let entryResponse = await fetch(`/api/calendarEntry/get/${id}`)
@@ -59,11 +78,18 @@ const EntryDetails = () => {
                     date,
                     description 
                 } = entryDetails
+
+                date = new Date(date)
+
+                // reset values if the user wants to cancel changes, but keep viewing their details
+                setResetValues({ item, task, description, date })
             
                 setValue('item', item)
                 setValue('task', task)
                 setValue('description', description)
-                setDate(new Date(date))
+                setValue('date', date)
+            
+                setHasEntryLoaded(true)
 
                 setRefresh({})
             }
@@ -75,10 +101,34 @@ const EntryDetails = () => {
         getEntry()
     }, [setRefresh, setValue, id])
 
+    // control the value of 'hasBeenChanged'
+    useEffect(() => {
+        const currentValues = {
+            item: watchedItem, 
+            task: watchedTask, 
+            description: watchedDescription, 
+            date: watchedDate
+        }
+
+        const doEntriesMatch = Object.keys(resetValues).every(key => resetValues[key] === currentValues[key])
+        
+        if (doEntriesMatch) {
+            setHasBeenChanged(false)
+        }
+        else {
+            setHasBeenChanged(true)
+        }
+    }, [
+        watchedItem, 
+        watchedTask, 
+        watchedDescription, 
+        watchedDate, 
+        resetValues, 
+        hasEntryLoaded
+    ])
+
     // form submit function
     const onSubmit = async (data) => {
-        console.log('data: ', data)
-
         let action = `/api/calendarEntry/update/${id}`
         let options = {
           method: "put",
@@ -101,29 +151,28 @@ const EntryDetails = () => {
     } 
 
     //edit icon that makes the desired input field active
-    const ActivePencil = props => <PencilIcon 
-        onClick={() => {
-            props.setter(!props.isActive)
-            for (let input of inputs.filter(input => input.isActive !== props.isActive)) input.setter(false)
-        }} 
-    />
+    const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
 
-    // update 'date' input field whenever the piece of state is changed
-    useEffect(() => setValue('date', date), [setValue, date])
+    // edit or details icon. Changes which icon it is based on view mode
+    const EditOrDetailsButton = props => {
+        if (viewMode === 'details') return <PencilIcon {...props} onClick={() => setViewMode('edit')} />
+        if (viewMode === 'edit') return <DoneIcon {...props} onClick={() => setViewMode('details')} />
+    }
 
     if (!refresh) return null
     
     return (
         <Page>
             <PageContainer>
+                <EditOrDetailsButton />
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-                    <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
                     <FlexSection>
                         <Label htmlFor="item">Item</Label>        
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Input
                             detailedPage
+                            readOnly={shouldReadOnly}
                             maxLength='50'
                             id="item" 
                             {...register("item", {required: "You must indicate an item."})}
@@ -137,8 +186,8 @@ const EntryDetails = () => {
                     <FlexSection fullWidth>
                         <Input 
                             detailedPage
+                            readOnly={shouldReadOnly}
                             maxLength='50'
-                           
                             id="task" 
                             {...register("task", {required: "You must indicate a task."})} 
                             name="task"
@@ -151,6 +200,7 @@ const EntryDetails = () => {
                     <FlexSection fullWidth>
                         <Textarea 
                             detailedPage
+                            readOnly={shouldReadOnly}
                             id="description" 
                             {...register("description", {required: "You must write a description."})} 
                             name="description"
@@ -158,25 +208,27 @@ const EntryDetails = () => {
                         {errors.description && <p className="">{errors.description.message}</p>}                        
                     </FlexSection>
                     <FlexSection>
-                        <Label htmlFor="date">Date</Label>
-                        <ActivePencil isActive={dateActive} setter={setDateActive}/>                      
+                        <Label htmlFor="date">Date</Label>            
                     </FlexSection>
                     <FlexSection fullWidth>
-                        {dateActive
-                            ? <StyledDateTimePicker
-                            id="date"
-                            onChange={setDate}
-                            value={date}
+                        {shouldReadOnly
+                            ? <Input detailedPage as="div">{watchedDate?.toString()}</Input>
+                            : <StyledDateTimePicker
+                                id="date"
+                                onChange={e => setValue('date', e)}
+                                value={watchedDate}
                             />
-                            : date?.toString()
                         }
-                        <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
+                        <Input  name='date'  type='hidden' {...register('date', {required: "You must choose a date."})} />
                         {errors.date && <p className="">{errors.date.message}</p>}                        
                     </FlexSection>
-                    <Button formSubmit important type='submit'>Save Changes</Button>                        
+                    {hasBeenChanged && <Button formSubmit important type='submit'>Save Changes</Button>}                        
                 </Form>
 
-                <FlexSection justifyCenter>
+                <FlexSection column justifyCenter>
+                    {hasBeenChanged && <Button type='button' onClick={() => resetForm()}>Cancel Changes</Button>}
+                    {!hasBeenChanged && <Button type='button' onClick={() => history.push('/calendar')}><BackIcon /> Calendar</Button>}
+
                     <DeleteEntryButton formSubmit={true} entryId={id} />                   
                 </FlexSection>
 
