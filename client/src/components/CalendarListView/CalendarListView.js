@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
 import UserContext from '../../UserContext'
+import { FlexSection } from '../../common'
 
 import Accordion from '../Accordion/Accordion'
 import './CalendarListView.css'
@@ -89,18 +90,29 @@ const CalendarListView = ({ reRenderList }) => {
     }
   }, [entryTemplate, setNoneFound, reRenderList])
 
+  // return <>
+  //   {dates.map((date, index) => {
+  //       return (
+  //         <div key={index} className='calendar-list-entry-container'>
+  //           <div className='list-date'>
+  //             <h5>{date.date || "No date"}</h5>
+  //           </div>
+  //           <div className='list-entry'>
+  //             {date.entries.map((entry, index) => <Accordion reRenderList={reRenderList} key={index} {...entry} />)}               
+  //           </div>
+             
+  //         </div>
+  //       )
+  //   })}
+  // </>
+
   return <>
     {dates.map((date, index) => {
         return (
-          <div key={index} className='calendar-list-entry-container'>
-            <div className='list-date'>
-              <h5>{date.date || "No date"}</h5>
-            </div>
-            <div className='list-entry'>
-              {date.entries.map((entry, index) => <Accordion reRenderList={reRenderList} key={index} {...entry} />)}               
-            </div>
-             
-          </div>
+          <FlexSection column>
+            <h5>{date.date || "No date"}</h5>
+            {date.entries.map((entry, index) => <Accordion reRenderList={reRenderList} key={index} {...entry} />)}                
+          </FlexSection>
         )
     })}
   </>

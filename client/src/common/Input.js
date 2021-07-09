@@ -5,6 +5,7 @@ const Input = styled.input.attrs(props => ({
 }))`
     width: 100%;
     padding: .4em .6em;
+    font-family: inherit;
     font-size: 1em;
     color: ${props => props.theme.contentColor};
     border: 1px solid ${props => props.theme.prm};
@@ -13,8 +14,14 @@ const Input = styled.input.attrs(props => ({
     box-sizing: border-box;
 
     ${props => props.detailedPage && css`
-        padding: .4em 0;
-        border: none;
+        background-color: ${props => props.theme.scdLt};
+        border: 1px solid ${props => props.theme.prmDk};
+
+        &:disabled {
+            padding: .4em 0;
+            background: none;
+            border: none;
+        }
     `} 
 
     &:focus {

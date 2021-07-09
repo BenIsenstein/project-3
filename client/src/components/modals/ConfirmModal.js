@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Button } from '../../common'
+import { Button, FlexSection } from '../../common'
 
 const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, message, actionOnConfirm }) => {
 
@@ -23,20 +23,19 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, message, action
               <p>
                 {message}
               </p>
-              <div>
-                {/* <Button onClick={actionOnConfirm}> */}
-                <Button onClick={() => {
+              <FlexSection fullWidth justifyCenter>
+                <Button fullWidth onClick={() => {
                   hideConfirmModal();
                   actionOnConfirm();
                 }}>
-                  Remove
+                  Delete
                 </Button>
-                <Button important onClick={()=>{
+                <Button fullWidth important onClick={()=>{
                   hideConfirmModal()
                 }}>
                   Cancel
                 </Button>
-              </div>
+              </FlexSection>
             </div>
           </div>
         </React.Fragment>, document.body

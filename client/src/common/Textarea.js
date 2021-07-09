@@ -17,8 +17,14 @@ const Textarea = styled(TextareaAutosize).attrs(props => ({
     overflow: hidden;
 
     ${props => props.detailedPage && css`
-        padding: .4em 0;
-        border: none;
+        background-color: ${props => props.theme.scdLt};
+        border: 1px solid ${props => props.theme.prmDk};
+
+        &:disabled {
+            padding: .4em 0;
+            background: none;
+            border: none;
+        }
     `} 
 
     &:focus {
