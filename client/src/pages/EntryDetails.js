@@ -118,26 +118,21 @@ const EntryDetails = () => {
             <PageContainer>
                 <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
-                    
                     <FlexSection>
-                        <Label htmlFor="item">Item</Label>
-                        
+                        <Label htmlFor="item">Item</Label>        
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Input
                             detailedPage
                             maxLength='50'
-                            
                             id="item" 
                             {...register("item", {required: "You must indicate an item."})}
                             name="item"
                         />
                     {errors.item && <p className="">{errors.item.message}</p>}                        
-                    </FlexSection>
-                    
+                    </FlexSection>                  
                     <FlexSection>
-                        <Label htmlFor="task">Task</Label>
-                                               
+                        <Label htmlFor="task">Task</Label>                             
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Input 
@@ -150,10 +145,8 @@ const EntryDetails = () => {
                         />
                         {errors.task && <p className="">{errors.task.message}</p>}                        
                     </FlexSection>
-
                     <FlexSection>
-                        <Label htmlFor="description">Description</Label>
-                                             
+                        <Label htmlFor="description">Description</Label>                       
                     </FlexSection>
                     <FlexSection fullWidth>
                         <Textarea 
@@ -164,7 +157,6 @@ const EntryDetails = () => {
                         />
                         {errors.description && <p className="">{errors.description.message}</p>}                        
                     </FlexSection>
-
                     <FlexSection>
                         <Label htmlFor="date">Date</Label>
                         <ActivePencil isActive={dateActive} setter={setDateActive}/>                      
@@ -181,7 +173,6 @@ const EntryDetails = () => {
                         <Input type='hidden' name='date'  {...register('date', {required: "You must choose a date."})} />
                         {errors.date && <p className="">{errors.date.message}</p>}                        
                     </FlexSection>
-                    
                     <Button formSubmit important type='submit'>Save Changes</Button>                        
                 </Form>
 
