@@ -116,12 +116,7 @@ const EntryDetails = () => {
     return (
         <Page>
             <PageContainer>
-                <Form 
-                    onSubmit={async () => {
-                        for (let { setter } of inputs) await setter(true)
-                        handleSubmit(async (data) => await onSubmit(data))()    
-                    }}
-                >
+                <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
                     <Button onClick={() => history.push(`/calendar`)}><BackIcon />Calendar</Button>
                     <Label htmlFor="item">Item</Label>
                     <ActivePencil isActive={itemActive} setter={setItemActive}/>
