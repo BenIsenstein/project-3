@@ -2,7 +2,7 @@ import styled, {css} from 'styled-components'
 import TextareaAutosize from 'react-textarea-autosize'
 
 const Textarea = styled(TextareaAutosize).attrs(props => ({
-    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onFocus
+    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onClick
 }))`
     width: 100%;
     min-height: 1.8em;

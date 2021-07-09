@@ -1,7 +1,7 @@
 import styled, {css} from 'styled-components'
 
 const Input = styled.input.attrs(props => ({
-    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onFocus
+    onClick: props.detailedPage && props.shouldBlur ? e => e.target.blur() : props.onClick
 }))`
     width: 100%;
     padding: .4em .6em;
