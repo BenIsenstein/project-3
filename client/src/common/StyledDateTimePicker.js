@@ -11,18 +11,18 @@ const StyledDateTimePicker = styled(DateTimePicker)`
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     outline: none;
-
-    ${props => props.detailedPage && css`
-        padding: .4em 0;
-        border: none;
-    `} 
-
+    
     &:focus {
         padding: .4em .6em;
         background-color: ${props => props.theme.scdLt};
         border: 1px solid ${props => props.theme.prmDk};
         outline: none;
     }
+
+    ${props => props.detailedPage && css`
+        padding: .4em 0;
+        border: none;
+    `} 
 `
 
 export {StyledDateTimePicker}

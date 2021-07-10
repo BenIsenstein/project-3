@@ -45,18 +45,21 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
 
   }
 
-  return ( 
-    <div>
+  return <>
       <ConfirmModal
         isConfirmModalShowing={isConfirmModalShowing}
         hideConfirmModal={toggleConfirmModal}
         message="Do you really wish to delete this event?"
         actionOnConfirm={DeleteEntry}
       />
-      <Button icon={props.iconButton} formSubmit={props.formSubmit} onClick={toggleConfirmModal}>
-        { props.iconButton ? <TrashIcon /> : 'Delete Entry' }       
+      <Button 
+        icon={props.iconButton} 
+        formSubmit={props.formSubmit}
+        fullwidth={props.fullWidth}
+        onClick={toggleConfirmModal}
+      >
+        { props.iconButton ? <TrashIcon /> : 'Delete Event' }       
       </Button>
-    </div>
-  )
+  </>
 }
 export default DeleteEntryButton

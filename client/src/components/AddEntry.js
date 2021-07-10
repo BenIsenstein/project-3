@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
-import { Form, Button, Label, Input, Textarea, StyledDateTimePicker } from '../common'
+import { Form, Button, Label, Input, Textarea, StyledDateTimePicker, FlexSection } from '../common'
 import { useForm } from "react-hook-form"
 
 const AddEntry = () => {
@@ -90,8 +90,11 @@ const AddEntry = () => {
       <Input type="hidden" id="house" {...register("house", { required: "You must specify a house." })} name="house" />
       {errors.house && <p className="">{errors.house.message}</p>}
 
-      <Button formSubmit important type="submit" value="add entry">Save</Button>
-      <Button formSubmit onClick={() => history.goBack()}>Cancel</Button>
+      <FlexSection fullWidth marginTop1em>
+        <Button fullWidth important type="submit" value="add entry">Save</Button>
+        <Button fullWidth onClick={() => history.goBack()}>Cancel</Button>        
+      </FlexSection>
+
     </Form>
   )
 }

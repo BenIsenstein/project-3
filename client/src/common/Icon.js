@@ -48,20 +48,22 @@ const HouseIcon = styled(House)`
 `
 
 const PencilIcon = styled(Pencil)`
-    height: 3em;
+    height: 1.6em;
+    fill: ${props => props.theme.prm};
     cursor: pointer;
 `
 
 const ExitIcon = styled(Exit)`
     margin-right: .4em;
-    height: 1.8em;
+    height: 2em;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
 `
 
-const DoneIcon = styled(Done)`
-    height: 3em;
+const CheckIcon = styled(Done)`
+    height: 1.8em;
+    fill: ${props => props.theme.prm};
     cursor: pointer;
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, DoneIcon}
+export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon}

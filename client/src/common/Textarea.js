@@ -14,17 +14,25 @@ const Textarea = styled(TextareaAutosize)`
     resize: none;
     overflow: hidden;
 
-    ${props => props.detailedPage && css`
-        background-color: ${props => props.theme.scdLt};
-        border: 1px solid ${props => props.theme.prmDk};
-    `} 
-
     &:focus {
         padding: .4em .6em;
         background-color: ${props => props.theme.scdLt};
         border: 1px solid ${props => props.theme.prmDk};
         outline: none;
     }
+
+    ${props => props.readOnly && css`
+        border: none;
+        padding: .4em 0;
+        cursor: default;
+
+        &:focus {
+            padding: .4em 0;
+            background: none;
+            border: none;
+            outline: none;
+        }
+    `} 
 `
 
 export {Textarea}

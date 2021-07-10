@@ -79,8 +79,7 @@ const Calendar = () => {
                     </FlexSection>
                 </FlexSection>
 
-
-                Displaying home maintenance events for {userContext.userName}
+                <p>Welcome to your home calendar, {userContext.userName}!</p> 
 
                 {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}
             </PageContainer>

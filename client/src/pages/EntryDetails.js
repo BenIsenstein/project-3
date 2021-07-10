@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, DoneIcon, StyledDateTimePicker, FlexSection } from '../common'
+import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, CheckIcon, StyledDateTimePicker, FlexSection } from '../common'
 import { useForm } from 'react-hook-form'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 
@@ -16,9 +16,12 @@ const EntryDetails = () => {
 
     // original values of the entry, for resetting, will be stored upon fetching
     const [resetValues, setResetValues] = useState({})
-    const resetForm = () => reset(resetValues) 
-        
-    // watch the values of every input to compare with resetValues, determine which kind of button to render
+    const resetForm = () => {
+        reset(resetValues) 
+        setViewMode('details')
+    }
+
+    // watch the values of every input
     const watchedItem = watch('item')
     const watchedTask = watch('task')
     const watchedDescription = watch('description')
@@ -150,10 +153,14 @@ const EntryDetails = () => {
         }
     } 
 
+    // edit icon that makes the desired input field active
+    // const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
+
     // edit or details icon. Changes which icon it is based on view mode
     const EditOrDetailsButton = props => {
         if (shouldReadOnly) return <PencilIcon {...props} onClick={() => setViewMode('edit')} />
-        if (viewMode === 'edit') return <DoneIcon {...props} onClick={() => setViewMode('details')} />
+        // if (viewMode === 'edit') return <CheckIcon {...props} onClick={() => setViewMode('details')} />
+        if (viewMode === 'edit') return null
     }
 
     if (!refresh) return null
@@ -161,72 +168,72 @@ const EntryDetails = () => {
     return (
         <Page>
             <PageContainer>
-                <EditOrDetailsButton />
-                <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-                    <FlexSection>
-                        <Label htmlFor="item">Item</Label>        
-                    </FlexSection>
-                    <FlexSection fullWidth>
-                        <Input
-                            detailedPage
-                            readOnly={shouldReadOnly}
-                            maxLength='50'
-                            id="item" 
-                            {...register("item", {required: "You must indicate an item."})}
-                            name="item"
-                        />
-                    {errors.item && <p className="">{errors.item.message}</p>}                        
-                    </FlexSection>                  
-                    <FlexSection>
-                        <Label htmlFor="task">Task</Label>                             
-                    </FlexSection>
-                    <FlexSection fullWidth>
-                        <Input 
-                            detailedPage
-                            readOnly={shouldReadOnly}
-                            maxLength='50'
-                            id="task" 
-                            {...register("task", {required: "You must indicate a task."})} 
-                            name="task"
-                        />
-                        {errors.task && <p className="">{errors.task.message}</p>}                        
-                    </FlexSection>
-                    <FlexSection>
-                        <Label htmlFor="description">Description</Label>                       
-                    </FlexSection>
-                    <FlexSection fullWidth>
-                        <Textarea 
-                            detailedPage
-                            readOnly={shouldReadOnly}
-                            id="description" 
-                            {...register("description", {required: "You must write a description."})} 
-                            name="description"
-                        />
-                        {errors.description && <p className="">{errors.description.message}</p>}                        
-                    </FlexSection>
-                    <FlexSection>
-                        <Label htmlFor="date">Date</Label>            
-                    </FlexSection>
-                    <FlexSection fullWidth>
-                        {shouldReadOnly
-                            ? <Input detailedPage as="div">{watchedDate?.toString()}</Input>
-                            : <StyledDateTimePicker
-                                id="date"
-                                onChange={e => setValue('date', e)}
-                                value={watchedDate}
-                            />
-                        }
-                        <Input  name='date'  type='hidden' {...register('date', {required: "You must choose a date."})} />
-                        {errors.date && <p className="">{errors.date.message}</p>}                        
-                    </FlexSection>
-                    {hasBeenChanged && <Button formSubmit important type='submit'>Save Changes</Button>}                        
-                </Form>
-                <FlexSection column justifyCenter>
-                    {hasBeenChanged && <Button type='button' onClick={() => resetForm()}>Cancel Changes</Button>}
-                    {!hasBeenChanged && <Button type='button' onClick={() => history.push('/calendar')}><BackIcon /> Calendar</Button>}
+                {shouldReadOnly && <Button type='button' onClick={() => history.push('/calendar')}><BackIcon />Calendar</Button>}
 
-                    <DeleteEntryButton formSubmit={true} entryId={id} />                   
+                <FlexSection spaceBetween>
+                    <p>Home Feature</p>
+                    <EditOrDetailsButton />                    
                 </FlexSection>
+
+                <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
+
+                    <Label htmlFor="item">Item</Label>        
+                    <Input
+                        detailedPage
+                        readOnly={shouldReadOnly}
+                        maxLength='50'
+                        id="item" 
+                        {...register("item", {required: "You must indicate an item."})}
+                        name="item"
+                    />
+                    {errors.item && <p>{errors.item.message}</p>}                        
+
+                    <Label htmlFor="task">Task</Label>                             
+                    <Input 
+                        detailedPage
+                        readOnly={shouldReadOnly}
+                        maxLength='50'
+                        id="task" 
+                        {...register("task", {required: "You must indicate a task."})} 
+                        name="task"
+                    />
+                    {errors.task && <p>{errors.task.message}</p>}                        
+
+                    <Label htmlFor="description">Description</Label>                       
+                    <Textarea 
+                        detailedPage
+                        readOnly={shouldReadOnly}
+                        id="description" 
+                        {...register("description", {required: "You must write a description."})} 
+                        name="description"
+                    />
+                    {errors.description && <p>{errors.description.message}</p>}                        
+
+                    <Label htmlFor="date">Date & Time</Label>            
+                    {shouldReadOnly
+                        ? <Input detailedPage readOnly as="div">{watchedDate?.toString()}</Input>
+                        : <StyledDateTimePicker
+                            id="date"
+                            onChange={e => setValue('date', e)}
+                            value={watchedDate}
+                        />
+                    }
+                    <Input  name='date'  type='hidden' {...register('date', {required: "You must choose a date."})} />
+                    {errors.date && <p>{errors.date.message}</p>}                        
+
+                    {!shouldReadOnly 
+                        && <FlexSection fullWidth marginTop1em>
+                            <Button fullWidth important type='submit'>Save</Button>
+                            <Button fullWidth onClick={() => resetForm()}>Cancel</Button>                              
+                        </FlexSection>
+                    }
+                </Form>
+
+                {shouldReadOnly 
+                    && <FlexSection marginTop1em>
+                        <DeleteEntryButton fullWidth entryId={id} /> 
+                    </FlexSection>
+                }
             </PageContainer>
         </Page>
     )

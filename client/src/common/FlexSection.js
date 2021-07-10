@@ -20,8 +20,16 @@ const FlexSection = styled.div`
         justify-content: space-between;
     `}
 
+    ${props => props.spaceEvenly && css`
+        justify-content: space-evenly;
+    `}
+
     ${props => props.fullWidth && css`
         width: 100%;
+    `}
+
+    ${props => props.marginTop1em && css`
+        margin-top: 1em;
     `}
 `
 
