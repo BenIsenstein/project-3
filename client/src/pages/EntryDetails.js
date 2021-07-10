@@ -14,18 +14,15 @@ const EntryDetails = () => {
     const [viewMode, setViewMode] = useState('details')
     const shouldReadOnly = viewMode !== 'edit'
 
+    // original values of the entry, for resetting, will be stored upon fetching
     const [resetValues, setResetValues] = useState({})
-    const resetForm = () => {
-        reset(resetValues) 
-        setViewMode('edit')
-    }
-
-    // watch the values of every input
+    const resetForm = () => reset(resetValues) 
+        
+    // watch the values of every input to compare with resetValues, determine which kind of button to render
     const watchedItem = watch('item')
     const watchedTask = watch('task')
     const watchedDescription = watch('description')
     const watchedDate = watch('date')
-    const [hasEntryLoaded, setHasEntryLoaded] = useState(false)
     const [hasBeenChanged, setHasBeenChanged] = useState(false)
 
     // 'active' inputs boolean values
@@ -60,6 +57,9 @@ const EntryDetails = () => {
     //     descriptionActive
     // ])
 
+    // edit icon that makes the desired input field active
+    // const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
+
     // get the entry from mongoDB
     useEffect(() => {
         const getEntry = async () => {
@@ -81,15 +81,13 @@ const EntryDetails = () => {
 
                 date = new Date(date)
 
-                // reset values if the user wants to cancel changes, but keep viewing their details
+                // define some reset values incase the user wants to cancel changes, but keep viewing their details
                 setResetValues({ item, task, description, date })
             
                 setValue('item', item)
                 setValue('task', task)
                 setValue('description', description)
                 setValue('date', date)
-            
-                setHasEntryLoaded(true)
 
                 setRefresh({})
             }
@@ -101,7 +99,7 @@ const EntryDetails = () => {
         getEntry()
     }, [setRefresh, setValue, id])
 
-    // control the value of 'hasBeenChanged'
+    // control the value of 'hasBeenChanged', to render buttons conditionally
     useEffect(() => {
         const currentValues = {
             item: watchedItem, 
@@ -110,7 +108,11 @@ const EntryDetails = () => {
             date: watchedDate
         }
 
-        const doEntriesMatch = Object.keys(resetValues).every(key => resetValues[key] === currentValues[key])
+        const doEntriesMatch = Object.keys(resetValues).every(key => 
+            key === 'date' 
+                ? resetValues[key]?.toString() === currentValues[key]?.toString() 
+                : resetValues[key] === currentValues[key]
+        )
         
         if (doEntriesMatch) {
             setHasBeenChanged(false)
@@ -124,19 +126,17 @@ const EntryDetails = () => {
         watchedDescription, 
         watchedDate, 
         resetValues, 
-        hasEntryLoaded
     ])
 
     // form submit function
     const onSubmit = async (data) => {
-        let action = `/api/calendarEntry/update/${id}`
-        let options = {
-          method: "put",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(data)
-        }
-    
         try {
+          let action = `/api/calendarEntry/update/${id}`
+          let options = {
+            method: "put",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(data)
+          }
           let res = await fetch(action, options)
           let resObject = await res.json()
           
@@ -150,12 +150,9 @@ const EntryDetails = () => {
         }
     } 
 
-    //edit icon that makes the desired input field active
-    const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
-
     // edit or details icon. Changes which icon it is based on view mode
     const EditOrDetailsButton = props => {
-        if (viewMode === 'details') return <PencilIcon {...props} onClick={() => setViewMode('edit')} />
+        if (shouldReadOnly) return <PencilIcon {...props} onClick={() => setViewMode('edit')} />
         if (viewMode === 'edit') return <DoneIcon {...props} onClick={() => setViewMode('details')} />
     }
 
@@ -224,14 +221,12 @@ const EntryDetails = () => {
                     </FlexSection>
                     {hasBeenChanged && <Button formSubmit important type='submit'>Save Changes</Button>}                        
                 </Form>
-
                 <FlexSection column justifyCenter>
                     {hasBeenChanged && <Button type='button' onClick={() => resetForm()}>Cancel Changes</Button>}
                     {!hasBeenChanged && <Button type='button' onClick={() => history.push('/calendar')}><BackIcon /> Calendar</Button>}
 
                     <DeleteEntryButton formSubmit={true} entryId={id} />                   
                 </FlexSection>
-
             </PageContainer>
         </Page>
     )
