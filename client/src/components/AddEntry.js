@@ -30,6 +30,8 @@ const AddEntry = () => {
   useEffect(() => setValue('date', date), [setValue, date])
 
   const onSubmit = async (data) => {
+    data.completed = false
+    
     let action = "/api/calendarEntry/add"
     let options = {
       method: "post",
