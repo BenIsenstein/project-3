@@ -71,7 +71,7 @@ const Accordion = props => {
           <p>{props.description}</p>
           {/* <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} /> */}
           <FlexSection justifyEnd>
-            <Button important onClick={() => history.push(`/event/${props._id}`)}>Details</Button>              
+            <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>              
           </FlexSection>                  
         </AccordionContentContainer>
       </AccordionContent>

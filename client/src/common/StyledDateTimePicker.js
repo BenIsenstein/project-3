@@ -22,7 +22,7 @@ const StyledDateTimePicker = styled(DateTimePicker)`
     ${props => props.detailedPage && css`
         padding: .4em 0;
         border: none;
-    `} 
+    `}
 `
 
 export {StyledDateTimePicker}

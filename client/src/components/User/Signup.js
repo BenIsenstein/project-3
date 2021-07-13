@@ -94,15 +94,16 @@ const Signup = () => {
       />
       {errors.email && <p>{errors.email.message}</p>}
 
-      <Label htmlFor="userType">I am a(n):</Label>
+      <Label hidden htmlFor="userType">I am a(n):</Label>
       <Select
+        hidden
         {...register("userType", { required: "You must pick an account type." })}
         name="userType"
         id="userType"
       >
         <option value="homeManager">Home Manager</option>
-        <option value="serviceProvider">Service Provider</option>
-        <option value="insuranceBroker">Insurance Broker</option>
+        {/* <option value="serviceProvider">Service Provider</option>
+        <option value="insuranceBroker">Insurance Broker</option> */}
       </Select>
       {errors.userType && <p>{errors.userType.message}</p>}
 

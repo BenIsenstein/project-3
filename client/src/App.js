@@ -24,8 +24,8 @@ const App = () => {
             <Route path='/login' component={LoginPage} />
             <Route path='/signup' component={SignupPage} />
             <Route path='/calendar' component={Calendar} />
-            <Route path='/event/:id' component={EntryDetails} />
-            <Route path='/addentry' component={AddEntryPage} />
+            <Route path='/task/:id' component={EntryDetails} />
+            <Route path='/new-task' component={AddEntryPage} />
           </Switch>
         </UserProvider>
       </Router>

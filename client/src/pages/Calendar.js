@@ -16,47 +16,12 @@ const Calendar = () => {
     const reRenderList = () => setRefresh({})
     let history = useHistory()
 
-    // return (
-    //     <Page>
-    //         <PageContainer>
-    //             <div className='calendar-top-options'>
-    //                 <div className='calendar-add-task'>
-    //                     <Button onClick={() => history.push(`/addentry`)}><AddIcon />New Task</Button>
-    //                 </div>
-    //                 <div className='calendar-logout'>
-    //                 <Button onClick={() => userContext.logOut()}><ExitIcon />Log Out</Button>
-    //                 </div>
-    //                 <div className='calendar-view-ctrl'>  
-    //                     <SwitchViewButton 
-    //                         activeView={viewMode === 'ListView'} 
-    //                         onClick={() => setViewMode('ListView')}
-    //                     >
-    //                         <ListIcon />
-    //                     </SwitchViewButton>
-    //                     <SwitchViewButton 
-    //                         activeView={viewMode === 'CalendarView'} 
-    //                         onClick={() => setViewMode('CalendarView')}
-    //                     >
-    //                         <CalendarIcon />
-    //                     </SwitchViewButton>
-    //                 </div>                    
-    //             </div>
-    //             <div>
-    //                 Displaying home maintenance events for {userContext.userName}
-    //             </div>
-    //             <div className='calendar-view-content'>
-    //                 {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}
-    //             </div>
-    //         </PageContainer>
-    //     </Page>
-    // )
-
     return (
         <Page>
             <PageContainer>
                 <FlexSection spaceBetween>
                     <FlexSection>
-                        <Button onClick={() => history.push(`/addentry`)}><AddIcon />New Task</Button>                        
+                        <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>                        
                     </FlexSection>
 
                     <FlexSection>
@@ -80,7 +45,11 @@ const Calendar = () => {
                 </FlexSection>
 
                 <p>Welcome to your home calendar, {userContext.userName}!</p> 
-
+                
+                <FlexSection justifyEnd>
+                    <Button>FILTER</Button>
+                </FlexSection>
+                
                 {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}
             </PageContainer>
         </Page>

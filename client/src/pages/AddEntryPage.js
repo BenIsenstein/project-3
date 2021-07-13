@@ -14,7 +14,7 @@ const AddEntryPage = () => {
     return (
         <Page>
             <PageContainer>
-                <p>New Event</p>
+                <p>New Task</p>
                 {/* // If user is NOT logged in and accidentally navigated to this page,
                 // redirect them to the LANDING PAGE. */}
                 {userContext.user === undefined &&
