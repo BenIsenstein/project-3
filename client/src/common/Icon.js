@@ -9,6 +9,7 @@ import {House} from '@styled-icons/material-rounded/House'
 import {Pencil} from '@styled-icons/foundation/Pencil'
 import {Exit} from '@styled-icons/ionicons-outline/Exit'
 import {Done} from '@styled-icons/material-rounded/Done'
+import {Envelope} from '@styled-icons/boxicons-regular/Envelope'
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
@@ -66,4 +67,9 @@ const CheckIcon = styled(Done)`
     cursor: pointer;
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon}
+const EnvelopeIcon = styled(Envelope)`
+height: 2em;
+margin-left: -0.8em;
+`
+
+export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}
