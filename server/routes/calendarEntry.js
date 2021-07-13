@@ -30,7 +30,7 @@ router.get('/getbyuser/:id', async (req, res) => {
 
 // get Calendar Entry by ID
 router.get('/get/:id', async (req, res) => {
-  try { res.json({ calendarEntry: await findCalendarEntryById(req.params.id) }) }
+  try { res.json(await findCalendarEntryById(req.params.id)) }
 
   catch(err) {console.log('ERROR get Calendar Entry by ID:', err)}
 })

@@ -73,8 +73,7 @@ const EntryDetails = () => {
                 setValue('description', '...')
             
                 let entryResponse = await fetch(`/api/calendarEntry/get/${id}`)
-                let resObject = await entryResponse.json()
-                let entryDetails = resObject.calendarEntry
+                let entryDetails = await entryResponse.json()
                 let {
                     item,
                     task,
