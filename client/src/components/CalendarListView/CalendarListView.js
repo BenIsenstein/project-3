@@ -21,17 +21,17 @@ const CalendarListView = ({ reRenderList }) => {
   // State for entries
   const [dates, setDates] = useState([{ 
     date: "Loading...", 
-    entries: entryTemplate.entries 
+    entries: [] 
   }])
 
   // Function in case the user's calendar is empty
   const setNoneFound = useMemo(() => 
     () => setDates([{ 
-      date: "No Calendar Entries Found", 
-      entries: entryTemplate.entries  
+      date: "Please add a new task", 
+      entries: []  
     }]), 
 
-  [entryTemplate])
+  [])
 
   // Effect to fetch all entries
   useEffect(() => {
@@ -39,7 +39,7 @@ const CalendarListView = ({ reRenderList }) => {
       const fetchCalendarEntries = async () => {
         setDates([{ 
           date: "Loading...", 
-          entries: entryTemplate.entries 
+          entries: [] 
         }])
       
         try {
@@ -47,8 +47,7 @@ const CalendarListView = ({ reRenderList }) => {
           let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
           let resObject = await entriesResponse.json()
           let list = resObject.calendarEntryList
-
-          if (!list) return setNoneFound()
+          if (!list.length) return setNoneFound()
 
           // Make a Date object out of the entry.date ISO string,
           // Use built-in method to grab nice-looking string
