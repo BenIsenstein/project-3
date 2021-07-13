@@ -1,10 +1,9 @@
 import React from "react"
 import { useHistory } from 'react-router-dom'
 import { Button, TrashIcon } from '../common'
-import './DeleteEntryButton.css'
 
-import ConfirmModal from './modals/ConfirmModal'
-import useConfirmModal from './modals/useConfirmModal'
+import ConfirmModal from './Modals/ConfirmModal'
+import useConfirmModal from './Modals/useConfirmModal'
 
 const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
 
@@ -49,7 +48,8 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
       <ConfirmModal
         isConfirmModalShowing={isConfirmModalShowing}
         hideConfirmModal={toggleConfirmModal}
-        message="Do you really wish to delete this event?"
+        modalContent="Do you really wish to delete this event?"
+        confirmPrompt='Delete'
         actionOnConfirm={DeleteEntry}
       />
       <Button 

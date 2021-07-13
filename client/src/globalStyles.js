@@ -15,6 +15,10 @@ export default createGlobalStyle`
         color: ${props => props.theme.contentColor};
     }
 
+    span {
+        color: ${props => props.theme.contentColor};
+    }
+
     button {
         cursor: pointer;
     }

@@ -4,6 +4,10 @@ const FlexSection = styled.div`
     display: flex;
     align-items: center;
 
+    ${props => props.alignStart && css`
+        align-items: flex-start;
+    `}
+
     ${props => props.column && css`
         flex-direction: column;
     `}

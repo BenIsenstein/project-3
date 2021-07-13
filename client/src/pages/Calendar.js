@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
+import FilterModal from '../components/Filter/FilterModal'
 import { ListIcon, CalendarIcon, AddIcon, ExitIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import './Calendar.css'
 
@@ -46,9 +47,7 @@ const Calendar = () => {
 
                 <p>Welcome to your home calendar, {userContext.userName}!</p> 
                 
-                <FlexSection justifyEnd>
-                    <Button>FILTER</Button>
-                </FlexSection>
+                <FilterModal />
                 
                 {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} />}
             </PageContainer>
