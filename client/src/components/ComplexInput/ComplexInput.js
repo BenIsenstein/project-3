@@ -1,9 +1,10 @@
 import { Form, Button, Label, Input, Textarea, StyledDateTimePicker, FlexSection } from '../common'
 
 /* 
-other props might include: 
-- as={Textarea}
-- type='hidden'
+other props might include:
+- labelText="Description longer than inputName." 
+- as={CustomComponent} | as='div'
+- type='hidden' | type=
 - maxLength
 - detailedPage
 - readOnly
