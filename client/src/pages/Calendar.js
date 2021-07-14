@@ -22,12 +22,11 @@ const Calendar = () => {
     let options = {
       method: 'post',
       headers: { "content-type": "application/json" },
-      // body: JSON.stringify(data)
-      // body: JSON.stringify()
       body: JSON.stringify({
+        // "email": `${userContext.user.email}`,
         "email": "artt@shaw.ca",
         "type": "reminder",
-        "firstname": "ArtyT",
+        "firstname": `${userContext.user.firstName}`,
         "home": "79 Panora Hts",
         "item": "Gutters",
         "task": "this is the task",
