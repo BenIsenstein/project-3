@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form, Button, Label, Input, Textarea, StyledDateTimePicker, FlexSection } from '../common'
+import { Label, Input } from '../../common'
 
 /* 
 other props might include:
-- labelText="Description longer than inputName." 
+- labelText="Description longer than name." 
 - as={CustomComponent} | as='div'
 - type='hidden' | type='file'
 - maxLength
@@ -11,15 +11,16 @@ other props might include:
 - readOnly
 */
 
-const ComplexInput = ({ inputName, errors, ...props }) => (
+const ComplexInput = ({ name, errors, ...props }) => (
   <React.Fragment key={props.key}>
-    <Label htmlFor={inputName}>{props.labelText || inputName}</Label>
+    <Label htmlFor={name}>{props.labelText || name}</Label>
     <Input 
-      id={inputName}
-      name={inputName}  
+      id={name}
+      name={name}
+      {...props.register(name, props.registerOptions)}
       {...props}
     />
-    {errors[inputName] && <p>{errors[inputName].message}</p>}
+    {errors && errors[name] && <p>{errors[name].message}</p>}
   </React.Fragment>
 )
 
