@@ -20,10 +20,20 @@ const Calendar = () => {
   const notifyByEmail = async () => {
     let action = "/api/sendEmail/user"
     let options = {
-      method: "post",
+      method: 'post',
       headers: { "content-type": "application/json" },
       // body: JSON.stringify(data)
-      body: JSON.stringify()
+      // body: JSON.stringify()
+      body: JSON.stringify({
+        "email": "artt@shaw.ca",
+        "type": "reminder",
+        "firstname": "ArtyT",
+        "home": "79 Panora Hts",
+        "item": "Gutters",
+        "task": "this is the task",
+        "description": "task described",
+        "date": "date to be performed"
+      })
     }
 
     try {

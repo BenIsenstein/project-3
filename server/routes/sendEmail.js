@@ -8,6 +8,7 @@ router.post('/user', async (req, res, next) => {
     // await sendUserEmail(new EmailBody(req.body))
     // await sendUserEmail()
     console.log("Congrats, you reached the EMAIL API")
+    await sendUserEmail(req.body)
     res.json({ success: true })
   }
   catch (err) {
