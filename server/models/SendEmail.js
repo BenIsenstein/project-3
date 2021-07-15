@@ -8,13 +8,14 @@ const { CalendarEntry } = require('./CalendarEntry')
 
 const sendUserEmail = async (data) => {
 
-
+  console.log("sendUserEmail model: data.email = ", data.email)
   let messageType = data.type
   let templateId = 0  // This is the desired SendInBlue email TEMPLATE to be used.
 
   let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
   let sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail | 
   sendTestEmail.emailTo = [data.email]
+  let targetRecipient = data.email
 
   try {
 
@@ -24,11 +25,13 @@ const sendUserEmail = async (data) => {
     // collection, and see if the email address provided is valid. If it is
     // NOT a valid email, override it by defaulting to the SiB account owner.
     let lookupResult = await findTesterByEmail(data.email)
+    console.log("sendUserEmail model: tester email lookup result = ", lookupResult)
     if (lookupResult && lookupResult > "") {
-      sendTestEmail.emailTo = [data.email]
+      console.log("sendUserEmail model: Found TESTER!")
+      targetRecipient = data.email
     }
     else {  // default to account owner
-      sendTestEmail.emailTo = ["artt@shaw.ca"]
+      targetRecipient = "artt@shaw.ca"
     } 
     // End of code block intended strictly for TESTING
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
@@ -41,6 +44,7 @@ const sendUserEmail = async (data) => {
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
             sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail
             templateId = 2
+            sendTestEmail.emailTo = [targetRecipient]
 
             // Retrieve data required for body of email
             let targetDate = new Date()  // start with current date
@@ -66,6 +70,7 @@ const sendUserEmail = async (data) => {
           apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
           sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail
           templateId = 1
+          sendTestEmail.emailTo = [targetRecipient]
           // Trigger API for to send email via SendInBlue
           console.log("TEST email being sent to:", sendTestEmail.emailTo) 
           await apiInstance.sendTestTemplate(templateId, sendTestEmail)
