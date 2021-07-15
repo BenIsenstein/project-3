@@ -19,9 +19,9 @@ partnerKey.apiKey = process.env.SIBAPIKEY
 // Connect to SendInBlue and verify account status. 
 let api = new SibApiV3Sdk.AccountApi()
 api.getAccount().then(function(data) {
-  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++")
-  console.log('SendInBlue API called successfully. Returned data: ' + data);
-  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++")
+  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+  console.log("SendInBlue API called successfully, account connected.")
+  console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 }, function(error) {
   console.error(error);
 });

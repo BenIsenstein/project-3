@@ -5,15 +5,12 @@ let router = express.Router()
 // send transactional email to user  
 router.post('/user', async (req, res, next) => {
   try {
-    // await sendUserEmail(new EmailBody(req.body))
-    // await sendUserEmail()
-    console.log("Congrats, you reached the EMAIL API")
     await sendUserEmail(req.body)
     res.json({ success: true })
   }
   catch (err) {
     console.log("Error sending USER email:", err)
-    res.json({ success: false })
+    res.json({ success: false }) 
   }
 })
 
