@@ -50,6 +50,14 @@ const Button = styled.button`
         display: flex;
         justify-content: center;
     `}
+
+    ${props => props.alignSelfStart && css`
+        align-self: flex-start;
+    `}
+
+    ${props => props.justifySelfStart && css`
+        justify-self: flex-start;
+    `}
 `
 
 export {Button}

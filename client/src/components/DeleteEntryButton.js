@@ -57,6 +57,7 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
         formSubmit={props.formSubmit}
         fullwidth={props.fullWidth}
         onClick={toggleConfirmModal}
+        {...props}
       >
         { props.iconButton ? <TrashIcon /> : 'Delete Event' }       
       </Button>

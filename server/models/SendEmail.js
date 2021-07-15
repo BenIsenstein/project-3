@@ -30,3 +30,4 @@ module.exports = {
     sendUserEmail,
     sendGroupEmail
 }
+
