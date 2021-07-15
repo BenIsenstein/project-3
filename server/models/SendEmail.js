@@ -33,6 +33,7 @@ const sendUserEmail = async (data) => {
     else {  // default to account owner
       targetRecipient = "artt@shaw.ca"
     } 
+    sendTestEmail.emailTo = [targetRecipient]
     // End of code block intended strictly for TESTING
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 
@@ -42,9 +43,9 @@ const sendUserEmail = async (data) => {
           {
             // Define parameters for email API
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
-            sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail
+            let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendTestEmail
             templateId = 2
-            sendTestEmail.emailTo = [targetRecipient]
+            // sendSmtpEmail.emailTo = [targetRecipient]
 
             // Retrieve data required for body of email
             let targetDate = new Date()  // start with current date
@@ -54,9 +55,26 @@ const sendUserEmail = async (data) => {
             let userTaskList = await CalendarEntry.find({ userid: data.userid, date: { $lte: "2021-07-18T06:00:00.000Z" }}, null, {sort: {date: 1}})
             // let userTaskList = await CalendarEntry.find({ userid: data.userid, date: { $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
             console.log("User task list = ", userTaskList)
+            let formattedList = "List of Tasks goes HERE!"
+            
+            sendSmtpEmail = {
+              to: [{
+                email: `${targetRecipient}`,
+                name: `${data.firstname}`
+              }],
+              templateId: 2,
+              params: {
+                name: `${data.firstname}`,
+                body: `${formattedList}`
+              },
+              headers: {
+                'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2'
+              }
+            }
+
             // Trigger API for to send email via SendInBlue
-            console.log("REMINDER email being sent to:", sendTestEmail.emailTo) 
-            await apiInstance.sendTestTemplate(templateId, sendTestEmail)
+            console.log("REMINDER email being sent to:", targetRecipient) 
+            await apiInstance.sendTransacEmail(sendSmtpEmail)
           }
           break;
         case "welcome":
