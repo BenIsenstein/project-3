@@ -31,7 +31,6 @@ const AccountDetails = () => {
         {
             name: "email",
             registerOptions: { required: "You must input an email address." },
-            labelText: "",
         }
     ]
 
