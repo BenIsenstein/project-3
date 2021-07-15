@@ -1,4 +1,5 @@
 import styled, {css} from 'styled-components'
+import {fadeIn} from './'
 
 const FlexSection = styled.div`
     display: flex;
@@ -6,6 +7,10 @@ const FlexSection = styled.div`
 
     ${props => props.alignStart && css`
         align-items: flex-start;
+    `}
+
+    ${props => props.alignEnd && css`
+        align-items: flex-end;
     `}
 
     ${props => props.column && css`
@@ -34,6 +39,26 @@ const FlexSection = styled.div`
 
     ${props => props.marginTop1em && css`
         margin-top: 1em;
+    `}
+
+    ${props => props.marginTop && css`
+        margin-top: ${props.marginTop};
+    `}
+
+    ${props => props.padding && css`
+        padding: ${props.padding};
+    `}
+
+    
+
+    ${props => props.popup && css`
+        overflow: hidden;
+        height: ${props => props.popupCondition ? 'max-content' : '0px'};
+        transition: height 1s;
+    `}
+
+    ${props => props.fadeIn && css`
+        animation: ${fadeIn} 0.4s linear;
     `}
 `
 

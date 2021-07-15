@@ -11,7 +11,7 @@ const Signup = () => {
   async function onSubmit(data) {
     const alertError = () => alert("There was an error signing you up. We're fixing it as fast as we can.")
 
-    data.dateCreation = new Date()
+    data.dateSignedUp = new Date()
     delete data.confirmPassword
 
     let authUrl = "/api/auth/signup"

@@ -3,45 +3,22 @@ import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
 import { Form, Button, Label, Input, Textarea, StyledDateTimePicker, FlexSection } from '../common'
 import { useForm } from "react-hook-form"
-import FormTemplate from './FormTemplate'
+import FormTemplate from './FormTemplate/FormTemplate'
 
 const AddEntry = () => {
-
   let history = useHistory()
-
-  // // Capture the current state of the logged in user
-  // let userContext = useContext(UserContext)
-
-  // // Preload the hidden input field for userid. Also pre-populate HOUSE value for now
-  // let user_id = "default"
-  // if (userContext.user !== undefined) {
-  //   user_id = userContext.user._id
-  // }
-
-  // const preLoadedValues = {
-  //   userid: `${user_id}`,
-  //   house: "1"  // hard code this for now, until Multiple-House functionality is added later
-  // }
-
-  // // const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
-  // const { register, formState: { errors }, handleSubmit, setValue } = useForm({ defaultValues: preLoadedValues })
-  // const [date, setDate] = useState()
-
-  // // update 'date' input field whenever the piece of state is changed
-  // useEffect(() => setValue('date', date), [setValue, date])
 
   const onSubmit = async (data) => {
     data.house = "House placeholder"
     data.completed = false
 
-    let action = "/api/calendarEntry/add"
-    let options = {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data)
-    }
-
     try {
+      let action = "/api/calendarEntry/add"
+      let options = {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
       let res = await fetch(action, options)
       let resObject = await res.json()
 
@@ -81,8 +58,29 @@ const AddEntry = () => {
     }
   ]
 
-  return <FormTemplate titleText=" " inputs={inputs} formMode='add' onSubmit={onSubmit} />
+  return <FormTemplate titleText=" " inputs={inputs} formMode='add' addModeCancel={history.goBack} onSubmit={onSubmit} />
+}
 
+// // Capture the current state of the logged in user
+  // let userContext = useContext(UserContext)
+
+  // // Preload the hidden input field for userid. Also pre-populate HOUSE value for now
+  // let user_id = "default"
+  // if (userContext.user !== undefined) {
+  //   user_id = userContext.user._id
+  // }
+
+  // const preLoadedValues = {
+  //   userid: `${user_id}`,
+  //   house: "1"  // hard code this for now, until Multiple-House functionality is added later
+  // }
+
+  // // const { register, formState: { errors }, handleSubmit, setValue } = useForm({})
+  // const { register, formState: { errors }, handleSubmit, setValue } = useForm({ defaultValues: preLoadedValues })
+  // const [date, setDate] = useState()
+
+  // // update 'date' input field whenever the piece of state is changed
+  // useEffect(() => setValue('date', date), [setValue, date])
 
   // return (
   //   <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
@@ -130,6 +128,6 @@ const AddEntry = () => {
 
   //   </Form>
   // )
-}
+
 
 export default AddEntry

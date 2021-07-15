@@ -42,9 +42,7 @@ router.post("/login",
   // authentication middleware. sends a status code 401 if auth fails
   passport.authenticate("local"),
   // if authentication passes, the next function has access to req.user
-  (req, res) => {
-    res.json({ user: req.user })
-  }
+  (req, res) => res.json(req.user)
 )
 
 // ----------------------------------- LOGOUT -----------------------------------
@@ -106,6 +104,6 @@ router.put('/edit/:id',
 
 // ----------------------------------- GET LOGGED IN USER -----------------------------------
 
-router.get("/getloggedinuser", (req, res) => res.json({ user: req.user }))
+router.get("/getloggedinuser", (req, res) => res.json(req.user))
 
 module.exports = router

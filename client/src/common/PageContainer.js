@@ -6,6 +6,11 @@ const PageContainer = styled.div`
     margin: 0.5em 0;
     animation: ${fadeIn} 0.4s linear;
 
+    ${props => props.flexColumn && css`
+        display: flex;
+        flex-direction: column;
+    `}
+
     ${props => props.centerPage && css`
         display: flex;
         flex-direction: column;

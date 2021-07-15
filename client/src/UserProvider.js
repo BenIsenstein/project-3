@@ -15,8 +15,7 @@ const UserProvider = ({ children }) => {
     const getLoggedInUser = async () => {
       try {
         let response = await fetch('/api/user/getloggedinuser')
-        let resObject = await response.json()
-        let user = resObject.user
+        let user = await response.json()
 
         if (!user) return setUserName("no_user")
 
@@ -47,12 +46,9 @@ const UserProvider = ({ children }) => {
 
     let response = await fetch('/api/auth/login', loginOptions)
 
-    if (response.status === 401) {
-      return alert('Unable to log in. Please make sure your login info is correct.')
-    }
-
-    let resObject = await response.json()
-    let loggedInUser = resObject.user
+    if (response.status === 401) return alert('Unable to log in. Please make sure your login info is correct.')
+    
+    let loggedInUser = await response.json()
     let { firstName, lastName, userType } = loggedInUser
 
     console.log('The call to AUTH returned: ', loggedInUser)

@@ -1,14 +1,158 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker, FlexSection } from '../common'
-import { useForm } from 'react-hook-form'
-import DeleteEntryButton from '../components/DeleteEntryButton'
-import FormTemplate from '../components/FormTemplate'
+import { Page, PageContainer, Button, Textarea} from '../common'
+import FormTemplate from '../components/FormTemplate/FormTemplate'
 
 const EntryDetails = () => {
+  const { id } = useParams()
+  const history = useHistory()
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [undergoingCompletion, setUndergoingCompletion] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const getEntryRoute = `/api/calendarEntry/get/${id}`
+
+  useEffect(() => {
+    const handleIsCompleted = async () => {
+      try {
+        let detailsRes = await fetch(getEntryRoute)
+        let details = await detailsRes.json()
+
+        if (details.completed) setIsCompleted(true)
+      }
+      catch(err) {
+        console.log(err)
+      }
+    }
+
+    handleIsCompleted()
+    setIsLoaded(true)
+
+  }, [getEntryRoute])
+
+  // update submit function
+  const updateDetails = async (data) => {
+    try {
+      let action = `/api/calendarEntry/update/${id}`
+      let options = {
+        method: "put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(action, options)
+      let resObject = await res.json()
+      
+      if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
+      history.goBack()
+    }
+    catch(err) {
+      console.log('error updating calendar entry: ', err)
+      alert("There was an error updating your entry. We're fixing it as fast as we can.")
+    }
+  } 
+
+  // completion submit function
+  const updateCompletionDetails = async (data) => {
+    data.completed = true
+
+    try {
+      let action = `/api/calendarEntry/update/${id}`
+      let options = {
+        method: "put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(action, options)
+      let resObject = await res.json()
+      
+      if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
+      history.goBack()
+    }
+    catch(err) {
+      console.log('error updating calendar entry: ', err)
+      alert("There was an error updating your entry. We're fixing it as fast as we can.")
+    }
+  } 
+
+  const entryDetailsInputs = [ 
+    {
+      name: "item",
+      registerOptions: { required: "You must choose an item." },
+      labelText: "",
+      maxLength: '50'
+    },
+    {
+      name: "task",
+      registerOptions: { required: "You must write a task." },
+      labelText: "",
+      maxLength: '50'
+    },
+    {
+      name: "description",
+      registerOptions: { required: "You must write a description." },
+      labelText: "",
+      as: Textarea
+    },
+    {
+      name: "date",
+      registerOptions: { required: "You must choose a date." },
+      labelText: ""
+    }
+  ]
+
+  const completionInputs = [
+    {
+      name: "dateCompleted",
+      registerOptions: { required: "You must select a date completed." },
+      labelText: "date completed"
+    },
+    {
+      name: "completionComments",
+      labelText: "comments",
+      as: Textarea
+    }
+  ]
+
+  const CompleteTaskButton = () => <>{
+    !(isCompleted || undergoingCompletion) && 
+    <Button 
+      important 
+      formSubmit 
+      type='button' 
+      onClick={() => setUndergoingCompletion(true)}
+    >
+      Complete Task
+    </Button>
+  }</>
+
+  return !isLoaded ? null : (
+    <Page>
+      <PageContainer flexColumn>
+        <FormTemplate 
+          titleText="Details"
+          inputs={entryDetailsInputs} 
+          formMode='details' 
+          detailsUrl={getEntryRoute} 
+          onSubmit={updateDetails} 
+          addModeCancel={history.goBack}
+          AfterTemplate={CompleteTaskButton}
+        />
+        <FormTemplate 
+          noBackButton
+          noDeleteButton
+          popup
+          popupCondition={isCompleted || undergoingCompletion}
+          titleText={isCompleted ? "Completed" : "Complete Event"}
+          inputs={completionInputs}
+          formMode={isCompleted ? "details" : "add"}
+          detailsUrl={getEntryRoute}
+          onSubmit={updateCompletionDetails}
+          addModeCancel={() => setUndergoingCompletion(false)}
+        />
+      </PageContainer>
+    </Page>
+  )
+}
     // const { register, formState: { errors }, handleSubmit, setValue, setFocus, reset, watch} = useForm({})
-    const { id } = useParams()
-    const history = useHistory()
     // const [refresh, setRefresh] = useState(null)
 
     // // viewMode can be 'details' or 'edit'
@@ -95,68 +239,6 @@ const EntryDetails = () => {
     //     resetValues, 
     // ])
 
-    // form submit function
-    const onSubmit = async (data) => {
-        try {
-          let action = `/api/calendarEntry/update/${id}`
-          let options = {
-            method: "put",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(data)
-          }
-          let res = await fetch(action, options)
-          let resObject = await res.json()
-          
-          if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
-
-          history.goBack()
-        }
-        catch(err) {
-          console.log('error updating calendar entry: ', err)
-          alert("There was an error updating your entry. We're fixing it as fast as we can.")
-        }
-    } 
-
-    const inputs = [
-        {
-          name: "item",
-          registerOptions: { required: "You must choose an item." },
-          labelText: "",
-          maxLength: '50'
-        },
-        {
-          name: "task",
-          registerOptions: { required: "You must write a task." },
-          labelText: "",
-          maxLength: '50'
-        },
-        {
-          name: "description",
-          registerOptions: { required: "You must write a description." },
-          labelText: "",
-          as: Textarea
-        },
-        {
-          name: "date",
-          registerOptions: { required: "You must choose a date." },
-          labelText: ""
-        }
-    ]
-
-    return (
-      <Page>
-        <PageContainer>
-          <FormTemplate 
-            titleText="Details"
-            inputs={inputs} 
-            formMode='details' 
-            detailsUrl={`/api/calendarEntry/get/${id}`} 
-            onSubmit={onSubmit} 
-          />
-        </PageContainer>
-      </Page>
-    )
-}
     // edit icon that makes the desired input field active
     // const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
 
