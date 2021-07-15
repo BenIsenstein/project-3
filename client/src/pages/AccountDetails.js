@@ -7,7 +7,6 @@ import UserContext from '../UserContext'
 const AccountDetails = () => {
     const history = useHistory()
     const userContext = useContext(UserContext)
-    const getAccountRoute = '/api/user/getloggedinuser'
     const inputs = [
         {
             name: "dateSignedUp",
@@ -75,9 +74,9 @@ const AccountDetails = () => {
             if (!correctionObject.success) return alert("Your entry update failed halfway through. Please contact customer service.")
         }
 
-        // set all context to match the changes and redirect 
+        // make sure the data for context update includes _id and dateSignedUp
+        // set all context to match the account changes and redirect 
         for (let key of ['dateSignedUp', '_id']) data[key] = userContext.user[key]
-
         userContext.setUserInfo(data)
         history.push("/calendar")
       }
@@ -94,9 +93,8 @@ const AccountDetails = () => {
           titleText="Your Account"
           inputs={inputs} 
           formMode='details' 
-          detailsUrl={getAccountRoute} 
+          detailsUrl={'/api/user/getloggedinuser'} 
           onSubmit={updateAccount} 
-          addModeCancel={history.goBack}
         />
       </PageContainer>
     </Page>
