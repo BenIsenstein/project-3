@@ -4,11 +4,19 @@ import { Label, Checkbox } from "../../common"
 const CheckboxDescription = styled.span`
     margin-left: .2em;
     text-transform: capitalize;
+    cursor: pointer;
 `
+
+// const CustomCheckbox = styled.span`
+//     position: absolute;
+//     height: 1em;
+//     width: 1em;
+//     background-color: black;
+// `
 
 const FilterItem = ({ item, checked, onChange }) => {
     return (
-        <div>
+        <div>                
             <Checkbox 
                 type='checkbox' 
                 id={item} 
@@ -18,7 +26,8 @@ const FilterItem = ({ item, checked, onChange }) => {
                 onChange={onChange}
             />
             <Label htmlFor={item}>
-                <CheckboxDescription>{item}</CheckboxDescription>
+                <CheckboxDescription>{item}</CheckboxDescription>  
+                {/* <CustomCheckbox /> */}
             </Label>            
         </div>                    
     )

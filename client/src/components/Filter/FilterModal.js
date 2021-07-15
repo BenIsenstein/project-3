@@ -4,7 +4,7 @@ import ConfirmModal from "../Modals/ConfirmModal"
 import useConfirmModal from "../Modals/useConfirmModal"
 import CalendarFilter from './CalendarFilter'
 
-const FilterModal = () => {
+const FilterModal = ({ checkedAll, setCheckedAll, checked, setChecked}) => {
     const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
 
     return (
@@ -13,7 +13,13 @@ const FilterModal = () => {
                 isConfirmModalShowing={isConfirmModalShowing}
                 hideConfirmModal={toggleConfirmModal}
                 confirmPrompt='Filter'
-                modalContent={<CalendarFilter />}
+                actionOnConfirm={() => {}}
+                modalContent={<CalendarFilter             
+                    checkedAll={checkedAll}
+                    setCheckedAll={setCheckedAll}
+                    checked={checked}
+                    setChecked={setChecked} 
+                />}
             />
             <Button onClick={toggleConfirmModal}>FILTER</Button>
         </FlexSection>
