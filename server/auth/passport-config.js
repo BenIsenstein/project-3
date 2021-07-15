@@ -14,7 +14,7 @@ const verifyUser = async (username, password, done) => {
             return done(null, false, { message: 'There is no user with that email.' })
         }
         else if (await bcrypt.compare(password, authCheck.password)) {
-            console.log(`Pasword match for user ${authCheck.email}`)
+            console.log(`Password match for user ${authCheck.email}`)
             // grab the user profile linked to the authenticated email and send it back
             return done(null, await User.findOne( { email: username } ))
         }
