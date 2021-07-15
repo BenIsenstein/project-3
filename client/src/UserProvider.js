@@ -54,8 +54,6 @@ const UserProvider = ({ children }) => {
     
     let loggedInUser = await response.json()
     setUserInfo(loggedInUser)
-
-    console.log('The call to AUTH returned: ', loggedInUser)
     
     history.push(`/`)
   }

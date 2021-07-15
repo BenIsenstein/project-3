@@ -69,7 +69,6 @@ const Accordion = props => {
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
           <p>{props.description}</p>
-          {/* <DeleteEntryButton reRenderList={props.reRenderList} entryId={props._id} /> */}
           <FlexSection justifyEnd>
             <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>              
           </FlexSection>                  

@@ -16,13 +16,13 @@ const Calendar = () => {
   // states for filters (active/completed/all)
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
-      active: true,
-      completed: false
+    active: true,
+    completed: false
   })
 
   //define state for refreshing the list view
-  const [refresh, setRefresh] = useState()
-  const reRenderList = () => setRefresh({})
+  const [loaded, setLoaded] = useState(false)
+
   let history = useHistory()
 
 
@@ -42,7 +42,10 @@ const Calendar = () => {
     entries: [] 
   }])
 
-  const [filteredDates, setFilteredDates] = useState(dates)
+  const [filteredDates, setFilteredDates] = useState([{ 
+    date: "Loading...", 
+    entries: [] 
+  }])
 
   // Function in case the user's calendar is empty
   const setNoneFound = useMemo(() => 
@@ -55,62 +58,65 @@ const Calendar = () => {
 
   // Effect to fetch all entries
   useEffect(() => {
-    if (userContext.user !== undefined) {
-      const fetchCalendarEntries = async () => {
-        setDates([{ 
-          date: "Loading...", 
-          entries: [] 
-        }])
-      
-        try {
-          // fetch all calendar entries for current authenticated user
-          let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
-          let resObject = await entriesResponse.json()
-          let list = resObject.calendarEntryList
-          if (!list.length) return setNoneFound()
+    if (!userContext.user) return
 
-          // Make a Date object out of the entry.date ISO string,
-          // Use built-in method to grab nice-looking string
-          let datesArray = []
+    const fetchCalendarEntries = async () => {
+      setDates([{ 
+        date: "Loading...", 
+        entries: [] 
+      }])
+    
+      try {
+        // fetch all calendar entries for current authenticated user
+        let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
+        let resObject = await entriesResponse.json()
+        let list = resObject.calendarEntryList
+        if (!list.length) return setNoneFound()
+        // Make a Date object out of the entry.date ISO string,
+        // Use built-in method to grab nice-looking string
 
-          // Fill datesArray with a string for each unique date
+        let datesArray = []
+
+        // Fill datesArray with a string for each unique date
+        for (let entry of list) {
+          entry.date = new Date(entry.date).toDateString()
+          if (!datesArray.includes(entry.date)) datesArray.push(entry.date)
+        }
+
+        // Turn each date string into the full structure with an empty array for <SingleEntries />
+        datesArray = datesArray.map(date => {return {date: date, entries: [] }})
+        
+        // Fill each date with matching entries
+        for (let date of datesArray) {
           for (let entry of list) {
-            let date = new Date(entry.date).toDateString()
-            entry.date = date
-            if (!datesArray.includes(date)) datesArray.push(date)
-          }
-
-          // Turn each date string into the full structure with an empty array for <SingleEntries />
-          datesArray = datesArray.map(date => {return {date: date, entries: [] }})
-          
-          // Fill each date with matching entries
-          for (let date of datesArray) {
-            for (let entry of list) {
-              if (entry.date === date.date) {
-                delete entry.date
-                date.entries.push(entry)
-              }
+            if (entry.date === date.date) {
+              delete entry.date
+              date.entries.push(entry)
             }
           }
-        
-          setDates(datesArray) 
-        }  
-        catch (err) {
-          setNoneFound()
-          console.log(err)
-          alert(`
-            There was an error loading your calendar. 
-            We're fixing it as fast as we can.
-          `)
         }
+      
+        setDates(datesArray) 
+        setLoaded(true)
+      }  
+      catch (err) {
+        setNoneFound()
+        console.log(err)
+        alert(`
+          There was an error loading your calendar. 
+          We're fixing it as fast as we can.
+        `)
       }
+    }
 
       fetchCalendarEntries()
-    }
-  // }, [entryTemplate, setNoneFound, reRenderList])
-  }, []) // removed guard conditions to prevent infinite loop
+    
+  // }, [entryTemplate, setNoneFound])
+  }, [userContext.user]) // removed guard conditions to prevent infinite loop
 
   useEffect(() => {
+    if (!loaded) return
+
     const returnAll = entry => true
     const returnActive = entry => !entry.completed
     const returnCompleted = entry => entry.completed
@@ -122,14 +128,17 @@ const Calendar = () => {
               checked.completed ? returnCompleted(entry) : 
                 returnActive(entry)
       )
+
       return {
-          date: date.date, 
-          entries: filteredEntries
-        }
+        date: date.date, 
+        entries: filteredEntries
+      }
     }))
 
+    // set active so that the effect runs
+    //setChecked({ active: !checked.active, ...checked })
     // setFilteredDates(filteredDates.filter(date => date.entries.length > 0))
-  }, [checked.active, checked.completed, checkedAll])
+  }, [checked.active, checked.completed, checkedAll, loaded])
 
   return (
     <Page>
@@ -164,7 +173,7 @@ const Calendar = () => {
         </FlexSection>
 
         <FlexSection fullWidth spaceBetween>
-          <p>Welcome to your home calendar, {userContext.userName}!</p>                    
+          {!loaded ? "Loading..." : <p>Welcome to your home calendar, {userContext.userName}!</p>}                   
           <FilterModal           
             checkedAll={checkedAll}
             setCheckedAll={setCheckedAll}
@@ -173,7 +182,7 @@ const Calendar = () => {
           />                    
         </FlexSection>
 
-        {viewMode === 'ListView' && <CalendarListView reRenderList={reRenderList} dates={filteredDates} />}
+        {viewMode === 'ListView' && <CalendarListView dates={filteredDates} />}
       </PageContainer>
     </Page>
   )
