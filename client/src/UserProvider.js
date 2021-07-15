@@ -18,6 +18,8 @@ const UserProvider = ({ children }) => {
         let response = await fetch('/api/user/getloggedinuser')
         let userObject = await response.json()
 
+        console.log('userObject: ', userObject)
+
         if (!userObject.success) return setUserName("no_user")
         console.log('current user: ', userObject)
 
