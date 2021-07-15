@@ -7,21 +7,23 @@ const UserProvider = ({ children }) => {
   const redirectHome = () => history.push('/calendar')
   const [user, setUser] = useState()
   const [userName, setUserName] = useState('loading')
-  const [userType, setUserType] = useState()
-  let isLoggedIn = userName !== "loading" && userName !== "no_user"
+  const [userType, setUserType] = useState(user?.userType)
+  let isLoggedIn = !["loading", "no_user"].includes(userName)
   let isLoading = userName === "loading"
 
   useEffect(() => {
     const getLoggedInUser = async () => {
+      console.log('getting logged in user in provider!')
       try {
         let response = await fetch('/api/user/getloggedinuser')
-        let user = await response.json()
+        let userObject = await response.json()
 
-        if (!user) return setUserName("no_user")
+        if (!userObject) return setUserName("no_user")
+        console.log('current user: ', userObject)
 
-        let { firstName, lastName, userType } = user
+        let { firstName, lastName, userType } = userObject
 
-        setUser(user)
+        setUser(userObject)
         setUserName(firstName + ' ' + lastName)
         setUserType(userType)
       }
@@ -33,6 +35,8 @@ const UserProvider = ({ children }) => {
 
     getLoggedInUser()
   }, [])
+
+ 
 
   const logIn = async (data) => {
 
@@ -56,7 +60,7 @@ const UserProvider = ({ children }) => {
     setUserName(firstName + ' ' + lastName)
     setUserType(userType)
     
-    history.push(`/calendar`)
+    history.push(`/`)
   }
 
   const logOut = async () => {
@@ -82,6 +86,14 @@ const UserProvider = ({ children }) => {
     }
   }
 
+  const setUserInfo = (userInfo) => {
+    let { firstName, lastName, userType } = userInfo
+
+    setUser(userInfo)
+    setUserName(firstName + ' ' + lastName)
+    setUserType(userType)
+  }
+
   let contextValue = {
     user,
     userName,
@@ -89,7 +101,8 @@ const UserProvider = ({ children }) => {
     isLoggedIn,
     isLoading,
     logIn,
-    logOut
+    logOut,
+    setUserInfo
   }
 
   return (

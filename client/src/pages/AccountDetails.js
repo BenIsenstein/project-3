@@ -1,9 +1,12 @@
+import { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Page, PageContainer } from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
+import UserContext from '../UserContext'
 
 const AccountDetails = () => {
     const history = useHistory()
+    const userContext = useContext(UserContext)
     const getAccountRoute = '/api/user/getloggedinuser'
     const inputs = [
         {
@@ -36,21 +39,51 @@ const AccountDetails = () => {
     // updateAccount submit function
     const updateAccount = async (data) => {
       try {
-        let action = `/api/calendarEntry/update`
-        let options = {
-          method: "put",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(data)
+        let isEmailChanged = data.email !== userContext.user.email  
+        let method = 'put'
+        let headers = { "content-type": "application/json" }
+        let body
+
+        // if the user wants to change their email, start by updating their auth record
+        // the only value in the request body is the new email
+        if (isEmailChanged) {
+            body = JSON.stringify({ email: data.email })
+
+            // send auth update request
+            let authRes = await fetch('/api/auth/update/__auth_ID_TBD', { method, headers, body })
+            let authObject = await authRes.json()
+
+            // return if the auth update was unsuccessful
+            if (!authObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
         }
-        let res = await fetch(action, options)
-        let resObject = await res.json()
-        
-        if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
-        history.goBack()
+
+        // redefine body with all of the form data
+        body = JSON.stringify(data)
+
+        // send user update request
+        let userRes = await fetch(`/api/user/update/${userContext.user._id}`, { method, headers, body }) 
+        let userObject = await userRes.json()
+
+        // if the update was unsuccessful, reverse the email change made to the auth document
+        if (!userObject.success && isEmailChanged) { 
+            body = JSON.stringify({ email: userContext.user.email })
+
+            let authCorrection = await fetch('/api/auth/update/__auth_ID_TBD', { method, headers, body })
+            let correctionObject = await authCorrection.json()
+
+            // return if the auth correction was unsuccessful
+            if (!correctionObject.success) return alert("Your entry update failed halfway through. Please contact customer service.")
+        }
+
+        // set all context to match the changes and redirect 
+        for (let key of ['dateSignedUp', '_id']) data[key] = userContext.user[key]
+
+        userContext.setUserInfo(data)
+        history.push("/calendar")
       }
       catch(err) {
-        console.log('error updating calendar entry: ', err)
-        alert("There was an error updating your entry. We're fixing it as fast as we can.")
+        console.log('error updating account: ', err)
+        alert("There was an error updating your account. We're fixing it as fast as we can.")
       }
     } 
 
@@ -62,7 +95,7 @@ const AccountDetails = () => {
           inputs={inputs} 
           formMode='details' 
           detailsUrl={getAccountRoute} 
-          onSubmit={async data => alert('update account function not ready! ...yet ;)', data)} 
+          onSubmit={updateAccount} 
           addModeCancel={history.goBack}
         />
       </PageContainer>

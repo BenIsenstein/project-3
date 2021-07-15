@@ -76,12 +76,12 @@ const FormTemplate = ({
   ...props }) => {
   // - - - - - - - - Hooks common to both modes - - - - - - - 
   const history = useHistory()
-  const goHome = () => history.push('/')
+  const goHome = useMemo(() => () => history.push('/'), [history])
   const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
 
   // - - - - - - - - Details mode hooks - - - - - - - - - - -
   const { id } = useParams() 
-  const [refresh, setRefresh] = useState(null)
+  const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
 
   // viewMode can be 'details' or 'edit'
   const [viewMode, setViewMode] = useState('details')
@@ -99,6 +99,9 @@ const FormTemplate = ({
   // Set default formMode if none has been given
   formMode = formMode || 'add'
 
+  // Set default onSubmit if none has been given
+  onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
+
   // Define some conditions for convenience
   const isAddMode = formMode === 'add'
   const isDetailsMode = formMode === 'details'
@@ -114,21 +117,22 @@ const FormTemplate = ({
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
     if (!isDetailsMode) return
-      
+    
+    let isMounted = true 
     const getEntry = async () => {
       try {
-        // fetch details
-        let detailsRes = await fetch(props.detailsUrl)
-        let details = await detailsRes.json()
         let valuesForReset = {}
-
-        // ensure that date-type inputs are made into Date objects
-        for (let dateInput of dateInputNames) {
-          if (details[dateInput]) details[dateInput] = new Date(details[dateInput])
+        let detailsRes
+        let details
+        
+        // fetch details
+        if (isMounted) {
+          detailsRes = await fetch(props.detailsUrl)
+          details = await detailsRes.json()
         }
-         
-        // set all inputs to blank
-        //for (let { name } of inputs) setValue(name, name !== 'date' ? '...' : undefined)
+
+        // ensure that the value of date-type inputs are made into Date objects
+        for (let dateInput of dateInputNames) if (details[dateInput]) details[dateInput] = new Date(details[dateInput])
 
         // for each input, setValue + add the value to valuesForReset
         for (let { name } of inputs) {
@@ -136,22 +140,37 @@ const FormTemplate = ({
           valuesForReset[name] = details[name]
         }
 
-        setResetValues(valuesForReset)
-        setRefresh({})
+        if (isMounted) {
+          setResetValues(valuesForReset)
+          setAreDetailsLoaded(true)
+        }
       }
       catch(err) {
         console.log(err)
         alert("There as an error loading your details. We're working on it as fast as we can.")
+        goHome()
       }   
     }
-      getEntry()
-  }, [isDetailsMode, props.detailsUrl, inputs, setRefresh, setValue, dateInputNames])
+    getEntry()
+
+    return () => isMounted = false
+  }, [
+    isDetailsMode, 
+    props.detailsUrl, 
+    inputs, 
+    setAreDetailsLoaded, 
+    setValue, 
+    dateInputNames, 
+    goHome
+  ])
 
   // Effect to conditionally control the value of 'hasBeenChanged'
+  // It won't render infinitely, the logic at the end prevents it.
   useEffect(() => {
     if (!isDetailsMode) return
 
     let currentValues = {}
+    
     for (let { name } of inputs) currentValues[name] = watch(name)
 
     let doEntriesMatch = Object.keys(resetValues).every(key => 
@@ -159,18 +178,14 @@ const FormTemplate = ({
         ? resetValues[key]?.toString() === currentValues[key]?.toString() 
         : resetValues[key] === currentValues[key]
     )
-    
-    if (doEntriesMatch) {
-      setHasBeenChanged(false)
-    }
-    else {
-      setHasBeenChanged(true)
-    }
-  }, [inputs, watch, resetValues, isDetailsMode])
+
+    if (!hasBeenChanged) if (!doEntriesMatch) setHasBeenChanged(true)
+    if (hasBeenChanged) if (doEntriesMatch) setHasBeenChanged(false)
+  })
 
   // - - - - - - RETURN JSX- - - - - - - - - - - //
 
-  if (isDetailsMode && !refresh) return "Loading..." 
+  if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
 
   return (
     <FlexSection fullWidth column fadeIn {...props}>
@@ -192,12 +207,7 @@ const FormTemplate = ({
         {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode('edit')} />}                    
       </FlexSection>
       
-      <Form 
-        onSubmit={handleSubmit(async (data) => onSubmit 
-          ? await onSubmit(data) 
-          : alert('No onSubmit given to <FormTemplate />'))
-        }
-      >   
+      <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
         {inputs && inputs.map(({ name, readOnly, ...rest }) => {
           // every input other than 'date'
           if (!dateInputNames.includes(name)) return <ComplexInput 

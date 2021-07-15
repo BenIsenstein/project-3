@@ -40,7 +40,7 @@ router.get('/get/:id', async (req, res) => {
  router.put('/update/:id', async (req, res) => {
    try {
       let originalEntry = await findCalendarEntryById(req.params.id)
-
+     
       for (let key in req.body) originalEntry[key] = req.body[key]
       
       await originalEntry.save()

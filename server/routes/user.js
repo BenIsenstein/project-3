@@ -82,13 +82,15 @@ router.get("/logout",
 // ------------------------------------ UPDATE USER---------------------------------
 
 // Update a user by id
-router.put('/edit/:id', 
+router.put('/update/:id', 
   async (req, res) => {
-    let userToUpdate = req.body
     try {
-      let data = await User.findByIdAndUpdate(req.params.id, userToUpdate);
-      console.log("Updated User", data)
-      res.redirect('/home');
+      let originalUser = await User.findOne({ _id: req.params.id })
+    
+      for (let key in req.body) originalUser[key] = req.body[key]
+
+      await originalUser.save()
+      res.json({ success: true })
     }
     catch(err) {
       console.log(err)
@@ -96,7 +98,7 @@ router.put('/edit/:id',
         res.status(409).send('User ' + userToUpdate.name + ' already exists');      
       }
       else {
-        res.sendStatus(500)
+        res.status(500).json({ success: false })
       }
     }
   }

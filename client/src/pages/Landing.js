@@ -1,24 +1,24 @@
 import { Page, PageContainer, HouseIcon, Button } from "../common"
 import { useHistory } from 'react-router-dom'
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import UserContext from '../UserContext'
 
 const Landing = () => {
     let history = useHistory()
-
+    const [isLoggedInChecked, setIsLoggedInChecked] = useState(false)
+    
     // Capture the current state of the logged in user
-    let userContext = useContext(UserContext)
+    let isLoggedIn = useContext(UserContext).isLoggedIn
 
     // If user is logged in already and somehow ends up on the landing page,
     // redirect them to their CALENDAR.
     useEffect(() => {
-        if (userContext.isLoggedIn) {
-            history.push(`/calendar`)
-        }
-    // }, [userContext])
-    })    
+        if (isLoggedIn) history.push(`/calendar`)
+        setIsLoggedInChecked(true)
 
-    return (
+    }, [isLoggedIn, history])
+
+    return !isLoggedInChecked ? null : (
         <Page>
             <PageContainer centerPage mockMobileView>
                 <HouseIcon onClick={() => history.push(`/`)} />
@@ -27,7 +27,6 @@ const Landing = () => {
             </PageContainer>
         </Page>
     )
-
 }
 
 export default Landing
