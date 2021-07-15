@@ -3,12 +3,12 @@ import { FlexSection } from "../../common"
 
 import FilterItem from './FilterItem'
 
-const CalendarFilter = () => {
-    const [checkedAll, setCheckedAll] = useState(false)
-    const [checked, setChecked] = useState({
-        active: false,
-        completed: false
-    })
+const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
+    // const [checkedAll, setCheckedAll] = useState(false)
+    // const [checked, setChecked] = useState({
+    //     active: false,
+    //     completed: false
+    // })
 
     const toggleCheck = (inputName) => {
         setChecked((prevState) => {
