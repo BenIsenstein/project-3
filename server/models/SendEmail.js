@@ -52,11 +52,36 @@ const sendUserEmail = async (data) => {
             let daysRange = 14  // date range from current day
             targetDate = targetDate.setDate(targetDate.getDate() + daysRange)
             console.log("Target end date for date range is:", targetDate)
-            let userTaskList = await CalendarEntry.find({ userid: data.userid, date: { $lte: "2021-07-18T06:00:00.000Z" }}, null, {sort: {date: 1}})
+            // let dbResponse = await CalendarEntry.find({ userid: data.userid, date: { $lte: "2021-07-18T06:00:00.000Z" }}, null, {sort: {date: 1}})
             // let userTaskList = await CalendarEntry.find({ userid: data.userid, date: { $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
-            console.log("User task list = ", userTaskList)
-            let formattedList = "List of Tasks goes HERE!"
+            let dbResponse = await CalendarEntry.find({ userid: data.userid }, null, {sort: {date: 1}})
+            let userTaskList = [{}]
+            let formattedList = ""
+            let arrayIndexer = 0
+            console.log("dbResponse.length =", dbResponse.length)
+            while (arrayIndexer < dbResponse.length) {
+              let currentItem = dbResponse[arrayIndexer]
+              userTaskList[arrayIndexer] = {
+                date: currentItem.date,
+                house: currentItem.house,
+                item: currentItem.item,
+                task: currentItem.task
+              }
+
+              formattedList = (formattedList + "Date: " +
+                              currentItem.date + "\n" +
+                              "     House: " +
+                              currentItem.house +
+                              "; Item: " +
+                              currentItem.item + "\n" +
+                              "     Task: " +
+                              currentItem.task + "\n" + "\n")
+              arrayIndexer += 1
+            } 
             
+            console.log("formattedList = ", formattedList)
+
+            // Define structure and parameters for call to SiB API
             sendSmtpEmail = {
               to: [{
                 email: `${targetRecipient}`,
