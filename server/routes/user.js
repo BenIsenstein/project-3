@@ -106,6 +106,6 @@ router.put('/update/:id',
 
 // ----------------------------------- GET LOGGED IN USER -----------------------------------
 
-router.get("/getloggedinuser", (req, res) => res.json(req.user || { success : false }))
+router.get("/getloggedinuser", (req, res) => res.json(req.user || {}))
 
 module.exports = router

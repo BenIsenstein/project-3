@@ -11,6 +11,14 @@ const UserProvider = ({ children }) => {
   let isLoggedIn = !["loading", "no_user"].includes(userName)
   let isLoading = userName === "loading"
 
+  const setUserInfo = (userInfo) => {
+    let { firstName, lastName, userType } = userInfo
+
+    setUser(userInfo)
+    setUserName(firstName + ' ' + lastName)
+    setUserType(userType)
+  }
+
   useEffect(() => {
     const getLoggedInUser = async () => {
       console.log('getting logged in user in provider!')
@@ -18,14 +26,9 @@ const UserProvider = ({ children }) => {
         let response = await fetch('/api/user/getloggedinuser')
         let userObject = await response.json()
 
-        if (!userObject.success) return setUserName("no_user")
-        console.log('current user: ', userObject)
+        if (!userObject) return setUserName("no_user")
 
-        let { firstName, lastName, userType } = userObject
-
-        setUser(userObject)
-        setUserName(firstName + ' ' + lastName)
-        setUserType(userType)
+        setUserInfo(userObject)
       }
       catch (err) {
         console.log('error running checkLoggedInUser: ', err)
@@ -36,10 +39,7 @@ const UserProvider = ({ children }) => {
     getLoggedInUser()
   }, [])
 
- 
-
   const logIn = async (data) => {
-
     let loginOptions = {
       method: 'POST',
       headers: {
@@ -53,12 +53,9 @@ const UserProvider = ({ children }) => {
     if (response.status === 401) return alert('Unable to log in. Please make sure your login info is correct.')
     
     let loggedInUser = await response.json()
-    let { firstName, lastName, userType } = loggedInUser
+    setUserInfo(loggedInUser)
 
     console.log('The call to AUTH returned: ', loggedInUser)
-    setUser(loggedInUser)
-    setUserName(firstName + ' ' + lastName)
-    setUserType(userType)
     
     history.push(`/`)
   }
@@ -86,14 +83,7 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  const setUserInfo = (userInfo) => {
-    let { firstName, lastName, userType } = userInfo
-
-    setUser(userInfo)
-    setUserName(firstName + ' ' + lastName)
-    setUserType(userType)
-  }
-
+  
   let contextValue = {
     user,
     userName,
