@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', 
   passport.authenticate('local'),
-  (req,res) => res.json( { user: req.user } )
+  (req,res) => res.json(req.user)
 )
 
 router.get('/logout', function(req, res){

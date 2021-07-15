@@ -1,15 +1,14 @@
 const LocalStrategy = require("passport-local").Strategy
 const { User, findUserById } = require('../models/User')
 const Auth = require('../models/Auth')
-
 const passport = require('passport')
 const bcrypt = require('bcrypt')
 
-
 const verifyUser = async (username, password, done) => {
     console.log("passport-cofig verifying user...")
+    
     try {
-        const authCheck = await Auth.findOne({email: username})
+        const authCheck = await Auth.findOne({ email: username })
 
         if (!authCheck) {
             return done(null, false, { message: 'There is no user with that email.' })

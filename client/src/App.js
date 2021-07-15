@@ -11,6 +11,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import Calendar from './pages/Calendar'
 import EntryDetails from './pages/EntryDetails'
+import AccountDetails from './pages/AccountDetails'
 import AddEntryPage from './pages/AddEntryPage'
 
 const App = () => {
@@ -25,6 +26,8 @@ const App = () => {
             <Route path='/signup' component={SignupPage} />
             <Route path='/calendar' component={Calendar} />
             <Route path='/task/:id' component={EntryDetails} />
+            <Route path='/account' component={AccountDetails} />
+
             <Route path='/new-task' component={AddEntryPage} />
           </Switch>
         </UserProvider>

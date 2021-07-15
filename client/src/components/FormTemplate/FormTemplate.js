@@ -13,7 +13,6 @@ FormTemplate is a dynamic form component wrapped in a FlexSection
 Other JSX components can be added before and after the main template and remain within this component
 
 - - - - - - - - - - - inputs | arr | default: undefined | - - - - - - - - - - - - - -
-- the 'name' attribute of each input must match the attribute as it appears in the Mongoose model
 - the inputs array is very important. it needs this structure:
 
 const inputs = [
@@ -31,6 +30,16 @@ const inputs = [
   }
 ]
 
+- the 'name' attribute of each input must match the attribute as it appears in the Mongoose model
+- other than the crucial 'name' prop, inputs can take any regular html 
+  attributes as well as some custom ones:
+
+some important input props:
+- readOnly | bool | default: false |
+- as | str, React component | default: undefined | https://styled-components.com/docs/api#as-polymorphic-prop
+- labelText | str | default: this.name |
+- registerOptions | object | default: undefined | https://react-hook-form.com/api/useform/register
+
 - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - BeforeTemplate | JSX | default: undefined |
@@ -41,7 +50,7 @@ const inputs = [
 - titleTag | str, React component | default: <P></P> | Can make the title of the template into any native html element, or a React component.
 
 - ADD MODE:
-  *  addModeCancel | func | default: history.push('/') | is a customizable function that fires on clicking the 'cancel' button. 
+  *  addModeCancel | func | default: history.push('/') | a customizable function that fires on clicking the 'cancel' button. 
 
 - DETAILS EDIT VIEW or ADD MODE:
   * submitText | str | default: "Save" | <Form /> 'submit' button at the bottom of the template
@@ -97,7 +106,7 @@ const FormTemplate = ({
   const isDetailsView = viewMode === 'details'
 
   // An array of the names of all inputs that are meant to select a date
-  const dateInputNames = useMemo(() => ['date', 'dateCompleted'], [])
+  const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
 
   // If the form is in 'add' mode, add the user's _id to the form data 
   if (isAddMode) register('userid', { value: user_id })
@@ -161,7 +170,7 @@ const FormTemplate = ({
 
   // - - - - - - RETURN JSX- - - - - - - - - - - //
 
-  if (isDetailsMode && !refresh) return null 
+  if (isDetailsMode && !refresh) return "Loading..." 
 
   return (
     <FlexSection fullWidth column fadeIn {...props}>
@@ -189,19 +198,19 @@ const FormTemplate = ({
           : alert('No onSubmit given to <FormTemplate />'))
         }
       >   
-        {inputs && inputs.map(({ name, ...rest }) => {
+        {inputs && inputs.map(({ name, readOnly, ...rest }) => {
           // every input other than 'date'
           if (!dateInputNames.includes(name)) return <ComplexInput 
             key={name}
             name={name}
-            readOnly={isDetailsMode ? isDetailsView : rest.readOnly}
+            readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
             register={register}
             errors={errors} 
             {...rest} 
           />
           
           // 'date' input
-          return (isDetailsMode && isDetailsView)
+          return (isDetailsMode && isDetailsView) || readOnly
             ? <ComplexInput 
               key={name} 
               name={name}

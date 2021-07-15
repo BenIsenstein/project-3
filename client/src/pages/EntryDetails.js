@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, BackIcon, Form, Label, Input, Textarea, PencilIcon, StyledDateTimePicker, FlexSection } from '../common'
-import { useForm } from 'react-hook-form'
-import DeleteEntryButton from '../components/DeleteEntryButton'
+import { Page, PageContainer, Button, Textarea} from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
 
 const EntryDetails = () => {
@@ -75,7 +73,7 @@ const EntryDetails = () => {
     }
   } 
 
-  const entryDetailsInputs = [
+  const entryDetailsInputs = [ 
     {
       name: "item",
       registerOptions: { required: "You must choose an item." },
