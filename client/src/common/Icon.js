@@ -10,10 +10,15 @@ import {Pencil} from '@styled-icons/foundation/Pencil'
 import {Exit} from '@styled-icons/ionicons-outline/Exit'
 import {Done} from '@styled-icons/material-rounded/Done'
 import {Envelope} from '@styled-icons/boxicons-regular/Envelope'
+import {PersonFill} from '@styled-icons/bootstrap/PersonFill'
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
 `
+
+const PersonIcon = styled(PersonFill)`
+    height: 1.8em;
+` 
 
 const CalendarIcon = styled(Calendar)`
     height: 1.8em;
@@ -72,4 +77,4 @@ height: 2em;
 margin-left: -0.8em;
 `
 
-export {ListIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}
+export {ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}

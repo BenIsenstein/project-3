@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
 import FilterModal from '../components/Filter/FilterModal'
-import { ListIcon, CalendarIcon, AddIcon, ExitIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
+import { ListIcon, PersonIcon, CalendarIcon, AddIcon, ExitIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
 import entry from "react-datetime-picker"
@@ -152,6 +152,12 @@ const Calendar = () => {
           <FlexSection>
             <TestEmailButton />
           </FlexSection>
+
+          <FlexSection>
+            <Button onClick={() => history.push('account')}><PersonIcon /> Account</Button>
+          </FlexSection>
+
+
 
           <FlexSection>
             <Button onClick={() => userContext.logOut()}><ExitIcon />Log Out</Button>
