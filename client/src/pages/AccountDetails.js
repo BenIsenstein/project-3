@@ -1,13 +1,15 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Page, PageContainer } from '../common'
+import { Page, PageContainer, Button } from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
 import UserContext from '../UserContext'
 
 const AccountDetails = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
-  const inputs = [
+  const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
+
+  const accountInputs = [
     {
       name: "dateSignedUp",
       readOnly: true,
@@ -31,6 +33,20 @@ const AccountDetails = () => {
     {
       name: "email",
       registerOptions: { required: "You must input an email address." },
+    }
+  ]
+
+  const passwordInputs = [
+    {
+      name: "oldPassword",
+      registerOptions: { required: "You must input your old passsword." },
+      labelText: "Old password:",
+      type: 'password'
+    },
+    {
+      name: "newPassword",
+      registerOptions: { required: "You must input your new passsword." },
+      labelText: "New password:"
     }
   ]
 
@@ -84,15 +100,43 @@ const AccountDetails = () => {
     }
   } 
 
+  const ChangePassword = (data) => {
+    alert("No change password function yet! :)")
+  }
+
+  const ChangePasswordButton = () => <>{
+    !undergoingPasswordChange && 
+    <Button 
+      important 
+      formSubmit 
+      type='button' 
+      onClick={() => setUndergoingPasswordChange(true)}
+    >
+      Change Password
+    </Button>
+  }</>
+
   return (
     <Page>
       <PageContainer flexColumn>
         <FormTemplate 
           titleText="Your Account"
-          inputs={inputs} 
+          inputs={accountInputs} 
           formMode='details' 
           detailsUrl='/api/user/getloggedinuser' 
           onSubmit={updateAccount} 
+          AfterTemplate={ChangePasswordButton}
+        />
+        <FormTemplate 
+          noBackButton
+          noDeleteButton
+          popup
+          popupCondition={undergoingPasswordChange}
+          titleText='Change Password'
+          inputs={passwordInputs}
+          formMode='add'
+          onSubmit={ChangePassword}
+          addModeCancel={() => setUndergoingPasswordChange(false)}
         />
       </PageContainer>
     </Page>

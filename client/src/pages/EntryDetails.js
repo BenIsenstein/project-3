@@ -8,7 +8,7 @@ const EntryDetails = () => {
   const history = useHistory()
   const [isCompleted, setIsCompleted] = useState(false)
   const [undergoingCompletion, setUndergoingCompletion] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [isCompletedHandled, setIsCompletedHandled] = useState(false)
   const getEntryRoute = `/api/calendarEntry/get/${id}`
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const EntryDetails = () => {
     }
 
     handleIsCompleted()
-    setIsLoaded(true)
+    setIsCompletedHandled(true)
 
   }, [getEntryRoute])
 
@@ -124,7 +124,7 @@ const EntryDetails = () => {
     </Button>
   }</>
 
-  return !isLoaded ? null : (
+  return !isCompletedHandled ? null : (
     <Page>
       <PageContainer flexColumn>
         <FormTemplate 
