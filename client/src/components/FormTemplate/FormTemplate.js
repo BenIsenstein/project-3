@@ -79,17 +79,17 @@ const FormTemplate = ({
   onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
   const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
-  const [viewMode, setViewMode] = useState('details')
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
-  const [resetValues, setResetValues] = useState({})
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
-  const { id } = useParams() 
-  const history = useHistory()
+  const [viewMode, setViewMode] = useState('details')
+  const [resetValues, setResetValues] = useState({})
   const userContext = useContext(UserContext)
+  const history = useHistory()
+  const { id } = useParams() 
+  const goHome = useMemo(() => () => history.push('/'), [history])
   const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
   const isDateInput = useMemo(() => (name) => dateInputNames.includes(name), [dateInputNames])
   const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
-  const goHome = useMemo(() => () => history.push('/'), [history])
   // - - - -  Conditions measuring formMode + viewMode - - - -
   const isAddMode = formMode === 'add'
   const isDetailsMode = formMode === 'details'
@@ -147,7 +147,8 @@ const FormTemplate = ({
     goHome
   ])
 
-  // Effect to conditionally control the value of 'hasBeenChanged'
+  // Effect to conditionally control the value of 'hasBeenChanged'. 
+  // It can be useful to know if the form has been edited.
   // It won't render infinitely, the logic at the end prevents it.
   useEffect(() => {
     if (!isDetailsMode) return
@@ -172,80 +173,76 @@ const FormTemplate = ({
   if (isAddMode) register('userid', { value: userContext.user?._id })
 
   // - - - - - - RETURN JSX- - - - - - - - - - - //
-
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
+  
+  return <FlexSection fullWidth column fadeIn {...props}>
+    {BeforeTemplate && <BeforeTemplate />} 
 
-  return (
-    <FlexSection fullWidth column fadeIn {...props}>
-      {BeforeTemplate && <BeforeTemplate />} 
-  
-      {!props.noBackButton && isDetailsMode && 
-        <Button type='button' alignSelfStart onClick={props.backButtonOnClick || goHome}>
-          {(BackButtonIcon && <BackButtonIcon />) || <BackIcon />}
-          {props.backButtonText}
-        </Button>
-      }
-  
-      <FlexSection fullWidth spaceBetween>
-        <P as={props.titleTag}>{props.titleText}</P>
-        {!props.displayOnly && isDetailsMode && 
-          <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />
-        }                    
-      </FlexSection>
-      
-      <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
-        {inputs && inputs.map(({ name, readOnly, ...rest }) => {
-          // every input other than 'date'
-          if (!isDateInput(name)) return <ComplexInput 
-            key={name}
+    {!props.noBackButton && isDetailsMode && 
+      <Button type='button' alignSelfStart onClick={props.backButtonOnClick || goHome}>
+        {(BackButtonIcon && <BackButtonIcon />) || <BackIcon />}
+        {props.backButtonText}
+      </Button>
+    }
+
+    <FlexSection fullWidth spaceBetween>
+      <P as={props.titleTag}>{props.titleText}</P>
+      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
+    </FlexSection>
+    
+    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
+      {inputs && inputs.map(({ name, readOnly, ...rest }) => {
+        // every input other than 'date'
+        if (!isDateInput(name)) return <ComplexInput 
+          key={name}
+          name={name}
+          readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+          register={register}
+          errors={errors} 
+          {...rest} 
+        />
+        
+        // 'date' input
+        return (isDetailsMode && isDetailsView) || readOnly
+          ? <ComplexInput 
+            key={name} 
             name={name}
-            readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+            readOnly 
+            register={register} 
+            {...rest}
+          />  
+          : <ComplexInput
+            key={name} 
+            name={name}
+            as={StyledDateTimePicker}          
             register={register}
-            errors={errors} 
-            {...rest} 
+            onChange={val => setValue(name, val)}
+            value={watch(name)}
+            errors={errors}
+            {...rest}
           />
-          
-          // 'date' input
-          return (isDetailsMode && isDetailsView) || readOnly
-            ? <ComplexInput 
-              key={name} 
-              name={name}
-              readOnly 
-              register={register} 
-              {...rest}
-            />  
-            : <ComplexInput
-              key={name} 
-              name={name}
-              as={StyledDateTimePicker}          
-              register={register}
-              onChange={val => setValue(name, val)}
-              value={watch(name)}
-              errors={errors}
-              {...rest}
-            />
-        })}
-  
-        {(isAddMode || isEditView) && 
-          <FlexSection fullWidth marginTop1em>
-            <Button fullWidth important type='submit' value='submit'>
-              {props.submitText || "Save"}
-            </Button>
-            <Button fullWidth type='button' onClick={isEditView ? resetForm : props.addModeCancel || goHome}>
-              {props.cancelText || "Cancel"}
-            </Button>                              
-          </FlexSection>
-        }
-      </Form>  
-  
-      {!props.noDeleteButton && isDetailsMode && isDetailsView && 
-        <FlexSection fullWidth justifyEnd marginTop1em>
-          <DeleteEntryButton entryId={id} /> 
+      })}
+
+      {(isAddMode || isEditView) && 
+        <FlexSection fullWidth marginTop1em>
+          <Button fullWidth important type='submit' value='submit'>
+            {props.submitText || "Save"}
+          </Button>
+          <Button fullWidth type='button' onClick={isEditView ? resetForm : props.addModeCancel || goHome}>
+            {props.cancelText || "Cancel"}
+          </Button>                              
         </FlexSection>
       }
-  
-      {AfterTemplate && <AfterTemplate />} 
-    </FlexSection>
-)}
+    </Form>  
+
+    {!props.noDeleteButton && isDetailsMode && isDetailsView && 
+      <FlexSection fullWidth justifyEnd marginTop1em>
+        <DeleteEntryButton entryId={id} /> 
+      </FlexSection>
+    }
+
+    {AfterTemplate && <AfterTemplate />} 
+  </FlexSection>
+}
 
 export default FormTemplate
