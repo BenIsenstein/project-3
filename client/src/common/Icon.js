@@ -33,7 +33,8 @@ const NextIcon = styled(NavigateNext)`
 
 const BackIcon = styled(NavigateBefore)`
     height: 2em;
-    margin-left: -0.8em;
+    // margin-left: -0.8em;
+    margin: 0 -.6em;
 `
 
 const AddIcon = styled(Plus)`
@@ -73,8 +74,8 @@ const CheckIcon = styled(Done)`
 `
 
 const EnvelopeIcon = styled(Envelope)`
-height: 2em;
-margin-left: -0.8em;
+    height: 2em;
+    fill: ${props => props.theme.prm};
 `
 
 export {ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}
