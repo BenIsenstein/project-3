@@ -43,8 +43,6 @@ const sendUserEmail = async (data) => {
             // Define parameters for email API
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
             let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
-            templateId = 2
-            let formattedList = ""
             let arrayIndexer = 0
             let currentItem = {}
 
@@ -56,25 +54,16 @@ const sendUserEmail = async (data) => {
 
             let userOverdueTaskList = [{}]
             if (dbOverdueResponse.length > 0) {
-              formattedList = (formattedList + "OVERDUE: " + "\n")
               arrayIndexer = 0
               while (arrayIndexer < dbOverdueResponse.length) {
                 currentItem = dbOverdueResponse[arrayIndexer]
                 userOverdueTaskList[arrayIndexer] = {
+                  status: "overdue",
                   date: currentItem.date,
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task
-                }
-                
-                formattedList = (formattedList + "Date: " +
-                currentItem.date + "\n" +
-                "     House: " +
-                currentItem.house +
-                "; Item: " +
-                currentItem.item + "\n" +
-                "     Task: " +
-                currentItem.task + "\n" + "\n")
+                }                
                 arrayIndexer += 1
               } 
             }
@@ -84,60 +73,66 @@ const sendUserEmail = async (data) => {
             let targetDate = dateToday.setDate(dateToday.getDate() + 14)  // add 14 days to current day
             // convert target date into a new date, and convert it to an ISO date-time string
             targetDate = new Date(targetDate).toISOString()
-
+            
             // Retrieve data from DB
             let dbResponse = await CalendarEntry.find({ userid: data.userid, date: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
-
+            
             let userTaskList = [{}]
             if (dbResponse.length > 0) {
-              formattedList = (formattedList + "UPCOMING: " + "\n")
               arrayIndexer = 0
               while (arrayIndexer < dbResponse.length) {
                 currentItem = dbResponse[arrayIndexer]
                 userTaskList[arrayIndexer] = {
+                  status: "active",
                   date: currentItem.date,
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task
                 }
-                
-                formattedList = (formattedList + "Date: " +
-                currentItem.date + "\n" +
-                "     House: " +
-                currentItem.house +
-                "; Item: " +
-                currentItem.item + "\n" +
-                "     Task: " +
-                currentItem.task + "\n" + "\n")
                 arrayIndexer += 1
               } 
             }
-              
-              console.log("Task list to send to user = ", formattedList)
-              
+            
+            let combinedTaskList = [{}]
+            combinedTaskList = [...userOverdueTaskList, ...userTaskList]
+            
             if ((dbResponse.length === 0) && (dbOverdueResponse.length === 0 )) {
-              formattedList = "None. You do not have any outstanding tasks within the next 2 weeks."
+              userTaskList = [{
+                status: "active",
+                date: "None. You have NO TASKS within the next 2 weeks.",
+                house: "",
+                item: "",
+                task: ""
+              }]
             }
-
+            
+            console.log("userOverdueTaskList = ", userOverdueTaskList )
+            console.log("userTaskList = ",userTaskList)
+            
             // Define structure and parameters for call to SiB API
             sendSmtpEmail = {
               to: [{
                 email: `${targetRecipient}`,
                 name: `${data.firstname}`
               }],
-              templateId: 2,
+              templateId: 3,
               params: {
                 name: `${data.firstname}`,
-                body: `${formattedList}`
+                overduetasks: userOverdueTaskList,
+                upcomingtasks: userTaskList
+
+                // "tasklist": [
+                //   {"status":"overdue","date":"2021-07-01T06:00:00.000Z","house":"1","item":"Roof","task":"Inspect Shingles"},
+                //   {"status":"overdue","date":"2021-07-04T06:00:00.000Z","house":"1","item":"Lawn","task":"Mow yard"}
+                // ]
               },
               headers: {
                 'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2'
               }
             }
-
             // Trigger API for to send email via SendInBlue
             console.log("REMINDER email being sent to:", targetRecipient) 
-            await apiInstance.sendTransacEmail(sendSmtpEmail)  // Send email via SiB API
+            await apiInstance.sendTransacEmail(JSON.stringify(sendSmtpEmail))  // Send email via SiB API
           }
           break;
         case "welcome":
