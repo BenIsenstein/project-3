@@ -28,8 +28,6 @@ const TestEmailButton = () => {
       let res = await fetch(action, options)
       let resObject = await res.json()
       console.log("Response from server = ", resObject)
-      if (resObject.success) alert("Call to server API Successful!")
-
       if (!resObject.success) alert("Your call to the sendEmail API failed for some reason. Please try again.")
     }
     catch (err) {
