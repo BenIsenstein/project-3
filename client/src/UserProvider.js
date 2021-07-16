@@ -19,9 +19,6 @@ const UserProvider = ({ children }) => {
     setUserType(userType)
   }
 
-  useEffect(() => console.log('userName changed to: ', userName), [userName])
-  useEffect(() => console.log('isLoggedIn changed to: ', isLoggedIn), [])
-
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {
