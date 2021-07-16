@@ -110,6 +110,7 @@ const FormTemplate = ({
 
   // An array of the names of all inputs that are meant to select a date
   const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
+  const isDateInput = name => dateInputNames.includes(name)
 
   // If the form is in 'add' mode, add the user's _id to the form data 
   if (isAddMode) register('userid', { value: user_id })
@@ -211,7 +212,7 @@ const FormTemplate = ({
       <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
         {inputs && inputs.map(({ name, readOnly, ...rest }) => {
           // every input other than 'date'
-          if (!dateInputNames.includes(name)) return <ComplexInput 
+          if (!isDateInput(name)) return <ComplexInput 
             key={name}
             name={name}
             readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
