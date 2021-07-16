@@ -6,15 +6,16 @@ const bcrypt = require('bcrypt')
 const passport = require('passport')
 
 router.post('/signup', async (req, res) => {
-  let { email, password, dateSignedUp: dateLastModified } = req.body
+  let { email, password, userId, dateSignedUp: dateLastModified } = req.body
   password = await bcrypt.hash(password, 10)
 
   try {
-    await new Auth({ email, password, dateLastModified }).save()
-    console.log("new Auth document saved!")
+    await new Auth({ email, password, userId, dateLastModified }).save()
     res.json({ success: true })
   } 
   catch (err) {
+    //delete the Auth document that was created before the User creation failed
+    await User.findOneAndDelete({ _id: userId })
     console.log("error saving Auth document: ", err)
     res.sendStatus(500)
   }
@@ -26,14 +27,14 @@ router.post('/login',
 )
 
 // update calendar entry by id
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:userId', async (req, res) => {
   try {
-     let originalAuth = await Auth.findOne({ _id: req.params.id })
+    let originalAuth = await Auth.findOne({ userId: req.params.userId })
 
-     for (let key in req.body) originalAuth[key] = req.body[key]
+    for (let key in req.body) originalAuth[key] = req.body[key]
      
-     await originalEntry.save()
-     res.json({ success: true })
+    await originalAuth.save()
+    res.json({ success: true })
   }
   catch(err) {
     console.log(err)
@@ -47,10 +48,9 @@ router.put('/update/:id', async (req, res) => {
   }
 })
 
-router.get('/logout', function(req, res){
+router.get('/logout', (req, res) => {
   console.log("Server: Logging Out User...")
   req.logout()
-  // res.sendStatus(200)
   res.json({ isLoggedOutNow : true })
 })
 

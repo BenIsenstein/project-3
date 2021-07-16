@@ -10,8 +10,12 @@ import './Calendar.css'
 import entry from "react-datetime-picker"
 
 const Calendar = () => {
+  let history = useHistory()
   const [viewMode, setViewMode] = useState('ListView')
   const userContext = useContext(UserContext)
+
+  // if user is not logged in, redirect to landing
+  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
 
   // states for filters (active/completed/all)
   const [checkedAll, setCheckedAll] = useState(false)
@@ -22,9 +26,6 @@ const Calendar = () => {
 
   //define state for refreshing the list view
   const [loaded, setLoaded] = useState(false)
-
-  let history = useHistory()
-
 
   // COPIED FROM LIST VIEW!!!!!!!! AHHH!!!!
 

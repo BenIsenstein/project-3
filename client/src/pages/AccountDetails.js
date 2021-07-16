@@ -38,35 +38,36 @@ const AccountDetails = () => {
     const updateAccount = async (data) => {
       try {
         let isEmailChanged = data.email !== userContext.user.email  
+        let userId = userContext.user._id
         let method = 'put'
         let headers = { "content-type": "application/json" }
         let body
 
         // if the user wants to change their email, start by updating their auth record
-        // the only value in the request body is the new email
+        // the only values in the request body are the new email and new dateLastModified
         if (isEmailChanged) {
-            body = JSON.stringify({ email: data.email })
+          body = JSON.stringify({ email: data.email, dateLastModified: new Date() })
 
-            // send auth update request
-            let authRes = await fetch('/api/auth/update/__auth_ID_TBD', { method, headers, body })
-            let authObject = await authRes.json()
+          // send auth update request
+          let authRes = await fetch(`/api/auth/update/${userId}`, { method, headers, body })
+          let authObject = await authRes.json()
 
-            // return if the auth update was unsuccessful
-            if (!authObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
+          // return if the auth update was unsuccessful
+          if (!authObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
         }
 
         // redefine body with all of the form data
         body = JSON.stringify(data)
 
         // send user update request
-        let userRes = await fetch(`/api/user/update/${userContext.user._id}`, { method, headers, body }) 
+        let userRes = await fetch(`/api/user/update/${userId}`, { method, headers, body }) 
         let userObject = await userRes.json()
 
         // if the update was unsuccessful, reverse the email change made to the auth document
         if (!userObject.success && isEmailChanged) { 
             body = JSON.stringify({ email: userContext.user.email })
 
-            let authCorrection = await fetch('/api/auth/update/__auth_ID_TBD', { method, headers, body })
+            let authCorrection = await fetch(`/api/auth/update/${userId}`, { method, headers, body })
             let correctionObject = await authCorrection.json()
 
             // return if the auth correction was unsuccessful

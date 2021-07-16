@@ -10,43 +10,33 @@ const Signup = () => {
 
   async function onSubmit(data) {
     const alertError = () => alert("There was an error signing you up. We're fixing it as fast as we can.")
-
+    let method = 'post'
+    let headers = { "content-type": "application/json" }
+    let body
     data.dateSignedUp = new Date()
     delete data.confirmPassword
 
-    let authUrl = "/api/auth/signup"
-    let userUrl = "/api/user/signup"
-    let fetchOptions = {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data)
-    }
-
     try { 
-      // attempt to create auth document  
-      let authResponse = await fetch(authUrl, fetchOptions)
-      let authObject = await authResponse.json()
-
-      // if auth document creation fails, return
-      if (!authObject.success) return alertError()
-
       // attempt to create user document
-      let userResponse = await fetch(userUrl, fetchOptions)
+      body = JSON.stringify(data)
+      let userResponse = await fetch("/api/user/signup", { method, headers, body })
       let userObject = await userResponse.json()
 
       // if user document creation fails, return
       if (!userObject.success) return alertError()
 
-      alert('success with entire signup flow! login is next.')
+      // attempt to create auth document, with the userId from newly created user document
+      body = JSON.stringify({ ...data, userId: userObject.userId })
+      let authResponse = await fetch("/api/auth/signup", { method, headers, body })
+      let authObject = await authResponse.json()
 
-      // log in
-      let { email, password, firstName } = data
-      let username = email
+      // if auth document creation fails, return
+      if (!authObject.success) return alertError()
+
+      alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
 
       // Log the user in
-      //alert(`logging you in now, ${firstName}`)
-      await userContext.logIn({ username, password })
-      // <Form onSubmit={handleSubmit(async (data) => await userContext.logIn(data))}>
+      await userContext.logIn({ username: data.email, password: data.password })
     }
     catch(err) {
       console.log('Error signing up: ', err)
