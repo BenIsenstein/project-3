@@ -8,7 +8,7 @@ const UserProvider = ({ children }) => {
   const [user, setUser] = useState()
   const [userName, setUserName] = useState('loading')
   const [userType, setUserType] = useState(user?.userType)
-  let isLoggedIn = !["loading", "no_user"].includes(userName)
+  let isLoggedIn = !['loading', 'no_user'].includes(userName) 
   let isLoading = userName === "loading"
 
   const setUserInfo = (userInfo) => {
@@ -19,15 +19,17 @@ const UserProvider = ({ children }) => {
     setUserType(userType)
   }
 
+  useEffect(() => console.log('userName changed to: ', userName), [userName])
+  useEffect(() => console.log('isLoggedIn changed to: ', isLoggedIn), [])
+
   useEffect(() => {
     const getLoggedInUser = async () => {
-      console.log('getting logged in user in provider!')
       try {
         let response = await fetch('/api/user/getloggedinuser')
         let userObject = await response.json()
 
-        if (!userObject) return setUserName("no_user")
-
+        if (userObject.no_user) return setUserName("no_user")
+        
         setUserInfo(userObject)
       }
       catch (err) {
@@ -64,7 +66,6 @@ const UserProvider = ({ children }) => {
       let resObject = await response.json()
 
       if (resObject.isLoggedOutNow) {
-        isLoggedIn = false
         setUser(undefined)
         setUserName('no_user')
         setUserType(undefined)
