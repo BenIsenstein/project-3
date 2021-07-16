@@ -204,7 +204,8 @@ const FormTemplate = ({
   
       <FlexSection fullWidth spaceBetween>
         <P as={props.titleTag}>{props.titleText}</P>
-        {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode('edit')} />}                    
+        {!props.displayOnly && isDetailsMode && 
+        <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
       </FlexSection>
       
       <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
