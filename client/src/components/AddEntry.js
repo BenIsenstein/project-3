@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import FormTemplate from './FormTemplate/FormTemplate'
 
 const AddEntry = () => {
-  let history = useHistory()
+  const history = useHistory()
 
   const onSubmit = async (data) => {
     data.house = "House placeholder"
@@ -58,7 +58,13 @@ const AddEntry = () => {
     }
   ]
 
-  return <FormTemplate titleText=" " inputs={inputs} formMode='add' addModeCancel={history.goBack} onSubmit={onSubmit} />
+  return <FormTemplate 
+    titleText="New Task" 
+    inputs={inputs} 
+    formMode='add' 
+    addModeCancel={history.goBack} 
+    onSubmit={onSubmit} 
+  />
 }
 
 // // Capture the current state of the logged in user
@@ -128,6 +134,4 @@ const AddEntry = () => {
 
   //   </Form>
   // )
-
-
 export default AddEntry

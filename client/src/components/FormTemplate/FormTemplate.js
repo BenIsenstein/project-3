@@ -74,47 +74,27 @@ const FormTemplate = ({
   onSubmit, 
   inputs, 
   ...props }) => {
-  // - - - - - - - - Hooks common to both modes - - - - - - - 
-  const history = useHistory()
-  const goHome = useMemo(() => () => history.push('/'), [history])
-  const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
-
-  // - - - - - - - - Details mode hooks - - - - - - - - - - -
-  const { id } = useParams() 
-  const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
-
-  // viewMode can be 'details' or 'edit'
-  const [viewMode, setViewMode] = useState('details')
-  
-  // original values of the entry, for resetting, will be stored upon fetching
-  const [resetValues, setResetValues] = useState({})
-  const resetForm = () => {reset(resetValues); setViewMode('details')} 
-  const [hasBeenChanged, setHasBeenChanged] = useState(false)
-
-  // - - - - - - - - Add mode hooks - - - - - - - - - - - - -
-  const userContext = useContext(UserContext)
-  const user_id = userContext.user?._id || 'default'
-
-  // - - - - Other effects/logic to prepare the form - - - - -
-  // Set default formMode if none has been given
+  // - - - - - Handle the most crucial props - - - - -  
   formMode = formMode || 'add'
-
-  // Set default onSubmit if none has been given
   onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
-
-  // Define some conditions for convenience
+  // - - - - - - - - - - - Hooks - - - - - - - - - - -
+  const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
+  const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
+  const [hasBeenChanged, setHasBeenChanged] = useState(false)
+  const [viewMode, setViewMode] = useState('details')
+  const [resetValues, setResetValues] = useState({})
+  const userContext = useContext(UserContext)
+  const history = useHistory()
+  const { id } = useParams() 
+  const goHome = useMemo(() => () => history.push('/'), [history])
+  const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
+  const isDateInput = useMemo(() => (name) => dateInputNames.includes(name), [dateInputNames])
+  const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
+  // - - - -  Conditions measuring formMode + viewMode - - - -
   const isAddMode = formMode === 'add'
   const isDetailsMode = formMode === 'details'
   const isEditView = viewMode === 'edit'
   const isDetailsView = viewMode === 'details'
-
-  // An array of the names of all inputs that are meant to select a date
-  const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
-  const isDateInput = name => dateInputNames.includes(name)
-
-  // If the form is in 'add' mode, add the user's _id to the form data 
-  if (isAddMode) register('userid', { value: user_id })
-  
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
     if (!isDetailsMode) return
@@ -133,7 +113,8 @@ const FormTemplate = ({
         }
 
         // ensure that the value of date-type inputs are made into Date objects
-        for (let dateInput of dateInputNames) if (details[dateInput]) details[dateInput] = new Date(details[dateInput])
+        for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
+        
 
         // for each input, setValue + add the value to valuesForReset
         for (let { name } of inputs) {
@@ -159,23 +140,26 @@ const FormTemplate = ({
     isDetailsMode, 
     props.detailsUrl, 
     inputs, 
+    isDateInput,
     setAreDetailsLoaded, 
     setValue, 
     dateInputNames, 
     goHome
   ])
 
-  // Effect to conditionally control the value of 'hasBeenChanged'
+  // Effect to conditionally control the value of 'hasBeenChanged'. 
+  // It can be useful to know if the form has been edited.
   // It won't render infinitely, the logic at the end prevents it.
   useEffect(() => {
     if (!isDetailsMode) return
 
+    // store the current value the form data
     let currentValues = {}
-    
     for (let { name } of inputs) currentValues[name] = watch(name)
 
+    // see if current form data is identical to the original values
     let doEntriesMatch = Object.keys(resetValues).every(key => 
-      key === 'date' 
+      isDateInput(key) 
         ? resetValues[key]?.toString() === currentValues[key]?.toString() 
         : resetValues[key] === currentValues[key]
     )
@@ -184,85 +168,81 @@ const FormTemplate = ({
     if (hasBeenChanged) if (doEntriesMatch) setHasBeenChanged(false)
   })
 
+  // When using a form in 'add' mode, 
+  // attach a 'userid' input to the form with a value of the user's _id
+  if (isAddMode) register('userid', { value: userContext.user?._id })
+
   // - - - - - - RETURN JSX- - - - - - - - - - - //
-
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
+  
+  return <FlexSection fullWidth column fadeIn {...props}>
+    {BeforeTemplate && <BeforeTemplate />} 
 
-  return (
-    <FlexSection fullWidth column fadeIn {...props}>
-      {BeforeTemplate && <BeforeTemplate />} 
-  
-      {!props.noBackButton && isDetailsMode && 
-        <Button 
-          type='button' 
-          alignSelfStart 
-          onClick={props.backButtonOnClick || goHome}
-        >
-          {(BackButtonIcon && <BackButtonIcon />) || <BackIcon />}
-          {props.backButtonText}
-        </Button>
-      }
-  
-      <FlexSection fullWidth spaceBetween>
-        <P as={props.titleTag}>{props.titleText}</P>
-        {!props.displayOnly && isDetailsMode && 
-        <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
-      </FlexSection>
-      
-      <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
-        {inputs && inputs.map(({ name, readOnly, ...rest }) => {
-          // every input other than 'date'
-          if (!isDateInput(name)) return <ComplexInput 
-            key={name}
+    {!props.noBackButton && isDetailsMode && 
+      <Button type='button' alignSelfStart onClick={props.backButtonOnClick || goHome}>
+        {(BackButtonIcon && <BackButtonIcon />) || <BackIcon />}
+        {props.backButtonText}
+      </Button>
+    }
+
+    <FlexSection fullWidth spaceBetween>
+      <P as={props.titleTag}>{props.titleText}</P>
+      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
+    </FlexSection>
+    
+    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
+      {inputs && inputs.map(({ name, readOnly, ...rest }) => {
+        // every input other than 'date'
+        if (!isDateInput(name)) return <ComplexInput 
+          key={name}
+          name={name}
+          readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+          register={register}
+          errors={errors} 
+          {...rest} 
+        />
+        
+        // 'date' input
+        return (isDetailsMode && isDetailsView) || readOnly
+          ? <ComplexInput 
+            key={name} 
             name={name}
-            readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+            readOnly 
+            register={register} 
+            {...rest}
+          />  
+          : <ComplexInput
+            key={name} 
+            name={name}
+            as={StyledDateTimePicker}          
             register={register}
-            errors={errors} 
-            {...rest} 
+            onChange={val => setValue(name, val)}
+            value={watch(name)}
+            errors={errors}
+            {...rest}
           />
-          
-          // 'date' input
-          return (isDetailsMode && isDetailsView) || readOnly
-            ? <ComplexInput 
-              key={name} 
-              name={name}
-              readOnly 
-              register={register} 
-              {...rest}
-            />  
-            : <ComplexInput
-              key={name} 
-              name={name}
-              as={StyledDateTimePicker}          
-              register={register}
-              onChange={val => setValue(name, val)}
-              value={watch(name)}
-              errors={errors}
-              {...rest}
-            />
-        })}
-  
-        {(isAddMode || isEditView) && 
-          <FlexSection fullWidth marginTop1em>
-            <Button fullWidth important type='submit' value='submit'>
-              {props.submitText || "Save"}
-            </Button>
-            <Button fullWidth type='button' onClick={isEditView ? resetForm : props.addModeCancel || goHome}>
-              {props.cancelText || "Cancel"}
-            </Button>                              
-          </FlexSection>
-        }
-      </Form>  
-  
-      {!props.noDeleteButton && isDetailsMode && isDetailsView && 
-        <FlexSection fullWidth justifyEnd marginTop1em>
-          <DeleteEntryButton entryId={id} /> 
+      })}
+
+      {(isAddMode || isEditView) && 
+        <FlexSection fullWidth marginTop1em>
+          <Button fullWidth important type='submit' value='submit'>
+            {props.submitText || "Save"}
+          </Button>
+          <Button fullWidth type='button' onClick={isEditView ? resetForm : props.addModeCancel || goHome}>
+            {props.cancelText || "Cancel"}
+          </Button>                              
         </FlexSection>
       }
-  
-      {AfterTemplate && <AfterTemplate />} 
-    </FlexSection>
-)}
+    </Form>  
 
+    {!props.noDeleteButton && isDetailsMode && isDetailsView && 
+      <FlexSection fullWidth justifyEnd marginTop1em>
+        <DeleteEntryButton entryId={id} /> 
+      </FlexSection>
+    }
+
+    {AfterTemplate && <AfterTemplate />} 
+  </FlexSection>
+}
 
 export default FormTemplate

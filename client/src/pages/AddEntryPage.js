@@ -4,17 +4,13 @@ import { Page, Button, PageContainer } from '../common'
 import AddEntry from "../components/AddEntry"
 import UserContext from '../UserContext'
 
-const AddEntryPage = () => {
-    
-    let history = useHistory()
-
-    // Capture the current state of the logged in user
-    let userContext = useContext(UserContext)
+const AddEntryPage = () => {  
+    const history = useHistory()
+    const userContext = useContext(UserContext)
 
     return (
         <Page>
             <PageContainer>
-                <p>New Task</p>
                 {/* // If user is NOT logged in and accidentally navigated to this page,
                 // redirect them to the LANDING PAGE. */}
                 {userContext.user === undefined &&
