@@ -18,16 +18,20 @@ const Calendar = () => {
   useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
 
   // states for filters (active/completed/all)
+  // has the same names but different from states in FilterModal
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
     active: true,
     completed: false
   })
 
+  function handleFilterChange(active, completed, all) {
+    setChecked({active: active, completed: completed})
+    setCheckedAll(all)
+  }
+
   //define state for refreshing the list view
   const [loaded, setLoaded] = useState(false)
-
-  // COPIED FROM LIST VIEW!!!!!!!! AHHH!!!!
 
   // Template for declaring useState() and setNoneFound()
   const entryTemplate = useMemo(() => {
@@ -113,7 +117,7 @@ const Calendar = () => {
       fetchCalendarEntries()
     
   // }, [entryTemplate, setNoneFound])
-  }, [userContext.user]) // removed guard conditions to prevent infinite loop
+  }, [userContext.user])
 
   useEffect(() => {
     if (!loaded) return
@@ -154,10 +158,8 @@ const Calendar = () => {
           </FlexSection>
 
           <FlexSection>
-            <Button onClick={() => history.push('account')}><PersonIcon /> Account</Button>
+            <Button onClick={() => history.push('account')}><PersonIcon /></Button>
           </FlexSection>
-
-
 
           <FlexSection>
             <Button onClick={() => userContext.logOut()}><ExitIcon />Log Out</Button>
@@ -186,6 +188,7 @@ const Calendar = () => {
             setCheckedAll={setCheckedAll}
             checked={checked}
             setChecked={setChecked} 
+            handleFilterChange={handleFilterChange}
           />                    
         </FlexSection>
 

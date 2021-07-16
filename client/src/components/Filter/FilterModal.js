@@ -1,11 +1,18 @@
+import React, { useState } from 'react'
 import { FlexSection, Button } from "../../common"
 
 import ConfirmModal from "../Modals/ConfirmModal"
 import useConfirmModal from "../Modals/useConfirmModal"
 import CalendarFilter from './CalendarFilter'
 
-const FilterModal = ({ checkedAll, setCheckedAll, checked, setChecked}) => {
+const FilterModal = ({ handleFilterChange }) => {
     const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
+
+    const [checkedAll, setCheckedAll] = useState(false)
+    const [checked, setChecked] = useState({
+        active: true,
+        completed: false
+    })
 
     return (
         <FlexSection justifyEnd>
@@ -13,7 +20,7 @@ const FilterModal = ({ checkedAll, setCheckedAll, checked, setChecked}) => {
                 isConfirmModalShowing={isConfirmModalShowing}
                 hideConfirmModal={toggleConfirmModal}
                 confirmPrompt='Filter'
-                actionOnConfirm={() => {}}
+                actionOnConfirm={() => handleFilterChange(checked.active, checked.completed, checkedAll)}
                 modalContent={<CalendarFilter             
                     checkedAll={checkedAll}
                     setCheckedAll={setCheckedAll}

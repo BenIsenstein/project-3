@@ -7,16 +7,16 @@ const { CalendarEntry } = require('./CalendarEntry')
 // Define functions
 
 const sendUserEmail = async (data) => {
-
-  console.log("sendUserEmail model: data.email = ", data.email)
+  
   let messageType = data.type
   let templateId = 0  // This is the desired SendInBlue email TEMPLATE to be used.
-
+  
   let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
   let sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail | 
   sendTestEmail.emailTo = [data.email]
   let targetRecipient = data.email
-
+  let currentDate = new Date() 
+  
   try {
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -25,7 +25,6 @@ const sendUserEmail = async (data) => {
     // collection, and see if the email address provided is valid. If it is
     // NOT a valid email, override it by defaulting to the SiB account owner.
     let lookupResult = await findTesterByEmail(data.email)
-    console.log("sendUserEmail model: tester email lookup result = ", lookupResult)
     if (lookupResult && lookupResult > "") {
       console.log("sendUserEmail model: Found TESTER!")
       targetRecipient = data.email
@@ -43,43 +42,82 @@ const sendUserEmail = async (data) => {
           {
             // Define parameters for email API
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
-            let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // SendTestEmail
+            let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
             templateId = 2
-            // sendSmtpEmail.emailTo = [targetRecipient]
-
-            // Retrieve data required for body of email
-            let targetDate = new Date()  // start with current date
-            let daysRange = 14  // date range from current day
-            targetDate = targetDate.setDate(targetDate.getDate() + daysRange)
-            console.log("Target end date for date range is:", targetDate)
-            // let dbResponse = await CalendarEntry.find({ userid: data.userid, date: { $lte: "2021-07-18T06:00:00.000Z" }}, null, {sort: {date: 1}})
-            // let userTaskList = await CalendarEntry.find({ userid: data.userid, date: { $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
-            let dbResponse = await CalendarEntry.find({ userid: data.userid }, null, {sort: {date: 1}})
-            let userTaskList = [{}]
             let formattedList = ""
             let arrayIndexer = 0
-            console.log("dbResponse.length =", dbResponse.length)
-            while (arrayIndexer < dbResponse.length) {
-              let currentItem = dbResponse[arrayIndexer]
-              userTaskList[arrayIndexer] = {
-                date: currentItem.date,
-                house: currentItem.house,
-                item: currentItem.item,
-                task: currentItem.task
-              }
+            let currentItem = {}
 
-              formattedList = (formattedList + "Date: " +
-                              currentItem.date + "\n" +
-                              "     House: " +
-                              currentItem.house +
-                              "; Item: " +
-                              currentItem.item + "\n" +
-                              "     Task: " +
-                              currentItem.task + "\n" + "\n")
-              arrayIndexer += 1
-            } 
-            
-            console.log("formattedList = ", formattedList)
+            // Retrieve data required for body of email
+
+            // First retrieve OVERDUE tasks.
+            // Retrieve data from DB
+            let dbOverdueResponse = await CalendarEntry.find({ userid: data.userid, completed: false, date: { $lt: currentDate.toISOString() }  }, null, {sort: {date: 1}})
+
+            let userOverdueTaskList = [{}]
+            if (dbOverdueResponse.length > 0) {
+              formattedList = (formattedList + "OVERDUE: " + "\n")
+              arrayIndexer = 0
+              while (arrayIndexer < dbOverdueResponse.length) {
+                currentItem = dbOverdueResponse[arrayIndexer]
+                userOverdueTaskList[arrayIndexer] = {
+                  date: currentItem.date,
+                  house: currentItem.house,
+                  item: currentItem.item,
+                  task: currentItem.task
+                }
+                
+                formattedList = (formattedList + "Date: " +
+                currentItem.date + "\n" +
+                "     House: " +
+                currentItem.house +
+                "; Item: " +
+                currentItem.item + "\n" +
+                "     Task: " +
+                currentItem.task + "\n" + "\n")
+                arrayIndexer += 1
+              } 
+            }
+
+            // Next retrieve all UPCOMING tasks in next 2 weeks.
+            let dateToday = new Date()  // start with current date
+            let targetDate = dateToday.setDate(dateToday.getDate() + 14)  // add 14 days to current day
+            // convert target date into a new date, and convert it to an ISO date-time string
+            targetDate = new Date(targetDate).toISOString()
+
+            // Retrieve data from DB
+            let dbResponse = await CalendarEntry.find({ userid: data.userid, date: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
+
+            let userTaskList = [{}]
+            if (dbResponse.length > 0) {
+              formattedList = (formattedList + "UPCOMING: " + "\n")
+              arrayIndexer = 0
+              while (arrayIndexer < dbResponse.length) {
+                currentItem = dbResponse[arrayIndexer]
+                userTaskList[arrayIndexer] = {
+                  date: currentItem.date,
+                  house: currentItem.house,
+                  item: currentItem.item,
+                  task: currentItem.task
+                }
+                
+                formattedList = (formattedList + "Date: " +
+                currentItem.date + "\n" +
+                "     House: " +
+                currentItem.house +
+                "; Item: " +
+                currentItem.item + "\n" +
+                "     Task: " +
+                currentItem.task + "\n" + "\n")
+                arrayIndexer += 1
+              } 
+            }
+              
+              console.log("Task list to send to user = ", formattedList)
+              
+            if ((dbResponse.length === 0) && (dbOverdueResponse.length === 0 )) {
+              formattedList = "None. You do not have any outstanding tasks within the next 2 weeks."
+            }
 
             // Define structure and parameters for call to SiB API
             sendSmtpEmail = {
@@ -99,7 +137,7 @@ const sendUserEmail = async (data) => {
 
             // Trigger API for to send email via SendInBlue
             console.log("REMINDER email being sent to:", targetRecipient) 
-            await apiInstance.sendTransacEmail(sendSmtpEmail)
+            await apiInstance.sendTransacEmail(sendSmtpEmail)  // Send email via SiB API
           }
           break;
         case "welcome":
