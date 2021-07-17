@@ -4,7 +4,8 @@ import './CalendarListView.css'
 
 const CalendarListView = (props) => <>
   {props.dates.map((date, index) => {
-    if (!date.entries.length) return null
+    if (!date.entries.length) return null // this ensures that the date text for empty days disappears
+    
     return (
       <FlexSection column>
         <h5>{date?.date || "No date"}</h5>

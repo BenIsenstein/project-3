@@ -30,6 +30,10 @@ const Input = styled.input`
             outline: none;
         }
     `} 
+
+    ${props => props.margin && css`
+        margin: ${props.margin};
+    `}
 `
 
 const PasswordInput = styled(Input)`

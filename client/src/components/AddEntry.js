@@ -61,7 +61,6 @@ const AddEntry = () => {
   return <FormTemplate 
     titleText="New Task" 
     inputs={inputs} 
-    formMode='add' 
     addModeCancel={history.goBack} 
     onSubmit={onSubmit} 
   />

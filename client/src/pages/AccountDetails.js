@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button } from '../common'
+import { Page, PageContainer, Button, Input, FlexSection, EyeIcon, EyeSlashIcon } from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
 import UserContext from '../UserContext'
 
@@ -8,6 +8,44 @@ const AccountDetails = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
+
+  const validatePass = (password) => (
+    /.{6,}$/.test(password) &&
+    /[A-Z]+/.test(password) &&
+    /[a-z]+/.test(password) &&
+    /[0-9]+/.test(password)
+  )
+
+  const validatePassWithMessage = (value) => validatePass(value) || "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long." 
+
+  const ToggleVisible = props => {
+    const [inputTextVisible, setInputTextVisible] = useState(props.startVisible || false)
+    const toggleInputTextVisible = () => setInputTextVisible(!inputTextVisible)
+    
+    return <FlexSection fullWidth>
+      <Input 
+        type={!inputTextVisible ? "password" : "text"}
+        {...props.register(props.name, props.registerOptions)}
+        {...props} 
+      />
+      {inputTextVisible 
+        ? <EyeIcon onClick={toggleInputTextVisible} />
+        : <EyeSlashIcon onClick={toggleInputTextVisible} />
+      }
+    </FlexSection>
+  }
+
+  const ChangePasswordButton = () => <>{
+    !undergoingPasswordChange && 
+    <Button 
+      important 
+      formSubmit 
+      type='button' 
+      onClick={() => setUndergoingPasswordChange(true)}
+    >
+      Change Password
+    </Button>
+  }</>
 
   const accountInputs = [
     {
@@ -18,7 +56,7 @@ const AccountDetails = () => {
     {
       name: "firstName",
       registerOptions: { required: "You must input a first name." },
-      labelText: "First Name:",
+      labelText: "First Name:"
     },
     {
       name: "lastName",
@@ -38,15 +76,20 @@ const AccountDetails = () => {
 
   const passwordInputs = [
     {
-      name: "oldPassword",
-      registerOptions: { required: "You must input your old passsword." },
+      name: "password",
+      registerOptions: { required: "You must input your old password." },
       labelText: "Old password:",
       type: 'password'
     },
     {
       name: "newPassword",
-      registerOptions: { required: "You must input your new passsword." },
-      labelText: "New password:"
+      registerOptions: { 
+        required: "You must input your new password.", 
+        validate: (value) => validatePassWithMessage(value) 
+      },
+      labelText: "New password:",
+      as: ToggleVisible,
+      margin: "0 5px 0 0"
     }
   ]
 
@@ -100,21 +143,32 @@ const AccountDetails = () => {
     }
   } 
 
-  const ChangePassword = (data) => {
-    alert("No change password function yet! :)")
+  const ChangePassword = async (data) => {
+    try {
+      const options = {
+        method: 'put',
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...data, username: userContext.user?.email })
+      }
+    
+      let passwordRes = await fetch('/api/auth/change-password', options)
+      
+      if (passwordRes.status === 401) return alert("Verification failed. Please make sure your password is correct.")
+      
+      let passwordObject = await passwordRes.json()
+      
+      if (!passwordObject.success) return alert("Your password failed to update for some reason. We're working on it.")
+
+      alert("Your password was successfully changed.")
+      history.push('/calendar')
+    }
+    catch(err) {
+      console.log('error updating password: ', err)
+      alert("Something went wrong.")
+    }
   }
 
-  const ChangePasswordButton = () => <>{
-    !undergoingPasswordChange && 
-    <Button 
-      important 
-      formSubmit 
-      type='button' 
-      onClick={() => setUndergoingPasswordChange(true)}
-    >
-      Change Password
-    </Button>
-  }</>
+  
 
   return (
     <Page>
@@ -134,7 +188,6 @@ const AccountDetails = () => {
           popupCondition={undergoingPasswordChange}
           titleText='Change Password'
           inputs={passwordInputs}
-          formMode='add'
           onSubmit={ChangePassword}
           addModeCancel={() => setUndergoingPasswordChange(false)}
         />

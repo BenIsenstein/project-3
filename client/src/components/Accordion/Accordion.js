@@ -59,8 +59,8 @@ const Accordion = props => {
     <AccordionContainer>
 
       <AccordionHeader onClick={toogleActive}>
-        <h4>{props.item || "No item"}</h4>
-        <p>{props.task || "No task"}</p>            
+        <h4>{props.item || "Item here"}</h4>
+        <p>{props.task || "Task here"}</p>            
         <AccordionIcon rotate={active}>
           <NextIcon />
         </AccordionIcon>        
@@ -68,13 +68,12 @@ const Accordion = props => {
 
       <AccordionContent ref={contentRef}>
         <AccordionContentContainer>
-          <p>{props.description}</p>
+          <p>{props.description || "Description here"}</p>
           <FlexSection justifyEnd>
             <Button important onClick={() => history.push(`/task/${props._id}`)}>Details</Button>              
           </FlexSection>                  
         </AccordionContentContainer>
       </AccordionContent>
-
     </AccordionContainer>
   )
 }

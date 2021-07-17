@@ -26,6 +26,19 @@ router.post('/login',
   (req,res) => res.json(req.user)
 )
 
+router.put('/change-password',
+  passport.authenticate('local'),
+  async (req, res) => {
+    let body = req.body
+    let originalAuth = await Auth.findOne({ userId: body.userid })
+
+    originalAuth.password = await bcrypt.hash(body.newPassword, 10)
+
+    await originalAuth.save()
+    res.json({ success: true })
+  }
+)
+
 // update calendar entry by id
 router.put('/update/:userId', async (req, res) => {
   try {

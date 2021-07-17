@@ -11,6 +11,18 @@ import {Exit} from '@styled-icons/ionicons-outline/Exit'
 import {Done} from '@styled-icons/material-rounded/Done'
 import {Envelope} from '@styled-icons/boxicons-regular/Envelope'
 import {PersonFill} from '@styled-icons/bootstrap/PersonFill'
+import {Eye} from '@styled-icons/bootstrap/Eye'
+import {EyeSlash} from '@styled-icons/bootstrap/EyeSlash'
+
+const EyeIcon = styled(Eye)`
+    height: 1.6em;
+    cursor: pointer;
+`
+
+const EyeSlashIcon = styled(EyeSlash)`
+    height: 1.6em;
+    cursor: pointer;
+`
 
 const ListIcon = styled(ListUl)`
     height: 1.8em;
@@ -78,4 +90,4 @@ const EnvelopeIcon = styled(Envelope)`
     fill: ${props => props.theme.prm};
 `
 
-export {ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}

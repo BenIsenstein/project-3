@@ -44,22 +44,16 @@ const Calendar = () => {
   // State for entries
   const [dates, setDates] = useState([{ 
     date: "Loading...", 
-    entries: [] 
+    entries: [{}] 
   }])
 
   const [filteredDates, setFilteredDates] = useState([{ 
     date: "Loading...", 
-    entries: [] 
+    entries: [{}] 
   }])
 
   // Function in case the user's calendar is empty
-  const setNoneFound = useMemo(() => 
-    () => setDates([{ 
-      date: "Please add a new task", 
-      entries: []  
-    }]), 
-
-  [])
+  const setNoneFound = useMemo(() => () => setFilteredDates([{ date: "Please add a new task", entries: [{}] }]), [])
 
   // Effect to fetch all entries
   useEffect(() => {
@@ -68,7 +62,7 @@ const Calendar = () => {
     const fetchCalendarEntries = async () => {
       setDates([{ 
         date: "Loading...", 
-        entries: [] 
+        entries: [{}] 
       }])
     
       try {
@@ -114,10 +108,8 @@ const Calendar = () => {
       }
     }
 
-      fetchCalendarEntries()
-    
-  // }, [entryTemplate, setNoneFound])
-  }, [userContext.user])
+    fetchCalendarEntries()
+  }, [userContext.user, setNoneFound])
 
   useEffect(() => {
     if (!loaded) return
@@ -129,9 +121,9 @@ const Calendar = () => {
     setFilteredDates(dates.map(date => { 
       let filteredEntries = date.entries.filter(entry => 
         checkedAll ? returnAll(entry) : 
-            checked.active ? returnActive(entry) : 
-              checked.completed ? returnCompleted(entry) : 
-                returnActive(entry)
+          checked.active ? returnActive(entry) : 
+            checked.completed ? returnCompleted(entry) : 
+              returnActive(entry)
       )
 
       return {
@@ -139,11 +131,7 @@ const Calendar = () => {
         entries: filteredEntries
       }
     }))
-
-    // set active so that the effect runs
-    //setChecked({ active: !checked.active, ...checked })
-    // setFilteredDates(filteredDates.filter(date => date.entries.length > 0))
-  }, [checked.active, checked.completed, checkedAll, loaded])
+  }, [checked.active, checked.completed, checkedAll, loaded, dates])
 
   return (
     <Page>
@@ -182,7 +170,7 @@ const Calendar = () => {
         </FlexSection>
 
         <FlexSection fullWidth spaceBetween>
-          {!loaded ? "Loading..." : <p>Welcome to your home calendar, {userContext.userName}!</p>}                   
+          {<p>Welcome to your home calendar, {userContext.userName}!</p>}                   
           <FilterModal           
             checkedAll={checkedAll}
             setCheckedAll={setCheckedAll}
