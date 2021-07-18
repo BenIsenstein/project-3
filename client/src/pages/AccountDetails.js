@@ -18,7 +18,7 @@ const AccountDetails = () => {
 
   const validatePassWithMessage = (value) => validatePass(value) || "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long." 
 
-  const ToggleVisible = props => {
+  const ToggleVisibleInput = props => {
     const [inputTextVisible, setInputTextVisible] = useState(props.startVisible || false)
     const toggleInputTextVisible = () => setInputTextVisible(!inputTextVisible)
     
@@ -83,13 +83,13 @@ const AccountDetails = () => {
     },
     {
       name: "newPassword",
+      labelText: "New password:",
+      as: ToggleVisibleInput,
+      margin: "0 5px 0 0",
       registerOptions: { 
         required: "You must input your new password.", 
         validate: (value) => validatePassWithMessage(value) 
-      },
-      labelText: "New password:",
-      as: ToggleVisible,
-      margin: "0 5px 0 0"
+      }
     }
   ]
 
@@ -167,8 +167,6 @@ const AccountDetails = () => {
       alert("Something went wrong.")
     }
   }
-
-  
 
   return (
     <Page>

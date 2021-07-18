@@ -13,22 +13,16 @@ other props might include:
 
 const ComplexInput = ({ name, errors, ...props }) => (
   <React.Fragment key={props.key}>
-    {props.type !== 'hidden' && 
-      <Label htmlFor={name}>{props.labelText || name}</Label>
-    }
+    {props.type !== 'hidden' && <Label htmlFor={name}>{props.labelText || name}</Label>}
     <Input 
       id={name}
       name={name}
-      {...!props.as ? props.register(name, props.registerOptions) : { register: props.register }}
+      {...!props.as && props.register(name, props.registerOptions)} 
+      {...props.as && { register: props.register }}
       {...props}
     />
-    {errors && errors[name] && 
-      <p>{errors[name].message}</p>
-    }
+    {errors && errors[name] && <p>{errors[name].message}</p>}
   </React.Fragment>
 )
 
 export default ComplexInput
-
-
-

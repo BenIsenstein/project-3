@@ -52,14 +52,12 @@ const EntryDetails = () => {
 
   // completion submit function
   const updateCompletionDetails = async (data) => {
-    data.completed = true
-
     try {
       let action = `/api/calendarEntry/update/${id}`
       let options = {
         method: "put",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify({...data, completed: true})
       }
       let res = await fetch(action, options)
       let resObject = await res.json()
