@@ -32,13 +32,14 @@ const EntryDetails = () => {
   // update submit function
   const updateDetails = async (data) => {
     try {
-      let action = `/api/calendarEntry/update/${id}`
+      if (data.dateCompleted) data.completed = true
+
       let options = {
         method: "put",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(data)
       }
-      let res = await fetch(action, options)
+      let res = await fetch(`/api/calendarEntry/update/${id}`, options)
       let resObject = await res.json()
       
       if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
@@ -48,28 +49,7 @@ const EntryDetails = () => {
       console.log('error updating calendar entry: ', err)
       alert("There was an error updating your entry. We're fixing it as fast as we can.")
     }
-  } 
-
-  // completion submit function
-  const updateCompletionDetails = async (data) => {
-    try {
-      let action = `/api/calendarEntry/update/${id}`
-      let options = {
-        method: "put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({...data, completed: true})
-      }
-      let res = await fetch(action, options)
-      let resObject = await res.json()
-      
-      if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
-      history.goBack()
-    }
-    catch(err) {
-      console.log('error updating calendar entry: ', err)
-      alert("There was an error updating your entry. We're fixing it as fast as we can.")
-    }
-  } 
+  }  
 
   const entryDetailsInputs = [ 
     {
@@ -122,7 +102,7 @@ const EntryDetails = () => {
     </Button>
   }</>
 
-  return !isCompletedHandled ? null : (
+  return isCompletedHandled && (
     <Page>
       <PageContainer flexColumn>
         <FormTemplate 
@@ -143,7 +123,7 @@ const EntryDetails = () => {
           inputs={completionInputs}
           formMode={isCompleted ? "details" : "add"}
           detailsUrl={getEntryRoute}
-          onSubmit={updateCompletionDetails}
+          onSubmit={updateDetails}
           addModeCancel={() => setUndergoingCompletion(false)}
         />
       </PageContainer>

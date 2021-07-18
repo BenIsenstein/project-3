@@ -97,7 +97,8 @@ const AccountDetails = () => {
   const updateAccount = async (data) => {
     try {
       let isEmailChanged = data.email !== userContext.user.email  
-      let userId = userContext.user._id
+      let authAction = `/api/auth/update/${userContext.user._id}`
+      let userAction = `/api/user/update/${userContext.user._id}`
       let method = 'put'
       let headers = { "content-type": "application/json" }
       let body
@@ -108,7 +109,7 @@ const AccountDetails = () => {
         body = JSON.stringify({ email: data.email, dateLastModified: new Date() })
 
         // send auth update request
-        let authRes = await fetch(`/api/auth/update/${userId}`, { method, headers, body })
+        let authRes = await fetch(authAction, { method, headers, body })
         let authObject = await authRes.json()
 
         // return if the auth update was unsuccessful
@@ -118,13 +119,13 @@ const AccountDetails = () => {
       body = JSON.stringify(data)
 
       // send user update request
-      let userRes = await fetch(`/api/user/update/${userId}`, { method, headers, body }) 
+      let userRes = await fetch(userAction, { method, headers, body }) 
       let userObject = await userRes.json()
 
       // if the update was unsuccessful, reverse the email change made to the auth document
       if (!userObject.success && isEmailChanged) { 
         body = JSON.stringify({ email: userContext.user.email })
-        let authCorrection = await fetch(`/api/auth/update/${userId}`, { method, headers, body })
+        let authCorrection = await fetch(authAction, { method, headers, body })
         let correctionObject = await authCorrection.json()
 
         // return if the auth correction was unsuccessful
