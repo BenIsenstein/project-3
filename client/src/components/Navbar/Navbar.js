@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import { MenuIcon, CloseIcon, PersonIcon, CalendarIcon, ExitIcon } from "../../common"
@@ -55,16 +55,29 @@ const NavItem = styled(NavLink)`
 
 const Navbar = () => {
     const userContext = useContext(UserContext)
+    const ref = useRef()
 
     const [sidebar, setSidebar] = useState(false)
 
     const showSidebar = () => setSidebar(!sidebar)
 
+    useEffect(() => {
+        const outsideClick = e => {
+            if (sidebar && ref.current && !ref.current.contains(e.target)) {
+                setSidebar(false)
+            }
+        }
+        document.addEventListener('mousedown', outsideClick)
+        return () => {
+            document.removeEventListener('mousedown', outsideClick)
+        }
+    }, [sidebar])
+
     return <>
         <NavbarContainer hamburger>
             <MenuIcon onClick={showSidebar} />
         </NavbarContainer>
-        <NavMenu active={sidebar} onClick={showSidebar}>
+        <NavMenu active={sidebar} onClick={showSidebar} ref={ref}>
             <NavbarContainer>
                 <CloseIcon />
             </NavbarContainer>
