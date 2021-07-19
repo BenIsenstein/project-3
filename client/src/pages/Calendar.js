@@ -7,6 +7,8 @@ import FilterModal from '../components/Filter/FilterModal'
 import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
+import CalendarView from '../components/CalendarView/CalendarView'
+
 
 const Calendar = () => {
   let history = useHistory()
@@ -179,8 +181,9 @@ const Calendar = () => {
           (filteredDates.length 
             ? <CalendarListView dates={filteredDates} /> 
             : <p>You have no {checked.active ? "upcoming" : "completed"} tasks</p>
-          )
+            )
         }
+        {viewMode === 'CalendarView' && <CalendarView dates={filteredDates} />}
       </PageContainer>
     </Page>
   )
