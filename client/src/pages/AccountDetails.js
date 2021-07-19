@@ -1,39 +1,15 @@
 import { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Page, PageContainer, Button, Input, FlexSection, EyeIcon, EyeSlashIcon } from '../common'
+import { validatePassWithMessage } from '../functions'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
+import ToggleVisibleInput from '../components/ToggleVisibleInput/ToggleVisibleInput'
 import UserContext from '../UserContext'
 
 const AccountDetails = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
-
-  const validatePass = (password) => (
-    /.{6,}$/.test(password) &&
-    /[A-Z]+/.test(password) &&
-    /[a-z]+/.test(password) &&
-    /[0-9]+/.test(password)
-  )
-
-  const validatePassWithMessage = (value) => validatePass(value) || "The password must contain an uppercase letter, a lowercase letter, a number, and be at least 6 characters long." 
-
-  const ToggleVisibleInput = props => {
-    const [inputTextVisible, setInputTextVisible] = useState(props.startVisible || false)
-    const toggleInputTextVisible = () => setInputTextVisible(!inputTextVisible)
-    
-    return <FlexSection fullWidth>
-      <Input 
-        type={!inputTextVisible ? "password" : "text"}
-        {...props.register(props.name, props.registerOptions)}
-        {...props} 
-      />
-      {inputTextVisible 
-        ? <EyeIcon onClick={toggleInputTextVisible} />
-        : <EyeSlashIcon onClick={toggleInputTextVisible} />
-      }
-    </FlexSection>
-  }
 
   const ChangePasswordButton = () => <>{
     !undergoingPasswordChange && 
@@ -88,7 +64,7 @@ const AccountDetails = () => {
       margin: "0 5px 0 0",
       registerOptions: { 
         required: "You must input your new password.", 
-        validate: (value) => validatePassWithMessage(value) 
+        validate: (value) => validatePassWithMessage(value)
       }
     }
   ]
