@@ -3,7 +3,8 @@ import {fadeIn} from './'
 
 const PageContainer = styled.div`
     width: 95%;
-    margin: 0.5em 0;
+    min-height: 90vh;
+    margin: .4em 0 1.4em 0;
     animation: ${fadeIn} 0.4s linear;
 
     ${props => props.flexColumn && css`

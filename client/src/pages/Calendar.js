@@ -114,7 +114,7 @@ const Calendar = () => {
         checkedAll ? returnAll(entry) : 
           checked.active ? returnActive(entry) : 
             checked.completed ? returnCompleted(entry) : 
-              returnActive(entry)
+              returnActive(entry) && setChecked({active: true})
       )
 
       return {
@@ -154,13 +154,7 @@ const Calendar = () => {
 
         <FlexSection fullWidth spaceBetween>
           {<p>Welcome to your home calendar, {userContext.userName}!</p>}                   
-          <FilterModal           
-            checkedAll={checkedAll}
-            setCheckedAll={setCheckedAll}
-            checked={checked}
-            setChecked={setChecked} 
-            handleFilterChange={handleFilterChange}
-          />                    
+          <FilterModal handleFilterChange={handleFilterChange} />                    
         </FlexSection>
 
         {viewMode === 'ListView' && <CalendarListView dates={filteredDates} />}

@@ -13,14 +13,15 @@ const AccountDetails = () => {
 
   const ChangePasswordButton = () => <>{
     !undergoingPasswordChange && 
-    <Button 
-      important 
-      formSubmit 
-      type='button' 
-      onClick={() => setUndergoingPasswordChange(true)}
-    >
-      Change Password
-    </Button>
+    <FlexSection fullWidth justifyStart marginTop1em>
+      <Button  
+        type='button' 
+        onClick={() => setUndergoingPasswordChange(true)}
+      >
+        Change Password
+      </Button>      
+    </FlexSection>
+
   }</>
 
   const accountInputs = [
@@ -59,7 +60,7 @@ const AccountDetails = () => {
     },
     {
       name: "newPassword",
-      labelText: "New password:",
+      labelText: "New password",
       as: ToggleVisibleInput,
       margin: "0 5px 0 0",
       registerOptions: { 
@@ -151,7 +152,7 @@ const AccountDetails = () => {
         <FormTemplate 
           noBackButton
           noDeleteButton
-          titleText="Your Account"
+          titleText="Personal Details"
           inputs={accountInputs} 
           formMode='details' 
           detailsUrl='/api/user/getloggedinuser' 
