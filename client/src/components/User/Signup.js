@@ -20,12 +20,12 @@ const Signup = () => {
 
     try { 
       // attempt to create user document
-      console.log('fetching to /api/user/signup')
       body = JSON.stringify(data)
       let userResponse = await fetch("/api/user/signup", { method, headers, body })
-      let userObject = await userResponse.json()
+      if (userResponse.status === 409) return alert("We already have an account with that email address. Try logging in.")
 
       // if user document creation fails, return
+      let userObject = await userResponse.json()
       if (!userObject.success) return alertError()
 
       // attempt to create auth document, with the userId from newly created user document
@@ -37,7 +37,7 @@ const Signup = () => {
       // if auth document creation fails, return
       if (!authObject.success) return alertError()
 
-      alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
+      //alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
 
       // Log the user in
       console.log('logging in new user')

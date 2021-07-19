@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom'
 import { Page, PageContainer, Button, Input, FlexSection, EyeIcon, EyeSlashIcon } from '../common'
 import { validatePassWithMessage } from '../functions'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
-import ToggleVisibleInput from '../components/ToggleVisibleInput/ToggleVisibleInput'
 import UserContext from '../UserContext'
 
 const AccountDetails = () => {
@@ -61,7 +60,7 @@ const AccountDetails = () => {
     {
       name: "newPassword",
       labelText: "New password",
-      as: ToggleVisibleInput,
+      toggleVisible: true,
       margin: "0 5px 0 0",
       registerOptions: { 
         required: "You must input your new password.", 
