@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext, useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
-import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, StyledDateTimePicker, FlexSection } from '../../common'
+import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
 import ComplexInput from '../ComplexInput/ComplexInput'
 import DeleteEntryButton from '../DeleteEntryButton'
+import CustomModalButton from '../CustomModalButton'
 import './FormTemplate.css'
 
 /* 
@@ -211,16 +212,28 @@ const FormTemplate = ({
             register={register} 
             {...rest}
           />  
-          : <ComplexInput
-            key={name} 
-            name={name}
-            as={StyledDateTimePicker}          
-            register={register}
-            onChange={val => setValue(name, val)}
-            value={watch(name)}
-            errors={errors}
-            {...rest}
-          />
+          : <>
+            <Label htmlFor={name}>
+              {rest.labelText || name}
+            </Label>
+            <FlexSection fullWidth key={name}>
+              <ComplexInput
+                labelHidden
+                maxRows={1}
+                key={name} 
+                name={name}        
+                register={register}
+                errors={errors}
+                {...rest}
+              />
+              <CustomModalButton 
+                actionOnConfirm={setValue} 
+                nameForUpdate={name} 
+                margin="0 0 0 5px"
+                iconButton 
+              />
+            </FlexSection>
+          </>
       })}
 
       {(isAddMode || isEditView) && 

@@ -77,7 +77,8 @@ const EntryDetails = () => {
     {
       name: "dateCompleted",
       registerOptions: { required: "You must select a date completed." },
-      labelText: "date completed"
+      labelText: "date completed",
+      placeholder: new Date()
     },
     {
       name: "completionComments",

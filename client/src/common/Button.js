@@ -58,6 +58,10 @@ const Button = styled.button`
     ${props => props.justifySelfStart && css`
         justify-self: flex-start;
     `}
+
+    ${props => props.margin && css`
+        margin: ${props.margin};
+    `}
 `
 
 export {Button}
