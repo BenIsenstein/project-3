@@ -1,11 +1,13 @@
 import React from 'react'
-import { Label, Input } from '../../common'
+import { Label, Textarea } from '../../common'
+import ToggleVisibleInput from '../ToggleVisibleInput/ToggleVisibleInput'
 
 /* 
 other props might include:
 - labelText="Description longer than name." 
 - as={CustomComponent} | as='div'
 - type='hidden' | type='file'
+- toggleVisible
 - maxLength
 - detailedPage
 - readOnly
@@ -14,11 +16,11 @@ other props might include:
 const ComplexInput = ({ name, errors, ...props }) => (
   <React.Fragment key={props.key}>
     {props.type !== 'hidden' && <Label htmlFor={name}>{props.labelText || name}</Label>}
-    <Input 
+    <Textarea 
       id={name}
       name={name}
-      {...!props.as && props.register(name, props.registerOptions)} 
-      {...props.as && { register: props.register }}
+      {...!props.toggleVisible && props.register(name, props.registerOptions)} 
+      {...props.toggleVisible && { as: ToggleVisibleInput, register: props.register }}
       {...props}
     />
     {errors && errors[name] && <p>{errors[name].message}</p>}

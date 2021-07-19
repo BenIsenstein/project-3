@@ -24,6 +24,8 @@ const Calendar = () => {
     completed: false
   })
 
+  
+
   function handleFilterChange(active, completed, all) {
     setChecked({active: active, completed: completed})
     setCheckedAll(all)
@@ -33,28 +35,19 @@ const Calendar = () => {
   const [loaded, setLoaded] = useState(false)
   
   // State for entries
-  const [dates, setDates] = useState([{ 
-    date: "Loading...", 
-    entries: [{}] 
-  }])
+  const [dates, setDates] = useState([])
 
-  const [filteredDates, setFilteredDates] = useState([{ 
-    date: "Loading...", 
-    entries: [{}] 
-  }])
+  const [filteredDates, setFilteredDates] = useState([])
 
   // Function in case the user's calendar is empty
-  const setNoneFound = useMemo(() => () => setFilteredDates([{ date: "Please add a new task", entries: [{}] }]), [])
+  const setNoneFound = useMemo(() => () => setFilteredDates([]), [])
 
   // Effect to fetch all entries
   useEffect(() => {
     if (!userContext.user) return
 
     const fetchCalendarEntries = async () => {
-      setDates([{ 
-        date: "Loading...", 
-        entries: [{}] 
-      }])
+      //setDates([])
     
       try {
         // fetch all calendar entries for current authenticated user
@@ -109,20 +102,45 @@ const Calendar = () => {
     const returnActive = entry => !entry.completed
     const returnCompleted = entry => entry.completed
 
-    setFilteredDates(dates.map(date => { 
-      let filteredEntries = date.entries.filter(entry => 
-        checkedAll ? returnAll(entry) : 
-          checked.active ? returnActive(entry) : 
-            checked.completed ? returnCompleted(entry) : 
-              returnActive(entry) && setChecked({active: true})
-      )
+    // setFilteredDates(dates.map(date => { 
+      // let filteredEntries = date.entries.filter(entry => 
+      //   checkedAll ? returnAll(entry) : 
+      //     checked.active ? returnActive(entry) : 
+      //       checked.completed ? returnCompleted(entry) : 
+      //         returnActive(entry) 
+      // )
 
-      return {
-        date: date.date, 
-        entries: filteredEntries
-      }
-    }))
-  }, [checked.active, checked.completed, checkedAll, loaded, dates])
+      // return {
+      //   date: date.date, 
+      //   entries: filteredEntries
+      // }
+    // }))
+
+    setFilteredDates(dates
+      .map(date => {
+        let { active, completed } = checked
+
+        let filteredEntries = date.entries.filter(entry => 
+          active && completed ? returnAll(entry) : 
+            active ? returnActive(entry) : 
+              completed ? returnCompleted(entry) : 
+                returnActive(entry) 
+        )
+  
+        return {
+          date: date.date, 
+          entries: filteredEntries
+        }
+      })
+      .filter(date => 
+        date.entries.length 
+      )
+    )
+      
+  }, [checked, loaded, dates])
+
+  useEffect(() => console.log('dates: ', dates), [dates])
+  useEffect(() => console.log('filteredDates: ', filteredDates), [filteredDates])
 
   return (
     <Page>
@@ -157,7 +175,12 @@ const Calendar = () => {
           <FilterModal handleFilterChange={handleFilterChange} />                    
         </FlexSection>
 
-        {viewMode === 'ListView' && <CalendarListView dates={filteredDates} />}
+        {viewMode === 'ListView' && 
+          (filteredDates.length 
+            ? <CalendarListView dates={filteredDates} /> 
+            : <p>You have no {checked.active ? "upcoming" : "completed"} tasks</p>
+          )
+        }
       </PageContainer>
     </Page>
   )

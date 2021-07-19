@@ -18,6 +18,7 @@ router.post("/signup", async (req, res) => {
   } 
   catch (err) {
     console.log("error saving User document: ", err)
+    if (err.code === 11000) return res.sendStatus(409)     
     res.sendStatus(500)
   }
 })

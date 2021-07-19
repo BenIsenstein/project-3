@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, FlexSection, FormSeparator, Button, Textarea } from '../common'
-
+import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 
@@ -57,25 +56,20 @@ const EntryDetails = () => {
     {
       name: "item",
       registerOptions: { required: "You must choose an item." },
-      labelText: "",
       maxLength: '50'
     },
     {
       name: "task",
       registerOptions: { required: "You must write a task." },
-      labelText: "",
       maxLength: '50'
     },
     {
       name: "description",
-      registerOptions: { required: "You must write a description." },
-      labelText: "",
-      //as: Textarea
+      registerOptions: { required: "You must write a description." }
     },
     {
       name: "date",
-      registerOptions: { required: "You must choose a date." },
-      labelText: ""
+      registerOptions: { required: "You must choose a date." }
     }
   ]
 
@@ -87,8 +81,7 @@ const EntryDetails = () => {
     },
     {
       name: "completionComments",
-      labelText: "comments",
-      as: Textarea
+      labelText: "comments"
     }
   ]
 
