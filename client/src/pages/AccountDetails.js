@@ -48,26 +48,26 @@ const AccountDetails = () => {
   }</>
 
   const accountInputs = [
-    {
-      name: "dateSignedUp",
-      readOnly: true,
-      labelText: "Member since:"  
-    },
+    // {
+    //   name: "dateSignedUp",
+    //   readOnly: true,
+    //   labelText: "Member since"  
+    // },
     {
       name: "firstName",
       registerOptions: { required: "You must input a first name." },
-      labelText: "First Name:"
+      labelText: "First Name"
     },
     {
       name: "lastName",
       registerOptions: { required: "You must input a last name." },
-      labelText: "Last Name:",
+      labelText: "Last Name",
     },
-    {
-      name: "userType",
-      registerOptions: { required: "You must input an account type." },
-      labelText: "You are a:",
-    },
+    // {
+    //   name: "userType",
+    //   registerOptions: { required: "You must input an account type." },
+    //   labelText: "You are a",
+    // },
     {
       name: "email",
       registerOptions: { required: "You must input an email address." },
@@ -78,7 +78,7 @@ const AccountDetails = () => {
     {
       name: "password",
       registerOptions: { required: "You must input your old password." },
-      labelText: "Old password:",
+      labelText: "Old password",
       type: 'password'
     },
     {
@@ -173,6 +173,8 @@ const AccountDetails = () => {
     <Page>
       <PageContainer flexColumn>
         <FormTemplate 
+          noBackButton
+          noDeleteButton
           titleText="Your Account"
           inputs={accountInputs} 
           formMode='details' 

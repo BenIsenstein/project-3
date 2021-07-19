@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 import {ListUl} from '@styled-icons/boxicons-regular/ListUl'
 import {Calendar} from '@styled-icons/boxicons-regular/Calendar'
 import {NavigateNext} from '@styled-icons/material-rounded/NavigateNext'
@@ -13,6 +13,8 @@ import {Envelope} from '@styled-icons/boxicons-regular/Envelope'
 import {PersonFill} from '@styled-icons/bootstrap/PersonFill'
 import {Eye} from '@styled-icons/bootstrap/Eye'
 import {EyeSlash} from '@styled-icons/bootstrap/EyeSlash'
+import {Menu} from '@styled-icons/material-rounded/Menu'
+import {Close} from '@styled-icons/material-rounded/Close'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -29,11 +31,15 @@ const ListIcon = styled(ListUl)`
 `
 
 const PersonIcon = styled(PersonFill)`
-    height: 1.8em;
+    height: 1.6em;
 ` 
 
 const CalendarIcon = styled(Calendar)`
     height: 1.8em;
+
+    ${props => props.nav && css`
+        height: 1.6em;
+    `}
 `
 
 const NextIcon = styled(NavigateNext)`
@@ -73,8 +79,7 @@ const PencilIcon = styled(Pencil)`
 `
 
 const ExitIcon = styled(Exit)`
-    margin-right: .4em;
-    height: 2em;
+    height: 1.6em;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
 `
@@ -90,4 +95,16 @@ const EnvelopeIcon = styled(Envelope)`
     fill: ${props => props.theme.prm};
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon}
+const MenuIcon = styled(Menu)`
+    height: 2em;
+    fill: ${props => props.theme.prm};
+    cursor: pointer;
+`
+
+const CloseIcon = styled(Close)`
+    height: 2em;
+    fill: ${props => props.theme.prm};
+    cursor: pointer;
+`
+
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}

@@ -1,9 +1,11 @@
 import React, { useContext } from "react"
+import { useHistory } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
 import { Form, Button, Label, Input, PasswordInput, Select } from "../../common"
 
 const Signup = () => {
+  let history = useHistory()
   const userContext = useContext(UserContext)
   const { register, formState: { errors }, watch, handleSubmit } = useForm({})
   const passwordValue = watch('password')
@@ -126,7 +128,7 @@ const Signup = () => {
       />
       {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
 
-      <Button formSubmit type='submit'>CREATE YOUR ACCOUNT</Button>
+      <Button formSubmit type='submit' onClick={() => history.push(`/calendar`)}>CREATE YOUR ACCOUNT</Button>
 
     </ Form>
   )

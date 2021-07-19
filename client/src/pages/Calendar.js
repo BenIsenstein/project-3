@@ -4,10 +4,9 @@ import { useHistory } from 'react-router-dom'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
 import FilterModal from '../components/Filter/FilterModal'
-import { ListIcon, PersonIcon, CalendarIcon, AddIcon, ExitIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
+import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
-import entry from "react-datetime-picker"
 
 const Calendar = () => {
   let history = useHistory()
@@ -32,15 +31,7 @@ const Calendar = () => {
 
   //define state for refreshing the list view
   const [loaded, setLoaded] = useState(false)
-
-  // Template for declaring useState() and setNoneFound()
-  const entryTemplate = useMemo(() => {
-    return { 
-      date: " ", 
-      entries: [{ title: " ", date: " ", item: " ", task: " " }] 
-    }
-  }, [])
-
+  
   // State for entries
   const [dates, setDates] = useState([{ 
     date: "Loading...", 
@@ -143,14 +134,6 @@ const Calendar = () => {
 
           <FlexSection>
             <TestEmailButton />
-          </FlexSection>
-
-          <FlexSection>
-            <Button onClick={() => history.push('account')}><PersonIcon /></Button>
-          </FlexSection>
-
-          <FlexSection>
-            <Button onClick={() => userContext.logOut()}><ExitIcon />Log Out</Button>
           </FlexSection>
 
           <FlexSection>

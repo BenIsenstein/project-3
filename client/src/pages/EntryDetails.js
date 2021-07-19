@@ -105,7 +105,8 @@ const EntryDetails = () => {
   return isCompletedHandled && (
     <Page>
       <PageContainer flexColumn>
-        <FormTemplate 
+        <FormTemplate
+          noBackButton
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 

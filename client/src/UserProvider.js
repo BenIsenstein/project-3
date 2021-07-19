@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, withRouter } from 'react-router-dom'
 import UserContext from './UserContext'
 
 const UserProvider = ({ children }) => {
@@ -54,7 +54,7 @@ const UserProvider = ({ children }) => {
     let loggedInUser = await response.json()
     setUserInfo(loggedInUser)
     
-    history.push(`/`)
+    history.push(`/calendar`)
   }
 
   const logOut = async () => {
@@ -67,7 +67,7 @@ const UserProvider = ({ children }) => {
         setUserName('no_user')
         setUserType(undefined)
 
-        history.push(`/`)
+      history.push(`/`)  
       }
       else {
         alert('You are still logged in for some reason. Please try logging out again.')

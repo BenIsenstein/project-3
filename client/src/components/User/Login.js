@@ -29,7 +29,6 @@ const Login = () => {
               {errors.password && <p>{errors.password.message}</p>}
 
               <Button formSubmit type='submit'>Log in</Button>
-
       </Form>
   )
 }
