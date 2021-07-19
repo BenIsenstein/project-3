@@ -7,6 +7,8 @@ import FilterModal from '../components/Filter/FilterModal'
 import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
+import CalendarView from '../components/CalendarView/CalendarView'
+
 
 const Calendar = () => {
   let history = useHistory()
@@ -158,6 +160,7 @@ const Calendar = () => {
         </FlexSection>
 
         {viewMode === 'ListView' && <CalendarListView dates={filteredDates} />}
+        {viewMode === 'CalendarView' && <CalendarView dates={filteredDates} />}
       </PageContainer>
     </Page>
   )
