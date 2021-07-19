@@ -20,6 +20,7 @@ const Signup = () => {
 
     try { 
       // attempt to create user document
+      console.log('fetching to /api/user/signup')
       body = JSON.stringify(data)
       let userResponse = await fetch("/api/user/signup", { method, headers, body })
       let userObject = await userResponse.json()
@@ -28,6 +29,7 @@ const Signup = () => {
       if (!userObject.success) return alertError()
 
       // attempt to create auth document, with the userId from newly created user document
+      console.log('fetching to /api/auth/signup')
       body = JSON.stringify({ ...data, userId: userObject.userId })
       let authResponse = await fetch("/api/auth/signup", { method, headers, body })
       let authObject = await authResponse.json()
@@ -38,6 +40,7 @@ const Signup = () => {
       alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
 
       // Log the user in
+      console.log('logging in new user')
       await userContext.logIn({ username: data.email, password: data.password })
     }
     catch(err) {
@@ -128,8 +131,7 @@ const Signup = () => {
       />
       {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
 
-      <Button formSubmit type='submit' onClick={() => history.push(`/calendar`)}>CREATE YOUR ACCOUNT</Button>
-
+      <Button formSubmit type='submit'>CREATE YOUR ACCOUNT</Button>
     </ Form>
   )
 }

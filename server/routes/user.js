@@ -13,7 +13,7 @@ router.post("/signup", async (req, res) => {
 
   try {
     let savedUser = await new User(newUser).save()
-    console.log('userToSave: ', savedUser)
+    console.log('user to save: ', savedUser)
     res.json({ success: true, userId: savedUser._id })
   } 
   catch (err) {
