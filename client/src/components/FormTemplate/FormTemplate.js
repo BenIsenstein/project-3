@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
-import { BackIcon, PencilIcon, Form, P, Button, StyledDateTimePicker, FlexSection } from '../../common'
+import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, StyledDateTimePicker, FlexSection } from '../../common'
 import ComplexInput from '../ComplexInput/ComplexInput'
 import DeleteEntryButton from '../DeleteEntryButton'
 import './FormTemplate.css'
@@ -186,7 +186,7 @@ const FormTemplate = ({
     }
 
     <FlexSection fullWidth spaceBetween>
-      <P as={props.titleTag}>{props.titleText}</P>
+      <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
     </FlexSection>
     

@@ -49,8 +49,6 @@ const FlexSection = styled.div`
         padding: ${props.padding};
     `}
 
-    
-
     ${props => props.popup && css`
         overflow: hidden;
         height: ${props => props.popupCondition ? 'max-content' : '0px'};

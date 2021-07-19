@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { MenuIcon, CloseIcon, PersonIcon, CalendarIcon, ExitIcon } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, ExitIcon } from "../../common"
 
 import UserContext from '../../UserContext'
 
 const NavbarContainer = styled.div`
     padding: 0 1em;
-    height: 3em;
+    height: 2.6em;
     display: flex;
     justify-content: flex-end;
     align-items: center;
 
     ${props => props.hamburger && css`
+        justify-content: space-between;
         background-color: ${props => props.theme.scdLt};
     `}
 `
@@ -39,7 +40,7 @@ const NavItem = styled(NavLink)`
     height: 2em;
     color: ${props => props.theme.prm};
     text-decoration: none;
-    margin: 1em 2em 0 2em;
+    margin: 1em 2.4em 0 2em;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -56,6 +57,7 @@ const NavItem = styled(NavLink)`
 const Navbar = () => {
     const userContext = useContext(UserContext)
     const ref = useRef()
+    let history = useHistory()
 
     const [sidebar, setSidebar] = useState(false)
 
@@ -75,6 +77,7 @@ const Navbar = () => {
 
     return <>
         <NavbarContainer hamburger>
+            <HouseIcon nav onClick={() => history.push(`/calendar`)}/>
             <MenuIcon onClick={showSidebar} />
         </NavbarContainer>
         <NavMenu active={sidebar} onClick={showSidebar} ref={ref}>
@@ -82,15 +85,15 @@ const Navbar = () => {
                 <CloseIcon />
             </NavbarContainer>
             <NavItem to='/calendar' activeClassName>
-                <CalendarIcon nav style={{marginRight: '1em'}} />
+                <CalendarIcon nav />
                 Calendar
             </NavItem>
             <NavItem to='/account' activeClassName>
-                <PersonIcon style={{marginRight: '1em'}} />
+                <PersonIcon nav />
                 Account
             </NavItem>
             <NavItem to='/' exact activeClassName onClick={() => userContext.logOut()}>
-                <ExitIcon style={{marginRight: '1em'}} />
+                <ExitIcon nav />
                 Log Out
             </NavItem>
         </NavMenu>

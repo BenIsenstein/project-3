@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import { Page, PageContainer, Button, Textarea} from '../common'
+import { Page, PageContainer, FlexSection, FormSeparator, Button, Textarea } from '../common'
+
 import FormTemplate from '../components/FormTemplate/FormTemplate'
+import DeleteEntryButton from '../components/DeleteEntryButton'
 
 const EntryDetails = () => {
   const { id } = useParams()
@@ -91,15 +93,17 @@ const EntryDetails = () => {
   ]
 
   const CompleteTaskButton = () => <>{
-    !(isCompleted || undergoingCompletion) && 
-    <Button 
-      important 
-      formSubmit 
-      type='button' 
-      onClick={() => setUndergoingCompletion(true)}
-    >
-      Complete Task
-    </Button>
+    !(isCompleted || undergoingCompletion) &&
+    <FlexSection fullWidth marginTop1em>
+      <Button 
+        important 
+        fullWidth 
+        type='button' 
+        onClick={() => setUndergoingCompletion(true)}
+      >
+        Complete Task
+      </Button>      
+    </FlexSection>
   }</>
 
   return isCompletedHandled && (
@@ -107,6 +111,7 @@ const EntryDetails = () => {
       <PageContainer flexColumn>
         <FormTemplate
           noBackButton
+          noDeleteButton
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 
@@ -115,18 +120,22 @@ const EntryDetails = () => {
           addModeCancel={history.goBack}
           AfterTemplate={CompleteTaskButton}
         />
+        {(isCompleted || undergoingCompletion) && <FormSeparator />}
         <FormTemplate 
           noBackButton
           noDeleteButton
           popup
           popupCondition={isCompleted || undergoingCompletion}
-          titleText={isCompleted ? "Completed" : "Complete Event"}
+          titleText={isCompleted ? "Completion" : "Complete Event"}
           inputs={completionInputs}
           formMode={isCompleted ? "details" : "add"}
           detailsUrl={getEntryRoute}
           onSubmit={updateDetails}
           addModeCancel={() => setUndergoingCompletion(false)}
         />
+        <FlexSection fullWidth marginTop1em>
+          <DeleteEntryButton fullWidth entryId={id} /> 
+        </FlexSection>
       </PageContainer>
     </Page>
   )

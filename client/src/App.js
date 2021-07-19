@@ -8,6 +8,7 @@ import UserContext from './UserContext'
 import './App.css';
 
 import Navbar from './components/Navbar/Navbar'
+import Footer from './components/Navbar/Footer'
 import Landing from './pages/Landing'
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
@@ -32,6 +33,7 @@ const App = () => {
         <Route path='/account' component={AccountDetails} />
         <Route path='/new-task' component={AddEntryPage} />
       </Switch>
+      {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>
   )
 }

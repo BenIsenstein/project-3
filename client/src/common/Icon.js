@@ -32,6 +32,10 @@ const ListIcon = styled(ListUl)`
 
 const PersonIcon = styled(PersonFill)`
     height: 1.6em;
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
 ` 
 
 const CalendarIcon = styled(Calendar)`
@@ -39,6 +43,7 @@ const CalendarIcon = styled(Calendar)`
 
     ${props => props.nav && css`
         height: 1.6em;
+        margin-right: 1em;
     `}
 `
 
@@ -70,6 +75,10 @@ const HouseIcon = styled(House)`
     height: 10em;
     fill: ${props => props.theme.prm};
     cursor: pointer;
+
+    ${props => props.nav && css`
+        height: 2em
+    `}
 `
 
 const PencilIcon = styled(Pencil)`
@@ -82,6 +91,10 @@ const ExitIcon = styled(Exit)`
     height: 1.6em;
     -webkit-transform: scaleX(-1);
     transform: scaleX(-1);
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
 `
 
 const CheckIcon = styled(Done)`
@@ -93,6 +106,7 @@ const CheckIcon = styled(Done)`
 const EnvelopeIcon = styled(Envelope)`
     height: 2em;
     fill: ${props => props.theme.prm};
+    cursor: pointer;
 `
 
 const MenuIcon = styled(Menu)`
