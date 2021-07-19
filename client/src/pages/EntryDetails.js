@@ -70,7 +70,7 @@ const EntryDetails = () => {
       name: "description",
       registerOptions: { required: "You must write a description." },
       labelText: "",
-      as: Textarea
+      //as: Textarea
     },
     {
       name: "date",

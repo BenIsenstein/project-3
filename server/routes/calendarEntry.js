@@ -5,6 +5,7 @@ let router = express.Router()
 // add a calendar entry  
 router.post('/add', async (req, res) => {
   try {
+    console.log('req.body: ', req.body)
     await addCalendarEntry(new CalendarEntry(req.body))
     res.json({ success: true })
   }
@@ -30,7 +31,11 @@ router.get('/getbyuser/:id', async (req, res) => {
 
 // get Calendar Entry by ID
 router.get('/get/:id', async (req, res) => {
-  try { res.json(await findCalendarEntryById(req.params.id)) }
+  try { 
+    console.log('entry ID: ', req.params.id)
+    console.log('entry: ', await findCalendarEntryById(req.params.id))
+    res.json(await findCalendarEntryById(req.params.id)) 
+  }
 
   catch(err) {console.log('ERROR get Calendar Entry by ID:', err)}
 })
