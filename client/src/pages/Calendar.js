@@ -10,7 +10,7 @@ import CalendarView from '../components/CalendarView/CalendarView'
 
 const Calendar = () => {
   let history = useHistory()
-  const [viewMode, setViewMode] = useState('ListView')
+  const [viewMode, setViewMode] = useState('CalendarView')
   const userContext = useContext(UserContext)
 
   // if user is not logged in, redirect to landing

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import UserContext from '../../UserContext'
 
@@ -6,6 +7,7 @@ import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // plugin for VIEW
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import listPlugin from "@fullcalendar/list" // needed for LIST view
+import timeGridPlugin from "@fullcalendar/timegrid" // needed for LIST view
 
 const StyleWrapper = styled.div`
   .fc-toolbar {
@@ -76,11 +78,24 @@ const StyleWrapper = styled.div`
 
 const CalendarView = (props) => {
   
+  let calendarComponentRef = React.createRef()
+
   // Capture the current state of the logged in user
   let userContext = useContext(UserContext)
+
+  // Use HISTORY
+  const history = useHistory()
   
   // State Variables
   const [eventList, setEventList] = useState([{}])
+  const [overdueList, setOverdueList] = useState([{}])
+  const [completedList, setCompletedList] = useState([{}])
+  const [upcomingList, setUpcomingList] = useState([{}])
+  const [currentView, setCurrentView] = useState("dayGridMonth")
+
+  // Capture the current date to be used as point of reference
+  let dateToday = new Date()
+  let dateTodayFormatted = dateToday.toISOString().substring(0, 10)
     
     useEffect(() => {
       // Re-build the list of events. Events are currently grouped
@@ -89,7 +104,10 @@ const CalendarView = (props) => {
       // new array of tasks (taskList), each task will have its own
       // DATE attribute amongst other attributes we specifically want
       // to capture.
-      let tempTaskList = [{}]
+      let tempTaskList = []
+      let tempOverdueList = []
+      let tempCompletedList = []
+      let tempUpcomingList = []
       let datesOuterIndexer = 0
       let entriesInnerIndexer = 0
       let dateAtOuterIndex = ""
@@ -106,38 +124,84 @@ const CalendarView = (props) => {
         while(entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
           // console.log("Current inner props data = ", props.dates[datesOuterIndexer].entries[entriesInnerIndexer])
           tempTaskList[taskListIndexer] = {
-            date: dateStringAtOuterIndex,
+            date: dateStringAtOuterIndex,  // Replaced by Start-End labels below
+            start: dateStringAtOuterIndex,
+            end: dateStringAtOuterIndex,
             house: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].house,
             title: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].task,
+            completed: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].completed,
             _id: props.dates[datesOuterIndexer].entries[entriesInnerIndexer]._id
           }
+          //Conditionally build the Overdue, Completed, and Upcoming lists
+          if (tempTaskList[taskListIndexer].completed) { //Add to Completed list
+            tempCompletedList.push(tempTaskList[taskListIndexer])
+          }
+          else {
+            if (tempTaskList[taskListIndexer].start < dateTodayFormatted) { //Add to Overdue list
+              tempOverdueList.push(tempTaskList[taskListIndexer])
+            }
+            else { //Add to Upcoming list
+              tempUpcomingList.push(tempTaskList[taskListIndexer])
+            }
+          }
+
           taskListIndexer += 1
           entriesInnerIndexer += 1
         }
         datesOuterIndexer += 1
       }
-      setEventList(tempTaskList) // Capture the temporary task list and set the STATE
+
+      // Set the respective STATE variables
+      setEventList(tempTaskList)
+      setOverdueList(tempOverdueList)
+      setCompletedList(tempCompletedList)
+      setUpcomingList(tempUpcomingList)
+
     }, [props.dates])
 
     const handleEventClick = (arg) => {
-      // history.push(`/task/${props._id}`)
-      // alert(arg.dateStr)
-      console.log("event = ", arg.event.title)
-      alert(arg.event.title)
+      history.push(`/task/${arg.event._def.extendedProps._id}`)
+      console.log("arg.event", arg.event)
+    }
+
+    const handleDateClick = (arg) => {
+      console.log("arg", arg)
+      console.log("arg.date", arg.date)
+      // alert(arg.date)
+      // changeView('dayGridDay', arg.date)
+      // calendar.changeView('timeGridDay')
+      // changeView('timeGridDay', arg.date)
+
+      // let calendarRef = React.createRef()
+      // calendarRef.current
+      //   .getApi()
+      //   .changeView('timeGridDay', arg.date)
+
+      let calendarApi = calendarComponentRef.current.getApi()
+      calendarApi.changeView("timeGridDay", arg.date)
+      
+    // let calendarApi = this.calendarComponentRef.current.getApi();
+    // calendarApi.changeView("timeGridDay");
     }
 
     return (
         <StyleWrapper>
             <FullCalendar
-                plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
-                initialView="dayGridMonth"
-                // initialView="dayGridDay"
+                plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin ]}
+                ref = {calendarComponentRef}
+                initialView="listMonth"  // LIST view
+                // initialView="dayGridMonth"  // MONTH view
+                // initialView="dayGridDay"  // DAY view
+                // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}
                 eventClick={handleEventClick}
-                // events={eventList}
+                dateClick={handleDateClick}
+                // events={eventList} // Replaced by eventSources below
                 eventSources= {[
                   // OVERDUE Tasks
-                  // {
+                  {
+                    events: overdueList,
+                  //   //Consider possible FORMATS for events below
                   //   events: [ // put the array in the `events` property
                   //     {
                   //       title  : 'event1',
@@ -153,40 +217,28 @@ const CalendarView = (props) => {
                   //       start  : '2021-07-09T12:30:00',
                   //     }
                   //   ],
-                  //   color: 'red',     // an option!
-                  //   textColor: 'white' // an option!
-                  // },
+                    color: 'red',     
+                    textColor: 'white' 
+                  },
 
                   // COMPLETED Tasks
-                  // {
-                  //   events: [ 
-                  //     {
-                  //       title  : 'event7',
-                  //       start  : '2021-07-01'
-                  //     },
-                  //     {
-                  //       title  : 'event8',
-                  //       start  : '2021-07-02',
-                  //       end    : '2021-07-03'
-                  //     },
-                  //     {
-                  //       title  : 'event9',
-                  //       start  : '2021-07-04T12:30:00',
-                  //     }
-                  //   ],
-                  //   color: '#d1d1cf',     // grey
-                  //   textColor: 'black' // an option!
-                  // },
+                  {
+                    events: completedList,
+                    color: '#d1d1cf',     // grey
+                    textColor: 'black' 
+                  },
 
                   // ACTIVE UPCOMING Tasks
                   {
-                    events: eventList,
+                    // events: eventList,
+                    events: upcomingList,
                     color: '#03b1fc',     // blue
                     textColor: 'white' 
                   }
                 ]}
                 headerToolbar={{
-                  left: 'title',
+                  left: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
+                  center: 'title',
                   right: 'today prevYear,prev,next,nextYear'
                 }}
                 height='auto'
