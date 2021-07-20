@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
 import UserContext from '../UserContext'
 import { useHistory } from 'react-router-dom'
-
 import CalendarListView from '../components/CalendarListView/CalendarListView'
 import FilterModal from '../components/Filter/FilterModal'
 import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
 import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
-
 
 const Calendar = () => {
   let history = useHistory()
@@ -25,8 +23,6 @@ const Calendar = () => {
     active: true,
     completed: false
   })
-
-  
 
   function handleFilterChange(active, completed, all) {
     setChecked({active: active, completed: completed})
@@ -49,8 +45,6 @@ const Calendar = () => {
     if (!userContext.user) return
 
     const fetchCalendarEntries = async () => {
-      //setDates([])
-    
       try {
         // fetch all calendar entries for current authenticated user
         let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
@@ -104,29 +98,16 @@ const Calendar = () => {
     const returnActive = entry => !entry.completed
     const returnCompleted = entry => entry.completed
 
-    // setFilteredDates(dates.map(date => { 
-      // let filteredEntries = date.entries.filter(entry => 
-      //   checkedAll ? returnAll(entry) : 
-      //     checked.active ? returnActive(entry) : 
-      //       checked.completed ? returnCompleted(entry) : 
-      //         returnActive(entry) 
-      // )
-
-      // return {
-      //   date: date.date, 
-      //   entries: filteredEntries
-      // }
-    // }))
-
     setFilteredDates(dates
       .map(date => {
         let { active, completed } = checked
 
-        let filteredEntries = date.entries.filter(entry => 
-          active && completed ? returnAll(entry) : 
-            active ? returnActive(entry) : 
-              completed ? returnCompleted(entry) : 
-                returnActive(entry) 
+        let filteredEntries = date.entries
+          .filter(entry => 
+            active && completed ? returnAll(entry) : 
+              active ? returnActive(entry) : 
+                completed ? returnCompleted(entry) : 
+                  returnActive(entry) 
         )
   
         return {

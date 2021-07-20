@@ -3,12 +3,47 @@ import { useHistory } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
 import { Form, Button, Label, Input, PasswordInput, Select } from "../../common"
+import { validatePassWithMessage } from "../../functions"
 
 const Signup = () => {
   let history = useHistory()
   const userContext = useContext(UserContext)
   const { register, formState: { errors }, watch, handleSubmit } = useForm({})
   const passwordValue = watch('password')
+
+  const accountInputs = [
+    {
+      name: "firstName",
+      registerOptions: { required: "You must input a first name." },
+      labelText: "First Name"
+    },
+    {
+      name: "lastName",
+      registerOptions: { required: "You must input a last name." },
+      labelText: "Last Name",
+    },
+    {
+      name: "email",
+      registerOptions: { required: "You must input an email address." },
+    },
+     // {
+    //   name: "userType",
+    //   registerOptions: { required: "You must input an account type." },
+    //   labelText: "You are a",
+    // },
+    {
+      name: 'password',
+      registerOptions: {
+        required: "You must provide a password.",
+        validate: (value) => validatePassWithMessage(value)
+      }
+
+    },
+    {
+      name: 'confirmPassword',
+      registerOptions: {}
+    }
+  ]
 
   async function onSubmit(data) {
     const alertError = () => alert("There was an error signing you up. We're fixing it as fast as we can.")
