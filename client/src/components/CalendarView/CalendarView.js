@@ -95,7 +95,6 @@ const StyleWrapper = styled.div`
       background-color: ${props => props.theme.prm};
     }
   }
-
 `
 
 const CalendarView = (props) => {
