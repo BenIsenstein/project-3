@@ -28,6 +28,11 @@ const StyleWrapper = styled.div`
     }
   }
 
+  .fc-icon-chevron-right, .fc-icon-chevron-left, .fc-icon-chevrons-right, .fc-icon-chevrons-left {
+    color: white;
+    margin: -.15em 0 .05em 0;
+  }
+
   .fc-scroller.fc-scroller-liquid-absolute {
     overflow: none;
   }
@@ -47,7 +52,7 @@ const StyleWrapper = styled.div`
     font-size: .8em;
   }
 
-  .fc-button.fc-button-primary {
+  .fc-button {
     font-family: inherit;
     font-size: .8em;
     font-weight: normal;
@@ -55,23 +60,41 @@ const StyleWrapper = styled.div`
     color: white;
     border: none;
     border-radius: 6px;
-    background-color: ${props => props.theme.scd};
+    background-color: ${props => props.theme.prmLt};
     background-image: none;
     outline: none;
 
-    &:hover {
-      background-color: ${props => props.theme.scdDk};
-      background-image: none;
-    }
+    &:disabled {
+      opacity: .4;
+      background-color: ${props => props.theme.prmLt};
 
-    &:active {
-      background-color: ${props => props.theme.scdDk};
-      box-shadow: none;
+      &:hover {
+        background-color: ${props => props.theme.prmLt};
+        cursor: not-allowed;
+      }
     }
 
     &:focus {
-      background-color: ${props => props.theme.scdDk};
+      background-color: ${props => props.theme.prm};
       box-shadow: none;
+    }
+  }
+
+  .fc-button-primary {
+    &:hover {
+      background-color: ${props => props.theme.prm};
+    }
+
+    &:not(:disabled):active {
+        background-color: ${props => props.theme.prm};
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+
+    &:focus {
+      background-color: ${props => props.theme.prm};
     }
   }
 `
