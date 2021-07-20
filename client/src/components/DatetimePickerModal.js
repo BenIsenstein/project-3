@@ -3,10 +3,9 @@ import { Button, TrashIcon, CalendarIcon, StyledDateTimePicker } from '../common
 import ConfirmModal from './Modals/ConfirmModal'
 import useConfirmModal from './Modals/useConfirmModal'
 
-const CustomModalButton = props => {
+const DatetimePickerModal = props => {
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
   const [value, onChange] = useState()
-
 
   return <>
       <ConfirmModal
@@ -24,4 +23,5 @@ const CustomModalButton = props => {
       </Button>
   </>
 }
-export default CustomModalButton
+
+export default DatetimePickerModal
