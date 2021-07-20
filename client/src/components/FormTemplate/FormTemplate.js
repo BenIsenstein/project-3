@@ -191,7 +191,7 @@ const FormTemplate = ({
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
     </FlexSection>
     
-    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
+    <Form authForm={props.authForm} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
       {inputs && inputs.map(({ name, readOnly, ...rest }) => {
         // every input other than 'date'
         if (!isDateInput(name)) return <ComplexInput 
