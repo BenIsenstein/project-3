@@ -1,10 +1,78 @@
-import React, { useEffect, useState, useMemo, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import styled from 'styled-components'
 import UserContext from '../../UserContext'
 
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // plugin for VIEW
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import listPlugin from "@fullcalendar/list" // needed for LIST view
+
+const StyleWrapper = styled.div`
+  .fc-toolbar {
+    flex-direction: column;
+
+    @media (min-width: ${props => props.theme.smScreen}) {
+      flex-direction: row;
+    }
+  }
+
+  .fc-toolbar-title {
+    margin-bottom: .6em;
+    font-size: 1.2em;
+    color: ${props => props.theme.prm};
+
+    @media (min-width: ${props => props.theme.smScreen}) {
+      margin: 0;
+    }
+  }
+
+  .fc-scroller.fc-scroller-liquid-absolute {
+    overflow: none;
+  }
+
+  .fc-col-header-cell-cushion {
+    font-size: .8em;
+    font-weight: normal;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-daygrid-day-number {
+    font-size: .6em;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-event-title {
+    font-size: .8em;
+  }
+
+  .fc-button.fc-button-primary {
+    font-family: inherit;
+    font-size: .8em;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    background-color: ${props => props.theme.scd};
+    background-image: none;
+    outline: none;
+
+    &:hover {
+      background-color: ${props => props.theme.scdDk};
+      background-image: none;
+    }
+
+    &:active {
+      background-color: ${props => props.theme.scdDk};
+      box-shadow: none;
+    }
+
+    &:focus {
+      background-color: ${props => props.theme.scdDk};
+      box-shadow: none;
+    }
+  }
+`
 
 const CalendarView = (props) => {
   
@@ -59,8 +127,7 @@ const CalendarView = (props) => {
     }
 
     return (
-        <div>
-            <h1> FullCalendar </h1>
+        <StyleWrapper>
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
                 initialView="dayGridMonth"
@@ -118,8 +185,13 @@ const CalendarView = (props) => {
                     textColor: 'white' 
                   }
                 ]}
+                headerToolbar={{
+                  left: 'title',
+                  right: 'today prevYear,prev,next,nextYear'
+                }}
+                height='auto'
             />
-        </div>
+        </StyleWrapper>
     )
 }
 export default CalendarView
