@@ -1,10 +1,101 @@
-import React, { useEffect, useState, useMemo, useContext } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import styled from 'styled-components'
 import UserContext from '../../UserContext'
 
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // plugin for VIEW
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import listPlugin from "@fullcalendar/list" // needed for LIST view
+
+const StyleWrapper = styled.div`
+  .fc-toolbar {
+    flex-direction: column;
+
+    @media (min-width: ${props => props.theme.smScreen}) {
+      flex-direction: row;
+    }
+  }
+
+  .fc-toolbar-title {
+    margin-bottom: .6em;
+    font-size: 1.2em;
+    color: ${props => props.theme.prm};
+
+    @media (min-width: ${props => props.theme.smScreen}) {
+      margin: 0;
+    }
+  }
+
+  .fc-icon-chevron-right, .fc-icon-chevron-left, .fc-icon-chevrons-right, .fc-icon-chevrons-left {
+    color: white;
+    margin: -.15em 0 .05em 0;
+  }
+
+  .fc-scroller.fc-scroller-liquid-absolute {
+    overflow: none;
+  }
+
+  .fc-col-header-cell-cushion {
+    font-size: .8em;
+    font-weight: normal;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-daygrid-day-number {
+    font-size: .6em;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-event-title {
+    font-size: .8em;
+  }
+
+  .fc-button {
+    font-family: inherit;
+    font-size: .8em;
+    font-weight: normal;
+    text-transform: uppercase;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    background-color: ${props => props.theme.prmLt};
+    background-image: none;
+    outline: none;
+
+    &:disabled {
+      opacity: .4;
+      background-color: ${props => props.theme.prmLt};
+
+      &:hover {
+        background-color: ${props => props.theme.prmLt};
+        cursor: not-allowed;
+      }
+    }
+
+    &:focus {
+      background-color: ${props => props.theme.prm};
+      box-shadow: none;
+    }
+  }
+
+  .fc-button-primary {
+    &:hover {
+      background-color: ${props => props.theme.prm};
+    }
+
+    &:not(:disabled):active {
+        background-color: ${props => props.theme.prm};
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+
+    &:focus {
+      background-color: ${props => props.theme.prm};
+    }
+  }
+`
 
 const CalendarView = (props) => {
   
@@ -59,8 +150,7 @@ const CalendarView = (props) => {
     }
 
     return (
-        <div>
-            <h1> FullCalendar </h1>
+        <StyleWrapper>
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin, listPlugin ]}
                 initialView="dayGridMonth"
@@ -118,8 +208,13 @@ const CalendarView = (props) => {
                     textColor: 'white' 
                   }
                 ]}
+                headerToolbar={{
+                  left: 'title',
+                  right: 'today prevYear,prev,next,nextYear'
+                }}
+                height='auto'
             />
-        </div>
+        </StyleWrapper>
     )
 }
 export default CalendarView

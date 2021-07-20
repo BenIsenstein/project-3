@@ -47,6 +47,7 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
             <p>Status:</p>
             <FilterItem item='active' checked={checked['active']} onChange={() => toggleCheck('active')} />
             <FilterItem item='completed' checked={checked['completed']} onChange={() => toggleCheck('completed')} />
+            {/* <FilterItem item='all' checked={checkedAll} onChange={(e) => selectAll(e.target.checked)} />       */}
         </FlexSection>
     )
 }
