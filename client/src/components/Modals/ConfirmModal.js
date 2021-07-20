@@ -32,13 +32,12 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, c
                 }}>
                   {confirmPrompt}
                 </Button>
-                <Button fullWidth important onClick={()=>{
+                <Button fullWidth important onClick={()=> {
                   hideConfirmModal()
                 }}>
                   Cancel
                 </Button>
               </FlexSection>
-
             </div>
           </div>
         </React.Fragment>, document.body

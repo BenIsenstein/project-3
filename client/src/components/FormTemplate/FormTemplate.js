@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext, useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
-import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, StyledDateTimePicker, FlexSection } from '../../common'
+import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
 import ComplexInput from '../ComplexInput/ComplexInput'
 import DeleteEntryButton from '../DeleteEntryButton'
+import DatetimePickerModal from '../DatetimePickerModal'
 import './FormTemplate.css'
 
 /* 
@@ -44,6 +45,7 @@ some important input props:
 
 - BeforeTemplate | JSX | default: undefined |
 - AfterTemplate | JSX | default: undefined  |
+- formProps | object | default: undefined | all props fed directly to the main <Form> element
 - onSubmit | func | default: alert('No onSubmit given to <FormTemplate />') | called on submit event of the main <Form /> element
 - formMode | str | default: 'add' | can be either 'add' or 'details'
 - titleText | str | default: null | Appears just below the back button, above the inputs
@@ -190,7 +192,7 @@ const FormTemplate = ({
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
     </FlexSection>
     
-    <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
+    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
       {inputs && inputs.map(({ name, readOnly, ...rest }) => {
         // every input other than 'date'
         if (!isDateInput(name)) return <ComplexInput 
@@ -211,16 +213,28 @@ const FormTemplate = ({
             register={register} 
             {...rest}
           />  
-          : <ComplexInput
-            key={name} 
-            name={name}
-            as={StyledDateTimePicker}          
-            register={register}
-            onChange={val => setValue(name, val)}
-            value={watch(name)}
-            errors={errors}
-            {...rest}
-          />
+          : <>
+            <Label htmlFor={name}>
+              {rest.labelText || name}
+            </Label>
+            <FlexSection fullWidth key={name}>
+              <ComplexInput
+                labelHidden
+                maxRows={1}
+                key={name} 
+                name={name}        
+                register={register}
+                errors={errors}
+                {...rest}
+              />
+              <DatetimePickerModal 
+                actionOnConfirm={setValue} 
+                nameForUpdate={name} 
+                margin="0 0 0 5px"
+                iconButton 
+              />
+            </FlexSection>
+          </>
       })}
 
       {(isAddMode || isEditView) && 
