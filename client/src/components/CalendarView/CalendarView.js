@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import UserContext from '../../UserContext'
-
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // plugin for VIEW
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
@@ -111,11 +109,11 @@ const CalendarView = (props) => {
   const [overdueList, setOverdueList] = useState([{}])
   const [completedList, setCompletedList] = useState([{}])
   const [upcomingList, setUpcomingList] = useState([{}])
-
-  // Capture the current date to be used as point of reference
-  let dateTodayFormatted = new Date().toISOString().substring(0, 10)
     
     useEffect(() => {
+      // Capture the current date to be used as point of reference
+      let dateTodayFormatted = new Date().toISOString().substring(0, 10)
+      
       // Re-build the list of events. Events are currently grouped
       // together by common DATE, and each date in the array contains
       // another array of 'entries' associated with that date. In our
