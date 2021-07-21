@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FlexSection, Button } from "../../common"
+import { FlexSection, Button, FilterIcon } from "../../common"
 
 import ConfirmModal from "../Modals/ConfirmModal"
 import useConfirmModal from "../Modals/useConfirmModal"
@@ -28,7 +28,7 @@ const FilterModal = ({ handleFilterChange }) => {
                     setChecked={setChecked} 
                 />}
             />
-            <Button onClick={toggleConfirmModal}>FILTER</Button>
+            <Button onClick={toggleConfirmModal}><FilterIcon />FILTER</Button>
         </FlexSection>
     )
 }

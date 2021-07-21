@@ -17,6 +17,7 @@ import {Menu} from '@styled-icons/material-rounded/Menu'
 import {Close} from '@styled-icons/material-rounded/Close'
 import {Settings} from '@styled-icons/fluentui-system-filled/Settings'
 import {Library} from '@styled-icons/fluentui-system-filled/Library'
+import {FilterList} from '@styled-icons/material-rounded/FilterList'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -83,6 +84,12 @@ const AddIcon = styled(Plus)`
     margin-left: -0.5em;
 `
 
+const FilterIcon = styled(FilterList)`
+    height: 2em;
+    margin-left: -.4em;
+    margin-right: .1em;
+`
+
 const TrashIcon = styled(Trash)`
     height: 1em;
     // margin: 0 -0.4em;
@@ -139,4 +146,4 @@ const CloseIcon = styled(Close)`
     cursor: pointer;
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}

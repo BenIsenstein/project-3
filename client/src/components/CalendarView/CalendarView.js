@@ -9,30 +9,27 @@ import timeGridPlugin from "@fullcalendar/timegrid" // needed for LIST view
 
 const StyleWrapper = styled.div`
   .fc-toolbar {
+    margin-top: 1em;
     flex-direction: column;
 
-    @media (min-width: ${props => props.theme.smScreen}) {
+    @media (min-width: ${props => props.theme.mdScreen}) {
       flex-direction: row;
     }
   }
 
   .fc-toolbar-title {
-    margin-bottom: .6em;
+    margin: .6em 0;
     font-size: 1.2em;
     color: ${props => props.theme.prm};
 
-    @media (min-width: ${props => props.theme.smScreen}) {
+    @media (min-width: ${props => props.theme.mdScreen}) {
       margin: 0;
     }
   }
 
   .fc-icon-chevron-right, .fc-icon-chevron-left, .fc-icon-chevrons-right, .fc-icon-chevrons-left {
     color: white;
-    margin: -.1em 0 0 0;
-  }
-
-  .fc-scroller.fc-scroller-liquid-absolute {
-    overflow: none;
+    margin-top: -.15em;
   }
 
   .fc-col-header-cell-cushion {
@@ -94,12 +91,30 @@ const StyleWrapper = styled.div`
     &:focus {
       background-color: ${props => props.theme.prm};
     }
+
+    &.fc-button-active {
+      &:focus {
+        box-shadow: none;
+      }
+    }
+  }
+
+  .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: ${props => props.theme.prm};
+
+    &:focus {
+      background-color: ${props => props.theme.prm};
+      box-shadow: none;
+    }
   }
 `
 
 const CalendarView = (props) => {
   
   let calendarComponentRef = React.createRef()
+
+  // Capture the current state of the logged in user
+  let userContext = useContext(UserContext)
 
   // Use HISTORY
   const history = useHistory()
@@ -109,6 +124,14 @@ const CalendarView = (props) => {
   const [overdueList, setOverdueList] = useState([{}])
   const [completedList, setCompletedList] = useState([{}])
   const [upcomingList, setUpcomingList] = useState([{}])
+<<<<<<< Updated upstream
+=======
+  const [currentView, setCurrentView] = useState("dayGridMonth")
+
+  // Capture the current date to be used as point of reference
+  let dateToday = new Date()
+  let dateTodayFormatted = dateToday.toISOString().substring(0, 10)
+>>>>>>> Stashed changes
     
     useEffect(() => {
       // Capture the current date to be used as point of reference
@@ -126,23 +149,27 @@ const CalendarView = (props) => {
       let tempUpcomingList = []
       let datesOuterIndexer = 0
       let entriesInnerIndexer = 0
+      let dateAtOuterIndex = ""
+      let dateStringAtOuterIndex = "" 
       let taskListIndexer = 0
-
       while (datesOuterIndexer < props.dates.length) { // Outer array
         // convert date into calendar-friendly format
-        
-        entriesInnerIndexer = 0
-        while (entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
-          // console.log("Current inner props data = ", props.dates[datesOuterIndexer].entries[entriesInnerIndexer])
-          let currentEntry = props.dates[datesOuterIndexer].entries[entriesInnerIndexer]
+        dateAtOuterIndex = new Date(props.dates[datesOuterIndexer].date)
+        dateStringAtOuterIndex = new Date(dateAtOuterIndex.getTime() - (dateAtOuterIndex.getTimezoneOffset() * 60000 ))
+                            .toISOString()
+                            .split("T")[0];
 
+        entriesInnerIndexer = 0
+        while(entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
+          // console.log("Current inner props data = ", props.dates[datesOuterIndexer].entries[entriesInnerIndexer])
           tempTaskList[taskListIndexer] = {
-            start: currentEntry.start,
-            end: currentEntry.end,
-            house: currentEntry.house,
-            title: currentEntry.task,
-            completed: currentEntry.completed,
-            _id: currentEntry._id
+            date: dateStringAtOuterIndex,  // Replaced by Start-End labels below
+            start: dateStringAtOuterIndex,
+            end: dateStringAtOuterIndex,
+            house: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].house,
+            title: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].task,
+            completed: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].completed,
+            _id: props.dates[datesOuterIndexer].entries[entriesInnerIndexer]._id
           }
           //Conditionally build the Overdue, Completed, and Upcoming lists
           if (tempTaskList[taskListIndexer].completed) { //Add to Completed list
@@ -171,11 +198,29 @@ const CalendarView = (props) => {
 
     }, [props.dates])
 
-    const handleEventClick = (arg) => history.push(`/task/${arg.event._def.extendedProps._id}`)
+    const handleEventClick = (arg) => {
+      history.push(`/task/${arg.event._def.extendedProps._id}`)
+      console.log("arg.event", arg.event)
+    }
 
     const handleDateClick = (arg) => {
+      console.log("arg", arg)
+      console.log("arg.date", arg.date)
+      // alert(arg.date)
+      // changeView('dayGridDay', arg.date)
+      // calendar.changeView('timeGridDay')
+      // changeView('timeGridDay', arg.date)
+
+      // let calendarRef = React.createRef()
+      // calendarRef.current
+      //   .getApi()
+      //   .changeView('timeGridDay', arg.date)
+
       let calendarApi = calendarComponentRef.current.getApi()
       calendarApi.changeView("timeGridDay", arg.date)
+      
+    // let calendarApi = this.calendarComponentRef.current.getApi();
+    // calendarApi.changeView("timeGridDay");
     }
 
     return (
