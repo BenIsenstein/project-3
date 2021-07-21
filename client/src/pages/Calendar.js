@@ -124,6 +124,46 @@ const Calendar = () => {
   // useEffect(() => console.log('dates: ', dates), [dates])
   // useEffect(() => console.log('filteredDates: ', filteredDates), [filteredDates])
 
+  // return (
+  //   <Page>
+  //     <PageContainer>
+  //       <FlexSection spaceBetween>
+  //         <FlexSection>
+  //           <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
+  //         </FlexSection>
+
+  //         <FlexSection>
+  //           <SwitchViewButton
+  //             activeView={viewMode === 'ListView'}
+  //             onClick={() => setViewMode('ListView')}
+  //           >
+  //             <ListIcon />
+  //           </SwitchViewButton>
+  //           <SwitchViewButton
+  //             activeView={viewMode === 'CalendarView'}
+  //             onClick={() => setViewMode('CalendarView')}
+  //           >
+  //             <CalendarIcon />
+  //           </SwitchViewButton>
+  //         </FlexSection>
+  //       </FlexSection>
+
+  //       <FlexSection fullWidth spaceBetween>
+  //         {<p>Welcome to your home calendar, {userContext.user?.firstName}!</p>}                   
+  //         <FilterModal handleFilterChange={handleFilterChange} />                    
+  //       </FlexSection>
+
+  //       {viewMode === 'ListView' && 
+  //         (filteredDates.length 
+  //           ? <CalendarListView dates={filteredDates} /> 
+  //           : <p>You have no {checked.active ? "upcoming" : "completed"} tasks</p>
+  //           )
+  //       }
+  //       {viewMode === 'CalendarView' && <CalendarView dates={filteredDates} />}
+  //     </PageContainer>
+  //   </Page>
+  // )
+
   return (
     <Page>
       <PageContainer>
@@ -131,26 +171,7 @@ const Calendar = () => {
           <FlexSection>
             <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
           </FlexSection>
-
-          <FlexSection>
-            <SwitchViewButton
-              activeView={viewMode === 'ListView'}
-              onClick={() => setViewMode('ListView')}
-            >
-              <ListIcon />
-            </SwitchViewButton>
-            <SwitchViewButton
-              activeView={viewMode === 'CalendarView'}
-              onClick={() => setViewMode('CalendarView')}
-            >
-              <CalendarIcon />
-            </SwitchViewButton>
-          </FlexSection>
-        </FlexSection>
-
-        <FlexSection fullWidth spaceBetween>
-          {<p>Welcome to your home calendar, {userContext.user?.firstName}!</p>}                   
-          <FilterModal handleFilterChange={handleFilterChange} />                    
+          <FilterModal handleFilterChange={handleFilterChange} /> 
         </FlexSection>
 
         {viewMode === 'ListView' && 

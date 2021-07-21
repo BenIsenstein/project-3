@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection } from "../../common"
 
 import UserContext from '../../UserContext'
 
@@ -24,6 +24,7 @@ const NavMenu = styled.nav`
     height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     position: fixed;
     top: 0;
     right: -100%;
@@ -81,29 +82,34 @@ const Navbar = () => {
             <MenuIcon onClick={showSidebar} />
         </NavbarContainer>
         <NavMenu active={sidebar} onClick={showSidebar} ref={ref}>
-            <NavbarContainer>
-                <CloseIcon />
-            </NavbarContainer>
-            <NavItem to='/calendar' activeClassName>
-                <CalendarIcon nav />
-                Calendar
-            </NavItem>
-            <NavItem to='/library' activeClassName>
-                <LibraryIcon nav />
-                Tasks Library
-            </NavItem>
-            <NavItem to='/account' activeClassName>
-                <PersonIcon nav />
-                Account
-            </NavItem>
-            <NavItem to='/settings' activeClassName>
-                <SettingsIcon nav />
-                Settings
-            </NavItem>
-            <NavItem to='/' exact activeClassName onClick={() => userContext.logOut()}>
-                <ExitIcon nav />
-                Log Out
-            </NavItem>
+            <FlexSection column>
+                <NavbarContainer style={{alignSelf: 'flex-end'}}>
+                    <CloseIcon />
+                </NavbarContainer>
+                <NavItem to='/calendar' activeClassName>
+                    <CalendarIcon nav />
+                    Calendar
+                </NavItem>
+                <NavItem to='/library' activeClassName>
+                    <LibraryIcon nav />
+                    Tasks Library
+                </NavItem>
+            </FlexSection>
+            <FlexSection column style={{marginBottom: '2em'}}>
+                <NavItem to='/account' activeClassName>
+                    <PersonIcon nav />
+                    Account
+                </NavItem>
+                <NavItem to='/settings' activeClassName>
+                    <SettingsIcon nav />
+                    Settings
+                </NavItem>
+                <NavItem to='/' exact activeClassName onClick={() => userContext.logOut()}>
+                    <ExitIcon nav />
+                    Log Out
+                </NavItem>                
+            </FlexSection>
+
         </NavMenu>
     </>
 }
