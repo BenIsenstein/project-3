@@ -50,7 +50,7 @@ const sendUserEmail = async (data) => {
 
             // First retrieve OVERDUE tasks.
             // Retrieve data from DB
-            let dbOverdueResponse = await CalendarEntry.find({ userid: data.userid, completed: false, date: { $lt: currentDate.toISOString() }  }, null, {sort: {date: 1}})
+            let dbOverdueResponse = await CalendarEntry.find({ userid: data.userid, completed: false, start: { $lt: currentDate.toISOString() }  }, null, {sort: {start: 1}})
 
             let userOverdueTaskList = [{}]
             if (dbOverdueResponse.length > 0) {
@@ -59,7 +59,7 @@ const sendUserEmail = async (data) => {
                 currentItem = dbOverdueResponse[arrayIndexer]
                 userOverdueTaskList[arrayIndexer] = {
                   status: "overdue",
-                  date: currentItem.date,
+                  date: currentItem.start,
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task
@@ -75,7 +75,7 @@ const sendUserEmail = async (data) => {
             targetDate = new Date(targetDate).toISOString()
             
             // Retrieve data from DB
-            let dbResponse = await CalendarEntry.find({ userid: data.userid, date: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {date: 1}})
+            let dbResponse = await CalendarEntry.find({ userid: data.userid, start: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {start: 1}})
             
             let userTaskList = [{}]
             if (dbResponse.length > 0) {
@@ -84,7 +84,7 @@ const sendUserEmail = async (data) => {
                 currentItem = dbResponse[arrayIndexer]
                 userTaskList[arrayIndexer] = {
                   status: "active",
-                  date: currentItem.date,
+                  date: currentItem.start,
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task

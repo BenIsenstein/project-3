@@ -19,8 +19,8 @@ const calendarEntrySchema = new mongoose.Schema({
 const CalendarEntry = mongoose.model("CalendarEntry", calendarEntrySchema, "CalendarEntries")
 
 const addCalendarEntry = async (newCalendarEntry) => await newCalendarEntry.save()
-const listAllCalendarEntries = async () => await CalendarEntry.find({}, null, {sort: {date: 1}})
-const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({ userid: id}, null, {sort: {date: 1}})
+const listAllCalendarEntries = async () => await CalendarEntry.find({}, null, {sort: {start: 1}})
+const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({ userid: id}, null, {sort: {start: 1}})
 const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
 const deleteCalendarEntry = async (id) => await CalendarEntry.deleteOne({ _id: id })
 
