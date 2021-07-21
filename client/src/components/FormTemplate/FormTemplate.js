@@ -36,6 +36,7 @@ const inputs = [
   attributes as well as some custom ones:
 
 some important input props:
+- isDateRange | bool | default: false | can make any date input into a range-picker 
 - readOnly | bool | default: false |
 - as | str, React component | default: undefined | https://styled-components.com/docs/api#as-polymorphic-prop
 - labelText | str | default: this.name |
