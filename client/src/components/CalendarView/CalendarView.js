@@ -30,7 +30,7 @@ const StyleWrapper = styled.div`
 
   .fc-icon-chevron-right, .fc-icon-chevron-left, .fc-icon-chevrons-right, .fc-icon-chevrons-left {
     color: white;
-    margin: -.15em 0 .05em 0;
+    margin: -.1em 0 0 0;
   }
 
   .fc-scroller.fc-scroller-liquid-absolute {

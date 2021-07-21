@@ -220,7 +220,7 @@ const FormTemplate = ({
             <FlexSection fullWidth key={name}>
               <ComplexInput
                 labelHidden
-                maxRows={1}
+                // maxRows={1}
                 key={name} 
                 name={name}        
                 register={register}

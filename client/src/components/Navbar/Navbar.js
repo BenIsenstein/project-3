@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, ExitIcon } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon } from "../../common"
 
 import UserContext from '../../UserContext'
 
@@ -28,7 +28,7 @@ const NavMenu = styled.nav`
     top: 0;
     right: -100%;
     transition: 850ms;
-    z-index: 1;
+    z-index: 4;
 
     ${props => props.active && css`
         right: 0;
@@ -88,9 +88,17 @@ const Navbar = () => {
                 <CalendarIcon nav />
                 Calendar
             </NavItem>
+            <NavItem to='/library' activeClassName>
+                <LibraryIcon nav />
+                Tasks Library
+            </NavItem>
             <NavItem to='/account' activeClassName>
                 <PersonIcon nav />
                 Account
+            </NavItem>
+            <NavItem to='/settings' activeClassName>
+                <SettingsIcon nav />
+                Settings
             </NavItem>
             <NavItem to='/' exact activeClassName onClick={() => userContext.logOut()}>
                 <ExitIcon nav />

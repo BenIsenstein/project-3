@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom'
 import CalendarListView from '../components/CalendarListView/CalendarListView'
 import FilterModal from '../components/Filter/FilterModal'
 import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
-import TestEmailButton from '../components/TestEmailButton'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
 
@@ -122,8 +121,8 @@ const Calendar = () => {
       
   }, [checked, loaded, dates])
 
-  useEffect(() => console.log('dates: ', dates), [dates])
-  useEffect(() => console.log('filteredDates: ', filteredDates), [filteredDates])
+  // useEffect(() => console.log('dates: ', dates), [dates])
+  // useEffect(() => console.log('filteredDates: ', filteredDates), [filteredDates])
 
   return (
     <Page>
@@ -131,10 +130,6 @@ const Calendar = () => {
         <FlexSection spaceBetween>
           <FlexSection>
             <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
-          </FlexSection>
-
-          <FlexSection>
-            <TestEmailButton />
           </FlexSection>
 
           <FlexSection>
