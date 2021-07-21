@@ -15,6 +15,8 @@ import {Eye} from '@styled-icons/bootstrap/Eye'
 import {EyeSlash} from '@styled-icons/bootstrap/EyeSlash'
 import {Menu} from '@styled-icons/material-rounded/Menu'
 import {Close} from '@styled-icons/material-rounded/Close'
+import {Settings} from '@styled-icons/fluentui-system-filled/Settings'
+import {Library} from '@styled-icons/fluentui-system-filled/Library'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -36,7 +38,23 @@ const PersonIcon = styled(PersonFill)`
     ${props => props.nav && css`
         margin-right: 1em;
     `}
+`
+
+const SettingsIcon = styled(Settings)`
+    height: 1.6em;
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
 ` 
+
+const LibraryIcon = styled(Library)`
+    height: 1.6em;
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
+`
 
 const CalendarIcon = styled(Calendar)`
     height: 1.8em;
@@ -121,4 +139,4 @@ const CloseIcon = styled(Close)`
     cursor: pointer;
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
