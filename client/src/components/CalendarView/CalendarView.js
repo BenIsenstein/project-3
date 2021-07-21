@@ -190,12 +190,12 @@ const CalendarView = (props) => {
                 // initialView="dayGridDay"  // DAY view
                 // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}
-                businessHours={true}
-                //businessHours= {
-                 // daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
-                 // startTime:'07:00', // a start time (7am in this example)
-                 // endTime: '18:00'  // an end time (6pm in this example)
-                //} 
+                // businessHours={true}
+                businessHours={{
+                 daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
+                 startTime:'07:00', // a start time (7am in this example)
+                 endTime: '18:00'  // an end time (6pm in this example)
+                }}
                 slotDuration={'01:00:00'}
                 scrollTime= {'06:00:00'}
                 scrollTimeReset={true}

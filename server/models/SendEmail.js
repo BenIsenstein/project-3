@@ -7,6 +7,13 @@ const { CalendarEntry } = require('./CalendarEntry')
 // Define functions
 
 const sendUserEmail = async (data) => {
+
+  const toHoursAndMins = date => {
+    let hours = date.getHours()
+    let mins = date.getMinutes()
+
+    return `${hours}:${(mins < 10) ? '0'+mins : mins}`
+  }
   
   let messageType = data.type
   let templateId = 0  // This is the desired SendInBlue email TEMPLATE to be used.
@@ -16,6 +23,7 @@ const sendUserEmail = async (data) => {
   sendTestEmail.emailTo = [data.email]
   let targetRecipient = data.email
   let currentDate = new Date() 
+
   
   try {
 
@@ -37,6 +45,7 @@ const sendUserEmail = async (data) => {
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 
     if (sendTestEmail.emailTo !== []) {
+
       switch (messageType) {
         case "reminder":
           {
@@ -45,6 +54,7 @@ const sendUserEmail = async (data) => {
             let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
             let arrayIndexer = 0
             let currentItem = {}
+            let startTime = undefined
 
             // Retrieve data required for body of email
 
@@ -57,9 +67,11 @@ const sendUserEmail = async (data) => {
               arrayIndexer = 0
               while (arrayIndexer < dbOverdueResponse.length) {
                 currentItem = dbOverdueResponse[arrayIndexer]
+                startTime = currentItem.start
                 userOverdueTaskList[arrayIndexer] = {
                   status: "overdue",
-                  date: currentItem.start,
+                  date: startTime.toDateString(),
+                  time: toHoursAndMins(startTime),
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task
@@ -82,9 +94,11 @@ const sendUserEmail = async (data) => {
               arrayIndexer = 0
               while (arrayIndexer < dbResponse.length) {
                 currentItem = dbResponse[arrayIndexer]
+                startTime = currentItem.start
                 userTaskList[arrayIndexer] = {
                   status: "active",
-                  date: currentItem.start,
+                  date: startTime.toDateString(),
+                  time: toHoursAndMins(startTime),
                   house: currentItem.house,
                   item: currentItem.item,
                   task: currentItem.task
