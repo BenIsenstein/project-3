@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
 
 // updateAccount submit function
-const useUpdateAccount = async () => {
+const useUpdateAccount = () => {
     const history = useHistory()
     const userContext = useContext(UserContext)
    

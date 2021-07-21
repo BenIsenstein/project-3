@@ -4,7 +4,7 @@ import { Button, FlexSection } from '../../common'
 
 import './ConfirmModal.css'
 
-const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, confirmPrompt, actionOnConfirm }) => {
+const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, confirmPrompt, actionOnConfirm, ...props }) => {
 
   // buttonResponse = false
   if(isConfirmModalShowing) {
@@ -21,7 +21,7 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, c
                 </button>
               </div>
 
-              <FlexSection>
+              <FlexSection {...props.modalContentProps}>
                 {modalContent}
               </FlexSection>
 
