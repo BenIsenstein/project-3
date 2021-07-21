@@ -3,15 +3,16 @@ const mongoose = require('mongoose')
 
 // Define CalendarEntries Collection Schema
 const calendarEntrySchema = new mongoose.Schema({
-    userid: String,
-    house: String,
-    date: Date,
-    item: String,
-    task: String,
-    description: String,
-    completed: Boolean,
-    dateCompleted: Date,
-    completionComments: String
+  userid: String,
+  house: String,
+  start: Date,
+  end: Date,
+  item: String,
+  task: String,
+  description: String,
+  completed: Boolean,
+  dateCompleted: Date,
+  completionComments: String
 })
   
 // Define functions

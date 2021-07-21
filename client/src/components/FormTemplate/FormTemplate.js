@@ -90,7 +90,7 @@ const FormTemplate = ({
   const history = useHistory()
   const { id } = useParams() 
   const goHome = useMemo(() => () => history.push('/'), [history])
-  const dateInputNames = useMemo(() => ['date', 'dateCompleted', 'dateSignedUp'], [])
+  const dateInputNames = useMemo(() => ['date', 'start', 'end', 'dateCompleted', 'dateSignedUp'], [])
   const isDateInput = useMemo(() => (name) => dateInputNames.includes(name), [dateInputNames])
   const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
   // - - - -  Conditions measuring formMode + viewMode - - - -
@@ -231,10 +231,11 @@ const FormTemplate = ({
               />
               <DatetimePickerModal 
                 setValue={setValue} 
+                openModalWithNewDate={rest.openModalWithNewDate}
+                modalTitle={rest.modalTitle || "set " + name}
                 nameForUpdate={name} 
                 margin="0 0 0 5px"
                 iconButton 
-                isDateRange={rest.isDateRange}
               />
             </FlexSection>
           </>

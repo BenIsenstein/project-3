@@ -57,18 +57,18 @@ const Calendar = () => {
 
         // Fill datesArray with a string for each unique date
         for (let entry of list) {
-          entry.date = new Date(entry.date).toDateString()
-          if (!datesArray.includes(entry.date)) datesArray.push(entry.date)
+          entry.start = new Date(entry.start)
+          let currentDateString = entry.start.toDateString()
+          if (!datesArray.includes(currentDateString)) datesArray.push(currentDateString)
         }
 
         // Turn each date string into the full structure with an empty array for <SingleEntries />
-        datesArray = datesArray.map(date => {return {date: date, entries: [] }})
+        datesArray = datesArray.map(dateString => {return { date: dateString, entries: [] }})
         
         // Fill each date with matching entries
         for (let date of datesArray) {
           for (let entry of list) {
-            if (entry.date === date.date) {
-              delete entry.date
+            if (entry.start.toDateString() === date.date) {
               date.entries.push(entry)
             }
           }

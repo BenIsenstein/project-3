@@ -49,14 +49,21 @@ const EntryDetails = () => {
       registerOptions: { required: "You must write a description." }
     },
     {
-      name: "date",
-      registerOptions: { required: "You must choose a date." }
+      name: "start",
+      labelText: "starts",
+      registerOptions: { required: "You must choose a start date." }
+    },
+    {
+      name: "end",
+      labelText: "ends",
+      registerOptions: { required: "You must choose an end date." }
     }
   ]
 
   const completionInputs = [
     {
       name: "dateCompleted",
+      openModalWithNewDate: true,
       registerOptions: !isCompleted && { value: new Date() },
       labelText: "date completed"
     },

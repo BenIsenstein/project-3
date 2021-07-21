@@ -103,9 +103,6 @@ const CalendarView = (props) => {
   
   let calendarComponentRef = React.createRef()
 
-  // Capture the current state of the logged in user
-  let userContext = useContext(UserContext)
-
   // Use HISTORY
   const history = useHistory()
   
@@ -114,11 +111,9 @@ const CalendarView = (props) => {
   const [overdueList, setOverdueList] = useState([{}])
   const [completedList, setCompletedList] = useState([{}])
   const [upcomingList, setUpcomingList] = useState([{}])
-  const [currentView, setCurrentView] = useState("dayGridMonth")
 
   // Capture the current date to be used as point of reference
-  let dateToday = new Date()
-  let dateTodayFormatted = dateToday.toISOString().substring(0, 10)
+  let dateTodayFormatted = new Date().toISOString().substring(0, 10)
     
     useEffect(() => {
       // Re-build the list of events. Events are currently grouped
@@ -133,27 +128,25 @@ const CalendarView = (props) => {
       let tempUpcomingList = []
       let datesOuterIndexer = 0
       let entriesInnerIndexer = 0
-      let dateAtOuterIndex = ""
-      let dateStringAtOuterIndex = "" 
       let taskListIndexer = 0
+
+      console.log('props.dates: ', props.dates)
       while (datesOuterIndexer < props.dates.length) { // Outer array
         // convert date into calendar-friendly format
-        dateAtOuterIndex = new Date(props.dates[datesOuterIndexer].date)
-        dateStringAtOuterIndex = new Date(dateAtOuterIndex.getTime() - (dateAtOuterIndex.getTimezoneOffset() * 60000 ))
-                            .toISOString()
-                            .split("T")[0];
-
+        
         entriesInnerIndexer = 0
-        while(entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
+        while (entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
           // console.log("Current inner props data = ", props.dates[datesOuterIndexer].entries[entriesInnerIndexer])
+          let currentEntry = props.dates[datesOuterIndexer].entries[entriesInnerIndexer]
+          console.log(currentEntry)
+
           tempTaskList[taskListIndexer] = {
-            date: dateStringAtOuterIndex,  // Replaced by Start-End labels below
-            start: dateStringAtOuterIndex,
-            end: dateStringAtOuterIndex,
-            house: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].house,
-            title: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].task,
-            completed: props.dates[datesOuterIndexer].entries[entriesInnerIndexer].completed,
-            _id: props.dates[datesOuterIndexer].entries[entriesInnerIndexer]._id
+            start: currentEntry.start,
+            end: currentEntry.end,
+            house: currentEntry.house,
+            title: currentEntry.task,
+            completed: currentEntry.completed,
+            _id: currentEntry._id
           }
           //Conditionally build the Overdue, Completed, and Upcoming lists
           if (tempTaskList[taskListIndexer].completed) { //Add to Completed list

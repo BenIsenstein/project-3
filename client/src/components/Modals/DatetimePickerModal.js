@@ -5,24 +5,14 @@ import useConfirmModal from './useConfirmModal'
 
 const DatetimePickerModal = ({ isDateRange, ...props }) => {
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const dateRangeString =  startDate + ' - ' + endDate 
+  const [date, setdate] = useState(props.openModalWithNewDate && new Date())
 
   const ModalContent = () => <>
-    <p>{isDateRange ? "From" : "Date"}</p>
+    <p>{props.modalTitle}</p>
     <StyledDateTimePicker
-      onChange={setStartDate}
-      value={startDate}
+      onChange={setdate}
+      value={date}
     />
-
-    {isDateRange && <>
-      <p>To</p>
-      <StyledDateTimePicker
-        onChange={setEndDate}
-        value={endDate}
-      />
-    </>}
   </>
 
   return <>
@@ -31,9 +21,9 @@ const DatetimePickerModal = ({ isDateRange, ...props }) => {
       hideConfirmModal={toggleConfirmModal}
       modalContentProps={{column: true}}
       modalContent={<ModalContent />}
-      confirmPrompt='Set date'
+      confirmPrompt='Confirm'
       actionOnConfirm={() => 
-        props.setValue(props.nameForUpdate, isDateRange ? dateRangeString : startDate)
+        props.setValue(props.nameForUpdate, date)
       }
     />
     <Button type='button' onClick={toggleConfirmModal} {...props}>
