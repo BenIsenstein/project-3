@@ -101,7 +101,7 @@ const CalendarView = (props) => {
   
   let calendarComponentRef = React.createRef()
 
-  // Use HISTORY
+  // Use history
   const history = useHistory()
   
   // State Variables
@@ -113,7 +113,7 @@ const CalendarView = (props) => {
     useEffect(() => {
       // Capture the current date to be used as point of reference
       let dateTodayFormatted = new Date().toISOString().substring(0, 10)
-      
+
       // Re-build the list of events. Events are currently grouped
       // together by common DATE, and each date in the array contains
       // another array of 'entries' associated with that date. In our
