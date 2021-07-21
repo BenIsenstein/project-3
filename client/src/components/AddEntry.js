@@ -45,6 +45,7 @@ const AddEntry = () => {
     },
     {
       name: "date",
+      isDateRange: true,
       registerOptions: { required: "You must choose a date." }
     }
   ]

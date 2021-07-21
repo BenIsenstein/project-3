@@ -1,7 +1,13 @@
 import styled, {css} from 'styled-components'
 import DateTimePicker from 'react-datetime-picker'
 
-const StyledDateTimePicker = styled(DateTimePicker)`
+const StyledDateTimePicker = styled(DateTimePicker).attrs(props => ({
+    dayPlaceholder: 'dd',
+    hourPlaceholder: 'hh',
+    minutePlaceholder: 'mi',
+    monthPlaceholder: 'mo',
+    yearPlaceholder: 'yy'
+  }))`
     width: 100%;
     min-height: 1.8em;
     padding: .4em .6em;

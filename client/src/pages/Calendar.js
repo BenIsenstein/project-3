@@ -154,7 +154,7 @@ const Calendar = () => {
         </FlexSection>
 
         <FlexSection fullWidth spaceBetween>
-          {<p>Welcome to your home calendar, {userContext.user.firstName}!</p>}                   
+          {<p>Welcome to your home calendar, {userContext.user?.firstName}!</p>}                   
           <FilterModal handleFilterChange={handleFilterChange} />                    
         </FlexSection>
 
