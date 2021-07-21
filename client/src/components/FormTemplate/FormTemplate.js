@@ -5,7 +5,7 @@ import UserContext from '../../UserContext'
 import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
 import ComplexInput from '../ComplexInput/ComplexInput'
 import DeleteEntryButton from '../DeleteEntryButton'
-import DatetimePickerModal from '../DatetimePickerModal'
+import DatetimePickerModal from '../Modals/DatetimePickerModal'
 import './FormTemplate.css'
 
 /* 
@@ -228,10 +228,11 @@ const FormTemplate = ({
                 {...rest}
               />
               <DatetimePickerModal 
-                actionOnConfirm={setValue} 
+                setValue={setValue} 
                 nameForUpdate={name} 
                 margin="0 0 0 5px"
                 iconButton 
+                isDateRange={rest.isDateRange}
               />
             </FlexSection>
           </>

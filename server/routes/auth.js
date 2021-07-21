@@ -39,10 +39,10 @@ router.put('/change-password',
   }
 )
 
-// update calendar entry by id
+// update auth by userId
 router.put('/update/:userId', async (req, res) => {
   try {
-    let originalAuth = await Auth.findOne({ userId: req.params.userId })
+    let originalAuth = await Auth.findOne({ userId: req.params.userId }) || await Auth.findOne({ email: req.user.email })
 
     for (let key in req.body) originalAuth[key] = req.body[key]
      

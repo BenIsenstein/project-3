@@ -3,22 +3,25 @@ import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
 import DeleteEntryButton from '../components/DeleteEntryButton'
+import { useUpdateEntry } from '../functions'
 
 const EntryDetails = () => {
   const { id } = useParams()
   const history = useHistory()
+  const updateEntry = useUpdateEntry()
   const [isCompleted, setIsCompleted] = useState(false)
   const [undergoingCompletion, setUndergoingCompletion] = useState(false)
   const [isCompletedHandled, setIsCompletedHandled] = useState(false)
+  const shouldShowCompletion = (isCompleted || undergoingCompletion)
   const getEntryRoute = `/api/calendarEntry/get/${id}`
 
   useEffect(() => {
     const handleIsCompleted = async () => {
       try {
-        let detailsRes = await fetch(getEntryRoute)
-        let details = await detailsRes.json()
+        let entryRes = await fetch(getEntryRoute)
+        let entry = await entryRes.json()
 
-        if (details.completed) setIsCompleted(true)
+        if (entry.completed) setIsCompleted(true)
       }
       catch(err) {
         console.log(err)
@@ -29,28 +32,6 @@ const EntryDetails = () => {
     setIsCompletedHandled(true)
 
   }, [getEntryRoute])
-
-  // update submit function
-  const updateDetails = async (data) => {
-    try {
-      if (data.dateCompleted) data.completed = true
-
-      let options = {
-        method: "put",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(data)
-      }
-      let res = await fetch(`/api/calendarEntry/update/${id}`, options)
-      let resObject = await res.json()
-      
-      if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
-      history.goBack()
-    }
-    catch(err) {
-      console.log('error updating calendar entry: ', err)
-      alert("There was an error updating your entry. We're fixing it as fast as we can.")
-    }
-  }  
 
   const entryDetailsInputs = [ 
     {
@@ -85,8 +66,7 @@ const EntryDetails = () => {
     }
   ]
 
-  const CompleteTaskButton = () => <>{
-    !(isCompleted || undergoingCompletion) &&
+  const CompleteTaskButton = () => !shouldShowCompletion && <>
     <FlexSection fullWidth marginTop1em>
       <Button 
         important 
@@ -97,7 +77,7 @@ const EntryDetails = () => {
         Complete Task
       </Button>      
     </FlexSection>
-  }</>
+  </>
 
   return isCompletedHandled && (
     <Page>
@@ -109,21 +89,21 @@ const EntryDetails = () => {
           inputs={entryDetailsInputs} 
           formMode='details' 
           detailsUrl={getEntryRoute} 
-          onSubmit={updateDetails} 
+          onSubmit={updateEntry} 
           addModeCancel={history.goBack}
           AfterTemplate={CompleteTaskButton}
         />
-        {(isCompleted || undergoingCompletion) && <FormSeparator />}
+        {shouldShowCompletion && <FormSeparator />}
         <FormTemplate 
           noBackButton
           noDeleteButton
           popup
-          popupCondition={isCompleted || undergoingCompletion}
+          popupCondition={shouldShowCompletion}
           titleText={isCompleted ? "Completion" : "Complete Event"}
           inputs={completionInputs}
           formMode={isCompleted ? "details" : "add"}
           detailsUrl={getEntryRoute}
-          onSubmit={updateDetails}
+          onSubmit={updateEntry}
           addModeCancel={() => setUndergoingCompletion(false)}
         />
         <FlexSection fullWidth marginTop1em>

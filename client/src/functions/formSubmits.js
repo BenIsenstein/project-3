@@ -1,6 +1,67 @@
 import { useContext } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
+
+//updateEntry
+const useUpdateEntry = () => {
+  const { id } = useParams()
+  const history = useHistory()
+
+  const updateEntry = async (data) => {
+    try {
+      if (data.dateCompleted) data.completed = true
+
+      let options = {
+        method: "put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(`/api/calendarEntry/update/${id}`, options)
+      let resObject = await res.json()
+      
+      if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
+      history.goBack()
+    }
+    catch(err) {
+      console.log('error updating calendar entry: ', err)
+      alert("There was an error updating your entry. We're fixing it as fast as we can.")
+    }
+  }  
+
+  return updateEntry
+
+}
+
+// addEntry
+const useAddEntry = () => {
+  const history = useHistory()
+
+  const addEntry = async (data) => {
+    data.house = "House placeholder"
+    data.completed = false
+
+    try {
+      let action = "/api/calendarEntry/add"
+      let options = {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(action, options)
+      let resObject = await res.json()
+
+      if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
+    }
+    catch (err) {
+      console.log('error adding calendar entry: ', err)
+      alert("There was an error adding your entry. We're fixing it as fast as we can.")
+    }
+
+    history.push(`/calendar`)
+  }
+
+  return addEntry
+}
 
 // updateAccount submit function
 const useUpdateAccount = () => {
@@ -94,5 +155,7 @@ const useChangePassword = () => {
 
 export { 
     useUpdateAccount, 
-    useChangePassword 
+    useChangePassword,
+    useAddEntry,
+    useUpdateEntry
 }
