@@ -118,7 +118,6 @@ const FormTemplate = ({
         // ensure that the value of date-type inputs are made into Date objects
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
         
-
         // for each input, setValue + add the value to valuesForReset
         for (let { name } of inputs) {
           setValue(name, details[name])
@@ -196,14 +195,16 @@ const FormTemplate = ({
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
       {inputs && inputs.map(({ name, readOnly, ...rest }) => {
         // every input other than 'date'
-        if (!isDateInput(name)) return <ComplexInput 
-          key={name}
-          name={name}
-          readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-          register={register}
-          errors={errors} 
-          {...rest} 
-        />
+        if (!isDateInput(name)) return ( 
+          <ComplexInput 
+            key={name}
+            name={name}
+            readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+            register={register}
+            errors={errors} 
+            {...rest} 
+          />
+        )
         
         // 'date' input
         return (isDetailsMode && isDetailsView) || readOnly
