@@ -130,7 +130,6 @@ const CalendarView = (props) => {
       let entriesInnerIndexer = 0
       let taskListIndexer = 0
 
-      console.log('props.dates: ', props.dates)
       while (datesOuterIndexer < props.dates.length) { // Outer array
         // convert date into calendar-friendly format
         
@@ -138,7 +137,6 @@ const CalendarView = (props) => {
         while (entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
           // console.log("Current inner props data = ", props.dates[datesOuterIndexer].entries[entriesInnerIndexer])
           let currentEntry = props.dates[datesOuterIndexer].entries[entriesInnerIndexer]
-          console.log(currentEntry)
 
           tempTaskList[taskListIndexer] = {
             start: currentEntry.start,
@@ -175,29 +173,11 @@ const CalendarView = (props) => {
 
     }, [props.dates])
 
-    const handleEventClick = (arg) => {
-      history.push(`/task/${arg.event._def.extendedProps._id}`)
-      console.log("arg.event", arg.event)
-    }
+    const handleEventClick = (arg) => history.push(`/task/${arg.event._def.extendedProps._id}`)
 
     const handleDateClick = (arg) => {
-      console.log("arg", arg)
-      console.log("arg.date", arg.date)
-      // alert(arg.date)
-      // changeView('dayGridDay', arg.date)
-      // calendar.changeView('timeGridDay')
-      // changeView('timeGridDay', arg.date)
-
-      // let calendarRef = React.createRef()
-      // calendarRef.current
-      //   .getApi()
-      //   .changeView('timeGridDay', arg.date)
-
       let calendarApi = calendarComponentRef.current.getApi()
       calendarApi.changeView("timeGridDay", arg.date)
-      
-    // let calendarApi = this.calendarComponentRef.current.getApi();
-    // calendarApi.changeView("timeGridDay");
     }
 
     return (
