@@ -48,7 +48,7 @@ router.post("/login",
 
 router.get("/logout", 
   function (req, res) {
-    let username = req.user?.username || 'nobody'
+    let username = req.user?.firstName || 'nobody'
     let logoutResult = undefined
     let isLoggedOutNow = undefined
 
@@ -63,13 +63,11 @@ router.get("/logout",
     }
 
     // set the value of logoutResult to be logged
-    if (req.isAuthenticated()) {
-      logoutResult = `user ${username} is logged in still :(`
-    }
-    else {
-      logoutResult = `${username} is logged out!`
-    }  
-
+    if (req.isAuthenticated()) logoutResult = `user ${username} is logged in still :(`
+    
+    else logoutResult = `${username} is logged out!`
+      
+    // log the message
     console.log("logout result: ", logoutResult)
 
     // send response with boolean of logout success
@@ -105,6 +103,9 @@ router.put('/update/:id',
 
 // ----------------------------------- GET LOGGED IN USER -----------------------------------
 
-router.get("/getloggedinuser", (req, res) => res.json(req.user || { no_user: true }))
+router.get("/getloggedinuser", (req, res) => {
+  console.log('getloggedinuser - req.user: ', req.user)
+  res.json(req.user || { no_user: true })
+})
 
 module.exports = router

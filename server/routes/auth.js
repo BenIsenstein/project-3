@@ -64,6 +64,7 @@ router.put('/update/:userId', async (req, res) => {
 router.get('/logout', (req, res) => {
   console.log("Server: Logging Out User...")
   req.logout()
+  console.log()
   res.json({ isLoggedOutNow : true })
 })
 

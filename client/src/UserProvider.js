@@ -26,6 +26,7 @@ const UserProvider = ({ children }) => {
         let userObject = await response.json()
 
         if (userObject.no_user) return setUserName("no_user")
+        console.log('getLoggedInUser userObject: ', userObject)
         
         setUserInfo(userObject)
       }
@@ -59,7 +60,7 @@ const UserProvider = ({ children }) => {
 
   const logOut = async () => {
     try {
-      let response = await fetch("/api/auth/logout")
+      let response = await fetch("/api/user/logout")
       let resObject = await response.json()
 
       if (resObject.isLoggedOutNow) {
