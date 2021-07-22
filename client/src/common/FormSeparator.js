@@ -1,7 +1,7 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
-const FormSeparator = styled.p`
-    margin-top: 1.4em;
+const FormSeparator = styled.div`
+    margin-top: .8em;
     border-bottom: 1px solid ${props => props.theme.prmLt};
 `
 

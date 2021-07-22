@@ -13,7 +13,7 @@ const theme = {
     contentFont: "",
     accentFont: "",
     smScreen: '641px',
-    mdScreen: '900px',
+    lgScreen: '1090px',
 }
 
 export default theme
