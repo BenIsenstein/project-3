@@ -40,24 +40,23 @@ const Calendar = () => {
         let list = resObject.calendarEntryList
         if (!list.length) return setNoneFound()
 
-        let datesArray = []
-
         // Fill datesArray with a string for each unique date
+        let datesArray = []
         for (let entry of list) {
+          console.log('entry.start: ', entry.start)
           entry.start = new Date(entry.start)
           let dateString = entry.start.toDateString()
           if (!datesArray.includes(dateString)) datesArray.push(dateString)
         }
 
-        // Turn each date string into the full structure with an empty array for <SingleEntries />
-        datesArray = datesArray.map(dateString => {return { date: dateString, entries: [] }})
-        
-        // Fill each date with matching entries
-        for (let date of datesArray) {
-          for (let entry of list) {
-            if (entry.start.toDateString() === date.date) date.entries.push(entry) 
+        // Turn each date string into the full structure with a string as the 'date',
+        // and an array full of matching entries as the 'entries'
+        datesArray = datesArray.map(dateString => {
+          return { 
+            date: dateString, 
+            entries: list.filter(entry => entry.start.toDateString() === dateString) 
           }
-        }
+        })
       
         setDates(datesArray) 
         setLoaded(true)
