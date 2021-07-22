@@ -24,7 +24,7 @@ router.get('/get', async (req, res) => {
 
 // get all calendar entries for logged in user 
 router.get('/getbyuser/:id', async (req, res) => {
-  try { res.json({ calendarEntryList: await listAllCalendarEntriesByUserId(req.params.id) }) }
+  try { res.json({ entryList: await listAllCalendarEntriesByUserId(req.params.id) }) }
   
   catch(err) {console.log('error getting all calendar entries:', err)}
 })

@@ -35,28 +35,28 @@ const Calendar = () => {
     const fetchCalendarEntries = async () => {
       try {
         // fetch all calendar entries for current authenticated user
-        let entriesResponse = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
-        let resObject = await entriesResponse.json()
-        let list = resObject.calendarEntryList
+        let entriesRes = await fetch(`/api/calendarEntry/getbyuser/${userContext.user._id}`)
+        let entriesObject = await entriesRes.json()
+        let list = entriesObject.entryList
+        let datesArray = []
+        // prepare list by making 'start' into a Date object
+        list.every(entry => entry.start = new Date(entry.start))
+
         if (!list.length) return setNoneFound()
 
-        // Fill datesArray with a string for each unique date
-        let datesArray = []
+        // build datesArray
         for (let entry of list) {
-          console.log('entry.start: ', entry.start)
-          entry.start = new Date(entry.start)
           let dateString = entry.start.toDateString()
-          if (!datesArray.includes(dateString)) datesArray.push(dateString)
-        }
 
-        // Turn each date string into the full structure with a string as the 'date',
-        // and an array full of matching entries as the 'entries'
-        datesArray = datesArray.map(dateString => {
-          return { 
-            date: dateString, 
-            entries: list.filter(entry => entry.start.toDateString() === dateString) 
+          if (!datesArray.some(item => item.date === dateString)) {
+            let date = { 
+              date: dateString, 
+              entries: list.filter(entry => entry.start.toDateString() === dateString) 
+            }
+
+            datesArray.push(date)
           }
-        })
+        }
       
         setDates(datesArray) 
         setLoaded(true)
