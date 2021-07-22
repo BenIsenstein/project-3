@@ -22,12 +22,8 @@ const SwitchViewButton = styled.button`
         color: white;
     `}
 
-    ${props => props.first && css`
-        border-radius: 6px 0 0 6px;
-    `}
-
-    ${props => props.last && css`
-        border-radius: 0 6px 6px 0;
+    ${props => props.icon && css`
+        padding: .2em;
     `}
 `
 

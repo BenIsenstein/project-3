@@ -12,7 +12,7 @@ const StyleWrapper = styled.div`
     margin-top: 1em;
     flex-direction: column;
 
-    @media (min-width: ${props => props.theme.mdScreen}) {
+    @media (min-width: ${props => props.theme.lgScreen}) {
       flex-direction: row;
     }
   }
@@ -22,7 +22,7 @@ const StyleWrapper = styled.div`
     font-size: 1.2em;
     color: ${props => props.theme.prm};
 
-    @media (min-width: ${props => props.theme.mdScreen}) {
+    @media (min-width: ${props => props.theme.lgScreen}) {
       margin: 0;
     }
   }
@@ -32,10 +32,19 @@ const StyleWrapper = styled.div`
     margin-top: -.15em;
   }
 
+  .fc-scrollgrid-sync-inner {
+    text-align: center;
+  }
+
   .fc-col-header-cell-cushion {
     font-size: .8em;
     font-weight: normal;
     color: ${props => props.theme.prm};
+    align-self: center;
+  }
+
+  .fc-scroller-harness {
+    overflow: visible;
   }
 
   .fc-daygrid-day-number {
@@ -45,6 +54,12 @@ const StyleWrapper = styled.div`
 
   .fc-event-title {
     font-size: .8em;
+    color: ${props => props.theme.contentColor};
+
+    &:hover {
+      overflow: visible;
+      z-index: 5;
+    }
   }
 
   .fc-button {
@@ -106,6 +121,33 @@ const StyleWrapper = styled.div`
       background-color: ${props => props.theme.prm};
       box-shadow: none;
     }
+  }
+
+  .fc-timegrid-axis-cushion {
+    font-size: .8em;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-timegrid-slot-label-cushion {
+    font-size: .8em;
+    color: ${props => props.theme.prm};
+  }
+
+  .fc-list-day-cushion {
+    color: ${props => props.theme.contentColor};
+  }
+
+  .fc-list-table {
+    color: ${props => props.theme.contentColor};
+  }
+
+  .fc-list-empty-cushion {
+    color: ${props => props.theme.contentColor};
+  }
+
+  .fc-event-time {
+    font-size: .8em;
+    color: ${props => props.theme.contentColor};
   }
 `
 

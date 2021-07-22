@@ -111,11 +111,11 @@ const Calendar = () => {
             <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
             
             <FlexSection>
-              <SwitchViewButton activeView={viewMode === 'ListView'} onClick={() => setViewMode('ListView')}>
-                <ListIcon />
-              </SwitchViewButton>
-              <SwitchViewButton activeView={viewMode === 'CalendarView'} onClick={() => setViewMode('CalendarView')}>
+              <SwitchViewButton icon activeView={viewMode === 'CalendarView'} onClick={() => setViewMode('CalendarView')}>
                 <CalendarIcon />
+              </SwitchViewButton>
+              <SwitchViewButton icon activeView={viewMode === 'ListView'} onClick={() => setViewMode('ListView')}>
+                <ListIcon />
               </SwitchViewButton>
             </FlexSection>
           

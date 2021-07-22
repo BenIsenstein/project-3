@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator } from "../../common"
 
 import UserContext from '../../UserContext'
 
