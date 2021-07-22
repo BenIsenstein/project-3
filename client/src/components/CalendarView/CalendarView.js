@@ -109,7 +109,7 @@ const StyleWrapper = styled.div`
   }
 `
 
-const CalendarView = (props) => {
+const CalendarView = ({ dates, ...props }) => {
   
   let calendarComponentRef = React.createRef()
 
@@ -123,9 +123,6 @@ const CalendarView = (props) => {
   const [upcomingList, setUpcomingList] = useState([{}])
     
     useEffect(() => {
-      // Capture the current date to be used as point of reference
-      let dateTodayFormatted = new Date().toISOString().substring(0, 10)
-
       // Re-build the list of events. Events are currently grouped
       // together by common DATE, and each date in the array contains
       // another array of 'entries' associated with that date. In our
@@ -138,12 +135,14 @@ const CalendarView = (props) => {
       let tempUpcomingList = []
       let datesOuterIndexer = 0
       let entriesInnerIndexer = 0
-      
       let taskListIndexer = 0
-      while (datesOuterIndexer < props.dates.length) { // Outer array
+
+      while (datesOuterIndexer < dates.length) { // Outer array
         entriesInnerIndexer = 0
-        while(entriesInnerIndexer < props.dates[datesOuterIndexer].entries.length) {  // Inner array
-          let currentEntry = props.dates[datesOuterIndexer].entries[entriesInnerIndexer]
+        let entries = dates[datesOuterIndexer].entries
+
+        while (entriesInnerIndexer < entries.length) {  // Inner array
+          let currentEntry = entries[entriesInnerIndexer]
          
           tempTaskList[taskListIndexer] = {
             start: currentEntry.start,
@@ -158,7 +157,7 @@ const CalendarView = (props) => {
             tempCompletedList.push(tempTaskList[taskListIndexer])
           }
           else {
-            if (tempTaskList[taskListIndexer].start < dateTodayFormatted) { //Add to Overdue list
+            if (tempTaskList[taskListIndexer].start < new Date()) { //Add to Overdue list
               tempOverdueList.push(tempTaskList[taskListIndexer])
             }
             else { //Add to Upcoming list
@@ -178,7 +177,7 @@ const CalendarView = (props) => {
       setCompletedList(tempCompletedList)
       setUpcomingList(tempUpcomingList)
 
-    }, [props.dates])
+    }, [dates])
 
     const handleEventClick = (arg) => history.push(`/task/${arg.event._def.extendedProps._id}`)
 
@@ -192,8 +191,8 @@ const CalendarView = (props) => {
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin ]}
                 ref = {calendarComponentRef}
-                initialView="listMonth"  // LIST view
-                // initialView="dayGridMonth"  // MONTH view
+                // initialView="listMonth"  // LIST view
+                initialView="dayGridMonth"  // MONTH view
                 // initialView="dayGridDay"  // DAY view
                 // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}

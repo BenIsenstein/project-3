@@ -37,7 +37,7 @@ const Calendar = () => {
   const [filteredDates, setFilteredDates] = useState([])
 
   // Function in case the user's calendar is empty
-  const setNoneFound = useMemo(() => () => setFilteredDates([]), [])
+  const setNoneFound = useMemo(() => () => setDates([]), [])
 
   // Effect to fetch all entries
   useEffect(() => {
@@ -132,20 +132,20 @@ const Calendar = () => {
   //           <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
   //         </FlexSection>
 
-  //         <FlexSection>
-  //           <SwitchViewButton
-  //             activeView={viewMode === 'ListView'}
-  //             onClick={() => setViewMode('ListView')}
-  //           >
-  //             <ListIcon />
-  //           </SwitchViewButton>
-  //           <SwitchViewButton
-  //             activeView={viewMode === 'CalendarView'}
-  //             onClick={() => setViewMode('CalendarView')}
-  //           >
-  //             <CalendarIcon />
-  //           </SwitchViewButton>
-  //         </FlexSection>
+          // <FlexSection>
+          //   <SwitchViewButton
+          //     activeView={viewMode === 'ListView'}
+          //     onClick={() => setViewMode('ListView')}
+          //   >
+          //     <ListIcon />
+          //   </SwitchViewButton>
+          //   <SwitchViewButton
+          //     activeView={viewMode === 'CalendarView'}
+          //     onClick={() => setViewMode('CalendarView')}
+          //   >
+          //     <CalendarIcon />
+          //   </SwitchViewButton>
+          // </FlexSection>
   //       </FlexSection>
 
   //       <FlexSection fullWidth spaceBetween>
@@ -168,9 +168,17 @@ const Calendar = () => {
     <Page>
       <PageContainer>
         <FlexSection spaceBetween>
-          <FlexSection>
             <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
-          </FlexSection>
+            
+            <FlexSection>
+              <SwitchViewButton activeView={viewMode === 'ListView'} onClick={() => setViewMode('ListView')}>
+                <ListIcon />
+              </SwitchViewButton>
+              <SwitchViewButton activeView={viewMode === 'CalendarView'} onClick={() => setViewMode('CalendarView')}>
+                <CalendarIcon />
+              </SwitchViewButton>
+            </FlexSection>
+          
           <FilterModal handleFilterChange={handleFilterChange} /> 
         </FlexSection>
 
@@ -178,9 +186,14 @@ const Calendar = () => {
           (filteredDates.length 
             ? <CalendarListView dates={filteredDates} /> 
             : <p>You have no {checked.active ? "upcoming" : "completed"} tasks</p>
-            )
+          )
         }
-        {viewMode === 'CalendarView' && <CalendarView dates={filteredDates} />}
+        {viewMode === 'CalendarView' && <>
+          {!dates.length && <p>{userContext.user?.firstName}, add your first task now!</p>}
+          <CalendarView dates={filteredDates} />
+
+          
+        </>}
       </PageContainer>
     </Page>
   )
