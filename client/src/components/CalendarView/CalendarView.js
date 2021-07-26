@@ -190,7 +190,7 @@ const CalendarView = ({ dates, ...props }) => {
             start: currentEntry.start,
             end: currentEntry.end,
             house: currentEntry.house,
-            title: currentEntry.task,
+            title: currentEntry.item + ' - ' + currentEntry.task,
             completed: currentEntry.completed,
             _id: currentEntry._id
           }
@@ -233,8 +233,8 @@ const CalendarView = ({ dates, ...props }) => {
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin ]}
                 ref = {calendarComponentRef}
-                // initialView="listMonth"  // LIST view
-                initialView="dayGridMonth"  // MONTH view
+                initialView="listYear"  // LIST view
+                // initialView="dayGridMonth"  // MONTH view
                 // initialView="dayGridDay"  // DAY view
                 // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}
@@ -290,7 +290,7 @@ const CalendarView = ({ dates, ...props }) => {
                   }
                 ]}
                 headerToolbar={{
-                  left: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
+                  left: 'listYear dayGridMonth,timeGridWeek,timeGridDay',
                   center: 'title',
                   right: 'today prevYear,prev,next,nextYear'
                 }}

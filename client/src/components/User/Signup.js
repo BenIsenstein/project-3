@@ -26,7 +26,7 @@ const Signup = () => {
       name: "email",
       registerOptions: { required: "You must input an email address." },
     },
-     // {
+    //  {
     //   name: "userType",
     //   registerOptions: { required: "You must input an account type." },
     //   labelText: "You are a",
