@@ -21,9 +21,10 @@ const Calendar = () => {
     setCheckedAll(all)
   }
   const [loaded, setLoaded] = useState(false)
+  const [isDatesEmpty, setIsDatesEmpty] = useState(false)
   const [dates, setDates] = useState([])
   const [filteredDates, setFilteredDates] = useState([])
-  const setNoneFound = useMemo(() => () => setDates([]), [])
+  const setNoneFound = useMemo(() => () => {setDates([]); setIsDatesEmpty(true)}, [])
 
   // Effect to log user out if they're not logged in
   useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
@@ -129,8 +130,8 @@ const Calendar = () => {
           )
         }
         {viewMode === 'CalendarView' && <>
-          {!dates.length && <p>{userContext.user?.firstName}, add your first task now!</p>}
           <CalendarView dates={filteredDates} />
+          {isDatesEmpty && <p>{userContext.user?.firstName}, add your first task now!</p>}
         </>}
       </PageContainer>
     </Page>
