@@ -1,11 +1,10 @@
 import { Fragment, useEffect, useState, useContext, useMemo } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
-import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
+import { PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
 import ComplexInput from './ComplexInput/ComplexInput'
-import DeleteEntryButton from '../DeleteEntryButton'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
 import './FormTemplate.css'
 
@@ -84,11 +83,6 @@ const inputs = [
 - DETAILS MODE:
   * detailsUrl | str | default: undefined | is crucial to fetch info for the template dynamically
   * displayOnly | bool | default: false | if true the PencilIcon disappears, meaning you can effectively have a read-only FlexSection 
-  * noBackButton | bool | default: false | if true there will be no button at the top left of the template
-  * backButtonIcon | JSX | default: <BackIcon /> |
-  * backButtonText | str | default: undefined |
-  * backButtonOnClick | func | default: history.push('/') | 
-  * noDeleteButton | bool | default: false | if true there will be no <DeleteEntryButton /> at the very bottom of the template
 */
 
 const FormTemplate = ({ 
@@ -110,7 +104,6 @@ const FormTemplate = ({
   const [resetValues, setResetValues] = useState({})
   const userContext = useContext(UserContext)
   const history = useHistory()
-  const { id } = useParams() 
   const goHome = useMemo(() => () => history.push('/'), [history])
   const isDateInput = useIsDateInput()
   const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
@@ -221,13 +214,6 @@ const FormTemplate = ({
   return <FlexSection fullWidth column fadeIn {...props}>
     {BeforeTemplate && <BeforeTemplate />} 
 
-    {!props.noBackButton && isDetailsMode && 
-      <Button type='button' alignSelfStart onClick={props.backButtonOnClick || goHome}>
-        {(BackButtonIcon && <BackButtonIcon />) || <BackIcon />}
-        {props.backButtonText}
-      </Button>
-    }
-
     <FlexSection fullWidth spaceBetween>
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
@@ -292,12 +278,6 @@ const FormTemplate = ({
         </FlexSection>
       }
     </Form>  
-
-    {!props.noDeleteButton && isDetailsMode && isDetailsView && 
-      <FlexSection fullWidth justifyEnd marginTop1em>
-        <DeleteEntryButton entryId={id} /> 
-      </FlexSection>
-    }
 
     {AfterTemplate && <AfterTemplate />} 
   </FlexSection>

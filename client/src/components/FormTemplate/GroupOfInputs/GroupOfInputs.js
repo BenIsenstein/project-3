@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { FlexSection, Label } from '../../../common'
+import { FlexSection, GridSection, Label } from '../../../common'
 import { useIsDateInput } from '../../../functions'
 import DatetimePickerModal from '../../Modals/DatetimePickerModal'
 import ComplexInput from '../ComplexInput/ComplexInput'
@@ -33,7 +33,7 @@ const GroupOfInputs = ({
   }
 
   // - - - - - - - RETURN JSX - - - - - - - - //
-  return <FlexSection fullWidth {...props}>
+  return <GridSection fullWidth {...props}>
     {inputs && inputs.map(({ name, readOnly, ...rest }) => {
       // every input other than date-types
       if (!isDateInput(name)) return ( 
@@ -80,7 +80,7 @@ const GroupOfInputs = ({
           </FlexSection>
         </Fragment>
     })}
-  </FlexSection>
+  </GridSection>
 }
 
 export default GroupOfInputs

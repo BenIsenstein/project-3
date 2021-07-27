@@ -49,6 +49,10 @@ const FlexSection = styled.div`
         padding: ${props.padding};
     `}
 
+    ${props => props.backgroundColor && css`
+        background-color: ${props.backgroundColor};
+    `}
+
     ${props => props.popup && css`
         overflow: hidden;
         height: ${props => props.popupCondition ? 'max-content' : '0px'};
@@ -58,6 +62,12 @@ const FlexSection = styled.div`
     ${props => props.fadeIn && css`
         animation: ${fadeIn} 0.4s linear;
     `}
+
+    @media (min-width: ${props => props.theme.smScreen}) {
+        ${props => props.gridColumn && css`
+        grid-column: ${props.gridColumn};
+    `}
+    }
 `
 
 export {FlexSection}

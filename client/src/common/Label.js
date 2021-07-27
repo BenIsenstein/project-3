@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Label = styled.label`
+    color: ${props => props.theme.contentColor};
     margin: .4em .4em .1em 0;
     font-size: .8em;  
     text-transform: capitalize;

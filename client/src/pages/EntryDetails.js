@@ -90,8 +90,6 @@ const EntryDetails = () => {
     <Page>
       <PageContainer flexColumn>
         <FormTemplate
-          noBackButton
-          noDeleteButton
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 
@@ -102,8 +100,6 @@ const EntryDetails = () => {
         />
         {shouldShowCompletion && <FormSeparator />}
         <FormTemplate 
-          noBackButton
-          noDeleteButton
           popup
           popupCondition={shouldShowCompletion}
           titleText={isCompleted ? "Completion" : "Complete Event"}

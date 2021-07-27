@@ -33,6 +33,12 @@ const Textarea = styled(TextareaAutosize)`
             outline: none;
         }
     `} 
+
+    ${props => props.as?.name === "GroupOfInputs" && css`
+        border: none;
+        padding: 0;
+        margin: 0;
+    `}
 `
 
 export {Textarea}

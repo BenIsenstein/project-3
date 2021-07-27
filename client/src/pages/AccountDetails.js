@@ -40,6 +40,7 @@ const AccountDetails = () => {
           name: "lastName",
           registerOptions: { required: "You must input a last name." },
           labelText: "Last Name",
+          wrapperProps: {gridColumn: '3/4'}
         }
       ]
     },
@@ -78,8 +79,6 @@ const AccountDetails = () => {
     <Page>
       <PageContainer flexColumn>
         <FormTemplate 
-          noBackButton
-          noDeleteButton
           titleText="Personal Details"
           inputs={accountInputs} 
           formMode='details' 
@@ -88,8 +87,6 @@ const AccountDetails = () => {
           AfterTemplate={ChangePasswordButton}
         />
         <FormTemplate 
-          noBackButton
-          noDeleteButton
           popup
           popupCondition={undergoingPasswordChange}
           titleText='Change Password'

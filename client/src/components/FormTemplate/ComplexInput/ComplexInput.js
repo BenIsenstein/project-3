@@ -1,5 +1,4 @@
-import React from 'react'
-import { Label, Textarea, Input } from '../../../common'
+import { Label, Textarea, Input, FlexSection } from '../../../common'
 
 /* 
 other props might include:
@@ -13,7 +12,7 @@ other props might include:
 */
 
 const ComplexInput = ({ name, errors, ...props }) => (
-  <React.Fragment key={props.key}>
+  <FlexSection {...props.wrapperProps} fullWidth column alignStart key={props.key}>
     {!props.labelHidden && <Label htmlFor={name}>{props.labelText || name}</Label>}
     <Textarea 
       id={name}
@@ -24,7 +23,7 @@ const ComplexInput = ({ name, errors, ...props }) => (
       {...props}
     />
     {errors && errors[name] && <p>{errors[name].message}</p>}
-  </React.Fragment>
+  </FlexSection>
 )
 
 export default ComplexInput

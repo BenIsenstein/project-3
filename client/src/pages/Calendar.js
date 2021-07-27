@@ -1,16 +1,14 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
 import UserContext from '../UserContext'
 import { useHistory } from 'react-router-dom'
-import CalendarListView from '../components/CalendarListView/CalendarListView'
 import FilterModal from '../components/Filter/FilterModal'
-import { ListIcon, CalendarIcon, AddIcon, SwitchViewButton, Button, Page, PageContainer, FlexSection } from '../common'
+import { AddIcon, Button, Page, PageContainer, FlexSection } from '../common'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
 
 const Calendar = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
-  const [viewMode, setViewMode] = useState('CalendarView')
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
     active: true,
@@ -109,30 +107,12 @@ const Calendar = () => {
     <Page>
       <PageContainer>
         <FlexSection spaceBetween>
-            <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
-            
-            <FlexSection>
-              <SwitchViewButton icon activeView={viewMode === 'CalendarView'} onClick={() => setViewMode('CalendarView')}>
-                <CalendarIcon />
-              </SwitchViewButton>
-              <SwitchViewButton icon activeView={viewMode === 'ListView'} onClick={() => setViewMode('ListView')}>
-                <ListIcon />
-              </SwitchViewButton>
-            </FlexSection>
-          
+          <Button onClick={() => history.push(`/new-task`)}><AddIcon />New Task</Button>
           <FilterModal handleFilterChange={handleFilterChange} /> 
         </FlexSection>
-
-        {viewMode === 'ListView' && 
-          (filteredDates.length 
-            ? <CalendarListView dates={filteredDates} /> 
-            : <p>You have no {checked.active ? "upcoming" : "completed"} tasks</p>
-          )
-        }
-        {viewMode === 'CalendarView' && <>
-          <CalendarView dates={filteredDates} />
-          {isDatesEmpty && <p>{userContext.user?.firstName}, add your first task now!</p>}
-        </>}
+        
+        <CalendarView dates={filteredDates} />
+        {isDatesEmpty && <p>{userContext.user?.firstName}, add your first task now!</p>}
       </PageContainer>
     </Page>
   )

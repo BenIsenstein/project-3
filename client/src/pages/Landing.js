@@ -18,15 +18,14 @@ const Landing = () => {
 
     }, [isLoggedIn, history])
 
-    return !isLoggedInChecked ? null : (
-        <Page>
-            <PageContainer centerPage mockMobileView>
-                <HouseIcon onClick={() => history.push(`/`)} />
-                <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
-                <Button constWidth onClick={() => history.push(`/signup`)}>CREATE AN ACCOUNT</Button>
-            </PageContainer>
-        </Page>
-    )
+    return isLoggedInChecked && <Page>
+      <PageContainer centerPage mockMobileView>
+          <HouseIcon onClick={() => history.push(`/`)} />
+          <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
+          <Button constWidth onClick={() => history.push(`/signup`)}>CREATE AN ACCOUNT</Button>
+      </PageContainer>
+    </Page>
+    
 }
 
 export default Landing
