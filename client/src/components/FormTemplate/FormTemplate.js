@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useContext, useMemo } from 'react'
+import { Fragment, useEffect, useState, useContext, useMemo } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
 import { BackIcon, PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
-import ComplexInput from '../ComplexInput/ComplexInput'
+import { useIsDateInput } from '../../functions'
+import ComplexInput from './ComplexInput/ComplexInput'
 import DeleteEntryButton from '../DeleteEntryButton'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
 import './FormTemplate.css'
@@ -42,8 +43,29 @@ some important input props:
 - labelText | str | default: this.name |
 - registerOptions | object | default: undefined | https://react-hook-form.com/api/useform/register
 
+- - - - - - - - - | Styling inputs to group together | - - - - - -  
+- Inputs may be grouped into a row, column, wrapped, etc. by using a "GroupOfInputs".
+
+Note in this example the second object in the outside 'inputs' array:
+
+const inputs = [
+  {
+    name: "item",
+    registerOptions: { required: "You must choose an item." },
+    labelText: "",
+    maxLength: '50'
+  },
+  {
+    forwardRegister: true,
+    as: GroupOfInputs,
+    inputs: [{}, {}] 
+    // These inputs all render inside of a FlexSection.
+    // Any other attributes will be fed as props into the FlexSection wrapping the GroupOfInputs.
+  }
+]
 - - - - - - - - - - - - - - - - - - - - - - - - -
 
+- ...props | object | default: undefined | any props not recognized by the component are fed to the outermost <FlexSection>
 - BeforeTemplate | JSX | default: undefined |
 - AfterTemplate | JSX | default: undefined  |
 - formProps | object | default: undefined | all props fed directly to the main <Form> element
@@ -90,20 +112,30 @@ const FormTemplate = ({
   const history = useHistory()
   const { id } = useParams() 
   const goHome = useMemo(() => () => history.push('/'), [history])
-  const dateInputNames = useMemo(() => ['date', 'start', 'end', 'dateCompleted', 'dateSignedUp'], [])
-  const isDateInput = useMemo(() => (name) => dateInputNames.includes(name), [dateInputNames])
+  const isDateInput = useIsDateInput()
   const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
   // - - - -  Conditions measuring formMode + viewMode - - - -
   const isAddMode = formMode === 'add'
   const isDetailsMode = formMode === 'details'
   const isEditView = viewMode === 'edit'
   const isDetailsView = viewMode === 'details'
+  const modeAndView = {
+    isAddMode,
+    isDetailsMode,
+    isDetailsView,
+    isEditView
+  }
+  const formTools = {
+    register,
+    setValue,
+    errors
+  }
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
     if (!isDetailsMode) return
     
     let isMounted = true 
-    const getEntry = async () => {
+    const getDetails = async () => {
       try {
         let valuesForReset = {}
         let detailsRes
@@ -119,9 +151,19 @@ const FormTemplate = ({
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
         
         // for each input, setValue + add the value to valuesForReset
-        for (let { name } of inputs) {
-          setValue(name, details[name])
-          valuesForReset[name] = details[name]
+        for (let { name, ...input } of inputs) {
+          // if the object contains a single input element
+          if (input.as?.name !== 'GroupOfInputs') {
+            setValue(name, details[name])
+            valuesForReset[name] = details[name]
+            continue
+          }
+          
+          // if the object is a <GroupOfInputs /> with an array of inputs
+          for (let { name } of input.inputs) {
+            setValue(name, details[name])
+            valuesForReset[name] = details[name]
+          }
         }
 
         if (isMounted) {
@@ -135,7 +177,7 @@ const FormTemplate = ({
         goHome()
       }   
     }
-    getEntry()
+    getDetails()
 
     return () => isMounted = false
   }, [
@@ -145,7 +187,6 @@ const FormTemplate = ({
     isDateInput,
     setAreDetailsLoaded, 
     setValue, 
-    dateInputNames, 
     goHome
   ])
 
@@ -174,7 +215,7 @@ const FormTemplate = ({
   // attach a 'userid' input to the form with a value of the user's _id
   if (isAddMode) register('userid', { value: userContext.user?._id })
 
-  // - - - - - - RETURN JSX- - - - - - - - - - - //
+  // - - - - - - RETURN JSX - - - - - - - - - - - //
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
   
   return <FlexSection fullWidth column fadeIn {...props}>
@@ -193,40 +234,39 @@ const FormTemplate = ({
     </FlexSection>
     
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
-      {inputs && inputs.map(({ name, readOnly, ...rest }) => {
-        // every input other than 'date'
+      {inputs && inputs.map(({ name, readOnly, ...rest }, index) => {
+        // every input other than date-types
         if (!isDateInput(name)) return ( 
           <ComplexInput 
-            key={name}
+            key={index}
             name={name}
             readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-            register={register}
-            errors={errors} 
+            {...formTools}
+            {...modeAndView}
             {...rest} 
           />
         )
         
-        // 'date' input
+        // date-type input
         return (isDetailsMode && isDetailsView) || readOnly
           ? <ComplexInput 
-            key={name} 
+            key={index} 
             name={name}
             readOnly 
-            register={register} 
+            {...formTools} 
+            {...modeAndView}
             {...rest}
           />  
-          : <>
+          : <Fragment key={index}>
             <Label htmlFor={name}>
               {rest.labelText || name}
             </Label>
-            <FlexSection fullWidth key={name}>
+            <FlexSection fullWidth>
               <ComplexInput
                 labelHidden
-                // maxRows={1}
-                key={name} 
                 name={name}        
-                register={register}
-                errors={errors}
+                {...formTools}
+                {...modeAndView}
                 {...rest}
               />
               <DatetimePickerModal 
@@ -238,7 +278,7 @@ const FormTemplate = ({
                 iconButton 
               />
             </FlexSection>
-          </>
+          </Fragment>
       })}
 
       {(isAddMode || isEditView) && 

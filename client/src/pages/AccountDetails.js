@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Page, PageContainer, Button, FlexSection } from '../common'
 import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
 import FormTemplate from '../components/FormTemplate/FormTemplate'
+import ToggleVisibleInput from '../components/FormTemplate/ToggleVisibleInput/ToggleVisibleInput'
+import GroupOfInputs from '../components/FormTemplate/GroupOfInputs/GroupOfInputs'
 
 const AccountDetails = () => {
   const updateAccount = useUpdateAccount()
@@ -26,14 +28,20 @@ const AccountDetails = () => {
     //   labelText: "Member since"  
     // },
     {
-      name: "firstName",
-      registerOptions: { required: "You must input a first name." },
-      labelText: "First Name"
-    },
-    {
-      name: "lastName",
-      registerOptions: { required: "You must input a last name." },
-      labelText: "Last Name",
+      forwardRegister: true,
+      as: GroupOfInputs,
+      inputs: [
+        {
+          name: "firstName",
+          registerOptions: { required: "You must input a first name." },
+          labelText: "First Name"
+        },
+        {
+          name: "lastName",
+          registerOptions: { required: "You must input a last name." },
+          labelText: "Last Name",
+        }
+      ]
     },
     // {
     //   name: "userType",
@@ -56,8 +64,9 @@ const AccountDetails = () => {
     {
       name: "newPassword",
       labelText: "New password",
-      toggleVisible: true,
-      margin: "0 5px 0 0",
+      forwardRegister: true,
+      as: ToggleVisibleInput,
+      margin: "0 5px 0 0", 
       registerOptions: { 
         required: "You must input your new password.", 
         validate: (value) => validatePassWithMessage(value)

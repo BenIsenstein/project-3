@@ -1,6 +1,5 @@
 import React from 'react'
-import { Label, Textarea, Input } from '../../common'
-import ToggleVisibleInput from '../ToggleVisibleInput/ToggleVisibleInput'
+import { Label, Textarea, Input } from '../../../common'
 
 /* 
 other props might include:
@@ -19,8 +18,8 @@ const ComplexInput = ({ name, errors, ...props }) => (
     <Textarea 
       id={name}
       name={name}
-      {...!props.toggleVisible && props.register(name, props.registerOptions)} 
-      {...props.toggleVisible && { as: ToggleVisibleInput, register: props.register }}
+      {...!props.forwardRegister && props.register(name, props.registerOptions)} 
+      {...props.forwardRegister && { register: props.register }}
       {...props.type==='hidden' && { as: Input }}
       {...props}
     />
