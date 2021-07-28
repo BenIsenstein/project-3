@@ -27,6 +27,8 @@ const UserProvider = ({ children }) => {
 
         if (userObject.no_user) return setUserName("no_user")
         console.log('getLoggedInUser userObject: ', userObject)
+
+        // fetch for all homes here before concatenating with the userObject??
         
         setUserInfo(userObject)
       }
