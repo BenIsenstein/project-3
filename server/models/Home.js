@@ -15,6 +15,7 @@ const homeSchema = new mongoose.Schema({
   squareFootage: Number,
   userId: String,
   yearBuilt: Number,
+  colorScheme: Array
 })
 
 const Home = mongoose.model("Home", homeSchema)

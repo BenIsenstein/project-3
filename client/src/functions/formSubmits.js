@@ -37,7 +37,6 @@ const useAddEntry = () => {
   const history = useHistory()
 
   const addEntry = async (data) => {
-    data.house = "House placeholder"
     data.completed = false
 
     try {

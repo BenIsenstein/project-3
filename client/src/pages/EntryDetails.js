@@ -35,6 +35,10 @@ const EntryDetails = () => {
 
   const entryDetailsInputs = [ 
     {
+      name: "houseId",
+      labelText: "house"
+    },
+    {
       name: "item",
       registerOptions: { required: "You must choose an item." },
       maxLength: '50'

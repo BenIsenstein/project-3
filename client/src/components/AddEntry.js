@@ -8,6 +8,10 @@ const AddEntry = () => {
 
   const inputs = [
     {
+      name: "houseId",
+      labelText: "house"
+    },
+    {
       name: "item",
       registerOptions: { required: "You must choose an item." },
       maxLength: '50'

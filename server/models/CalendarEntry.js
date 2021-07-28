@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 // Define CalendarEntries Collection Schema
 const calendarEntrySchema = new mongoose.Schema({
   userId: String,
-  house: String,
+  houseId: String,
   start: Date,
   end: Date,
   item: String,
