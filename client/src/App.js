@@ -18,6 +18,7 @@ import Library from './pages/Library'
 import AccountDetails from './pages/AccountDetails'
 import Settings from './pages/Settings'
 import AddEntryPage from './pages/AddEntryPage'
+import AddHomePage from './pages/AddHomePage'
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -36,6 +37,7 @@ const App = () => {
         <Route path='/account' component={AccountDetails} />
         <Route path='/settings' component={Settings} />
         <Route path='/new-task' component={AddEntryPage} />
+        <Route path='/new-home' component={AddHomePage} />
       </Switch>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>

@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 // Define CalendarEntries Collection Schema
 const calendarEntrySchema = new mongoose.Schema({
-  userid: String,
+  userId: String,
   house: String,
   start: Date,
   end: Date,
@@ -20,7 +20,7 @@ const CalendarEntry = mongoose.model("CalendarEntry", calendarEntrySchema, "Cale
 
 const addCalendarEntry = async (newCalendarEntry) => await newCalendarEntry.save()
 const listAllCalendarEntries = async () => await CalendarEntry.find({}, null, {sort: {start: 1}})
-const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({ userid: id}, null, {sort: {start: 1}})
+const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({ userId: id}, null, {sort: {start: 1}})
 const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
 const deleteCalendarEntry = async (id) => await CalendarEntry.deleteOne({ _id: id })
 

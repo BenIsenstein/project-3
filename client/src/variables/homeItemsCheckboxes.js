@@ -1,37 +1,32 @@
 import { GroupOfCheckboxes } from "../components/FormTemplate/GroupOfInputs/GroupOfInputs";
 
+// wrapperProps: {gridColumn: '3/4'} - will need to be used for formatting
+
 const homeItemsCheckboxes = {
-  name: 'allHomeItems',
-  registerOptions: {required: "ITEMS IS REQUIRED"},
-  labelText: 'ITEMS',
+  name: 'homeItems',
+  //registerOptions: {required: "ITEMS IS REQUIRED"},
+  labelText: 'Items In Your Home',
   as: GroupOfCheckboxes,
   inputs: [
-    {value: "1", labelText: 'ONE'},
-    {value: "2"},
-    {value: "3"},
-    {value: "phlalo blue"},
-    {value: "5"},
-    {value: "kudu"},
-    {value: "7"},
-    {value: "8"},
-    {value: "giraffe"},
-    {value: "0"},
-    {value: "papayawhip"},
-    {value: "11"},
-    {value: "gorilla"},
-    {value: "13"},
-    {value: "zebra"},
-    {value: "15"},
-    {value: "16"},
-    {value: "17"},
-    {value: "mink"},
-    {value: "19", labelText: "another labelText"},
-    {value: "20"},
-    {value: "pika"},
-    {value: "22"},
-    {value: "23"},
-    {value: "24"},
+    {value: "furnace"},
+    {value: "airConditioner", labelText: "Air Conditioner"},
+    {value: "waterHeater", labelText: "Water Heater"},
+    {value: "ducts"},
+    {value: "roof"},
+    {value: "irrigation"},
+    {value: "waterSoftener", labelText: "Water Softener"},
+    {value: "floorHeating", labelText: "Floor Heating"},
+    {value: "humidifier"},
+    {value: "smokeAlarms", labelText: "Smoke Alarms"},
+    {value: "carbonMonoxideAlarms", labelText: "Carbon Monoxide Alarms"},
+    {value: "GFCI"},
+    {value: "eavestroughs"},
+    {value: "centralVacuum", labelText: "Central Vacuum"},
+    {value: "windows"},
+    {value: "exteriorPaint", labelText: "Exterior Paint"},
+    {value: "hoses"},
+    {value: "aeration"}
   ]
 }
 
-export default homeItemsCheckboxes
+export { homeItemsCheckboxes }

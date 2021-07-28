@@ -205,8 +205,8 @@ const FormTemplate = ({
   })
 
   // When using a form in 'add' mode, 
-  // attach a 'userid' input to the form with a value of the user's _id
-  if (isAddMode) register('userid', { value: userContext.user?._id })
+  // attach a 'userId' input to the form with a value of the user's _id
+  if (isAddMode) register('userId', { value: userContext.user?._id })
 
   // - - - - - - RETURN JSX - - - - - - - - - - - //
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 

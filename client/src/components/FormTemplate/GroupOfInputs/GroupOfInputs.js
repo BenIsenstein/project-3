@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { FlexSection, GridSection, Label } from '../../../common'
+import { FlexSection, GridSection, Label, Select } from '../../../common'
 import { useIsDateInput } from '../../../functions'
 import DatetimePickerModal from '../../Modals/DatetimePickerModal'
 import ComplexInput from '../ComplexInput/ComplexInput'
@@ -122,5 +122,17 @@ const GroupOfCheckboxes = ({
   </GridSection>
 }
 
+const SuperFormSelect = ({ options, name, ...props }) => {
+  return <>
+    <Select 
+      name={name} 
+      id={name} 
+      {...props.register(name, props.registerOptions)} //wait and see if it registers, since Select is a native element.
+    >
+      {options && options.map(({ value, optionText }) => <option value={value}>{optionText || value}</option> )}
+    </Select>
+  </>
+}
+
 export default GroupOfInputs
-export {GroupOfCheckboxes}
+export { GroupOfCheckboxes, SuperFormSelect }

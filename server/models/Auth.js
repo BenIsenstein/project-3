@@ -1,7 +1,6 @@
 require('./db')
 const mongoose = require('mongoose');
 
-
 const authSchema = new mongoose.Schema({
   email: {
     type: String,
