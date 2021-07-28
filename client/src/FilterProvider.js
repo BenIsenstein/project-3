@@ -5,89 +5,45 @@ import FilterContext from './FilterContext'
 const FilterProvider = ({ children }) => {
   const history = useHistory()
   const redirectHome = () => history.push('/calendar')
-  const [user, setUser] = useState()
-  const [userName, setUserName] = useState('loading')
-  const [userType, setUserType] = useState(user?.userType)
-  let isLoggedIn = !['loading', 'no_user'].includes(userName) 
-  let isLoading = userName === "loading"
+  const [active, setActive] = useState(true)
+  const [completed, setCompleted] = useState(false)
 
-  const setUserInfo = (userInfo) => {
-    let { firstName, lastName, userType } = userInfo
+  const setFilterInfo = (filterInfo) => {
+    let { activeIsChecked, completedIsChecked } = filterInfo
 
-    setUser(userInfo)
-    setUserName(firstName + ' ' + lastName)
-    setUserType(userType)
+    setActive(activeIsChecked)
+    setCompleted(completedIsChecked)
   }
 
-  useEffect(() => {
-    const getLoggedInUser = async () => {
-      try {
-        let response = await fetch('/api/user/getloggedinuser')
-        let userObject = await response.json()
+  // Using the current USER INFO, set the FILTER values
+  // according to their preferences.
+  // useEffect(() => {
+  //   const getUserFilterPreferences = async () => {
+  //     try {
+  //       let response = await fetch('/api/user/getloggedinuser')
+  //       let userObject = await response.json()
 
-        if (userObject.no_user) return setUserName("no_user")
-        console.log('getLoggedInUser userObject: ', userObject)
+  //       if (userObject.no_user) return setUserName("no_user")
+  //       console.log('getLoggedInUser userObject: ', userObject)
 
-        // fetch for all homes here before concatenating with the userObject??
+  //       // fetch for all homes here before concatenating with the userObject??
         
-        setUserInfo(userObject)
-      }
-      catch (err) {
-        console.log('error running checkLoggedInUser: ', err)
-        alert("There was an error checking your login status. We're fixing it as fast as we can.")
-      }
-    }
+  //       setUserInfo(userObject)
+  //     }
+  //     catch (err) {
+  //       console.log('error running checkLoggedInUser: ', err)
+  //       alert("There was an error checking your login status. We're fixing it as fast as we can.")
+  //     }
+  //   }
 
-    getLoggedInUser()
-  }, [])
-
-  const logIn = async (data) => {
-    let loginOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }
-
-    let response = await fetch('/api/auth/login', loginOptions)
-
-    if (response.status === 401) return alert('Unable to log in. Please make sure your login info is correct.')
-    
-    let loggedInUser = await response.json()
-    setUserInfo(loggedInUser)
-    
-    history.push(`/calendar`)
-  }
-
-  const logOut = async () => {
-    try {
-      let response = await fetch("/api/user/logout")
-      let resObject = await response.json()
-
-      if (resObject.isLoggedOutNow) {
-        setUser(undefined)
-        setUserName('no_user')
-        setUserType(undefined)
-
-      history.push(`/`)  
-      }
-      else {
-        alert('You are still logged in for some reason. Please try logging out again.')
-      }
-    }
-    catch (err) {
-      console.log(`Error logging out user ${userName}: `, err)
-      alert("There was an error logging you out. We're fixing it as fast as we can.")
-    }
-  }
-
+  //   getUserFilterPreferences()
+  // }, [])
   
- // let contextValue = {
-//    active,
- //   completed,
- //   setFilterInfo
- // }
+ let contextValue = {
+   active,
+   completed,
+   setFilterInfo
+ }
 
   return (
     <FilterContext.Provider value={contextValue}>
