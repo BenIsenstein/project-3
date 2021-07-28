@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Page, PageContainer, Button, FlexSection } from '../common'
 import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
-import FormTemplate from '../components/FormTemplate/FormTemplate'
-import ToggleVisibleInput from '../components/FormTemplate/ToggleVisibleInput/ToggleVisibleInput'
-import GroupOfInputs from '../components/FormTemplate/GroupOfInputs/GroupOfInputs'
+import SuperForm from '../components/SuperForm/SuperForm'
+import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput/ToggleVisibleInput'
+import GroupOfInputs from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
 
 const AccountDetails = () => {
   const updateAccount = useUpdateAccount()
@@ -22,11 +22,11 @@ const AccountDetails = () => {
   </>
 
   const accountInputs = [
-    // {
-    //   name: "dateSignedUp",
-    //   readOnly: true,
-    //   labelText: "Member since"  
-    // },
+    {
+      name: "dateSignedUp",
+      readOnly: true,
+      labelText: "Member since"  
+    },
     {
       forwardRegister: true,
       as: GroupOfInputs,
@@ -78,7 +78,7 @@ const AccountDetails = () => {
   return (
     <Page>
       <PageContainer flexColumn>
-        <FormTemplate 
+        <SuperForm 
           titleText="Personal Details"
           inputs={accountInputs} 
           formMode='details' 
@@ -86,7 +86,7 @@ const AccountDetails = () => {
           onSubmit={updateAccount} 
           AfterTemplate={ChangePasswordButton}
         />
-        <FormTemplate 
+        <SuperForm 
           popup
           popupCondition={undergoingPasswordChange}
           titleText='Change Password'

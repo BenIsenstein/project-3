@@ -1,4 +1,4 @@
-import { GroupOfCheckboxes } from "../components/FormTemplate/GroupOfInputs/GroupOfInputs";
+import { GroupOfCheckboxes } from "../components/SuperForm/GroupOfInputs/GroupOfInputs";
 
 // wrapperProps: {gridColumn: '3/4'} - will need to be used for formatting
 

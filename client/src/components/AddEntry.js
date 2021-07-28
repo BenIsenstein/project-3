@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router-dom'
-import FormTemplate from './FormTemplate/FormTemplate'
+import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry } from '../functions'
 
 const AddEntry = () => {
@@ -37,7 +37,7 @@ const AddEntry = () => {
     }
   ]
 
-  return <FormTemplate 
+  return <SuperForm 
     titleText="New Task" 
     inputs={inputs} 
     addModeCancel={history.goBack} 

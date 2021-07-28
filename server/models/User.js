@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   userType: String,
   email: { type: String, unique: true, required: true },
+  settings: {},
   dateSignedUp: Date
-
 })
   
 userSchema.methods.validPassword = function (pwd) {

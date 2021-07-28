@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
-import FormTemplate from '../components/FormTemplate/FormTemplate'
+import FormTemplate from '../components/SuperForm/SuperForm'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 import { useUpdateEntry } from '../functions'
 
@@ -109,7 +109,7 @@ const EntryDetails = () => {
           popupCondition={shouldShowCompletion}
           titleText={isCompleted ? "Completion" : "Complete Event"}
           inputs={completionInputs}
-          formMode={isCompleted ? "details" : "add"}
+          formMode={isCompleted ? "details" : "add"} 
           detailsUrl={getEntryRoute}
           onSubmit={updateEntry}
           addModeCancel={() => setUndergoingCompletion(false)}
