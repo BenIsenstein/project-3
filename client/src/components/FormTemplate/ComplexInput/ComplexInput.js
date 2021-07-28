@@ -11,19 +11,29 @@ other props might include:
 - readOnly
 */
 
-const ComplexInput = ({ name, errors, ...props }) => (
-  <FlexSection {...props.wrapperProps} fullWidth column alignStart key={props.key}>
-    {!props.labelHidden && <Label htmlFor={name}>{props.labelText || name}</Label>}
+const ComplexInput = ({ name, errors, register, forwardRegister, forwardErrors, ...props }) => {
+  const isCheckbox = props.type==='checkbox'
+  const ifCheckboxValueElseName = isCheckbox ? props.value : name
+
+  return <FlexSection {...props.wrapperProps} fullWidth column alignStart key={props.key}>
+
+    {!props.labelHidden && 
+      <Label htmlFor={ifCheckboxValueElseName}>{props.labelText || ifCheckboxValueElseName}</Label>
+    }
+
     <Textarea 
-      id={name}
+      id={ifCheckboxValueElseName}
       name={name}
-      {...!props.forwardRegister && props.register(name, props.registerOptions)} 
-      {...props.forwardRegister && { register: props.register }}
-      {...props.type==='hidden' && { as: Input }}
+      {...!forwardRegister && register && register(name, props.registerOptions)} 
+      {...forwardRegister && register && { register }}
+      {...forwardErrors && errors && { errors }}
+      {...props.type && { as: Input }}
       {...props}
     />
-    {errors && errors[name] && <p>{errors[name].message}</p>}
+
+    {!forwardErrors && errors && <p>{errors[name]?.message}</p>}
+
   </FlexSection>
-)
+}
 
 export default ComplexInput

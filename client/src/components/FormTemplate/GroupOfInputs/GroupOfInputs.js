@@ -83,4 +83,44 @@ const GroupOfInputs = ({
   </GridSection>
 }
 
+const GroupOfCheckboxes = ({
+  inputs, 
+  isAddMode,
+  isDetailsMode,
+  isDetailsView,
+  isEditView,
+  register,
+  setValue,
+  errors,
+  ...props }) => {
+  // - - - - - - hooks/variables - - - - - - - //
+  const modeAndView = {
+    isAddMode,
+    isDetailsMode,
+    isDetailsView,
+    isEditView
+  }
+  const formTools =  {
+    setValue, 
+    register,
+    errors
+  }
+  
+  // - - - - - - - RETURN JSX - - - - - - - - //
+  return <GridSection fullWidth {...props}>
+    {inputs && inputs.map(({ readOnly, ...rest }, index) => 
+      <ComplexInput 
+        key={index}
+        name={props.name}
+        type="checkbox"
+        readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+        {...formTools}
+        {...modeAndView}
+        {...rest} 
+      />
+    )}
+  </GridSection>
+}
+
 export default GroupOfInputs
+export {GroupOfCheckboxes}
