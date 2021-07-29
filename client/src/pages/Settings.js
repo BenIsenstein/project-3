@@ -12,6 +12,12 @@ const Settings = () => {
   const userContext = useContext(UserContext)
   const updateAccount = useUpdateAccount()
   const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
+  const [checkedAll, setCheckedAll] = useState(false)
+  const [checked, setChecked] = useState({
+        active: true,
+        completed: false
+      })
+  const [undergoingNotificationChange, setUndergoingNotificationChange] = useState(false)
 
   const ChangePreferenceButton = () =>
     !undergoingPreferenceChange && (
@@ -53,28 +59,68 @@ const Settings = () => {
     <Page>
       <PageContainer flexColumn>
           <FlexSection fullWidth justifyStart marginTop1em>
-          {!undergoingPreferenceChange &&  
-            <Button
-              type="button"
-              onClick={() => setUndergoingPreferenceChange(true)}
-            >
-              Set Filter Preference
-            </Button>
-          }
+
+            <h1>Preferences</h1> 
+            
+            <hr/>
+
+            {!undergoingPreferenceChange &&  
+              <Button
+                type="button"
+                onClick={() => setUndergoingPreferenceChange(true)}
+              >
+                Filters
+              </Button>
+             }
           </FlexSection>
       
-        <SuperForm
-          popup
-          popupCondition={undergoingPreferenceChange}
-          // detailsUrl="/api/user/update/${userContext.user._id}" 
-          titleText="Filter Preferences"
-          inputs={filterInputs}
-          // modalContent={<CalendarFilter />}
+          <SuperForm
+            popup
+            popupCondition={undergoingPreferenceChange}
+            BeforeSubmitButton={<CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>}
+            // BeforeTemplate={<CalendarFilter />}
+            // AfterTemplate={<CalendarFilter />}
+            // BeforeSubmitButton={<CalendarFilter />}
+            // modalContent={<CalendarFilter />}
+            // detailsUrl="/api/user/update/${userContext.user._id}" 
 
-          onSubmit={updateAccount}
-          addModeCancel={() => setUndergoingPreferenceChange(false)}
-        />
-        <hr />
+            titleText="Filter Preferences"
+            // inputs={filterInputs}
+
+            onSubmit={updateAccount}
+            addModeCancel={() => setUndergoingPreferenceChange(false)}
+          />
+
+          <hr />
+        
+          {!undergoingNotificationChange &&  
+            <Button
+              type="button"
+              onClick={() => setUndergoingNotificationChange(true)}
+            >
+              Notifications
+            </Button>
+          }
+
+          <SuperForm
+            popup
+            popupCondition={undergoingNotificationChange}
+            // BeforeSubmitButton={<CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>}
+            // BeforeTemplate={<CalendarFilter />}
+            // AfterTemplate={<CalendarFilter />}
+            // BeforeSubmitButton={<CalendarFilter />}
+            // modalContent={<CalendarFilter />}
+            // detailsUrl="/api/user/update/${userContext.user._id}" 
+
+            titleText="Notification Preferences"
+            // inputs={filterInputs}
+
+            // onSubmit={updateAccount}
+            addModeCancel={() => setUndergoingNotificationChange(false)}
+          />
+
+
+          <hr />
   
         <TestEmailButton /> Email me a reminder for my tasks now!
       </PageContainer>
