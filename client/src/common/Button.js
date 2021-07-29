@@ -66,6 +66,21 @@ const Button = styled.button`
     ${props => props.margin && css`
         margin: ${props.margin};
     `}
+
+    ${props => props.inline && css`
+        margin: 0 0 0 .6em;
+        border: none;
+        border-radius: 50px;
+        color: white;
+        font-size: .6em;
+        background: ${props => props.theme.prm};
+
+        &:hover {
+            color: white;
+            background: ${props => props.theme.prmDk};
+            border: none;
+        }
+    `}
 `
 
 export {Button}

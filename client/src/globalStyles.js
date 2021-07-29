@@ -11,7 +11,7 @@ export default createGlobalStyle`
     }
 
     p {
-        margin: 0.8em 0;
+        margin: 0;
         color: ${props => props.theme.contentColor};
     }
 

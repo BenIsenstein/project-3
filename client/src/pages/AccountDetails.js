@@ -1,14 +1,20 @@
-import { useState } from 'react'
-import { Page, PageContainer, Button, FlexSection } from '../common'
+import { useState, useEffect, useContext } from 'react'
+import { useHistory } from 'react-router-dom'
+import UserContext from '../UserContext'
+import { Page, PageContainer, Button, SwitchViewButton, FlexSection, FormSectionTitle, FormSeparator, PencilIcon, HomeAddIcon } from '../common'
 import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
 import SuperForm from '../components/SuperForm/SuperForm'
 import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput/ToggleVisibleInput'
 import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
 
 const AccountDetails = () => {
+  const history = useHistory()
+  const userContext = useContext(UserContext)
+
   const updateAccount = useUpdateAccount()
   const changePassword = useChangePassword()
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
+  const [homes, setHomes] = useState([])
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
@@ -84,6 +90,33 @@ const AccountDetails = () => {
     }
   ]
 
+  // Effect to log user out if they're not logged in
+  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
+
+  // Effect to fetch all entries
+  useEffect(() => {
+    if (!userContext.user) return
+
+    const fetchHomes = async () => {
+      try {
+        let homesRes = await fetch(`/api/home/getbyuser/${userContext.user._id}`)
+        let homesObject = await homesRes.json()
+        // let list = homesObject.entryList
+        // let homesArray = []
+      
+        setHomes(homesObject)
+      }  
+      catch (err) {
+        console.log(err)
+        alert(`
+          There was an error loading your homes. 
+          We're fixing it as fast as we can.
+        `)
+      }
+    }
+    fetchHomes()
+  }, [userContext.user])
+
   return (
     <Page>
       <PageContainer flexColumn>
@@ -103,6 +136,21 @@ const AccountDetails = () => {
           onSubmit={changePassword}
           addModeCancel={() => setUndergoingPasswordChange(false)}
         />
+
+        <FormSeparator />
+
+        <FlexSection alignCenter>
+          <FormSectionTitle>Manage Home(s)</FormSectionTitle>
+          <Button inline onClick={() => history.push('/new-home')}><HomeAddIcon /></Button>
+        </FlexSection>
+        {homes.map((home, index) => {
+          return (
+            <FlexSection key={index}>
+              <p>{home.address}</p>
+              <SwitchViewButton edit><PencilIcon /></SwitchViewButton>
+            </FlexSection>
+          )
+        })}
       </PageContainer>
     </Page>
   )

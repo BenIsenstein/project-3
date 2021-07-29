@@ -84,7 +84,7 @@ const useAddHome = () => {
       alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
 
-    history.push(`/calendar`)
+    history.push(`/account`)
   }
 
   return addHome

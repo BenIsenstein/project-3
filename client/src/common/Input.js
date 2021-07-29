@@ -6,7 +6,7 @@ const Input = styled.input`
     font-family: inherit;
     font-size: 1em;
     color: ${props => props.theme.contentColor};
-    border: 1px solid ${props => props.theme.prm};
+    border: 1px solid ${props => props.theme.titleColor};
     border-radius: 6px;
     outline: none;
     box-sizing: border-box;
@@ -14,7 +14,7 @@ const Input = styled.input`
     &:focus {
         padding: .4em .6em;
         background-color: ${props => props.theme.prmLt};
-        border: 1px solid ${props => props.theme.prmDk};
+        border: 1px solid ${props => props.theme.contentColor};
         outline: none;
     }
 
