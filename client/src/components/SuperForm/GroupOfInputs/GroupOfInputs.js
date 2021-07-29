@@ -113,6 +113,7 @@ const GroupOfCheckboxes = ({
         key={index}
         name={props.name}
         type="checkbox"
+        checked
         readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
         registerOptions={props.registerOptions}
         wrapperProps={{rowReverse: true, justifyEnd: true}}

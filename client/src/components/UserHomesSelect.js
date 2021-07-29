@@ -4,6 +4,7 @@ import UserContext from '../UserContext'
 
 // The only CRUCIAL props are 'register' and 'name'. 
 // These will plug it into SuperForm
+// Make sure to include 'forwardRegister=true' with this input in SuperForm.
 const UserHomesSelect = props => {
     const [homeOptions, setHomeOptions] = useState([])
     const userContext = useContext(UserContext)
