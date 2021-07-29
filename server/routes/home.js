@@ -13,4 +13,20 @@ router.post('/add', async (req, res) => {
     }
 })
 
+// get all homes for a user
+router.get('/getbyuser/:id', async (req, res) => {
+    try {res.json({ homeList: await Home.find({ userId: req.params.id }) })}
+    
+    catch (err) {console.log("error getting all home for user: ", err)}
+})
+
+// get a single home
+router.get('/get/:id', async (req, res) => {
+    try {res.json(await Home.findOne({ _id: req.params.id }))}
+    
+    catch (err) {console.log("error getting single home: ", err)}   
+})
+
+
+
 module.exports = router
