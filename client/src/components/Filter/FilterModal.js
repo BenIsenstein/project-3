@@ -10,7 +10,7 @@ import FilterContext from '../../FilterContext'
 const FilterModal = ({ handleFilterChange }) => {
     const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
 
-    
+
     const [checkedAll, setCheckedAll] = useState(false)
     // const [checked, setChecked] = useState({
     //     active: true,
