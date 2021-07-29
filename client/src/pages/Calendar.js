@@ -87,9 +87,6 @@ const Calendar = () => {
   useEffect(() => {
     if (!loaded) return
 
-    console.log("Calendar: Welcome to UseEffect for setFilteredDates!")
-    console.log("FilterContext = ", filterContext)
-
     const returnAll = entry => true
     const returnActive = entry => !entry.completed
     const returnCompleted = entry => entry.completed
