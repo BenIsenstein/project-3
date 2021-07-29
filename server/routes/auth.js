@@ -1,7 +1,7 @@
 require("dotenv").config()
 const express = require("express")
-const Auth = require("../models/Auth")
 const router = express.Router()
+const Auth = require("../models/Auth")
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 

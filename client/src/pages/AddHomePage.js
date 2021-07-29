@@ -5,14 +5,12 @@ import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from '../components
 import { homeItemsCheckboxes } from '../variables'
 import CustomItemModal from '../components/Modals/CustomItemModal'
 import ComplexInput from '../components/SuperForm/ComplexInput/ComplexInput'
-
-
-
-
+import { useAddHome } from '../functions'
 
 const AddHomePage = () => {
   const [customItems, setCustomItems] = useState([])
   const [newItem, setNewItem] = useState()
+  const addHome = useAddHome()
   const inputs = [
     {
       name: "address",
@@ -113,7 +111,7 @@ const AddHomePage = () => {
         <SuperForm 
           titleText="Add A Home"
           inputs={inputs}
-          onSubmit={data => console.log('Add a home data: ', data)}
+          onSubmit={addHome}
           BeforeSubmitButton={<> 
             <CustomItemModal 
               modalContent={

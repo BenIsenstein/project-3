@@ -62,6 +62,34 @@ const useAddEntry = () => {
   return addEntry
 }
 
+// addHome
+const useAddHome = () => {
+  const history = useHistory()
+
+  const addHome = async (data) => {
+    try {
+      let action = "/api/home/add"
+      let options = {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(action, options)
+      let resObject = await res.json()
+
+      if (!resObject.success) alert("Your home wasn't added for some reason. Please try again.")
+    }
+    catch (err) {
+      console.log('error adding calendar entry: ', err)
+      alert("There was an error adding your entry. We're fixing it as fast as we can.")
+    }
+
+    history.push(`/calendar`)
+  }
+
+  return addHome
+}
+
 // updateAccount submit function
 const useUpdateAccount = () => {
     const history = useHistory()
@@ -153,8 +181,9 @@ const useChangePassword = () => {
 }
 
 export { 
-    useUpdateAccount, 
-    useChangePassword,
-    useAddEntry,
-    useUpdateEntry
+  useUpdateAccount, 
+  useChangePassword,
+  useAddEntry,
+  useUpdateEntry,
+  useAddHome
 }
