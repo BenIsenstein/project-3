@@ -11,6 +11,7 @@ const AddHomePage = () => {
   const [customItems, setCustomItems] = useState([])
   const [newItem, setNewItem] = useState()
   const addHome = useAddHome()
+  const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
   const inputs = [
     {
       name: "address",
@@ -98,12 +99,10 @@ const AddHomePage = () => {
       ]
     },
     {
-      ...homeItemsCheckboxes
+      ...restOfDefaultItems,
+      inputs: [...defaultItemsCheckboxes, ...customItems]
     }
   ]
-
-  
-  
 
   return (
     <Page>
@@ -112,28 +111,15 @@ const AddHomePage = () => {
           titleText="Add A Home"
           inputs={inputs}
           onSubmit={addHome}
-          BeforeSubmitButton={<> 
-            <CustomItemModal 
-              modalContent={
-                <ComplexInput 
-                  name="Item name"
-                  onChange={event => setNewItem(event.target.value)}
-                />
-              }
-              actionOnConfirm={() => 
-                setCustomItems([{ value: newItem, defaultChecked: true }, ...customItems])
-              }
-            />
-            {customItems.length > 0 && 
-              <ComplexInput 
-                name="homeItems"
-                labelText="Custom Items"
-                forwardRegister
-                as={GroupOfCheckboxes}
-                inputs={customItems}
-              />
+          BeforeSubmitButton={<CustomItemModal 
+            modalContent={<ComplexInput 
+              name="Item name"
+              onChange={event => setNewItem(event.target.value)}
+            />}
+            actionOnConfirm={() => 
+              setCustomItems([...customItems, { value: newItem, defaultChecked: true }])
             }
-          </>}
+          />}
         />
       </PageContainer>
     </Page>
