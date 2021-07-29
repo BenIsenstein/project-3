@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from '../../common'
+import { Button, AddIcon } from '../../common'
 import ConfirmModal from './ConfirmModal'
 import useConfirmModal from './useConfirmModal'
 
@@ -15,8 +15,8 @@ const CustomItemModal = ({ isDateRange, ...props }) => {
       confirmPrompt='Add item'
       actionOnConfirm={props.actionOnConfirm}
     />
-    <Button type='button' onClick={toggleConfirmModal} {...props}>
-      Add your own item       
+    <Button text type='button' onClick={toggleConfirmModal} {...props}>
+      <AddIcon sm />add your own item      
     </Button>
   </>
 }

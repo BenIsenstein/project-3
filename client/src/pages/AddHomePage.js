@@ -15,43 +15,11 @@ const AddHomePage = () => {
   
   const inputs = [
     {
+      name: "nickname"
+    },    
+    {
       name: "address",
       registerOptions: { required: "You must input an address." },
-    },
-    {
-      name: "nickname"
-    },
-    {
-      name: "residenceType",
-      labelText: "Type of residence",
-      registerOptions: { required: "You must select a type of residence." },
-      forwardRegister: true, 
-      as: SuperFormSelect,
-      options: [
-        {value: "house"},
-        {value: "duplex"},
-        {value: "condo"},
-        {value: "apartment"}
-      ]
-    },
-    {
-      name: "squareFootage",
-      labelText: "Square Footage",
-      registerOptions: { required: "You must input a square footage." },
-      type: "number",
-      min: "100"
-    },
-    {
-      name: "yearBuilt",
-      labelText: "Year Built",
-      registerOptions: { required: "You must input a year built." },
-      type: "number",
-      min: "0"
-    },
-    {
-      name: "possessionDateByOwner",
-      labelText: "Possession date by the current property/unit owner",
-      registerOptions: { required: "You must input a possession date." }
     },
     {
       forwardRegister: true,
@@ -100,6 +68,40 @@ const AddHomePage = () => {
       ]
     },
     {
+      name: "residenceType",
+      labelText: "Building Type",
+      registerOptions: { required: "You must select a building type." },
+      forwardRegister: true, 
+      as: SuperFormSelect,
+      options: [
+        {value: "House"},
+        {value: "Row/Townhouse"},
+        {value: "Apartment"},
+        {value: "Condo"},
+        {value: "Duplex"},
+        {value: "Mobile Home"},
+      ]
+    },
+    {
+      name: "squareFootage",
+      labelText: "Floor Space (sqft)",
+      registerOptions: { required: "You must input a square footage." },
+      type: "number",
+      min: "100"
+    },
+    {
+      name: "yearBuilt",
+      labelText: "Year Built",
+      registerOptions: { required: "You must input a year built." },
+      type: "number",
+      min: "0"
+    },
+    {
+      name: "possessionDateByOwner",
+      labelText: "Possession date by the current property/unit owner",
+      registerOptions: { required: "You must input a possession date." }
+    },
+    {
       ...restOfDefaultItems,
       inputs: [...defaultItemsCheckboxes, ...customItems]
     }
@@ -109,7 +111,7 @@ const AddHomePage = () => {
     <Page>
       <PageContainer flexColumn>
         <SuperForm 
-          titleText="Add A Home"
+          titleText="New Home"
           inputs={inputs}
           onSubmit={addHome}
           BeforeSubmitButton={<CustomItemModal 

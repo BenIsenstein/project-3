@@ -81,6 +81,18 @@ const Button = styled.button`
             border: none;
         }
     `}
+
+    ${props => props.text && css`
+        margin: 0;
+        padding: 0;
+        border: none;
+        font-size: .8em;
+        text-transform: none;
+
+        &:hover {
+            border: none;
+        }
+    `}
 `
 
 export {Button}

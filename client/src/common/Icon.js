@@ -83,6 +83,11 @@ const BackIcon = styled(NavigateBefore)`
 const AddIcon = styled(Plus)`
     height: 2em;
     margin-left: -0.5em;
+
+    ${props => props.sm && css`
+        margin: 0;
+        height: 1em;
+    `}
 `
 
 const HomeAddIcon = styled(HomeAdd)`

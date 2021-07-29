@@ -18,7 +18,8 @@ const AccountDetails = () => {
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
-      <Button  
+      <Button
+        text  
         type='button' 
         onClick={() => setUndergoingPasswordChange(true)}
       >
@@ -29,9 +30,28 @@ const AccountDetails = () => {
 
   const accountInputs = [
     {
-      name: "dateSignedUp",
-      readOnly: true,
-      labelText: "Member since"  
+      forwardRegister: true,
+      forwardErrors: true,
+      as: GroupOfInputs,
+      inputs: [
+        {
+          name: "dateSignedUp",
+          readOnly: true,
+          labelText: "Member since"           
+        },
+        {
+          name: "userType",
+          registerOptions: { required: "You must select an account type." },
+          labelText: "You are a",
+          forwardRegister: true, 
+          as: SuperFormSelect,
+          options: [
+            {value: "Home Manager"},
+            {value: "Service Provider"},
+            {value: "Insurance Provider"},
+          ]
+        }
+      ]
     },
     {
       forwardRegister: true,
@@ -50,18 +70,6 @@ const AccountDetails = () => {
           labelText: "Last Name",
           wrapperProps: {gridColumn: '3/4'}
         }
-      ]
-    },
-    {
-      name: "userType",
-      registerOptions: { required: "You must input an account type." },
-      labelText: "You are a",
-      forwardRegister: true, 
-      as: SuperFormSelect,
-      options: [
-        {value: "homeManager"},
-        {value: "serviceProvider"},
-        {value: "insuranceProvider"},
       ]
     },
     {

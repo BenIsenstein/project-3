@@ -107,7 +107,7 @@ const EntryDetails = () => {
         <FormTemplate 
           popup
           popupCondition={shouldShowCompletion}
-          titleText={isCompleted ? "Completion" : "Complete Event"}
+          titleText={isCompleted ? "Completion" : "Complete Task"}
           inputs={completionInputs}
           formMode={isCompleted ? "details" : "add"} 
           detailsUrl={getEntryRoute}
