@@ -1,4 +1,4 @@
-import { Label, Textarea, Input, FlexSection } from '../../../common'
+import { Label, Textarea, Input, FlexSection, Error } from '../../../common'
 
 /* 
 other props might include:
@@ -22,20 +22,21 @@ const ComplexInput = ({
   wrapperProps,
   ...props 
   }) => {
-  const ifCheckboxValueElseName = type==='checkbox' ? props.value : name
+  const isCheckbox = type==='checkbox'
+  const ifCheckboxValueElseName = isCheckbox ? props.value : name
 
   return (
     <FlexSection 
       key={props.key}
       gridColumn={wrapperProps?.gridColumn || "1/-1"}
       fullWidth={!props.noFullWidth} 
-      column 
-      alignStart 
+      column={!props.noColumn} 
+      {...isCheckbox ? {alignCenter: true} : {alignStart: true}}
       {...wrapperProps}
     >
   
       {!props.labelHidden && 
-        <Label htmlFor={ifCheckboxValueElseName}>
+        <Label htmlFor={ifCheckboxValueElseName} {...isCheckbox && {margin: '0'}}>
           {props.labelText || ifCheckboxValueElseName}
         </Label>
       }
@@ -50,7 +51,7 @@ const ComplexInput = ({
         {...props}
       />
   
-      {!forwardErrors && errors && <p>{errors[name]?.message}</p>}
+      {!forwardErrors && errors && <Error>{errors[name]?.message}</Error>}
   
     </FlexSection>
   )

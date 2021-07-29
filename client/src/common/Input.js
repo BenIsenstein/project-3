@@ -1,7 +1,7 @@
 import styled, {css} from 'styled-components'
 
 const Input = styled.input`
-    width: 100%;
+    width: ${props => props.noFullWidth ? 'auto' : '100%'};
     padding: .4em .6em;
     font-family: inherit;
     font-size: 1em;
@@ -13,7 +13,7 @@ const Input = styled.input`
     
     &:focus {
         padding: .4em .6em;
-        background-color: ${props => props.theme.scdLt};
+        background-color: ${props => props.theme.prmLt};
         border: 1px solid ${props => props.theme.prmDk};
         outline: none;
     }
@@ -34,6 +34,10 @@ const Input = styled.input`
     ${props => props.margin && css`
         margin: ${props.margin};
     `}
+
+    ${props => props.type='checkbox' && css`
+        cursor: pointer;
+    `}
 `
 
 const PasswordInput = styled(Input)`
@@ -44,10 +48,6 @@ const Checkbox = styled.input.attrs({
     type: 'checkbox'
 })`
     cursor: pointer;
-    // position: absolute;
-    // opacity: 0;
-    // height: 0;
-    // width: 0;
 `
 
 export {Input, PasswordInput, Checkbox}

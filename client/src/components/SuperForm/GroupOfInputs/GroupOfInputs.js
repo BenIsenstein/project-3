@@ -109,11 +109,14 @@ const GroupOfCheckboxes = ({
   return <GridSection fullWidth {...props}>
     {inputs && inputs.map(({ readOnly, ...rest }, index) => 
       <ComplexInput 
+        noFullWidth
+        noColumn
         key={index}
         name={props.name}
         type="checkbox"
         readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
         registerOptions={props.registerOptions}
+        wrapperProps={{rowReverse: true, justifyEnd: true}}
         {...formTools}
         {...modeAndView}
         {...rest} 

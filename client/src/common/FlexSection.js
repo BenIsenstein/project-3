@@ -17,6 +17,10 @@ const FlexSection = styled.div`
         flex-direction: column;
     `}
 
+    ${props => props.rowReverse && css`
+        flex-direction: row-reverse;
+    `}
+
     ${props => props.justifyCenter && css`
         justify-content: center;
     `}

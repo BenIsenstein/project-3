@@ -2,7 +2,7 @@ import styled, {css} from 'styled-components'
 import TextareaAutosize from 'react-textarea-autosize'
 
 const Textarea = styled(TextareaAutosize)`
-    width: 100%;
+    width: ${props => props.noFullWidth ? 'auto' : '100%'};
     min-height: 1.8em;
     padding: .4em .6em;
     font-family: inherit;
@@ -34,11 +34,11 @@ const Textarea = styled(TextareaAutosize)`
         }
     `} 
 
-    ${props => props.as?.name === "GroupOfInputs" && css`
+    ${props => ['GroupOfInputs', 'GroupOfCheckboxes'].includes(props.as?.name) && css`
         border: none;
         padding: 0;
         margin: 0;
-    `}
+    `}   
 `
 
 export {Textarea}
