@@ -1,15 +1,17 @@
 import TestEmailButton from "../components/TestEmailButton";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import UserContext from '../UserContext';
 import { Page, PageContainer, Button, FlexSection } from "../common";
 //import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
 import SuperForm from "../components/SuperForm/SuperForm";
 import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs/GroupOfInputs";
 import { useUpdateAccount } from "../functions";
+import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
-  const [undergoingPreferenceChange, setUndergoingPreferenceChange] =
-    useState(false);
-  const updateAccount = useUpdateAccount();
+  const userContext = useContext(UserContext)
+  const updateAccount = useUpdateAccount()
+  const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
 
   const ChangePreferenceButton = () =>
     !undergoingPreferenceChange && (
@@ -32,13 +34,13 @@ const Settings = () => {
       as: GroupOfCheckboxes,
       inputs: [
         {
-          name: "active",
+          name: "settings.filterprefs.active",
           registerOptions: {},
           labelText: "Active",
           wrapperProps: { gridColumn: "1/2" },
         },
         {
-          name: "completed",
+          name: "settings.filterprefs.completed",
           registerOptions: {},
           labelText: "Completed",
           wrapperProps: { gridColumn: "3/4" },
@@ -64,9 +66,11 @@ const Settings = () => {
         <SuperForm
           popup
           popupCondition={undergoingPreferenceChange}
-          detailsUrl="/api/user/getloggedinuser"
+          // detailsUrl="/api/user/update/${userContext.user._id}" 
           titleText="Filter Preferences"
           inputs={filterInputs}
+          // modalContent={<CalendarFilter />}
+
           onSubmit={updateAccount}
           addModeCancel={() => setUndergoingPreferenceChange(false)}
         />
