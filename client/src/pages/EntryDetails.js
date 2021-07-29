@@ -114,7 +114,7 @@ const EntryDetails = () => {
           onSubmit={updateEntry}
           addModeCancel={() => setUndergoingCompletion(false)}
         />
-        <FlexSection fullWidth marginTop1em>
+        <FlexSection fadeIn fullWidth marginTop1em>
           <DeleteEntryButton fullWidth fullHeight entryId={id} />
           <Button fullWidth onClick={() => history.push(`/calendar`)}>BACK TO CALENDAR</Button>
         </FlexSection>
