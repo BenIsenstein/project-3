@@ -1,12 +1,11 @@
-import { Fragment, useEffect, useState, useContext, useMemo } from 'react'
+import React, { useEffect, useState, useContext, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
-import { PencilIcon, Form, FormSectionTitle, Button, Label, FlexSection } from '../../common'
+import { PencilIcon, Form, FormSectionTitle, Button, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
 import ComplexInput from './ComplexInput/ComplexInput'
-import DatetimePickerModal from '../Modals/DatetimePickerModal'
-import './FormTemplate.css'
+import GroupOfInputs from './GroupOfInputs/GroupOfInputs'
 
 /* 
 NOTES
@@ -103,7 +102,7 @@ const SuperForm= ({
   const [resetValues, setResetValues] = useState({})
   const userContext = useContext(UserContext)
   const history = useHistory()
-  const goHome = useMemo(() => () => history.push('/'), [history])
+  const goHome = useMemo(() => () => history.push('/calendar'), [history])
   const isDateInput = useIsDateInput()
   const resetForm = useMemo(() => () => {reset(resetValues); setViewMode('details')}, [reset, resetValues])
   // - - - -  Conditions measuring formMode + viewMode - - - -
@@ -122,6 +121,22 @@ const SuperForm= ({
     setValue,
     errors
   }
+  // - - Wrapper to deliver register to children in BeforeTemplate, AfterTemplate, BeforeSubmitButton - -
+  const DeliverRegister = ({ children }) => <>
+    {React.Children.map(children.props.children, child => {
+        return React.createElement(
+          child.type, 
+          {...{
+            ...child.props,
+            register: register,
+            key: child.props?.name
+          }}
+        )
+       })}
+  </>
+ 
+
+
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
     if (!isDetailsMode) return
@@ -211,7 +226,7 @@ const SuperForm= ({
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
   
   return <FlexSection fullWidth column fadeIn {...props}>
-    {BeforeTemplate && <BeforeTemplate />} 
+    {BeforeTemplate} 
 
     <FlexSection fullWidth spaceBetween>
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
@@ -219,52 +234,19 @@ const SuperForm= ({
     </FlexSection>
     
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
-      {inputs && inputs.map(({ name, readOnly, ...rest }, index) => {
-        // every input other than date-types
-        if (!isDateInput(name)) return ( 
-          <ComplexInput 
-            key={index}
-            name={name}
-            readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-            {...formTools}
-            {...modeAndView}
-            {...rest} 
-          />
-        )
-        
-        // date-type input
-        return (isDetailsMode && isDetailsView) || readOnly
-          ? <ComplexInput 
-            key={index} 
-            name={name}
-            readOnly 
-            {...formTools} 
-            {...modeAndView}
-            {...rest}
-          />  
-          : <Fragment key={index}>
-            <Label htmlFor={name}>
-              {rest.labelText || name}
-            </Label>
-            <FlexSection fullWidth>
-              <ComplexInput
-                labelHidden
-                name={name}        
-                {...formTools}
-                {...modeAndView}
-                {...rest}
-              />
-              <DatetimePickerModal 
-                setValue={setValue} 
-                openModalWithNewDate={rest.openModalWithNewDate}
-                modalTitle={rest.modalTitle || "set " + name}
-                nameForUpdate={name} 
-                margin="0 0 0 5px"
-                iconButton 
-              />
-            </FlexSection>
-          </Fragment>
-      })}
+      <GroupOfInputs 
+        {...{
+        inputs, 
+        ...modeAndView,
+        ...formTools
+        }}
+      />
+
+      {props.BeforeSubmitButton?.props?.children?.map(child => 
+        child?.type?.name === "ComplexInput" 
+          ? <ComplexInput {...child.props} {...formTools} {...modeAndView} />
+          : child
+      )}
 
       {(isAddMode || isEditView) && 
         <FlexSection fullWidth marginTop1em>
@@ -278,7 +260,7 @@ const SuperForm= ({
       }
     </Form>  
 
-    {AfterTemplate && <AfterTemplate />} 
+    {AfterTemplate} 
   </FlexSection>
 }
 

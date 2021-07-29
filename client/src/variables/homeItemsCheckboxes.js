@@ -4,28 +4,29 @@ import { GroupOfCheckboxes } from "../components/SuperForm/GroupOfInputs/GroupOf
 
 const homeItemsCheckboxes = {
   name: 'homeItems',
-  //registerOptions: {required: "ITEMS IS REQUIRED"},
+  registerOptions: {required: "You must pick at least one item."},
   labelText: 'Items In Your Home',
+  forwardRegister: true,
   as: GroupOfCheckboxes,
   inputs: [
-    {value: "furnace"},
-    {value: "airConditioner", labelText: "Air Conditioner"},
-    {value: "waterHeater", labelText: "Water Heater"},
-    {value: "ducts"},
-    {value: "roof"},
-    {value: "irrigation"},
-    {value: "waterSoftener", labelText: "Water Softener"},
-    {value: "floorHeating", labelText: "Floor Heating"},
-    {value: "humidifier"},
-    {value: "smokeAlarms", labelText: "Smoke Alarms"},
-    {value: "carbonMonoxideAlarms", labelText: "Carbon Monoxide Alarms"},
+    {value: "Furnace"},
+    {value: "Air Conditioner"},
+    {value: "Water Heater"},
+    {value: "Ducts"},
+    {value: "Roof"},
+    {value: "Irrigation"},
+    {value: "Water Softener"},
+    {value: "Floor Heating"},
+    {value: "Humidifier"},
+    {value: "Smoke Alarms"},
+    {value: "Carbon Monoxide Alarms"},
     {value: "GFCI"},
-    {value: "eavestroughs"},
-    {value: "centralVacuum", labelText: "Central Vacuum"},
-    {value: "windows"},
-    {value: "exteriorPaint", labelText: "Exterior Paint"},
-    {value: "hoses"},
-    {value: "aeration"}
+    {value: "Eavestroughs"},
+    {value: "Central Vacuum"},
+    {value: "Windows"},
+    {value: "Exterior Paint"},
+    {value: "Hoses"},
+    {value: "Aeration"}
   ]
 }
 

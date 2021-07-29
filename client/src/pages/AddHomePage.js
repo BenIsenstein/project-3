@@ -1,10 +1,19 @@
 import { useState } from 'react'
-import { Page, PageContainer, Button, FlexSection } from '../common'
+import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
+import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
 import { homeItemsCheckboxes } from '../variables'
+import CustomItemModal from '../components/Modals/CustomItemModal'
+import ComplexInput from '../components/SuperForm/ComplexInput/ComplexInput'
 
-const inputs = [
+
+
+
+
+const AddHomePage = () => {
+  const [customItems, setCustomItems] = useState([])
+  const [newItem, setNewItem] = useState()
+  const inputs = [
     {
       name: "address",
       registerOptions: { required: "You must input an address." },
@@ -16,7 +25,7 @@ const inputs = [
       name: "residenceType",
       labelText: "Type of residence",
       registerOptions: { required: "You must select a type of residence." },
-      forwardRegister: true, // starting by not passing the register and see what happens
+      forwardRegister: true, 
       as: SuperFormSelect,
       options: [
         {value: "house"},
@@ -46,17 +55,19 @@ const inputs = [
     },
     {
       forwardRegister: true,
+      forwardErrors: true,
       as: GroupOfInputs,
       inputs: [
         {
           name: "city",
+          wrapperProps: {gridColumn: '1/2'},
           registerOptions: { required: "You must input a city." }
         },
         {
           name: "province",
           wrapperProps: {gridColumn: '3/4'},
           registerOptions: { required: "You must select a province." },
-          forwardRegister: true, // starting by not passing the register and see what happens
+          forwardRegister: true, 
           as: SuperFormSelect,
           options: [
             {value: "BC"},
@@ -76,6 +87,7 @@ const inputs = [
         },
         {
           name: "country",
+          wrapperProps: {gridColumn: '1/2'},
           registerOptions: { required: "You must input a country." }
           // how to efficiently make a worldwide country select?
         },
@@ -89,13 +101,12 @@ const inputs = [
     },
     {
       ...homeItemsCheckboxes
-    },
-    // {
-    //     //add your own item
-    // }
-]
+    }
+  ]
 
-const AddHomePage = () => {
+  
+  
+
   return (
     <Page>
       <PageContainer flexColumn>
@@ -103,10 +114,34 @@ const AddHomePage = () => {
           titleText="Add A Home"
           inputs={inputs}
           onSubmit={data => console.log('Add a home data: ', data)}
-        />  
+          BeforeSubmitButton={<> 
+            <CustomItemModal 
+              modalContent={
+                <ComplexInput 
+                  name="Item name"
+                  onChange={event => setNewItem(event.target.value)}
+                />
+              }
+              actionOnConfirm={() => 
+                setCustomItems([{ value: newItem, defaultChecked: true }, ...customItems])
+              }
+            />
+            {customItems.length > 0 && 
+              <ComplexInput 
+                name="homeItems"
+                labelText="Custom Items"
+                forwardRegister
+                as={GroupOfCheckboxes}
+                inputs={customItems}
+              />
+            }
+          </>}
+        />
       </PageContainer>
     </Page>
   )
 }
+//modalContent
+// actionOnConfirm
 
 export default AddHomePage

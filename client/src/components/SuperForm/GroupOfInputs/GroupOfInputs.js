@@ -1,12 +1,9 @@
-import { Fragment } from 'react'
-import { FlexSection, GridSection, Label, Select } from '../../../common'
+import { FlexSection, GridSection, Input, Select } from '../../../common'
 import { useIsDateInput } from '../../../functions'
 import DatetimePickerModal from '../../Modals/DatetimePickerModal'
 import ComplexInput from '../ComplexInput/ComplexInput'
 
-// all props not in the component code are passed to the outside FlexSection.
-// by default the FlexSection will behave as a row, but any FlexSection props 
-// can be applied to format the input group
+// all props not in the component code are passed to the outside GridSection.
 
 const GroupOfInputs = ({
   inputs, 
@@ -34,11 +31,11 @@ const GroupOfInputs = ({
 
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
-    {inputs && inputs.map(({ name, readOnly, ...rest }) => {
+    {inputs && inputs.map(({ name, readOnly, ...rest }, index) => {
       // every input other than date-types
       if (!isDateInput(name)) return ( 
         <ComplexInput 
-          key={name}
+          key={index}
           name={name}
           readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
           {...formTools}
@@ -50,20 +47,21 @@ const GroupOfInputs = ({
       // date-type input
       return (isDetailsMode && isDetailsView) || readOnly
         ? <ComplexInput 
-          key={name} 
+          key={index} 
           name={name}
           readOnly 
           {...formTools} 
           {...modeAndView}
           {...rest}
         />  
-        : <Fragment key={name}>
-          <Label htmlFor={name}>
-            {rest.labelText || name}
-          </Label>
-          <FlexSection fullWidth>
+        : (
+          <FlexSection 
+            key={index} 
+            gridColumn={rest.wrapperProps?.gridColumn || "1/5"} 
+            {...rest.wrapperProps} 
+            fullWidth
+          >
             <ComplexInput
-              labelHidden
               name={name}        
               {...formTools}
               {...modeAndView}
@@ -78,12 +76,13 @@ const GroupOfInputs = ({
               iconButton 
             />
           </FlexSection>
-        </Fragment>
+        )
     })}
   </GridSection>
 }
 
 const GroupOfCheckboxes = ({
+  // GroupOfCheckboxes needs to have 'forwardRegister' set to true
   inputs, 
   isAddMode,
   isDetailsMode,
@@ -114,6 +113,7 @@ const GroupOfCheckboxes = ({
         name={props.name}
         type="checkbox"
         readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+        registerOptions={props.registerOptions}
         {...formTools}
         {...modeAndView}
         {...rest} 
@@ -122,14 +122,21 @@ const GroupOfCheckboxes = ({
   </GridSection>
 }
 
-const SuperFormSelect = ({ options, name, ...props }) => {
+const SuperFormSelect = ({ options, name, ...props }) => { 
+  // *SuperFormSelect needs to have "forwardRegister" set to true.*
+  const allProps = {
+    name: name,
+    id: name,
+    ...props.register(name, props.registerOptions), 
+    ...props
+  }
+  
+  if (!options) return null
+  if (props.readOnly) return <Input {...allProps} />
+
   return <>
-    <Select 
-      name={name} 
-      id={name} 
-      {...props.register(name, props.registerOptions)} //wait and see if it registers, since Select is a native element.
-    >
-      {options && options.map(({ value, optionText }) => <option value={value}>{optionText || value}</option> )}
+    <Select {...allProps}>
+      {options.map(({ value, optionText }) => <option value={value} key={value}>{optionText || value}</option> )}
     </Select>
   </>
 }

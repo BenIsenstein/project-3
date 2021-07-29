@@ -3,7 +3,7 @@ import { Page, PageContainer, Button, FlexSection } from '../common'
 import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
 import SuperForm from '../components/SuperForm/SuperForm'
 import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput/ToggleVisibleInput'
-import GroupOfInputs from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
 
 const AccountDetails = () => {
   const updateAccount = useUpdateAccount()
@@ -29,12 +29,14 @@ const AccountDetails = () => {
     },
     {
       forwardRegister: true,
+      forwardErrors: true,
       as: GroupOfInputs,
       inputs: [
         {
           name: "firstName",
           registerOptions: { required: "You must input a first name." },
-          labelText: "First Name"
+          labelText: "First Name",
+          wrapperProps: {gridColumn: '1/2'}
         },
         {
           name: "lastName",
@@ -44,11 +46,18 @@ const AccountDetails = () => {
         }
       ]
     },
-    // {
-    //   name: "userType",
-    //   registerOptions: { required: "You must input an account type." },
-    //   labelText: "You are a",
-    // },
+    {
+      name: "userType",
+      registerOptions: { required: "You must input an account type." },
+      labelText: "You are a",
+      forwardRegister: true, 
+      as: SuperFormSelect,
+      options: [
+        {value: "homeManager"},
+        {value: "serviceProvider"},
+        {value: "insuranceProvider"},
+      ]
+    },
     {
       name: "email",
       registerOptions: { required: "You must input an email address." },
@@ -84,7 +93,7 @@ const AccountDetails = () => {
           formMode='details' 
           detailsUrl='/api/user/getloggedinuser' 
           onSubmit={updateAccount} 
-          AfterTemplate={ChangePasswordButton}
+          AfterTemplate={<ChangePasswordButton />}
         />
         <SuperForm 
           popup

@@ -101,7 +101,7 @@ const EntryDetails = () => {
           detailsUrl={getEntryRoute} 
           onSubmit={updateEntry} 
           addModeCancel={history.goBack}
-          AfterTemplate={CompleteTaskButton}
+          AfterTemplate={<CompleteTaskButton />}
         />
         {shouldShowCompletion && <FormSeparator />}
         <FormTemplate 

@@ -8,32 +8,52 @@ other props might include:
 - toggleVisible
 - maxLength
 - detailedPage
+- noFullWidth
 - readOnly
 */
 
-const ComplexInput = ({ name, errors, register, forwardRegister, forwardErrors, ...props }) => {
-  const isCheckbox = props.type==='checkbox'
-  const ifCheckboxValueElseName = isCheckbox ? props.value : name
+const ComplexInput = ({ 
+  name, 
+  errors, 
+  register, 
+  forwardRegister, 
+  forwardErrors, 
+  type, 
+  wrapperProps,
+  ...props 
+  }) => {
+  const ifCheckboxValueElseName = type==='checkbox' ? props.value : name
 
-  return <FlexSection {...props.wrapperProps} fullWidth column alignStart key={props.key}>
-
-    {!props.labelHidden && 
-      <Label htmlFor={ifCheckboxValueElseName}>{props.labelText || ifCheckboxValueElseName}</Label>
-    }
-
-    <Textarea 
-      id={ifCheckboxValueElseName}
-      name={name}
-      {...!forwardRegister && register && register(name, props.registerOptions)} 
-      {...forwardRegister && register && { register }}
-      {...forwardErrors && errors && { errors }}
-      {...props.type && { as: Input }}
-      {...props}
-    />
-
-    {!forwardErrors && errors && <p>{errors[name]?.message}</p>}
-
-  </FlexSection>
+  return (
+    <FlexSection 
+      key={props.key}
+      gridColumn={wrapperProps?.gridColumn || "1/5"}
+      fullWidth={!props.noFullWidth} 
+      column 
+      alignStart 
+      {...wrapperProps}
+    >
+  
+      {!props.labelHidden && 
+        <Label htmlFor={ifCheckboxValueElseName}>
+          {props.labelText || ifCheckboxValueElseName}
+        </Label>
+      }
+  
+      <Textarea 
+        id={ifCheckboxValueElseName}
+        name={name}
+        {...!forwardRegister && register && register(name, props.registerOptions)} 
+        {...forwardRegister && register && { register }}
+        {...forwardErrors && errors && { errors }}
+        {...type && { as: Input, type }}
+        {...props}
+      />
+  
+      {!forwardErrors && errors && <p>{errors[name]?.message}</p>}
+  
+    </FlexSection>
+  )
 }
 
 export default ComplexInput
