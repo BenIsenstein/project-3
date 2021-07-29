@@ -27,6 +27,4 @@ router.get('/get/:id', async (req, res) => {
     catch (err) {console.log("error getting single home: ", err)}   
 })
 
-
-
 module.exports = router

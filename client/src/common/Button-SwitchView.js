@@ -25,6 +25,20 @@ const SwitchViewButton = styled.button`
     ${props => props.icon && css`
         padding: .2em;
     `}
+
+    ${props => props.edit && css`
+        margin-left: .6em;
+        padding: .2em;
+        fill: ${props => props.theme.prm};
+        background: none;
+        transition: all .2s ease-in-out;
+
+        &:hover {
+            fill: ${props => props.theme.prmDk};
+            background: none;
+            transform: rotate(90deg);
+        }
+    `}
 `
 
 export {SwitchViewButton}
