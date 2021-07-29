@@ -135,7 +135,7 @@ const StyleWrapper = styled.div`
   }
 
   .fc-list-day-cushion {
-    color: ${props => props.theme.contentColor};
+    color: ${props => props.theme.titleColor};
     background: ${props => props.theme.prmLt};
   }
 
@@ -150,6 +150,11 @@ const StyleWrapper = styled.div`
 
   .fc-list-empty-cushion {
     color: ${props => props.theme.contentColor};
+  }
+
+  .fc-list-event-time {
+    white-space: normal;
+    width: auto;
   }
 
   .fc-event-time {

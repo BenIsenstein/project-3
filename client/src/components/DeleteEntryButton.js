@@ -48,18 +48,19 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
       <ConfirmModal
         isConfirmModalShowing={isConfirmModalShowing}
         hideConfirmModal={toggleConfirmModal}
-        modalContent="Do you really wish to delete this event?"
+        modalContent="Do you really wish to delete this task?"
         confirmPrompt='Delete'
         actionOnConfirm={DeleteEntry}
       />
       <Button 
         icon={props.iconButton} 
         formSubmit={props.formSubmit}
-        fullwidth={props.fullWidth}
+        fullWidth={props.fullWidth}
+        fullHeight={props.fullHeight}
         onClick={toggleConfirmModal}
         {...props}
       >
-        { props.iconButton ? <TrashIcon /> : 'Delete Event' }       
+        { props.iconButton ? <TrashIcon /> : 'Delete Task' }       
       </Button>
   </>
 }
