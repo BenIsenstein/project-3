@@ -1,6 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry } from '../functions'
+import UserHomesSelect from './UserHomesSelect'
 
 const AddEntry = () => {
   const history = useHistory()
@@ -9,7 +10,9 @@ const AddEntry = () => {
   const inputs = [
     {
       name: "houseId",
-      labelText: "house"
+      labelText: "house",
+      forwardRegister: true,
+      as: UserHomesSelect
     },
     {
       name: "item",

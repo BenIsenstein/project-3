@@ -110,7 +110,6 @@ const GroupOfCheckboxes = ({
     {inputs && inputs.map(({ readOnly, ...rest }, index) => 
       <ComplexInput 
         noFullWidth
-        noColumn
         key={index}
         name={props.name}
         type="checkbox"

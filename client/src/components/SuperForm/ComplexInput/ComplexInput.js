@@ -29,8 +29,8 @@ const ComplexInput = ({
     <FlexSection 
       key={props.key}
       gridColumn={wrapperProps?.gridColumn || "1/-1"}
-      fullWidth={!props.noFullWidth} 
-      column={!props.noColumn} 
+      fullWidth={!wrapperProps?.noFullWidth} 
+      column={!wrapperProps?.noColumn} 
       {...isCheckbox ? {alignCenter: true} : {alignStart: true}}
       {...wrapperProps}
     >
