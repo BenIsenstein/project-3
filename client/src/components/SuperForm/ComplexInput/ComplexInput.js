@@ -27,7 +27,7 @@ const ComplexInput = ({
   return (
     <FlexSection 
       key={props.key}
-      gridColumn={wrapperProps?.gridColumn || "1/5"}
+      gridColumn={wrapperProps?.gridColumn || "1/-1"}
       fullWidth={!props.noFullWidth} 
       column 
       alignStart 
