@@ -27,12 +27,12 @@ const AddEntry = () => {
     },
     {
       name: "start",
-      labelText: "starts:",
+      labelText: "starts",
       registerOptions: { required: "You must choose a start date." }
     },
     {
       name: "end",
-      labelText: "ends:",
+      labelText: "ends",
       registerOptions: { required: "You must choose an end date." }
     }
   ]

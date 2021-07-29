@@ -14,12 +14,12 @@ const NavbarContainer = styled.div`
 
     ${props => props.hamburger && css`
         justify-content: space-between;
-        background-color: ${props => props.theme.scdLt};
+        background-color: ${props => props.theme.bkgColor};
     `}
 `
 
 const NavMenu = styled.nav`
-    background-color: ${props => props.theme.scdLt};
+    background: ${props => props.theme.bkgColor};
     width: auto;
     height: 100vh;
     display: flex;
@@ -39,7 +39,7 @@ const NavMenu = styled.nav`
 
 const NavItem = styled(NavLink)`
     height: 2em;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.prmLt};
     text-decoration: none;
     margin: 1em 2.4em 0 2em;
     display: flex;
@@ -47,11 +47,11 @@ const NavItem = styled(NavLink)`
     cursor: pointer;
 
     &:hover {
-        color: ${props => props.theme.prmDk};
+        color: ${props => props.theme.prm};
     }
 
     &.${props => props.activeClassName} {
-        color: ${props => props.theme.prmDk};
+        color: ${props => props.theme.prm};
     }
 `
 
@@ -90,10 +90,10 @@ const Navbar = () => {
                     <CalendarIcon nav />
                     Calendar
                 </NavItem>
-                <NavItem to='/library' activeClassName>
+                {/* <NavItem to='/library' activeClassName>
                     <LibraryIcon nav />
                     Tasks Library
-                </NavItem>
+                </NavItem> */}
             </FlexSection>
             <FlexSection column style={{marginBottom: '2em'}}>
                 <NavItem to='/account' activeClassName>

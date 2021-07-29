@@ -8,7 +8,7 @@ const Textarea = styled(TextareaAutosize)`
     font-family: inherit;
     font-size: 1em;
     color: ${props => props.theme.contentColor};
-    border: 1px solid ${props => props.theme.prm};
+    border: 1px solid ${props => props.theme.titleColor};
     border-radius: 6px;
     outline: none;
     resize: none;
@@ -16,8 +16,8 @@ const Textarea = styled(TextareaAutosize)`
 
     &:focus {
         padding: .4em .6em;
-        background-color: ${props => props.theme.scdLt};
-        border: 1px solid ${props => props.theme.prmDk};
+        background-color: ${props => props.theme.prmLt};
+        border: 1px solid ${props => props.theme.contentColor};
         outline: none;
     }
 

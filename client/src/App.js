@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { ThemeProvider } from "styled-components"
+import styled, { ThemeProvider } from "styled-components"
 import theme from './theme'
 import GlobalStyle from "./globalStyles"
 

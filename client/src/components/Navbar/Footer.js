@@ -6,7 +6,7 @@ const FooterContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: ${props => props.theme.scdLt};
+    background: ${props => props.theme.prmLt};
 `
 
 const Footer = () => {
