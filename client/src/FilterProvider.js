@@ -4,15 +4,13 @@ import FilterContext from './FilterContext'
 
 const FilterProvider = ({ children }) => {
   const history = useHistory()
-  const redirectHome = () => history.push('/calendar')
+  // const redirectHome = () => history.push('/calendar')
   const [active, setActive] = useState(true)
   const [completed, setCompleted] = useState(false)
 
   const setFilterInfo = (filterInfo) => {
-    let { activeIsChecked, completedIsChecked } = filterInfo
-
-    setActive(activeIsChecked)
-    setCompleted(completedIsChecked)
+    setActive(filterInfo.active)
+    setCompleted(filterInfo.completed)
   }
 
   // Using the current USER INFO, set the FILTER values
@@ -28,7 +26,7 @@ const FilterProvider = ({ children }) => {
 
   //       // fetch for all homes here before concatenating with the userObject??
         
-  //       setUserInfo(userObject)
+  //       setFilterInfo(userObject)
   //     }
   //     catch (err) {
   //       console.log('error running checkLoggedInUser: ', err)
