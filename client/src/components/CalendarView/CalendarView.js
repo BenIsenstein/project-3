@@ -20,7 +20,7 @@ const StyleWrapper = styled.div`
   .fc-toolbar-title {
     margin: .6em 0;
     font-size: 1.2em;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.titleColor};
 
     @media (min-width: ${props => props.theme.lgScreen}) {
       margin: 0;
@@ -30,6 +30,7 @@ const StyleWrapper = styled.div`
   .fc-icon-chevron-right, .fc-icon-chevron-left, .fc-icon-chevrons-right, .fc-icon-chevrons-left {
     color: white;
     margin-top: -.15em;
+    font-weight: 600;
   }
 
   .fc-scrollgrid-sync-inner {
@@ -39,7 +40,7 @@ const StyleWrapper = styled.div`
   .fc-col-header-cell-cushion {
     font-size: .8em;
     font-weight: normal;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.contentColor};
     align-self: center;
   }
 
@@ -49,7 +50,7 @@ const StyleWrapper = styled.div`
 
   .fc-daygrid-day-number {
     font-size: .6em;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.contentColor};
   }
 
   .fc-event-title {
@@ -65,38 +66,38 @@ const StyleWrapper = styled.div`
   .fc-button {
     font-family: inherit;
     font-size: .8em;
-    font-weight: normal;
+    font-weight: 500;
     text-transform: uppercase;
     color: white;
     border: none;
     border-radius: 6px;
-    background-color: ${props => props.theme.prmLt};
+    background-color: ${props => props.theme.scdLt};
     background-image: none;
     outline: none;
 
     &:disabled {
       opacity: .4;
-      background-color: ${props => props.theme.prmLt};
+      background-color: ${props => props.theme.scdLt};
 
       &:hover {
-        background-color: ${props => props.theme.prmLt};
+        background-color: ${props => props.theme.scdLt};
         cursor: not-allowed;
       }
     }
 
     &:focus {
-      background-color: ${props => props.theme.prm};
+      background-color: ${props => props.theme.scd};
       box-shadow: none;
     }
   }
 
   .fc-button-primary {
     &:hover {
-      background-color: ${props => props.theme.prm};
+      background-color: ${props => props.theme.scd};
     }
 
     &:not(:disabled):active {
-        background-color: ${props => props.theme.prm};
+        background-color: ${props => props.theme.scd};
 
         &:focus {
           box-shadow: none;
@@ -104,7 +105,7 @@ const StyleWrapper = styled.div`
       }
 
     &:focus {
-      background-color: ${props => props.theme.prm};
+      background-color: ${props => props.theme.scd};
     }
 
     &.fc-button-active {
@@ -115,34 +116,45 @@ const StyleWrapper = styled.div`
   }
 
   .fc-button-primary:not(:disabled).fc-button-active {
-    background-color: ${props => props.theme.prm};
+    background-color: ${props => props.theme.scd};
 
     &:focus {
-      background-color: ${props => props.theme.prm};
+      background-color: ${props => props.theme.scd};
       box-shadow: none;
     }
   }
 
   .fc-timegrid-axis-cushion {
     font-size: .8em;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.contentColor};
   }
 
   .fc-timegrid-slot-label-cushion {
     font-size: .8em;
-    color: ${props => props.theme.prm};
+    color: ${props => props.theme.contentColor};
   }
 
   .fc-list-day-cushion {
-    color: ${props => props.theme.contentColor};
+    color: ${props => props.theme.titleColor};
+    background: ${props => props.theme.prmLt};
   }
 
   .fc-list-table {
     color: ${props => props.theme.contentColor};
   }
 
+  .fc-non-business {
+    background: ${props => props.theme.prmLt};
+    opacity: .6;
+  }
+
   .fc-list-empty-cushion {
     color: ${props => props.theme.contentColor};
+  }
+
+  .fc-list-event-time {
+    white-space: normal;
+    width: auto;
   }
 
   .fc-event-time {
@@ -238,6 +250,7 @@ const CalendarView = ({ dates, ...props }) => {
                 // initialView="dayGridDay"  // DAY view
                 // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}
+                firstDay={1}
                 // businessHours={true}
                 businessHours={{
                  daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
@@ -270,23 +283,20 @@ const CalendarView = ({ dates, ...props }) => {
                   //       start  : '2021-07-09T12:30:00',
                   //     }
                   //   ],
-                    color: 'red',     
-                    textColor: 'white' 
+                    color: 'tomato',
                   },
 
                   // COMPLETED Tasks
                   {
                     events: completedList,
-                    color: '#d1d1cf',     // grey
-                    textColor: 'black' 
+                    color: 'silver',     // grey
                   },
 
                   // ACTIVE UPCOMING Tasks
                   {
                     // events: eventList,
                     events: upcomingList,
-                    color: '#03b1fc',     // blue
-                    textColor: 'white' 
+                    color: 'skyblue',     // blue
                   }
                 ]}
                 headerToolbar={{

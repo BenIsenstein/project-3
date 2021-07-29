@@ -6,7 +6,7 @@ const SignupPage = () => {
     let history = useHistory()
 
     return (
-        <Page>
+        <Page noBackground>
             <PageContainer centerPage mockMobileView>
                 <Signup />
                 <p>Already have an account? <TextLink onClick={() => history.push(`/login`)}>Log in</TextLink> here.</p>

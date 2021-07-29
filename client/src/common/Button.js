@@ -51,6 +51,10 @@ const Button = styled.button`
         justify-content: center;
     `}
 
+    ${props => props.fullHeight && css`
+        height: 100%;
+    `}
+
     ${props => props.alignSelfStart && css`
         align-self: flex-start;
     `}

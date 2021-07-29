@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo, useContext } from "react"
 import UserContext from '../UserContext'
+import FilterContext from '../FilterContext'
 import { useHistory } from 'react-router-dom'
 import FilterModal from '../components/Filter/FilterModal'
 import { AddIcon, Button, Page, PageContainer, FlexSection } from '../common'
@@ -9,15 +10,26 @@ import CalendarView from '../components/CalendarView/CalendarView'
 const Calendar = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
-  const [checkedAll, setCheckedAll] = useState(false)
-  const [checked, setChecked] = useState({
-    active: true,
-    completed: false
-  })
+  const filterContext = useContext(FilterContext)
+  // const [checkedAll, setCheckedAll] = useState(false)
+  // const [checked, setChecked] = useState({
+  //   active: true,
+  //   completed: false
+  // })
+
   const handleFilterChange = (active, completed, all) => {
-    setChecked({active: active, completed: completed})
-    setCheckedAll(all)
+    // setChecked({active: active, completed: completed})
+    // setCheckedAll(all)
+    
+    // Set global context for FILTER settings to persist 
+    // when changing pages/components.
+    let filterInfo = {
+      active: active,
+      completed: completed
+    }
+    filterContext.setFilterInfo(filterInfo)
   }
+
   const [loaded, setLoaded] = useState(false)
   const [isDatesEmpty, setIsDatesEmpty] = useState(false)
   const [dates, setDates] = useState([])
@@ -69,12 +81,14 @@ const Calendar = () => {
         `)
       }
     }
-
     fetchCalendarEntries()
   }, [userContext.user, setNoneFound])
 
   useEffect(() => {
     if (!loaded) return
+
+    console.log("Calendar: Welcome to UseEffect for setFilteredDates!")
+    console.log("FilterContext = ", filterContext)
 
     const returnAll = entry => true
     const returnActive = entry => !entry.completed
@@ -82,7 +96,10 @@ const Calendar = () => {
 
     setFilteredDates(dates
       .map(date => {
-        let { active, completed } = checked
+        // let { active, completed } = checked
+        let active = filterContext.active
+        let completed = filterContext.completed
+
         let filteredEntries = date.entries
           .filter(entry => 
             active && completed ? returnAll(entry) : 
@@ -90,7 +107,7 @@ const Calendar = () => {
             completed ? returnCompleted(entry) : 
             returnActive(entry) 
         )
-  
+
         return {
           date: date.date, 
           entries: filteredEntries
@@ -100,8 +117,8 @@ const Calendar = () => {
         date.entries.length 
       )
     )
-      
-  }, [checked, loaded, dates])
+  }, [filterContext, loaded, dates])
+  // }, [checked, loaded, dates])
 
   return (
     <Page>

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import { ThemeProvider } from "styled-components"
+import styled, { ThemeProvider } from "styled-components"
 import theme from './theme'
 import GlobalStyle from "./globalStyles"
 
@@ -19,6 +19,7 @@ import AccountDetails from './pages/AccountDetails'
 import Settings from './pages/Settings'
 import AddEntryPage from './pages/AddEntryPage'
 import AddHomePage from './pages/AddHomePage'
+import FilterProvider from './FilterProvider'
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -27,18 +28,20 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       {userContext.isLoggedIn && <Navbar />}
-      <Switch>
-        <Route exact path='/' component={Landing} />
-        <Route path='/login' component={LoginPage} />
-        <Route path='/signup' component={SignupPage} />
-        <Route path='/calendar' component={Calendar} />
-        <Route path='/library' component={Library} />
-        <Route path='/task/:id' component={EntryDetails} />
-        <Route path='/account' component={AccountDetails} />
-        <Route path='/settings' component={Settings} />
-        <Route path='/new-task' component={AddEntryPage} />
-        <Route path='/new-home' component={AddHomePage} />
-      </Switch>
+      <FilterProvider>
+        <Switch>
+          <Route exact path='/' component={Landing} />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/signup' component={SignupPage} />
+          <Route path='/calendar' component={Calendar} />
+          <Route path='/library' component={Library} />
+          <Route path='/task/:id' component={EntryDetails} />
+          <Route path='/account' component={AccountDetails} />
+          <Route path='/settings' component={Settings} />
+          <Route path='/new-task' component={AddEntryPage} />
+          <Route path='/new-home' component={AddHomePage} />
+        </Switch>
+      </FilterProvider>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>
   )

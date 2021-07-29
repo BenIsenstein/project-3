@@ -18,7 +18,7 @@ const Landing = () => {
 
     }, [isLoggedIn, history])
 
-    return isLoggedInChecked && <Page>
+    return isLoggedInChecked && <Page noBackground>
       <PageContainer centerPage mockMobileView>
           <HouseIcon onClick={() => history.push(`/`)} />
           <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
