@@ -121,21 +121,6 @@ const SuperForm= ({
     setValue,
     errors
   }
-  // - - Wrapper to deliver register to children in BeforeTemplate, AfterTemplate, BeforeSubmitButton - -
-  const DeliverRegister = ({ children }) => <>
-    {React.Children.map(children.props.children, child => {
-        return React.createElement(
-          child.type, 
-          {...{
-            ...child.props,
-            register: register,
-            key: child.props?.name
-          }}
-        )
-       })}
-  </>
- 
-
 
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
