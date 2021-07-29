@@ -13,6 +13,7 @@ const GroupOfInputs = ({
   isEditView,
   register,
   setValue,
+  watch,
   errors,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
@@ -26,6 +27,7 @@ const GroupOfInputs = ({
   const formTools = {
     register,
     setValue,
+    watch,
     errors
   }
 
@@ -90,6 +92,7 @@ const GroupOfCheckboxes = ({
   isEditView,
   register,
   setValue,
+  watch,
   errors,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
@@ -102,6 +105,7 @@ const GroupOfCheckboxes = ({
   const formTools =  {
     setValue, 
     register,
+    watch,
     errors
   }
   

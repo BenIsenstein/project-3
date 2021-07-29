@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry } from '../functions'
-import UserHomesSelect from './UserHomesSelect'
+import UserHomesSelect, { HomeItemsSelect } from './SuperForm/DynamicSelects'
 
 const AddEntry = () => {
   const history = useHistory()
@@ -9,15 +9,15 @@ const AddEntry = () => {
 
   const inputs = [
     {
-      name: "houseId",
-      labelText: "house",
+      name: "homeId",
+      labelText: "home",
       forwardRegister: true,
       as: UserHomesSelect
     },
     {
       name: "item",
-      registerOptions: { required: "You must choose an item." },
-      maxLength: '50'
+      forwardRegister: true,
+      as: HomeItemsSelect
     },
     {
       name: "task",

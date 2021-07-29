@@ -35,8 +35,8 @@ const EntryDetails = () => {
 
   const entryDetailsInputs = [ 
     {
-      name: "houseId",
-      labelText: "house",
+      name: "homeId",
+      labelText: "home",
       readOnly: true
     },
     {
