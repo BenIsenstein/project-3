@@ -11,7 +11,7 @@ const Select = styled.select`
     outline: none;
 
     &:focus {
-        background-color: ${props => props.theme.scdLt};
+        background-color: ${props => props.theme.prmLt};
         border: 1px solid ${props => props.theme.prmDk};
         outline: none;
     }

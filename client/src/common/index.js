@@ -1,5 +1,6 @@
 export * from './Button-SwitchView'
 export * from './Button'
+export * from './Error'
 export * from './FlexSection'
 export * from './Form'
 export * from './FormSectionTitle'

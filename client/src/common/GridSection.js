@@ -24,7 +24,7 @@ const GridSection = styled.div`
     `}
 
     @media (min-width: ${props => props.theme.smScreen}) {
-        grid-template-columns: 5fr 0.5fr 5fr;
+        grid-template-columns: ${props => props.gridTemplateColumns || "5fr 0.5fr 5fr"};
     }
 `
 

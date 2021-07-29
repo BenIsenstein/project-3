@@ -227,11 +227,13 @@ const SuperForm= ({
         }}
       />
 
-      {props.BeforeSubmitButton?.props?.children?.map(child => 
+      {/* {props.BeforeSubmitButton?.props?.children?.map(child => 
         child?.type?.name === "ComplexInput" 
           ? <ComplexInput {...child.props} {...formTools} {...modeAndView} />
           : child
-      )}
+      )} */}
+
+      {props.BeforeSubmitButton}
 
       {(isAddMode || isEditView) && 
         <FlexSection fullWidth marginTop1em>

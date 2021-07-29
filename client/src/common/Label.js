@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const Label = styled.label`
     color: ${props => props.theme.titleColor};
@@ -10,6 +10,10 @@ const Label = styled.label`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
+    ${props => props.margin && css`
+        margin: ${props.margin};
+    `}
 `
 
 export {Label}

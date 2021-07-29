@@ -15,7 +15,7 @@ router.post('/add', async (req, res) => {
 
 // get all homes for a user
 router.get('/getbyuser/:id', async (req, res) => {
-    try {res.json({ homeList: await Home.find({ userId: req.params.id }) })}
+    try {res.json(await Home.find({ userId: req.params.id }))} // JSON array is sent back
     
     catch (err) {console.log("error getting all home for user: ", err)}
 })
