@@ -119,6 +119,7 @@ const SuperForm= ({
   const formTools = {
     register,
     setValue,
+    watch,
     errors
   }
 

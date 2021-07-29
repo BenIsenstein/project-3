@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
 import { homeItemsCheckboxes } from '../variables'
 import CustomItemModal from '../components/Modals/CustomItemModal'
 import ComplexInput from '../components/SuperForm/ComplexInput/ComplexInput'
@@ -12,6 +12,7 @@ const AddHomePage = () => {
   const [newItem, setNewItem] = useState()
   const addHome = useAddHome()
   const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
+  
   const inputs = [
     {
       name: "address",
