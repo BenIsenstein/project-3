@@ -44,7 +44,7 @@ const AddEntry = () => {
     titleText="New Task" 
     inputs={inputs} 
     addModeCancel={history.goBack} 
-    onSubmit={addEntry} 
+    onSubmit={data => console.log(data)} 
   />
 }
 

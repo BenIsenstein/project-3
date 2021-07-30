@@ -2,13 +2,13 @@ import { SuperFormSelect } from './GroupOfInputs/GroupOfInputs'
 import { useEffect, useState, useContext } from 'react'
 import UserContext from '../../UserContext'
 
-// The only CRUCIAL props are 'register' and 'name'. 
-// These will plug it into SuperForm.
+// It needs register to plug into SuperForm.
 // register will take care of itself if you include 
 // 'forwardRegister=true' with this input in SuperForm.
 const UserHomesSelect = props => {
     const [homeOptions, setHomeOptions] = useState([{value: 'loading...'}])
     const userContext = useContext(UserContext)
+    const { setValue } = props
 
     useEffect(() => {
         const fetchHomes = async () => {
@@ -19,15 +19,17 @@ const UserHomesSelect = props => {
               //successful fetch check
 
               setHomeOptions(homesArray.map(home => {return {value: home._id, optionText: home.nickname || home.address}}))
+              setValue('homeId', homesArray[0]._id)
             }
             catch (err) {
+                alert("There was an error searching the homes registered to this user. We're working on it.")
                 console.log(err)
             }
         }
 
         fetchHomes()
 
-    }, [userContext.user._id])
+    }, [userContext.user._id, setValue])
 
     return <SuperFormSelect options={homeOptions} {...props} />
 }
@@ -35,10 +37,11 @@ const UserHomesSelect = props => {
 const HomeItemsSelect = props => {
     const [itemOptions, setItemOptions] = useState([{value: 'loading...'}])
     const homeId = props.watch("homeId")
+    const { setValue, name } = props
     
     useEffect(() => {
         if (['loading...', undefined].includes(homeId)) return
-
+       
         let isMounted = true 
         const fetchHomes = async () => {
             try {
@@ -57,6 +60,7 @@ const HomeItemsSelect = props => {
 
               if (isMounted) {
                 setItemOptions(itemsArray.map(item => {return { value: item }}))
+                setValue(name, itemsArray[0])
               }
             }
             catch (err) {
