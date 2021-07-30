@@ -16,7 +16,7 @@ const ComplexInput = ({
   name, 
   errors, 
   register, 
-  forwardRegister, 
+  isCustomComponent, 
   forwardErrors, 
   type, 
   wrapperProps,
@@ -44,8 +44,8 @@ const ComplexInput = ({
       <Textarea 
         id={ifCheckboxValueElseName}
         name={name}
-        {...!forwardRegister && register && register(name, props.registerOptions)} 
-        {...forwardRegister && register && { register }}
+        {...!isCustomComponent && register && register(name, props.registerOptions)} 
+        {...isCustomComponent && register && { register }}
         {...forwardErrors && errors && { errors }}
         {...type && { as: Input, type }}
         {...props}

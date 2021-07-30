@@ -4,7 +4,7 @@ import UserContext from '../../UserContext'
 
 // It needs register to plug into SuperForm.
 // register will take care of itself if you include 
-// 'forwardRegister=true' with this input in SuperForm.
+// 'isCustomComponent=true' with this input in SuperForm.
 const UserHomesSelect = props => {
     const [homeOptions, setHomeOptions] = useState([{value: 'loading...'}])
     const userContext = useContext(UserContext)

@@ -22,7 +22,7 @@ const AddHomePage = () => {
       registerOptions: { required: "You must input an address." },
     },
     {
-      forwardRegister: true,
+      isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
       inputs: [
@@ -35,7 +35,7 @@ const AddHomePage = () => {
           name: "province",
           wrapperProps: {gridColumn: '3/4'},
           registerOptions: { required: "You must select a province." },
-          forwardRegister: true, 
+          isCustomComponent: true, 
           as: SuperFormSelect,
           options: [
             {value: "BC"},
@@ -71,7 +71,7 @@ const AddHomePage = () => {
       name: "residenceType",
       labelText: "Building Type",
       registerOptions: { required: "You must select a building type." },
-      forwardRegister: true, 
+      isCustomComponent: true, 
       as: SuperFormSelect,
       options: [
         {value: "House"},

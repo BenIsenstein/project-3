@@ -30,7 +30,7 @@ const AccountDetails = () => {
 
   const accountInputs = [
     {
-      forwardRegister: true,
+      isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
       inputs: [
@@ -43,7 +43,7 @@ const AccountDetails = () => {
           name: "userType",
           registerOptions: { required: "You must select an account type." },
           labelText: "You are a",
-          forwardRegister: true, 
+          isCustomComponent: true, 
           as: SuperFormSelect,
           options: [
             {value: "Home Manager"},
@@ -54,7 +54,7 @@ const AccountDetails = () => {
       ]
     },
     {
-      forwardRegister: true,
+      isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
       inputs: [
@@ -88,7 +88,7 @@ const AccountDetails = () => {
     {
       name: "newPassword",
       labelText: "New password",
-      forwardRegister: true,
+      isCustomComponent: true,
       as: ToggleVisibleInput,
       margin: "0 5px 0 0", 
       registerOptions: { 

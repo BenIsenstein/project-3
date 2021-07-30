@@ -6,7 +6,7 @@ const homeItemsCheckboxes = {
   name: 'homeItems',
   registerOptions: {required: "You must pick at least one item."},
   labelText: 'Items In Your Home',
-  forwardRegister: true,
+  isCustomComponent: true,
   as: GroupOfCheckboxes,
   inputs: [
     {value: "Furnace"},

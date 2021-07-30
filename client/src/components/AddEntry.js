@@ -3,7 +3,7 @@ import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry } from '../functions'
 import UserHomesSelect, { HomeItemsSelect } from './SuperForm/DynamicSelects'
 
-const AddEntry = () => {
+const AddEntry = () => {  
   const history = useHistory()
   const addEntry = useAddEntry()
 
@@ -11,12 +11,12 @@ const AddEntry = () => {
     {
       name: "homeId",
       labelText: "home",
-      forwardRegister: true,
+      isCustomComponent: true,
       as: UserHomesSelect
     },
     {
       name: "item",
-      forwardRegister: true,
+      isCustomComponent: true,
       as: HomeItemsSelect
     },
     {

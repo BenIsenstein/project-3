@@ -84,7 +84,7 @@ const GroupOfInputs = ({
 }
 
 const GroupOfCheckboxes = ({
-  // GroupOfCheckboxes needs to have 'forwardRegister' set to true
+  // GroupOfCheckboxes needs to have 'isCustomComponent' set to true
   inputs, 
   isAddMode,
   isDetailsMode,
@@ -130,7 +130,7 @@ const GroupOfCheckboxes = ({
 }
 
 const SuperFormSelect = ({ options, name, ...props }) => { 
-  // *SuperFormSelect needs to have "forwardRegister" set to true.*
+  // *SuperFormSelect needs to have "isCustomComponent" set to true.*
   const allProps = {
     name: name,
     id: name,

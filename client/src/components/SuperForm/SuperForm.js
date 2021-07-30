@@ -53,7 +53,7 @@ const inputs = [
     maxLength: '50'
   },
   {
-    forwardRegister: true,
+    isCustomComponent: true,
     as: GroupOfInputs,
     inputs: [{}, {}] 
     // These inputs all render inside of a FlexSection.

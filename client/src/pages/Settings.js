@@ -34,25 +34,28 @@ const Settings = () => {
     );
 
   const filterInputs = [
+    // {
+    //   isCustomComponent: true,
+    //   forwardErrors: true,
+    //   as: GroupOfCheckboxes,
+    //   inputs: [
+    //     {
+    //       name: "settings.filterprefs.active",
+    //       registerOptions: {},
+    //       labelText: "Active",
+    //       wrapperProps: { gridColumn: "1/2" },
+    //     },
+    //     {
+    //       name: "settings.filterprefs.completed",
+    //       registerOptions: {},
+    //       labelText: "Completed",
+    //       wrapperProps: { gridColumn: "3/4" },
+    //     },
+    //   ],
+    // },
     {
-      forwardRegister: true,
-      forwardErrors: true,
-      as: GroupOfCheckboxes,
-      inputs: [
-        {
-          name: "settings.filterprefs.active",
-          registerOptions: {},
-          labelText: "Active",
-          wrapperProps: { gridColumn: "1/2" },
-        },
-        {
-          name: "settings.filterprefs.completed",
-          registerOptions: {},
-          labelText: "Completed",
-          wrapperProps: { gridColumn: "3/4" },
-        },
-      ],
-    },
+      isCustomComponent: true,
+    }
   ];
 
   return (
@@ -112,9 +115,9 @@ const Settings = () => {
               // detailsUrl="/api/user/update/${userContext.user._id}" 
 
               titleText="Notifications"
-              // inputs={filterInputs}
+              inputs={filterInputs}
 
-              // onSubmit={updateAccount}
+              onSubmit={data => console.log(data)}
               addModeCancel={() => setUndergoingNotificationChange(false)}
             />
 
