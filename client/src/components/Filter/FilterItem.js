@@ -17,11 +17,9 @@ const CheckboxDescription = styled.span`
 const FilterItem = ({ item, checked, onChange }) => {
     return (
         <div>                
-            <Checkbox 
-                type='checkbox' 
+            <Checkbox  
                 id={item} 
                 name={item} 
-                value={item}
                 checked={checked}
                 onChange={onChange}
             />

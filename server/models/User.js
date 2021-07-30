@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   userType: String,
   email: { type: String, unique: true, required: true },
-  settings: {},
+  settings: new mongoose.Schema({ filterPrefs: Object, notificationPrefs: Object }),
   dateSignedUp: Date
 })
   

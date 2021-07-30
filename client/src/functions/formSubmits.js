@@ -106,7 +106,7 @@ const useUpdateAccount = () => {
       
             // if the user wants to change their email, start by updating their auth record
             // the only values in the request body are the new email and new dateLastModified
-            if (isEmailChanged) {
+            if (data.email && isEmailChanged) {
               body = JSON.stringify({ email: data.email, dateLastModified: new Date() })
       
               // send auth update request
@@ -124,7 +124,7 @@ const useUpdateAccount = () => {
             let userObject = await userRes.json()
       
             // if the update was unsuccessful, reverse the email change made to the auth document
-            if (!userObject.success && isEmailChanged) { 
+            if (!userObject.success && data.email && isEmailChanged) { 
               body = JSON.stringify({ email: userContext.user.email })
               let authCorrection = await fetch(authAction, { method, headers, body })
               let correctionObject = await authCorrection.json()

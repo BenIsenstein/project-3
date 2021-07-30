@@ -6,6 +6,7 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
     const toggleCheck = (inputName) => {
         setChecked((prevState) => {
             const newState = {...prevState}
+            console.log(`prevState[${inputName}]: `, prevState[inputName])
             newState[inputName] = !prevState[inputName]
             return newState
         })
@@ -26,7 +27,8 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
         let areNoneChecked = Object.values(checked).every(entry => entry === false)
 
         if (areNoneChecked) toggleCheck('active')
-    }, [checked])
+
+    }, [checked])   
 
     // useEffect(() => {
     //     let allChecked = true
@@ -44,6 +46,7 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
     
     return (
         <FlexSection column alignStart>
+            <button type='button' onClick={() => toggleCheck('active')}>toggleCheck('active')</button>
             <p>Status:</p>
             <FilterItem item='active' checked={checked['active']} onChange={() => toggleCheck('active')} />
             <FilterItem item='completed' checked={checked['completed']} onChange={() => toggleCheck('completed')} />

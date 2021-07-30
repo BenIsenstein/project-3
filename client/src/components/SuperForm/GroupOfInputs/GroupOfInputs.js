@@ -115,9 +115,9 @@ const GroupOfCheckboxes = ({
       <ComplexInput 
         noFullWidth
         key={index}
-        name={props.name}
+        name={rest.name || props.name}
         type="checkbox"
-        checked
+        defaultChecked
         readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
         registerOptions={props.registerOptions}
         wrapperProps={{rowReverse: true, justifyEnd: true}}

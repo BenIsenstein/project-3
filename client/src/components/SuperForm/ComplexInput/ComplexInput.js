@@ -25,6 +25,8 @@ const ComplexInput = ({
   const isCheckbox = type==='checkbox'
   const ifCheckboxValueElseName = isCheckbox ? props.value : name
 
+  //console.log('checkedAll, setCheckedAll, checked, setChecked: ', props.checkedAll, props.setCheckedAll,props.checked,props.setChecked)
+
   return (
     <FlexSection 
       key={props.key}

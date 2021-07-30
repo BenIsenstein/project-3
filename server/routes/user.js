@@ -82,11 +82,12 @@ router.get("/logout",
 router.put('/update/:id', 
   async (req, res) => {
     try {
-      let originalUser = await User.findOne({ _id: req.params.id })
-    
-      for (let key in req.body) originalUser[key] = req.body[key]
-
-      await originalUser.save()
+      // let originalUser = await User.findOne({ _id: req.params.id })
+      // for (let key in req.body) originalUser[key] = req.body[key]
+      // await originalUser.save()
+      console.log('user/update req.body: ', req.body)
+      await User.findByIdAndUpdate(req.params.id, req.body)
+      
       res.json({ success: true })
     }
     catch(err) {
