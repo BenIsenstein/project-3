@@ -19,7 +19,6 @@ import AccountDetails from './pages/AccountDetails'
 import Settings from './pages/Settings'
 import AddEntryPage from './pages/AddEntryPage'
 import AddHomePage from './pages/AddHomePage'
-import FilterProvider from './FilterProvider'
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -28,7 +27,6 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       {userContext.isLoggedIn && <Navbar />}
-      <FilterProvider>
         <Switch>
           <Route exact path='/' component={Landing} />
           <Route path='/login' component={LoginPage} />
@@ -41,7 +39,6 @@ const App = () => {
           <Route path='/new-task' component={AddEntryPage} />
           <Route path='/new-home' component={AddHomePage} />
         </Switch>
-      </FilterProvider>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>
   )
