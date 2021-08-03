@@ -19,6 +19,7 @@ import {Settings} from '@styled-icons/fluentui-system-filled/Settings'
 import {Library} from '@styled-icons/fluentui-system-filled/Library'
 import {FilterList} from '@styled-icons/material-rounded/FilterList'
 import {HomeAdd} from '@styled-icons/fluentui-system-regular/HomeAdd'
+import {RemoveCircle} from '@styled-icons/material-rounded/RemoveCircle'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -134,6 +135,12 @@ const PencilIcon = styled(Pencil)`
     `}
 `
 
+const RemoveIcon = styled(RemoveCircle)`
+    height: 1em;
+    fill: ${props => props.theme.prm};
+    cursor: pointer;
+`
+
 const ExitIcon = styled(Exit)`
     height: 1.6em;
     -webkit-transform: scaleX(-1);
@@ -168,4 +175,4 @@ const CloseIcon = styled(Close)`
     cursor: pointer;
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}

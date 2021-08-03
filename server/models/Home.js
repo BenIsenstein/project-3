@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 // User model and functions
 const homeSchema = new mongoose.Schema({
+  activated: Boolean,
   address: String,
   city: String,
   country: String,

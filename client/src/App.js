@@ -19,6 +19,7 @@ import AccountDetails from './pages/AccountDetails'
 import Settings from './pages/Settings'
 import AddEntryPage from './pages/AddEntryPage'
 import AddHomePage from './pages/AddHomePage'
+import HomeDetails from './pages/HomeDetails'
 import FilterProvider from './FilterProvider'
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
           <Route path='/settings' component={Settings} />
           <Route path='/new-task' component={AddEntryPage} />
           <Route path='/new-home' component={AddHomePage} />
+          <Route path='/home/:id' component={HomeDetails} />
         </Switch>
       </FilterProvider>
       {userContext.isLoggedIn && <Footer />}

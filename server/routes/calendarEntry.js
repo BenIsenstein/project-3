@@ -38,26 +38,26 @@ router.get('/get/:id', async (req, res) => {
 
 
 // update calendar entry by id
- router.put('/update/:id', async (req, res) => {
-   try {
-      let originalEntry = await findCalendarEntryById(req.params.id)
-     
-      for (let key in req.body) originalEntry[key] = req.body[key]
-      
-      await originalEntry.save()
-      res.json({ success: true })
-   }
-   catch(err) {
-     console.log(err)
+router.put('/update/:id', async (req, res) => {
+  try {
+    let originalEntry = await findCalendarEntryById(req.params.id)
+    
+    for (let key in req.body) originalEntry[key] = req.body[key]
+    
+    await originalEntry.save()
+    res.json({ success: true })
+  }
+  catch(err) {
+    console.log(err)
 
-     if (err.code === 11000) {
-       res.status(409).json({message: 'Duplicate ID is not allowed'});      
-     }
-     else {
-       res.status(500).json({message: '500 error.'})
-     }
-   }
- })
+    if (err.code === 11000) {
+      res.status(409).json({message: 'Duplicate ID is not allowed'});      
+    }
+    else {
+      res.status(500).json({message: '500 error.'})
+    }
+  }
+})
 
 
 // Delete Calendar Entry by ID
