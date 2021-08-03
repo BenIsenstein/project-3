@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { FlexSection, GridSection, Input, Select } from '../../../common'
 import { useIsDateInput } from '../../../functions'
+import { DeleteItemModal, EditItemModal } from '../../Modals/CustomItemModal'
 import DatetimePickerModal from '../../Modals/DatetimePickerModal'
 import ComplexInput from '../ComplexInput/ComplexInput'
 
@@ -94,6 +96,8 @@ const GroupOfCheckboxes = ({
   setValue,
   watch,
   errors,
+  customItems,
+  setCustomItems,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
   const modeAndView = {
@@ -108,23 +112,50 @@ const GroupOfCheckboxes = ({
     watch,
     errors
   }
+
+  const DefaultCheckbox = ({ readOnly, ...rest }) => <ComplexInput 
+    noFullWidth
+    key={rest.index}
+    name={rest.name || props.name}
+    type="checkbox"
+    defaultChecked
+    readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+    registerOptions={props.registerOptions}
+    wrapperProps={{rowReverse: true, justifyEnd: true}}
+    {...formTools}
+    {...modeAndView}
+    {...rest} 
+  />
+
+  const CustomItemCheckbox = (rest) => {
+    const [editedItem, setEditedItem] = useState()
+
+    return <FlexSection gridColumn="1/-1">
+      <DefaultCheckbox {...rest} />
+      <EditItemModal 
+        modalContent={<>
+          <p>Editing {rest.labelText || rest.value}</p>
+          <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
+        </>}
+        actionOnConfirm={() => 
+          setCustomItems(customItems.map(item => item.value === rest.value ? { ...item, value: editedItem } : item))
+        }
+      />
+      <DeleteItemModal 
+        {...rest}
+        actionOnConfirm={() => 
+          setCustomItems(customItems.filter(item => item.value !== rest.value))
+        }
+      />
+    </FlexSection>
+  }
   
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
-    {inputs && inputs.map(({ readOnly, ...rest }, index) => 
-      <ComplexInput 
-        noFullWidth
-        key={index}
-        name={rest.name || props.name}
-        type="checkbox"
-        defaultChecked
-        readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-        registerOptions={props.registerOptions}
-        wrapperProps={{rowReverse: true, justifyEnd: true}}
-        {...formTools}
-        {...modeAndView}
-        {...rest} 
-      />
+    {inputs && inputs.map((input, index) => 
+      input.isCustomItem 
+        ? <CustomItemCheckbox index={index} {...input} /> 
+        : <DefaultCheckbox index={index} {...input} />
     )}
   </GridSection>
 }

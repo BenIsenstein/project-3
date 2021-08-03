@@ -105,6 +105,11 @@ const TrashIcon = styled(Trash)`
     height: 1em;
     // margin: 0 -0.4em;
     fill: ${props => props.theme.prm};
+
+    ${props => props.sm && css`
+        margin: 0;
+        height: 1em;
+    `}
 `
 
 const HouseIcon = styled(House)`
@@ -122,6 +127,11 @@ const PencilIcon = styled(Pencil)`
     height: 1.6em;
     fill: ${props => props.theme.prm};
     cursor: pointer;
+
+    ${props => props.sm && css`
+        margin: 0;
+        height: 1em;
+    `}
 `
 
 const ExitIcon = styled(Exit)`
