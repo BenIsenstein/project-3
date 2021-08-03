@@ -67,8 +67,11 @@ const useAddHome = () => {
   const history = useHistory()
 
   const addHome = async (data) => {
+    data.activated = true
+    
     try {
       let action = "/api/home/add"
+
       let options = {
         method: "post",
         headers: { "content-type": "application/json" },
@@ -88,6 +91,35 @@ const useAddHome = () => {
   }
 
   return addHome
+}
+
+// update Home
+const useUpdateHome = () => {
+  const { id } = useParams()
+  const history = useHistory()
+
+  const updateHome = async (data) => {
+
+    try {
+      let options = {
+        method: "put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(`/api/home/update/${id}`, options)
+      let resObject = await res.json()
+      
+      if (!resObject.success) return alert("Your home details wasn't updated for some reason. Please try again.")
+      history.push('/account')
+    }
+    catch(err) {
+      console.log('error updating calendar entry: ', err)
+      alert("There was an error updating your home details. We're fixing it as fast as we can.")
+    }
+  }  
+
+  return updateHome
+
 }
 
 // updateAccount submit function
@@ -198,5 +230,6 @@ export {
   useChangePassword,
   useAddEntry,
   useUpdateEntry,
-  useAddHome
+  useAddHome,
+  useUpdateHome
 }

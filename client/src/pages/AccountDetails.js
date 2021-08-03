@@ -154,8 +154,8 @@ const AccountDetails = () => {
         {homes.map((home, index) => {
           return (
             <FlexSection key={index}>
-              <p>{home.address}</p>
-              <SwitchViewButton edit><PencilIcon /></SwitchViewButton>
+              <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
+              <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
             </FlexSection>
           )
         })}
