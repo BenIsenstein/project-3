@@ -127,26 +127,28 @@ const GroupOfCheckboxes = ({
     {...rest} 
   />
 
-  const CustomItemCheckbox = (rest) => {
+  const CustomItemCheckbox = ({ wrapperProps, ...rest }) => {
     const [editedItem, setEditedItem] = useState()
 
-    return <FlexSection gridColumn="1/-1">
+    return <FlexSection gridColumn="1/2" {...wrapperProps}>
       <DefaultCheckbox {...rest} />
-      <EditItemModal 
-        modalContent={<>
-          <p>Editing {rest.labelText || rest.value}</p>
-          <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
-        </>}
-        actionOnConfirm={() => 
-          setCustomItems(customItems.map(item => item.value === rest.value ? { ...item, value: editedItem } : item))
-        }
-      />
-      <DeleteItemModal 
-        {...rest}
-        actionOnConfirm={() => 
-          setCustomItems(customItems.filter(item => item.value !== rest.value))
-        }
-      />
+      <FlexSection>
+        <EditItemModal 
+          modalContent={<>
+            <p>Editing {rest.labelText || rest.value}</p>
+            <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
+          </>}
+          actionOnConfirm={() => 
+            setCustomItems(customItems.map(item => item.value === rest.value ? { ...item, value: editedItem } : item))
+          }
+        />
+        <DeleteItemModal 
+          {...rest}
+          actionOnConfirm={() => 
+            setCustomItems(customItems.filter(item => item.value !== rest.value))
+          }
+        />
+      </FlexSection>
     </FlexSection>
   }
   

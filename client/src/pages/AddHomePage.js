@@ -122,7 +122,7 @@ const AddHomePage = () => {
         setCustomItems([...customItems, { value: newItem, defaultChecked: true, isCustomItem: true }])
       }
     />
-}
+  }
 
   return (
     <Page>
