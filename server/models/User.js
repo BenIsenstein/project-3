@@ -2,12 +2,23 @@ require('./db')
 const mongoose = require('mongoose');
 
 // User model and functions
+
 const userSchema = new mongoose.Schema({
   firstName: String, 
   lastName: String,
   userType: String,
   email: { type: String, unique: true, required: true },
-  settings: new mongoose.Schema({ filterPrefs: Object, notificationPrefs: Object }),
+  settings: Object,
+  // settings: {
+  //   filterPrefs: {
+  //     active: Boolean,
+  //     completed: Boolean
+  //   },
+  //   notificationPrefs: {
+  //     frequency: String,
+  //     type: String
+  //   }
+  // },
   dateSignedUp: Date
 })
   

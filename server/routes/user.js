@@ -87,7 +87,46 @@ router.put('/update/:id',
       // await originalUser.save()
       console.log('user/update req.body: ', req.body)
       await User.findByIdAndUpdate(req.params.id, req.body)
-      
+
+      res.json({ success: true })
+    }
+    catch(err) {
+      console.log(err)
+      if (err.code === 11000) {
+        res.status(409).send('User ' + userToUpdate.name + ' already exists');      
+      }
+      else {
+        res.status(500).json({ success: false })
+      }
+    }
+  }
+)
+
+
+// Update a user's FILTER PREFERENCE SETTINGS by id
+router.put('/update/settings/filter/:id', 
+  async (req, res) => {
+    try {
+      await User.findByIdAndUpdate(req.params.id, {$set: {'settings.filterPrefs': req.body.settings.filterPrefs}})
+      res.json({ success: true })
+    }
+    catch(err) {
+      console.log(err)
+      if (err.code === 11000) {
+        res.status(409).send('User ' + userToUpdate.name + ' already exists');      
+      }
+      else {
+        res.status(500).json({ success: false })
+      }
+    }
+  }
+)
+
+// Update a user's NOTIFICATION PREFERENCE SETTINGS by id
+router.put('/update/settings/notifications/:id', 
+  async (req, res) => {
+    try {
+      await User.findByIdAndUpdate(req.params.id, {$set: {'settings.notificationPrefs': req.body.settings.notificationPrefs}})
       res.json({ success: true })
     }
     catch(err) {

@@ -1,23 +1,22 @@
-import TestEmailButton from "../components/TestEmailButton";
-import { useState, useContext, useMemo } from "react";
-import UserContext from '../UserContext';
-import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common";
-//import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
-import SuperForm from "../components/SuperForm/SuperForm";
-import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs/GroupOfInputs";
-import { useUpdateAccount } from "../functions";
+import TestEmailButton from "../components/TestEmailButton"
+import { useEffect, useState, useContext, useMemo } from "react"
+import { useHistory } from 'react-router-dom'
+import UserContext from '../UserContext'
+import FilterContext from '../FilterContext'
+import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common"
+import SuperForm from "../components/SuperForm/SuperForm"
+import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs/GroupOfInputs"
+import { useUpdateAccount } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
   const userContext = useContext(UserContext)
+  const filterContext = useContext(FilterContext)
   const updateAccount = useUpdateAccount()
-  const updateFilterPrefs = async (data) => {
-    data.settings = {}
-    data.settings.filterPrefs = checked
-    await updateAccount(data)
-  }
+  const history = useHistory()
 
   const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
+  const [undergoingNotificationChange, setUndergoingNotificationChange] = useState(false)
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
     active: true,
@@ -25,7 +24,49 @@ const Settings = () => {
   })
 
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
-  const [undergoingNotificationChange, setUndergoingNotificationChange] = useState(false)
+
+  const updateFilterPrefs = async (data) => {
+    data.settings = {}
+    data.settings.filterPrefs = checked
+    let mode = "filterPrefs"
+    // Save the new preferences in User Account SETTINGS
+    await updateAccount(data, mode)
+    // Update the session FILTER state with the new filter preference
+    filterContext.setFilterInfo(checked)
+    // Redirect user back to the SETTINGS page.
+    history.push(`/settings`)
+  }
+
+
+  // -----------  PRELOAD USER FILTER PREFERENCES -----------
+  // Every time user chooses to work with FILTER preferences, retrieve whatever
+  // SETTINGS preferences are currently stored in the database for that user.
+  // Then set local STATE variables so that the saved preference values are pre-loaded
+  // into the appropriate selectors.
+  useEffect(() => {
+
+    const loadUserSettings = async () => {
+
+      let userRes = await fetch("/api/user/getloggedinuser")
+      let userObject = await userRes.json()
+
+      if ('settings' in userObject) {
+        if ('filterPrefs' in userObject.settings){
+          let userFilterPrefs = userObject.settings.filterPrefs 
+          setChecked(userFilterPrefs)
+        }
+        else {
+          console.log("No FILTER PREFERENCE for user found!!!")
+        }
+      }
+      else {
+        console.log("No SETTINGS for user found!!!")
+      }
+    }
+
+    loadUserSettings()
+
+  },[undergoingPreferenceChange])
 
 
   return (
