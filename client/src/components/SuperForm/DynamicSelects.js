@@ -41,7 +41,7 @@ const HomeItemsSelect = props => {
     const { setValue, name } = props
     
     useEffect(() => {
-        if (['loading...', undefined].includes(homeId)) return
+        if (['loading...', '', undefined].includes(homeId)) return
        
         let isMounted = true 
         const fetchHomes = async () => {
@@ -61,7 +61,7 @@ const HomeItemsSelect = props => {
 
               if (isMounted) {
                 setItemOptions(itemsArray.map(item => {return { value: item }}))
-                setValue(name, itemsArray[0])
+                if (!props.readOnly) setValue(name, itemsArray[0])
               }
             }
             catch (err) {
@@ -75,7 +75,12 @@ const HomeItemsSelect = props => {
 
     }, [homeId])
 
-    return props.readOnly ? <ComplexInput labelHidden {...props} /> : <SuperFormSelect options={itemOptions} {...props} />
+
+    if (!homeId) return <ComplexInput labelHidden readOnly {...props} />
+
+    return !homeId ? <ComplexInput labelHidden readOnly {...props} /> :
+      props.readOnly ? <ComplexInput labelHidden {...props} /> : 
+      <SuperFormSelect options={itemOptions} {...props} />
 }
 
 export default UserHomesSelect
