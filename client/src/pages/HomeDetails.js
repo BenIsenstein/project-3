@@ -11,21 +11,21 @@ const HomeDetails = ({activatedHomesLength}) => {
 
   useEffect(() => {
     const fetchHomeDetails = async () => {
-        try {
+      try {
         let homeRes = await fetch(`/api/home/get/${id}`)
         let homeObject = await homeRes.json()
         
         setHome(homeObject)
-        }  
-        catch (err) {
+      }  
+      catch (err) {
         alert(`
             There was an error loading your home details. 
             We're fixing it as fast as we can.
         `)
-        }
+      }
     }
     fetchHomeDetails()
-  }, [])
+  }, [id])
 
   return (
     <Page>

@@ -1,6 +1,7 @@
 import { SuperFormSelect } from './GroupOfInputs'
 import { useEffect, useState, useContext } from 'react'
 import UserContext from '../../UserContext'
+import ComplexInput from './ComplexInput'
 
 // It needs register to plug into SuperForm.
 // register will take care of itself if you include 
@@ -13,7 +14,7 @@ const UserHomesSelect = props => {
   useEffect(() => {
     const fetchHomes = async () => {
       try {
-        let homesRes = await fetch(`/api/home/getbyuser/${userContext.user._id}`)
+        let homesRes = await fetch(`/api/home/getbyuser/activated/${userContext.user._id}`)
         let homesArray = await homesRes.json()
 
         //successful fetch check
@@ -31,7 +32,7 @@ const UserHomesSelect = props => {
 
   }, [userContext.user._id, setValue])
 
-  return <SuperFormSelect options={homeOptions} {...props} />
+  return props.readOnly ? <ComplexInput labelHidden {...props} /> : <SuperFormSelect options={homeOptions} {...props} />
 }
 
 const HomeItemsSelect = props => {
@@ -74,7 +75,7 @@ const HomeItemsSelect = props => {
 
     }, [homeId])
 
-    return <SuperFormSelect options={itemOptions} {...props} />
+    return props.readOnly ? <ComplexInput labelHidden {...props} /> : <SuperFormSelect options={itemOptions} {...props} />
 }
 
 export default UserHomesSelect

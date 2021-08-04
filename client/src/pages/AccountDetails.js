@@ -17,8 +17,6 @@ const AccountDetails = ({setActivatedHomesLength}) => {
   const [activatedHomes, setActivatedHomes] = useState([])
   const [deactivatedHomes, setDeactivatedHomes] = useState([])
 
-  
-
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
       <Button

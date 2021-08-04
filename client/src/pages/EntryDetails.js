@@ -5,6 +5,7 @@ import FormTemplate from '../components/SuperForm/SuperForm'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 import { useHandleUserStatus, useUpdateEntry } from '../functions'
 import DisplayHomeFromId from '../components/SuperForm/DisplayHomeFromId'
+import { HomeItemsSelect } from '../components/SuperForm/DynamicSelects'
 
 const EntryDetails = () => {
   useHandleUserStatus()
@@ -44,8 +45,9 @@ const EntryDetails = () => {
     },
     {
       name: "item",
-      registerOptions: { required: "You must choose an item." },
-      maxLength: '50'
+      isCustomComponent: true,
+      as: HomeItemsSelect,
+      registerOptions: { required: "You must choose an item." }
     },
     {
       name: "task",

@@ -123,9 +123,7 @@ const AddHomePage = () => {
     return <CustomItemModal 
       modalContent={<>
         <p>New item</p>
-        <ComplexInput 
-          onChange={event => setNewItem(event.target.value)}
-        />
+        <ComplexInput onChange={event => setNewItem(event.target.value)} />
       </>}
       actionOnConfirm={() => 
         setCustomItems([...customItems, { value: newItem, defaultChecked: true, isCustomItem: true }])
@@ -146,8 +144,5 @@ const AddHomePage = () => {
     </Page>
   )
 }
-
-//modalContent
-// actionOnConfirm
 
 export default AddHomePage
