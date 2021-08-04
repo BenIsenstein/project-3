@@ -1,37 +1,39 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Page, PageContainer } from '../common'
+import { useParams, useHistory } from 'react-router-dom'
+import { Page, PageContainer, FlexSection, Button } from '../common'
 import DeactivateHome from '../components/DeactivateHome'
 
-const HomeDetails = () => {
-    const { id } = useParams()
+const HomeDetails = ({activatedHomesLength}) => {
+  const { id } = useParams()
+  const history = useHistory()
 
-    const [home, setHome] = useState([])
+  const [home, setHome] = useState([])
 
-    useEffect(() => {
-        const fetchHomeDetails = async () => {
-            try {
-            let homeRes = await fetch(`/api/home/get/${id}`)
-            let homeObject = await homeRes.json()
-            
-            setHome(homeObject)
-            console.log(home)
-            }  
-            catch (err) {
-            console.log(err)
-            alert(`
-                There was an error loading your home details. 
-                We're fixing it as fast as we can.
-            `)
-            }
+  useEffect(() => {
+    const fetchHomeDetails = async () => {
+        try {
+        let homeRes = await fetch(`/api/home/get/${id}`)
+        let homeObject = await homeRes.json()
+        
+        setHome(homeObject)
+        }  
+        catch (err) {
+        alert(`
+            There was an error loading your home details. 
+            We're fixing it as fast as we can.
+        `)
         }
-        fetchHomeDetails()
-        }, [])
+    }
+    fetchHomeDetails()
+  }, [])
 
   return (
     <Page>
       <PageContainer flexColumn>
-        <DeactivateHome home={home}/>
+        <FlexSection fadeIn fullWidth marginTop1em>
+          <DeactivateHome fullWidth fullHeight home={home} activatedHomesLength={activatedHomesLength} />
+          <Button fullWidth onClick={() => history.push(`/calendar`)}>BACK TO ACCOUNT</Button>
+        </FlexSection>
       </PageContainer>
     </Page>
   )
