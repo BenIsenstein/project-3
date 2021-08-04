@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
 import { PencilIcon, Form, FormSectionTitle, Button, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
-import ComplexInput from './ComplexInput/ComplexInput'
-import GroupOfInputs from './GroupOfInputs/GroupOfInputs'
+import ComplexInput from './ComplexInput'
+import GroupOfInputs from './GroupOfInputs'
 
 /* 
 NOTES

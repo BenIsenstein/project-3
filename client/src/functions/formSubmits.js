@@ -65,6 +65,7 @@ const useAddEntry = () => {
 // addHome
 const useAddHome = () => {
   const history = useHistory()
+  const userContext = useContext(UserContext)
 
   const addHome = async (data) => {
     try {
@@ -78,6 +79,8 @@ const useAddHome = () => {
       let resObject = await res.json()
 
       if (!resObject.success) alert("Your home wasn't added for some reason. Please try again.")
+
+      userContext.setUserInfo(userInfo => data && { ...userInfo, homes: [...userInfo.homes, data] })
     }
     catch (err) {
       console.log('error adding calendar entry: ', err)

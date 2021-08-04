@@ -2,19 +2,21 @@ import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
 import { Page, PageContainer, Button, SwitchViewButton, FlexSection, FormSectionTitle, FormSeparator, PencilIcon, HomeAddIcon } from '../common'
-import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
+import { validatePassWithMessage, useUpdateAccount, useChangePassword, useHandleUserStatus } from '../functions'
 import SuperForm from '../components/SuperForm/SuperForm'
-import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput/ToggleVisibleInput'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
+import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput'
+import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs'
 
 const AccountDetails = () => {
+  useHandleUserStatus()
   const history = useHistory()
   const userContext = useContext(UserContext)
-
   const updateAccount = useUpdateAccount()
   const changePassword = useChangePassword()
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
   const [homes, setHomes] = useState([])
+
+  
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
@@ -97,9 +99,6 @@ const AccountDetails = () => {
       }
     }
   ]
-
-  // Effect to log user out if they're not logged in
-  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
 
   // Effect to fetch all entries
   useEffect(() => {

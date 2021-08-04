@@ -5,11 +5,12 @@ import UserContext from '../UserContext'
 import FilterContext from '../FilterContext'
 import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common"
 import SuperForm from "../components/SuperForm/SuperForm"
-import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs/GroupOfInputs"
-import { useUpdateAccount } from "../functions"
+import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
+import { useHandleUserStatus, useUpdateAccount } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
+  useHandleUserStatus()
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
   const updateAccount = useUpdateAccount()

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { FlexSection, GridSection, Input, Select } from '../../../common'
-import { useIsDateInput } from '../../../functions'
-import { DeleteItemModal, EditItemModal } from '../../Modals/CustomItemModal'
-import DatetimePickerModal from '../../Modals/DatetimePickerModal'
-import ComplexInput from '../ComplexInput/ComplexInput'
+import { FlexSection, GridSection, Input, Select } from '../../common'
+import { useIsDateInput } from '../../functions'
+import { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
+import DatetimePickerModal from '../Modals/DatetimePickerModal'
+import ComplexInput from './ComplexInput'
 
 // all props not in the component code are passed to the outside GridSection.
 
