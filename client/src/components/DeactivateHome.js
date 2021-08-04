@@ -19,12 +19,12 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
       let res = await fetch(`/api/home/update/${home._id}`, options)
       let resObject = await res.json()
       
-      if (!resObject.success) return alert("Your home details wasn't deactivated for some reason. Please try again.")
+      if (!resObject.success) return alert("Your home details wasn't activated for some reason. Please try again.")
       history.push('/account')
     }
     catch(err) {
       console.log('error updating calendar entry: ', err)
-      alert("There was an error deactivating your home details. We're fixing it as fast as we can.")
+      alert("There was an error activating your home details. We're fixing it as fast as we can.")
     }
   }
 
