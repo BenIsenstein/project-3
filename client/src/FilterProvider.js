@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useHistory, withRouter } from 'react-router-dom'
 import FilterContext from './FilterContext'
+import UserContext from './UserContext'
 
 const FilterProvider = ({ children }) => {
   const history = useHistory()
+  const userContext = useContext(UserContext)
   // const redirectHome = () => history.push('/calendar')
   const [active, setActive] = useState(true)
   const [completed, setCompleted] = useState(false)
@@ -13,35 +15,32 @@ const FilterProvider = ({ children }) => {
     setCompleted(filterInfo.completed)
   }
 
-  // Using the current USER INFO, set the FILTER values
-  // according to their preferences.
-  // useEffect(() => {
-  //   const getUserFilterPreferences = async () => {
-  //     try {
-  //       let response = await fetch('/api/user/getloggedinuser')
-  //       let userObject = await response.json()
+  // When USER CONTEXT changes, use the current user account info to
+  // set the FILTER values according to their preferences.
+  useEffect(() => {
+    if (userContext.user) {
+      if ('settings' in userContext.user) {
+        if ('filterPrefs' in userContext.user.settings){
+          let userFilterPrefs = userContext.user.settings.filterPrefs
 
-  //       if (userObject.no_user) return setUserName("no_user")
-  //       console.log('getLoggedInUser userObject: ', userObject)
+          setFilterInfo(userFilterPrefs)
+        }
+        else {
+          console.log("FilterProvider UseEffect: No FILTER PREFERENCE for user found!!!")
+        }
+      }
+      else {
+        console.log("FilterProvider UseEffect: No SETTINGS for user found!!!")
+      }
+    }
+  }, [userContext.user])
 
-  //       // fetch for all homes here before concatenating with the userObject??
-        
-  //       setFilterInfo(userObject)
-  //     }
-  //     catch (err) {
-  //       console.log('error running checkLoggedInUser: ', err)
-  //       alert("There was an error checking your login status. We're fixing it as fast as we can.")
-  //     }
-  //   }
-
-  //   getUserFilterPreferences()
-  // }, [])
   
- let contextValue = {
-   active,
-   completed,
-   setFilterInfo
- }
+  let contextValue = {
+    active,
+    completed,
+    setFilterInfo
+  }
 
   return (
     <FilterContext.Provider value={contextValue}>

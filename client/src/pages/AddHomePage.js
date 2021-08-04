@@ -16,6 +16,12 @@ const AddHomePage = () => {
   const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
   
   const inputs = [
+    // {
+    //   name: 'activated',
+    //   type: 'checkbox',
+    //   defaultChecked: true,
+    //   hidden: true,
+    // },
     {
       name: "nickname"
     },    

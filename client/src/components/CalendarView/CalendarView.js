@@ -283,7 +283,10 @@ const CalendarView = ({ dates, ...props }) => {
                   //       start  : '2021-07-09T12:30:00',
                   //     }
                   //   ],
-                    color: 'tomato',
+                    color: 'red',
+                    // borderColor: 'pink',
+                    // textColor: 'papayawhip',
+                    // backgroundColor: 'lavender'
                   },
 
                   // COMPLETED Tasks
@@ -296,7 +299,7 @@ const CalendarView = ({ dates, ...props }) => {
                   {
                     // events: eventList,
                     events: upcomingList,
-                    color: 'skyblue',     // blue
+                    color: 'deepskyblue',     // blue
                   }
                 ]}
                 headerToolbar={{
