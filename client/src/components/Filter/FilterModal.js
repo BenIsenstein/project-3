@@ -21,7 +21,8 @@ const FilterModal = ({ handleFilterChange }) => {
     const filterContext = useContext(FilterContext)
     const [checked, setChecked] = useState({
         active: filterContext.active,
-        completed: filterContext.completed
+        completed: filterContext.completed,
+        homes: filterContext.homes
     })
 
     return (
@@ -30,7 +31,7 @@ const FilterModal = ({ handleFilterChange }) => {
                 isConfirmModalShowing={isConfirmModalShowing}
                 hideConfirmModal={toggleConfirmModal}
                 confirmPrompt='Filter'
-                actionOnConfirm={() => handleFilterChange(checked.active, checked.completed, checkedAll)}
+                actionOnConfirm={() => handleFilterChange(checked.active, checked.completed, checked.homes, checkedAll)}
                 modalContent={<CalendarFilter             
                     checkedAll={checkedAll}
                     setCheckedAll={setCheckedAll}

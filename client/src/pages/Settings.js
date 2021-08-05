@@ -20,7 +20,8 @@ const Settings = () => {
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
     active: true,
-    completed: false
+    completed: false,
+    homes: []
   })
 
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
@@ -98,7 +99,7 @@ const Settings = () => {
 
           <FormSeparator />
           
-          <FlexSection fullWidth column>
+          {/* <FlexSection fullWidth column>
             {!undergoingNotificationChange &&  
               <Button
                 type="button"
@@ -127,7 +128,7 @@ const Settings = () => {
 
           </FlexSection>
 
-          <FormSeparator />
+          <FormSeparator /> */}
 
           <FlexSection fullWidth justifyCenter>
             <TestEmailButton /> Email me a reminder for my tasks now!
@@ -135,7 +136,7 @@ const Settings = () => {
         
       </PageContainer>
     </Page>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings

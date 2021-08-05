@@ -17,7 +17,7 @@ const Calendar = () => {
   //   completed: false
   // })
 
-  const handleFilterChange = (active, completed, all) => {
+  const handleFilterChange = (active, completed, homes, all) => {
     // setChecked({active: active, completed: completed})
     // setCheckedAll(all)
     
@@ -25,7 +25,8 @@ const Calendar = () => {
     // when changing pages/components.
     let filterInfo = {
       active: active,
-      completed: completed
+      completed: completed,
+      homes: homes
     }
     filterContext.setFilterInfo(filterInfo)
   }
