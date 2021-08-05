@@ -6,8 +6,10 @@ import FilterModal from '../components/Filter/FilterModal'
 import { AddIcon, Button, Page, PageContainer, FlexSection } from '../common'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
+import { useHandleUserStatus } from "../functions"
 
 const Calendar = () => {
+  useHandleUserStatus()
   const history = useHistory()
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
@@ -36,9 +38,6 @@ const Calendar = () => {
   const [dates, setDates] = useState([])
   const [filteredDates, setFilteredDates] = useState([])
   const setNoneFound = useMemo(() => () => {setDates([]); setIsDatesEmpty(true)}, [])
-
-  // Effect to log user out if they're not logged in
-  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
 
   // Effect to fetch all entries
   useEffect(() => {

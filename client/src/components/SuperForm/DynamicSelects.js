@@ -1,46 +1,48 @@
-import { SuperFormSelect } from './GroupOfInputs/GroupOfInputs'
+import { SuperFormSelect } from './GroupOfInputs'
 import { useEffect, useState, useContext } from 'react'
 import UserContext from '../../UserContext'
+import ComplexInput from './ComplexInput'
 
 // It needs register to plug into SuperForm.
 // register will take care of itself if you include 
 // 'isCustomComponent=true' with this input in SuperForm.
 const UserHomesSelect = props => {
-    const [homeOptions, setHomeOptions] = useState([{value: 'loading...'}])
-    const userContext = useContext(UserContext)
-    const { setValue } = props
+  const [homeOptions, setHomeOptions] = useState([{value: 'loading...'}])
+  const userContext = useContext(UserContext)
+  const { setValue } = props
 
-    useEffect(() => {
-        const fetchHomes = async () => {
-            try {
-              let homesRes = await fetch(`/api/home/getbyuser/${userContext.user._id}`)
-              let homesArray = await homesRes.json()
+  useEffect(() => {
+    const fetchHomes = async () => {
+      try {
+        let homesRes = await fetch(`/api/home/getbyuser/activated/${userContext.user._id}`)
+        let homesArray = await homesRes.json()
 
-              //successful fetch check
+        //successful fetch check
 
-              setHomeOptions(homesArray.map(home => {return {value: home._id, optionText: home.nickname || home.address}}))
-              setValue('homeId', homesArray[0]._id)
-            }
-            catch (err) {
-                alert("There was an error searching the homes registered to this user. We're working on it.")
-                console.log(err)
-            }
-        }
+        setHomeOptions(homesArray.map(home => {return {value: home._id, optionText: home.nickname || home.address}}))
+        setValue('homeId', homesArray[0]._id)
+      }
+      catch (err) {
+        alert("There was an error searching the homes registered to this user. We're working on it.")
+        console.log(err)
+      }
+    }
 
-        fetchHomes()
+    fetchHomes()
 
-    }, [userContext.user._id, setValue])
+  }, [userContext.user._id, setValue])
 
-    return <SuperFormSelect options={homeOptions} {...props} />
+  return <SuperFormSelect options={homeOptions} {...props} />
 }
 
-const HomeItemsSelect = props => {
+const HomeItemsSelect = ({...props}) => {
     const [itemOptions, setItemOptions] = useState([{value: 'loading...'}])
-    const homeId = props.watch("homeId")
-    const { setValue, name } = props
+    const { setValue, name, watch } = props
+    const homeId = watch("homeId")
     
     useEffect(() => {
-        if (['loading...', undefined].includes(homeId)) return
+        if (homeId === 'loading...') return
+        if (['', undefined].includes(homeId)) return setItemOptions([{value: watch(name)}])
        
         let isMounted = true 
         const fetchHomes = async () => {
@@ -60,7 +62,7 @@ const HomeItemsSelect = props => {
 
               if (isMounted) {
                 setItemOptions(itemsArray.map(item => {return { value: item }}))
-                setValue(name, itemsArray[0])
+                if (props.isAddMode) setValue(name, itemsArray[0])
               }
             }
             catch (err) {
@@ -72,8 +74,8 @@ const HomeItemsSelect = props => {
 
         return () => isMounted = false
 
-    }, [homeId])
-
+    }, [homeId, name, props.isAddMode, setValue, watch])
+    
     return <SuperFormSelect options={itemOptions} {...props} />
 }
 

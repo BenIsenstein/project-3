@@ -1,4 +1,4 @@
-import { Label, Textarea, Input, FlexSection, Error } from '../../../common'
+import { Label, Textarea, Input, FlexSection, Error } from '../../common'
 
 /* 
 other props might include:

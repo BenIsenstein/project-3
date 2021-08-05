@@ -3,9 +3,12 @@ import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
 import FormTemplate from '../components/SuperForm/SuperForm'
 import DeleteEntryButton from '../components/DeleteEntryButton'
-import { useUpdateEntry } from '../functions'
+import { useHandleUserStatus, useUpdateEntry } from '../functions'
+import DisplayHomeFromId from '../components/SuperForm/DisplayHomeFromId'
+import { HomeItemsSelect } from '../components/SuperForm/DynamicSelects'
 
 const EntryDetails = () => {
+  useHandleUserStatus()
   const { id } = useParams()
   const history = useHistory()
   const updateEntry = useUpdateEntry()
@@ -37,12 +40,14 @@ const EntryDetails = () => {
     {
       name: "homeId",
       labelText: "home",
-      readOnly: true
+      isCustomComponent: true,
+      as: DisplayHomeFromId
     },
     {
       name: "item",
-      registerOptions: { required: "You must choose an item." },
-      maxLength: '50'
+      isCustomComponent: true,
+      as: HomeItemsSelect,
+      registerOptions: { required: "You must choose an item." }
     },
     {
       name: "task",
@@ -78,7 +83,7 @@ const EntryDetails = () => {
     }
   ]
 
-  const CompleteTaskButton = () => !shouldShowCompletion && <>
+  const CompleteTaskButton = () => !shouldShowCompletion && (
     <FlexSection fullWidth marginTop1em>
       <Button 
         important 
@@ -89,7 +94,7 @@ const EntryDetails = () => {
         Complete Task
       </Button>      
     </FlexSection>
-  </>
+  )
 
   return isCompletedHandled && (
     <Page>
@@ -122,179 +127,5 @@ const EntryDetails = () => {
     </Page>
   )
 }
-    // const { register, formState: { errors }, handleSubmit, setValue, setFocus, reset, watch} = useForm({})
-    // const [refresh, setRefresh] = useState(null)
-
-    // // viewMode can be 'details' or 'edit'
-    // const [viewMode, setViewMode] = useState('details')
-    // const shouldReadOnly = viewMode === 'detais'
-
-    // // original values of the entry, for resetting, will be stored upon fetching
-    // const [resetValues, setResetValues] = useState({})
-    // const resetForm = () => {
-    //     reset(resetValues) 
-    //     setViewMode('details')
-    // }
-
-    // // watch the values of every input
-    // const watchedItem = watch('item')
-    // const watchedTask = watch('task')
-    // const watchedDescription = watch('description')
-    // const watchedDate = watch('date')
-    // const [hasBeenChanged, setHasBeenChanged] = useState(false)
-
-    // // get the entry from mongoDB
-    // useEffect(() => {
-    //     const getEntry = async () => {
-    //         try {
-    //             setValue('item', '...')
-    //             setValue('task', '...')
-    //             setValue('date', undefined)
-    //             setValue('description', '...')
-            
-    //             let entryResponse = await fetch(`/api/calendarEntry/get/${id}`)
-    //             let entryDetails = await entryResponse.json()
-    //             let {
-    //                 item,
-    //                 task,
-    //                 date,
-    //                 description 
-    //             } = entryDetails
-
-    //             date = new Date(date)
-
-    //             // define some reset values incase the user wants to cancel changes, but keep viewing their details
-    //             setResetValues({ item, task, description, date })
-            
-    //             setValue('item', item)
-    //             setValue('task', task)
-    //             setValue('description', description)
-    //             setValue('date', date)
-
-    //             setRefresh({})
-    //         }
-    //         catch(err) {
-    //             console.log(err)
-    //             alert("There as an error loading your entry. We're working on it as fast as we can.")
-    //         }   
-    //     }
-    //     getEntry()
-    // }, [setRefresh, setValue, id])
-
-    // // control the value of 'hasBeenChanged', to render buttons conditionally
-    // useEffect(() => {
-    //     const currentValues = {
-    //         item: watchedItem, 
-    //         task: watchedTask, 
-    //         description: watchedDescription, 
-    //         date: watchedDate
-    //     }
-    //     const doEntriesMatch = Object.keys(resetValues).every(key => 
-    //         key === 'date' 
-    //             ? resetValues[key]?.toString() === currentValues[key]?.toString() 
-    //             : resetValues[key] === currentValues[key]
-    //     )
-        
-    //     if (doEntriesMatch) {
-    //         setHasBeenChanged(false)
-    //     }
-    //     else {
-    //         setHasBeenChanged(true)
-    //     }
-    // }, [
-    //     watchedItem, 
-    //     watchedTask, 
-    //     watchedDescription, 
-    //     watchedDate, 
-    //     resetValues, 
-    // ])
-
-    // edit icon that makes the desired input field active
-    // const ActivePencil = props => <PencilIcon onClick={() => props.setter(!props.isActive)} />
-
-    // edit or details icon. Changes which icon it is based on view mode
-    // const EditOrDetailsButton = props => {
-    //     if (shouldReadOnly) return <PencilIcon {...props} onClick={() => setViewMode('edit')} />
-    //     // if (viewMode === 'edit') return <CheckIcon {...props} onClick={() => setViewMode('details')} />
-    //     if (viewMode === 'edit') return null
-    // }
-
-    // if (!refresh) return null
-    
-    // return (
-    //     <Page>
-    //         <PageContainer>
-    //             {shouldReadOnly && <Button type='button' onClick={() => history.push('/calendar')}><BackIcon />Calendar</Button>}
-
-    //             <FlexSection spaceBetween>
-    //                 <p>Home Feature</p>
-    //                 <PencilIcon onClick={() => setViewMode('edit')} />                    
-    //             </FlexSection>
-
-    //             <Form onSubmit={handleSubmit(async (data) => await onSubmit(data))}>
-
-    //                 <Label htmlFor="item">Item</Label>        
-    //                 <Input
-    //                     detailedPage
-    //                     readOnly={shouldReadOnly}
-    //                     maxLength='50'
-    //                     id="item" 
-    //                     {...register("item", {required: "You must indicate an item."})}
-    //                     name="item"
-    //                 />
-    //                 {errors.item && <p>{errors.item.message}</p>}                        
-
-    //                 <Label htmlFor="task">Task</Label>                             
-    //                 <Input 
-    //                     detailedPage
-    //                     readOnly={shouldReadOnly}
-    //                     maxLength='50'
-    //                     id="task" 
-    //                     {...register("task", {required: "You must indicate a task."})} 
-    //                     name="task"
-    //                 />
-    //                 {errors.task && <p>{errors.task.message}</p>}                        
-
-    //                 <Label htmlFor="description">Description</Label>                       
-    //                 <Textarea 
-    //                     detailedPage
-    //                     readOnly={shouldReadOnly}
-    //                     id="description" 
-    //                     {...register("description", {required: "You must write a description."})} 
-    //                     name="description"
-    //                 />
-    //                 {errors.description && <p>{errors.description.message}</p>}                        
-
-    //                 <Label htmlFor="date">Date & Time</Label>            
-    //                 {shouldReadOnly
-    //                     ? <Input detailedPage readOnly as="div">{watch('date')?.toString()}</Input>
-    //                     : <StyledDateTimePicker
-    //                         id="date"
-    //                         name='date'
-    //                         {...register('date', {required: "You must choose a date."})}
-    //                         onChange={e => setValue('date', e)}
-    //                         value={watchedDate}
-    //                     />
-    //                 }
-                
-    //                 {errors?.date && <p>{errors?.date?.message}</p>}                        
-
-    //                 {!shouldReadOnly 
-    //                     && <FlexSection fullWidth marginTop1em>
-    //                         <Button fullWidth important type='submit'>Save</Button>
-    //                         <Button fullWidth onClick={() => resetForm()}>Cancel</Button>                              
-    //                     </FlexSection>
-    //                 }
-    //             </Form>
-
-    //             {shouldReadOnly 
-    //                 && <FlexSection marginTop1em>
-    //                     <DeleteEntryButton fullWidth entryId={id} /> 
-    //                 </FlexSection>
-    //             }
-    //         </PageContainer>
-    //     </Page>
-    // )
-
 
 export default EntryDetails

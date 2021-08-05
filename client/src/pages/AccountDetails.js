@@ -2,19 +2,20 @@ import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
 import { Page, PageContainer, Button, SwitchViewButton, FlexSection, FormSectionTitle, FormSeparator, PencilIcon, HomeAddIcon } from '../common'
-import { validatePassWithMessage, useUpdateAccount, useChangePassword } from '../functions'
+import { validatePassWithMessage, useUpdateAccount, useChangePassword, useHandleUserStatus } from '../functions'
 import SuperForm from '../components/SuperForm/SuperForm'
-import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput/ToggleVisibleInput'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
-
-const AccountDetails = () => {
+import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput'
+import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs'
+  
+const AccountDetails = ({setActivatedHomesLength}) => {
+  useHandleUserStatus()
   const history = useHistory()
   const userContext = useContext(UserContext)
-
   const updateAccount = useUpdateAccount()
   const changePassword = useChangePassword()
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
-  const [homes, setHomes] = useState([])
+  const [activatedHomes, setActivatedHomes] = useState([])
+  const [deactivatedHomes, setDeactivatedHomes] = useState([])
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
@@ -98,21 +99,21 @@ const AccountDetails = () => {
     }
   ]
 
-  // Effect to log user out if they're not logged in
-  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
-
   // Effect to fetch all entries
   useEffect(() => {
     if (!userContext.user) return
 
     const fetchHomes = async () => {
       try {
-        let homesRes = await fetch(`/api/home/getbyuser/${userContext.user._id}`)
-        let homesObject = await homesRes.json()
-        // let list = homesObject.entryList
-        // let homesArray = []
+        let activatedHomesRes = await fetch(`/api/home/getbyuser/activated/${userContext.user._id}`)
+        let activatedHomesObject = await activatedHomesRes.json()
+
+        let deactivatedHomesRes = await fetch(`/api/home/getbyuser/deactivated/${userContext.user._id}`)
+        let deactivatedHomesObject = await deactivatedHomesRes.json()
       
-        setHomes(homesObject)
+        setActivatedHomes(activatedHomesObject)
+        setActivatedHomesLength(activatedHomesObject.length)
+        setDeactivatedHomes(deactivatedHomesObject)
       }  
       catch (err) {
         console.log(err)
@@ -151,7 +152,7 @@ const AccountDetails = () => {
           <FormSectionTitle>Manage Home(s)</FormSectionTitle>
           <Button inline onClick={() => history.push('/new-home')}><HomeAddIcon /></Button>
         </FlexSection>
-        {homes.map((home, index) => {
+        {activatedHomes.map((home, index) => {
           return (
             <FlexSection key={index}>
               <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
@@ -159,6 +160,20 @@ const AccountDetails = () => {
             </FlexSection>
           )
         })}
+
+        {deactivatedHomes.length > 0 && <>
+          <FlexSection alignCenter>
+            <FormSectionTitle>Deactivated Home(s)</FormSectionTitle>
+          </FlexSection>
+          {deactivatedHomes.map((home, index) => {
+            return (
+              <FlexSection key={index}>
+                <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
+                <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
+              </FlexSection>
+            )
+          })}
+        </>}
       </PageContainer>
     </Page>
   )

@@ -2,8 +2,10 @@ import { useHistory } from 'react-router-dom'
 import { Page, PageContainer, TextLink } from '../common'
 
 import Login from "../components/User/Login"
+import { useHandleUserStatus } from '../functions'
 
 const LoginPage = () => {
+    useHandleUserStatus()
     let history = useHistory()
 
     return (

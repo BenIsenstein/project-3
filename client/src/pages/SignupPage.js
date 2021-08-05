@@ -1,8 +1,10 @@
 import { useHistory } from 'react-router-dom'
 import { Page, PageContainer, TextLink } from '../common'
 import Signup from "../components/User/Signup"
+import { useHandleUserStatus } from '../functions'
 
 const SignupPage = () => {
+    useHandleUserStatus()
     let history = useHistory()
 
     return (

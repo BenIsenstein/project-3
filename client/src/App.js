@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { Switch, Route } from 'react-router-dom'
-import styled, { ThemeProvider } from "styled-components"
+import { ThemeProvider } from "styled-components"
 import theme from './theme'
 import GlobalStyle from "./globalStyles"
 
@@ -23,6 +23,7 @@ import HomeDetails from './pages/HomeDetails'
 
 const App = () => {
   const userContext = useContext(UserContext)
+  const [activatedHomesLength, setActivatedHomesLength] = useState()
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,11 +36,11 @@ const App = () => {
           <Route path='/calendar' component={Calendar} />
           <Route path='/library' component={Library} />
           <Route path='/task/:id' component={EntryDetails} />
-          <Route path='/account' component={AccountDetails} />
+          <Route path='/account' render={(...props) => (<AccountDetails {...props} setActivatedHomesLength={setActivatedHomesLength} />)} />
           <Route path='/settings' component={Settings} />
           <Route path='/new-task' component={AddEntryPage} />
           <Route path='/new-home' component={AddHomePage} />
-          <Route path='/home/:id' component={HomeDetails} />
+          <Route path='/home/:id' render={(...props) => (<HomeDetails {...props} activatedHomesLength={activatedHomesLength} />)} />
         </Switch>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>

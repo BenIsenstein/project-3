@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
 import { PencilIcon, Form, FormSectionTitle, Button, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
-import ComplexInput from './ComplexInput/ComplexInput'
-import GroupOfInputs from './GroupOfInputs/GroupOfInputs'
+import { homeItemsCheckboxes } from '../../variables'
+import GroupOfInputs from './GroupOfInputs'
 
 /* 
 NOTES
@@ -65,6 +65,8 @@ const inputs = [
 - ...props | object | default: undefined | any props not recognized by the component are fed to the outermost <FlexSection>
 - BeforeTemplate | JSX | default: undefined |
 - AfterTemplate | JSX | default: undefined  |
+- BeforeSubmitButton | JSX | default: undefined |
+- BeforeSubmitButtonIfEditView | JSX | default: undefined |
 - formProps | object | default: undefined | all props fed directly to the main <Form> element
 - onSubmit | func | default: alert('No onSubmit given to <FormTemplate />') | called on submit event of the main <Form /> element
 - formMode | str | default: 'add' | can be either 'add' or 'details'
@@ -94,6 +96,7 @@ const SuperForm= ({
   // - - - - - Handle the most crucial props - - - - -  
   formMode = formMode || 'add'
   onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
+  const finalInputs = inputs // should finalInputs be initialized as a piece of state??
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
   const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
@@ -144,7 +147,7 @@ const SuperForm= ({
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
         
         // for each input, setValue + add the value to valuesForReset
-        for (let { name, ...input } of inputs) {
+        for (let { name, ...input } of finalInputs) {
           // if the object contains a single input element
           if (!['GroupOfInputs', 'GroupOfCheckboxes'].includes(input.as?.name)) {
             setValue(name, details[name])
@@ -152,10 +155,17 @@ const SuperForm= ({
             continue
           }
           
-          // if the object is a <GroupOfInputs /> with an array of inputs, or a <GroupOfCheckboxes /> 
-          for (let { name } of input.inputs) {
-            setValue(name, details[name])
-            valuesForReset[name] = details[name]
+          // if the object is a <GroupOfInputs /> with an array of inputs
+          if (input.as?.name === 'GroupOfInputs') {
+            for (let { name } of input.inputs) {
+              setValue(name, details[name])
+              valuesForReset[name] = details[name]
+            }
+            continue
+          }
+          //if it's a <GroupOfCheckboxes />
+          else if (input.as?.name === 'GroupOfCheckboxes') {
+            input.inputs = details[name].map(input => {return { value: input }})
           }
         }
 
@@ -180,7 +190,8 @@ const SuperForm= ({
     isDateInput,
     setAreDetailsLoaded, 
     setValue, 
-    goHome
+    goHome,
+    finalInputs
   ])
 
   // Effect to conditionally control the value of 'hasBeenChanged'. 
@@ -222,7 +233,7 @@ const SuperForm= ({
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
       <GroupOfInputs 
         {...{
-        inputs, 
+        inputs: finalInputs, 
         ...modeAndView,
         ...formTools
         }}
@@ -235,6 +246,7 @@ const SuperForm= ({
       )} */}
 
       {props.BeforeSubmitButton}
+      {isEditView && props.BeforeSubmitButtonIfEditView}
 
       {(isAddMode || isEditView) && 
         <FlexSection fullWidth marginTop1em>

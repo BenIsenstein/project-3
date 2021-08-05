@@ -1,13 +1,16 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs'
 import { homeItemsCheckboxes } from '../variables'
 import CustomItemModal from '../components/Modals/CustomItemModal'
-import ComplexInput from '../components/SuperForm/ComplexInput/ComplexInput'
-import { useAddHome } from '../functions'
+import ComplexInput from '../components/SuperForm/ComplexInput'
+import { useAddHome, useHandleUserStatus } from '../functions'
+import UserContext from '../UserContext'
 
 const AddHomePage = () => {
+  useHandleUserStatus()
+  const userContext = useContext(UserContext)
   const [customItems, setCustomItems] = useState([])
   const addHome = useAddHome()
   const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
@@ -120,9 +123,7 @@ const AddHomePage = () => {
     return <CustomItemModal 
       modalContent={<>
         <p>New item</p>
-        <ComplexInput 
-          onChange={event => setNewItem(event.target.value)}
-        />
+        <ComplexInput onChange={event => setNewItem(event.target.value)} />
       </>}
       actionOnConfirm={() => 
         setCustomItems([...customItems, { value: newItem, defaultChecked: true, isCustomItem: true }])
@@ -134,7 +135,7 @@ const AddHomePage = () => {
     <Page>
       <PageContainer flexColumn>
         <SuperForm 
-          titleText="New Home"
+          titleText={userContext.user?.homes?.length ? "New Home" : "Add your first home!"}
           inputs={inputs}
           onSubmit={addHome}
           BeforeSubmitButton={<AddCustomItemModal />}
@@ -143,8 +144,5 @@ const AddHomePage = () => {
     </Page>
   )
 }
-
-//modalContent
-// actionOnConfirm
 
 export default AddHomePage
