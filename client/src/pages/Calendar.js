@@ -7,6 +7,7 @@ import { AddIcon, Button, Page, PageContainer, FlexSection } from '../common'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
 import { useHandleUserStatus } from "../functions"
+import entry from "react-datetime-picker"
 
 const Calendar = () => {
   useHandleUserStatus()
@@ -87,23 +88,32 @@ const Calendar = () => {
   useEffect(() => {
     if (!loaded) return
 
-    const returnAll = entry => true
-    const returnActive = entry => !entry.completed
-    const returnCompleted = entry => entry.completed
+    let homes = [
+      // {id: "61099f342ec65716b4b37d96", nickname: "Brentwood"}
+      {id: "6102b61836986f2db048502d", nickname: "Candiac"}
+    ]
+
+    const returnAll = entry => true && homes.some(object => object.id == entry.homeId) 
+    const returnActive = entry => !entry.completed && homes.some(object => object.id == entry.homeId) 
+    const returnCompleted = entry => entry.completed && homes.some(object => object.id == entry.homeId) 
+    // const returnHomes = entry => entry.some(object => object.id == entry.homeId) 
 
     setFilteredDates(dates
       .map(date => {
         // let { active, completed } = checked
         let active = filterContext.active
         let completed = filterContext.completed
+        // let homes = filterContext.homes
 
+        console.log('date.entries: ', date.entries)
         let filteredEntries = date.entries
+
           .filter(entry => 
             active && completed ? returnAll(entry) : 
             active ? returnActive(entry) : 
             completed ? returnCompleted(entry) : 
-            returnActive(entry) 
-        )
+            returnActive(entry)
+          )
 
         return {
           date: date.date, 

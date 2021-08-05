@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
-import { Page, PageContainer, Button, SwitchViewButton, FlexSection, FormSectionTitle, FormSeparator, PencilIcon, HomeAddIcon } from '../common'
+import { Page, PageContainer, Button, SwitchViewButton, FlexSection, FormSectionTitle, FormSeparator, PencilIcon, HomeAddIcon, ShareIcon } from '../common'
 import { validatePassWithMessage, useUpdateAccount, useChangePassword, useHandleUserStatus } from '../functions'
 import SuperForm from '../components/SuperForm/SuperForm'
 import ToggleVisibleInput from '../components/SuperForm/ToggleVisibleInput'
@@ -149,27 +149,29 @@ const AccountDetails = ({setActivatedHomesLength}) => {
         <FormSeparator />
 
         <FlexSection alignCenter>
-          <FormSectionTitle>Manage Home(s)</FormSectionTitle>
+          <FormSectionTitle style={{margin: '0 0 .2em 0'}}>Manage Home(s)</FormSectionTitle>
           <Button inline onClick={() => history.push('/new-home')}><HomeAddIcon /></Button>
         </FlexSection>
         {activatedHomes.map((home, index) => {
           return (
             <FlexSection key={index}>
-              <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
               <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
+              <ShareIcon />
+              <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
             </FlexSection>
           )
         })}
 
         {deactivatedHomes.length > 0 && <>
           <FlexSection alignCenter>
-            <FormSectionTitle>Deactivated Home(s)</FormSectionTitle>
+            <FormSectionTitle style={{margin: '1em 0 .2em 0'}}>Deactivated Home(s)</FormSectionTitle>
           </FlexSection>
           {deactivatedHomes.map((home, index) => {
             return (
               <FlexSection key={index}>
-                <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
                 <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
+                <ShareIcon />
+                <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
               </FlexSection>
             )
           })}
