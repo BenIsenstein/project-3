@@ -20,14 +20,15 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
 
   const toggleHomeCheck = (e) => {
     // to find out if it's checked or not; returns true or false
-    let targetChecked = e.checked
+    let targetChecked = e.target.checked
 
     // to get the checked value
-    let targetCheckedValue = e.value
+    let targetCheckedValue = e.target.value
 
     // to get the checked name
     let targetCheckedName = e.name
 
+    console.log('e.target: ', e.target) 
     console.log("toggleHomeCheck function says, targetChecked = ", targetChecked)
     console.log("toggleHomeCheck function says, targetCheckedValue = ", targetCheckedValue)
     console.log("toggleHomeCheck function says, targetCheckedName = ", targetCheckedName)

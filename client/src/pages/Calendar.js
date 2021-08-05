@@ -95,21 +95,21 @@ const Calendar = () => {
     // ]
 
     const returnAll = entry => {
-      if (homes.length > 0) {
+      if (homes?.length > 0) {
         return true && homes.some(object => object.id == entry.homeId)
       } else {
         return true
       } 
     }
     const returnActive = entry => {
-      if (homes.length > 0) {
+      if (homes?.length > 0) {
         return !entry.completed && homes.some(object => object.id == entry.homeId)
       } else {
         return !entry.completed
       } 
     }
     const returnCompleted = entry => {
-      if (homes.length > 0) {
+      if (homes?.length > 0) {
         return entry.completed && homes.some(object => object.id == entry.homeId)
       } else {
         return entry.completed
