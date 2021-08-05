@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FlexSection, GridSection, Input, Select } from '../../common'
+import { FlexSection, GridSection, Input, Select, Li } from '../../common'
 import { useIsDateInput } from '../../functions'
 import { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
@@ -118,7 +118,7 @@ const GroupOfCheckboxes = ({
     key={rest.index}
     name={rest.name || props.name}
     type="checkbox"
-    defaultChecked
+    defaultChecked={!rest.defaultUnchecked}
     readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
     registerOptions={props.registerOptions}
     wrapperProps={{rowReverse: true, justifyEnd: true}}
@@ -154,8 +154,9 @@ const GroupOfCheckboxes = ({
   
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
-    {inputs && inputs.map((input, index) => 
-      input.isCustomItem 
+    {inputs && inputs.map((input, index) => (props.readOnly || input.readOnly)
+      ? <Li gridColumn="1/2" key={index}>{input.value}</Li>
+      : input.isCustomItem 
         ? <CustomItemCheckbox index={index} {...input} /> 
         : <DefaultCheckbox index={index} {...input} />
     )}
@@ -165,10 +166,10 @@ const GroupOfCheckboxes = ({
 const SuperFormSelect = ({ options, name, ...props }) => { 
   // *SuperFormSelect needs to have "isCustomComponent" set to true.*
   const allProps = {
-    name: name,
-    id: name,
     ...props.register(name, props.registerOptions), 
-    ...props
+    ...props,
+    name: name,
+    id: name
   }
   
   if (!options) return null

@@ -32,16 +32,17 @@ const UserHomesSelect = props => {
 
   }, [userContext.user._id, setValue])
 
-  return props.readOnly ? <ComplexInput labelHidden {...props} /> : <SuperFormSelect options={homeOptions} {...props} />
+  return <SuperFormSelect options={homeOptions} {...props} />
 }
 
-const HomeItemsSelect = props => {
+const HomeItemsSelect = ({...props}) => {
     const [itemOptions, setItemOptions] = useState([{value: 'loading...'}])
-    const homeId = props.watch("homeId")
-    const { setValue, name } = props
+    const { setValue, name, watch } = props
+    const homeId = watch("homeId")
     
     useEffect(() => {
-        if (['loading...', '', undefined].includes(homeId)) return
+        if (homeId === 'loading...') return
+        if (['', undefined].includes(homeId)) return setItemOptions([{value: watch(name)}])
        
         let isMounted = true 
         const fetchHomes = async () => {
@@ -61,7 +62,7 @@ const HomeItemsSelect = props => {
 
               if (isMounted) {
                 setItemOptions(itemsArray.map(item => {return { value: item }}))
-                if (!props.readOnly) setValue(name, itemsArray[0])
+                if (props.isAddMode) setValue(name, itemsArray[0])
               }
             }
             catch (err) {
@@ -73,14 +74,9 @@ const HomeItemsSelect = props => {
 
         return () => isMounted = false
 
-    }, [homeId])
-
-
-    if (!homeId) return <ComplexInput labelHidden readOnly {...props} />
-
-    return !homeId ? <ComplexInput labelHidden readOnly {...props} /> :
-      props.readOnly ? <ComplexInput labelHidden {...props} /> : 
-      <SuperFormSelect options={itemOptions} {...props} />
+    }, [homeId, name, props.isAddMode, setValue, watch])
+    
+    return <SuperFormSelect options={itemOptions} {...props} />
 }
 
 export default UserHomesSelect
