@@ -88,14 +88,34 @@ const Calendar = () => {
   useEffect(() => {
     if (!loaded) return
 
-    let homes = [
-      // {id: "61099f342ec65716b4b37d96", nickname: "Brentwood"}
-      {id: "6102b61836986f2db048502d", nickname: "Candiac"}
-    ]
+    let homes = filterContext.homes
+    // let homes = [
+    //   // {id: "61099f342ec65716b4b37d96", nickname: "Brentwood"},
+    //   // {id: "6102b61836986f2db048502d", nickname: "Candiac"}
+    // ]
 
-    const returnAll = entry => true && homes.some(object => object.id == entry.homeId) 
-    const returnActive = entry => !entry.completed && homes.some(object => object.id == entry.homeId) 
-    const returnCompleted = entry => entry.completed && homes.some(object => object.id == entry.homeId) 
+    const returnAll = entry => {
+      if (homes.length > 0) {
+        return true && homes.some(object => object.id == entry.homeId)
+      } else {
+        return true
+      } 
+    }
+    const returnActive = entry => {
+      if (homes.length > 0) {
+        return !entry.completed && homes.some(object => object.id == entry.homeId)
+      } else {
+        return !entry.completed
+      } 
+    }
+    const returnCompleted = entry => {
+      if (homes.length > 0) {
+        return entry.completed && homes.some(object => object.id == entry.homeId)
+      } else {
+        return entry.completed
+      }
+    }    
+
     // const returnHomes = entry => entry.some(object => object.id == entry.homeId) 
 
     setFilteredDates(dates
@@ -103,7 +123,7 @@ const Calendar = () => {
         // let { active, completed } = checked
         let active = filterContext.active
         let completed = filterContext.completed
-        // let homes = filterContext.homes
+
 
         console.log('date.entries: ', date.entries)
         let filteredEntries = date.entries
