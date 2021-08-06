@@ -30,6 +30,4 @@ const homeItemsCheckboxes = {
   defaultInputNames: defaultInputNames
 }
 
-console.log('homeItemsCheckboxes.defaultInputNames: ', homeItemsCheckboxes.defaultInputNames)
-
 export { homeItemsCheckboxes }

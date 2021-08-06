@@ -4,6 +4,7 @@ import {fadeIn} from './'
 const FlexSection = styled.div`
     display: flex;
     align-items: center;
+    transition: max-height 0.4s;
 
     ${props => props.alignStart && css`
         align-items: flex-start;
@@ -59,8 +60,7 @@ const FlexSection = styled.div`
 
     ${props => props.popup && css`
         overflow: hidden;
-        height: ${props => props.popupCondition ? 'max-content' : '0px'};
-        transition: height 1s;
+        max-height: ${props => props.popupCondition ? '100%' : '0'};
     `}
 
     ${props => props.fadeIn && css`

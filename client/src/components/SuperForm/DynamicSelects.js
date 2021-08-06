@@ -57,11 +57,8 @@ const HomeItemsSelect = ({...props}) => {
               if (isMounted) {
                 homeRes = await fetch(`/api/home/get/${homeId}`)
                 homeObject = await homeRes.json()
-                console.log('homeObject: ', homeObject)
                 itemsObject = homeObject.homeItems
-                console.log('itemsObject: ', itemsObject)
                 itemsArray = Object.keys(itemsObject).filter(key => itemsObject[key])  // an array of strings that produce truthy values in the itemsObject. ie - they were checked on adding the home.
-                console.log('itemsArray: ', itemsArray)
               }
 
               // successful fetch check??

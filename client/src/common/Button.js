@@ -1,4 +1,5 @@
 import styled, {css} from 'styled-components'
+import {fadeIn} from './'
 
 const Button = styled.button`
     display: flex;
@@ -27,6 +28,10 @@ const Button = styled.button`
             background: ${props => props.theme.prmDk};
             color: white;
         }
+    `}
+
+    ${props => props.fadeIn && css`
+        animation: ${fadeIn} 0.4s linear;
     `}
 
     ${props => props.icon && css`

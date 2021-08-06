@@ -1,5 +1,5 @@
 import styled, {css} from 'styled-components'
-import {fadeIn} from './'
+import {slideInBottom} from './'
 
 const PageContainer = styled.div`
     width: 95%;
@@ -8,7 +8,7 @@ const PageContainer = styled.div`
     padding: .5em;
     background-color: ${props => props.theme.bkg};
     border-radius: 10px;
-    animation: ${fadeIn} 0.4s linear;
+    animation: ${slideInBottom} 0.4s linear;
 
     ${props => props.flexColumn && css`
         display: flex;

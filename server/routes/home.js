@@ -4,13 +4,14 @@ const router = express.Router()
 const { Home } = require('../models/Home')
 
 router.post('/add', async (req, res) => {
-    try {
-        await new Home(req.body).save()
-        res.json({ success: true })
-    }
-    catch (err) {
-        console.log('error adding Home: ', err)
-    }
+  try {
+    let newHome = await new Home(req.body).save()
+    res.json({ success: true, homeId: newHome._id })
+  }
+  catch (err) {
+    console.log('error adding Home: ', err)
+    res.json({ success: false })
+  }
 })
 
 // get all homes for a user

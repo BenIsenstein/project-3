@@ -84,16 +84,16 @@ const EntryDetails = () => {
   ]
 
   const CompleteTaskButton = () => !shouldShowCompletion && (
-    <FlexSection fullWidth marginTop1em>
       <Button 
         important 
         fullWidth 
+        fadeIn
+        margin="1em 0 0 0"
         type='button' 
         onClick={() => setUndergoingCompletion(true)}
       >
         Complete Task
       </Button>      
-    </FlexSection>
   )
 
   return isCompletedHandled && (
