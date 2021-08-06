@@ -87,8 +87,6 @@ const inputs = [
 
 const SuperForm= ({ 
   formMode, 
-  BeforeTemplate,
-  AfterTemplate,
   BackButtonIcon,
   onSubmit, 
   inputs, 
@@ -96,9 +94,8 @@ const SuperForm= ({
   // - - - - - Handle the most crucial props - - - - -  
   formMode = formMode || 'add'
   onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
-  const finalInputs = inputs // should finalInputs be initialized as a piece of state??
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
-  const { register, formState: { errors }, handleSubmit, setValue, reset, watch } = useForm({})
+  const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
   const [viewMode, setViewMode] = useState('details')
@@ -123,7 +120,8 @@ const SuperForm= ({
     register,
     setValue,
     watch,
-    errors
+    errors,
+    getValues
   }
 
   // Effect to conditionally bring in entry and populate fields
@@ -147,25 +145,36 @@ const SuperForm= ({
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
         
         // for each input, setValue + add the value to valuesForReset
-        for (let { name, ...input } of finalInputs) {
+        for (let { name, ...input } of inputs) {
           // if the object contains a single input element
           if (!['GroupOfInputs', 'GroupOfCheckboxes'].includes(input.as?.name)) {
             setValue(name, details[name])
             valuesForReset[name] = details[name]
-            continue
-          }
-          
+          } 
           // if the object is a <GroupOfInputs /> with an array of inputs
-          if (input.as?.name === 'GroupOfInputs') {
+          else if (input.as?.name === 'GroupOfInputs') {
             for (let { name } of input.inputs) {
               setValue(name, details[name])
               valuesForReset[name] = details[name]
             }
-            continue
+            
           }
           //if it's a <GroupOfCheckboxes />
           else if (input.as?.name === 'GroupOfCheckboxes') {
-            input.inputs = details[name].map(input => {return { value: input }})
+            let checkboxData = details[name]
+
+            input.setCustomItems(prevState => [
+              ...prevState, 
+              ...Object.keys(checkboxData)
+                .filter(key => !input.defaultInputNames.includes(key))
+                .map(key => {return { name: key, defaultChecked: true, isCustomItem: true }})
+            ])
+
+            for (let key in checkboxData) {
+              console.log(`setting value of ${name}.${key} to ${checkboxData[key]}`)
+              setValue(`${name}.${key}`, checkboxData[key])
+            }
+            
           }
         }
 
@@ -185,13 +194,11 @@ const SuperForm= ({
     return () => isMounted = false
   }, [
     isDetailsMode, 
-    props.detailsUrl, 
-    inputs, 
+    props.detailsUrl,  
     isDateInput,
     setAreDetailsLoaded, 
     setValue, 
-    goHome,
-    finalInputs
+    goHome
   ])
 
   // Effect to conditionally control the value of 'hasBeenChanged'. 
@@ -223,27 +230,19 @@ const SuperForm= ({
   if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
   
   return <FlexSection fullWidth column fadeIn {...props}>
-    {BeforeTemplate} 
+    {props.BeforeTemplate} 
 
     <FlexSection fullWidth spaceBetween>
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
     </FlexSection>
     
-    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>   
+    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>  
       <GroupOfInputs 
-        {...{
-        inputs: finalInputs, 
-        ...modeAndView,
-        ...formTools
-        }}
+        inputs={inputs}
+        {...modeAndView}
+        {...formTools}
       />
-
-      {/* {props.BeforeSubmitButton?.props?.children?.map(child => 
-        child?.type?.name === "ComplexInput" 
-          ? <ComplexInput {...child.props} {...formTools} {...modeAndView} />
-          : child
-      )} */}
 
       {props.BeforeSubmitButton}
       {isEditView && props.BeforeSubmitButtonIfEditView}
@@ -260,7 +259,7 @@ const SuperForm= ({
       }
     </Form>  
 
-    {AfterTemplate} 
+    {props.AfterTemplate} 
   </FlexSection>
 }
 

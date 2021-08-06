@@ -126,7 +126,7 @@ const AddHomePage = () => {
         <ComplexInput onChange={event => setNewItem(event.target.value)} />
       </>}
       actionOnConfirm={() => 
-        setCustomItems([...customItems, { value: newItem, defaultChecked: true, isCustomItem: true }])
+        setCustomItems([...customItems, { name: newItem, defaultChecked: true, isCustomItem: true }])
       }
     />
   }

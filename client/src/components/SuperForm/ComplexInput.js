@@ -17,36 +17,34 @@ const ComplexInput = ({
   errors, 
   register, 
   isCustomComponent, 
+  shouldRegisterParent,
   forwardErrors, 
   type, 
   wrapperProps,
   ...props 
   }) => {
-  const isCheckbox = type==='checkbox'
-  const ifCheckboxValueElseName = isCheckbox ? props.value : name
-
-  //console.log('checkedAll, setCheckedAll, checked, setChecked: ', props.checkedAll, props.setCheckedAll,props.checked,props.setChecked)
+  const isCheckbox = type === 'checkbox'
 
   return (
     <FlexSection 
       key={props.key}
-      gridColumn={wrapperProps?.gridColumn || "1/-1"}
-      fullWidth={!wrapperProps?.noFullWidth} 
-      column={!wrapperProps?.noColumn} 
-      {...isCheckbox ? {alignCenter: true} : {alignStart: true}}
+      gridColumn={wrapperProps?.gridColumn || "1/-1"}                // gridColumn: "1/-1" unless specified otherwise
+      fullWidth={!wrapperProps?.noFullWidth}                         // fullWidth unless specified otherwise
+      column={!wrapperProps?.noColumn}                               // column unless specified otherwise
+      {...isCheckbox ? {alignCenter: true} : {alignStart: true}}     // checkbox aligmnent
       {...wrapperProps}
     >
   
-      {!props.labelHidden && 
-        <Label htmlFor={ifCheckboxValueElseName} {...isCheckbox && {margin: '0'}}>
-          {props.labelText || ifCheckboxValueElseName}
+      {!props.labelHidden &&                                         // label can be hidden with labelHidden. 
+        <Label htmlFor={name} {...isCheckbox && {margin: '0'}}>
+          {props.labelText || name}
         </Label>
       }
   
       <Textarea 
-        id={ifCheckboxValueElseName}
+        id={name}
         name={name}
-        {...!isCustomComponent && register && register(name, props.registerOptions)} 
+        {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
         {...isCustomComponent && register && { register }}
         {...forwardErrors && errors && { errors }}
         {...type && { as: Input, type }}

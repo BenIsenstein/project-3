@@ -7,7 +7,7 @@ const homeSchema = new mongoose.Schema({
   address: String,
   city: String,
   country: String,
-  homeItems: Array,
+  homeItems: Object,
   nickname: String,
   possessionDateByOwner: Date,
   postalCode: String,

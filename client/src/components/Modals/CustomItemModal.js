@@ -47,7 +47,7 @@ const DeleteItemModal = props => {
       isConfirmModalShowing={isConfirmModalShowing}
       hideConfirmModal={toggleConfirmModal}
       modalContentProps={{column: true}}
-      modalContent={`Are you sure you want to delete "${props.labelText || props.value}"?`}
+      modalContent={`Are you sure you want to delete "${props.labelText || props.name}"?`}
       confirmPrompt="Delete"
       actionOnConfirm={props.actionOnConfirm}
     />
@@ -62,4 +62,3 @@ export { EditItemModal, DeleteItemModal }
 
 
 
-//`Edit ${props.labelText || props.value}`
