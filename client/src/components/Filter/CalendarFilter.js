@@ -6,7 +6,6 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
     const toggleCheck = (inputName) => {
         setChecked((prevState) => {
             const newState = {...prevState}
-            console.log(`prevState[${inputName}]: `, prevState[inputName])
             newState[inputName] = !prevState[inputName]
             return newState
         })

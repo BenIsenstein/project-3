@@ -20,6 +20,7 @@ import Settings from './pages/Settings'
 import AddEntryPage from './pages/AddEntryPage'
 import AddHomePage from './pages/AddHomePage'
 import HomeDetails from './pages/HomeDetails'
+import InfoPage from './pages/InfoPage'
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -41,6 +42,7 @@ const App = () => {
           <Route path='/new-task' component={AddEntryPage} />
           <Route path='/new-home' component={AddHomePage} />
           <Route path='/home/:id' render={(...props) => (<HomeDetails {...props} activatedHomesLength={activatedHomesLength} />)} />
+          <Route path='/info' component={InfoPage} />
         </Switch>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>

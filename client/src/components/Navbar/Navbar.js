@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator, EyeIcon } from "../../common"
 
 import UserContext from '../../UserContext'
 
@@ -103,6 +103,10 @@ const Navbar = () => {
                 <NavItem to='/settings' activeClassName>
                     <SettingsIcon nav />
                     Settings
+                </NavItem>
+                <NavItem to='/info' activeClassName>
+                    <EyeIcon nav />
+                    Info
                 </NavItem>
                 <NavItem to='/' exact activeClassName onClick={() => userContext.logOut()}>
                     <ExitIcon nav />
