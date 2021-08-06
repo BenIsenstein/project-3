@@ -8,7 +8,7 @@ const taskInfoSchema = new mongoose.Schema({
     frequency: Number,
   })
   
-const TaskInfo = mongoose.model("taskInfo", taskInfoSchema)
+const TaskInfo = mongoose.model("TaskInfo", taskInfoSchema, "TaskInfos")
 
 module.exports = {
   TaskInfo

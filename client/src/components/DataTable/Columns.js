@@ -1,4 +1,4 @@
-import { TypeColumnFilter, NumberRangeColumnFilter } from "./Filters";
+import { TypeColumnFilter, NumberRangeColumnFilter } from "./TabFilters";
 
 export const columnHeaders = [
     {
@@ -15,7 +15,7 @@ export const columnHeaders = [
     },
 
     {
-        Header: 'Frequency',
+        Header: 'Frequency(in days)',
         accessor: 'frequency',
         Filter: NumberRangeColumnFilter,
         disableFilters: true,

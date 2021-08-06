@@ -6,18 +6,27 @@ import { columnHeaders } from "./Columns"
 import { useHistory } from "react-router-dom"
 
 export default function InfoTable() {
-  const loadingMessage = [{name: 'Loading...', address: "This won't take long!"}]
+  const loadingMessage = [{item: 'Loading...', task: "This won't take long!"}]
   const [infoList, setInfoList] = useState(loadingMessage)
+  //  const [infoList, setInfoList] = useState(
+  //  [ { "item": "Furnace", "task": "Filter", "frequency": "180"},
+  //    { "item": "Furnace", "task": "Inspect", "frequency": "365"},
+  //    { "item": "Furnace", "task": "Dampers", "frequency": "180"}])
+  
   useEffect(() => {
     const getAllInfo = async () => {
-      let fetchUrl = "/api/info"
-      let response = await fetch(fetchUrl)
-      let resObject = await response.json()
-      let listResult = resObject.InfoList
-
-      setInfoList(listResult)
+      try {
+       console.log( "Welcome to our useEffect")
+       let response = await fetch("/api/info")
+       let resObject = await response.json()
+       console.log("res object is",resObject)
+       setInfoList(resObject)
+      }
+      catch (err) {
+        console.log("There was an error loading your table", err)
+      }
     }
-    getAllInfo()
+      getAllInfo()
   }, [])
 
   const history = useHistory()
@@ -52,7 +61,7 @@ export default function InfoTable() {
 
     return (
       <div 
-        style={{npm run 
+        style={{
           display: 'flex', 
           justifyContent: 'center',
           border: "4px solid #05386B",
