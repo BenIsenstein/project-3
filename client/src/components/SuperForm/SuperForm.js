@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form"
 import UserContext from '../../UserContext'
 import { PencilIcon, Form, FormSectionTitle, Button, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
-import { homeItemsCheckboxes } from '../../variables'
 import GroupOfInputs from './GroupOfInputs'
+import Skeleton from 'react-loading-skeleton'
 
 /* 
 NOTES
@@ -111,6 +111,7 @@ const SuperForm= ({
   const isEditView = viewMode === 'edit'
   const isDetailsView = viewMode === 'details'
   const modeAndView = {
+    areDetailsLoaded,
     isAddMode,
     isDetailsMode,
     isDetailsView,
@@ -227,7 +228,7 @@ const SuperForm= ({
   if (isAddMode) register('userId', { value: userContext.user?._id })
 
   // - - - - - - RETURN JSX - - - - - - - - - - - //
-  if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
+  //if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
   
   return <FlexSection fullWidth column fadeIn {...props}>
     {props.BeforeTemplate} 

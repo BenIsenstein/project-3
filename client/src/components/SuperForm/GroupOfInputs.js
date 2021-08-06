@@ -13,6 +13,7 @@ const GroupOfInputs = ({
   isDetailsMode,
   isDetailsView,
   isEditView,
+  areDetailsLoaded,
   register,
   setValue,
   watch,
@@ -25,7 +26,8 @@ const GroupOfInputs = ({
     isAddMode,
     isDetailsMode,
     isDetailsView,
-    isEditView
+    isEditView,
+    areDetailsLoaded
   }
   const formTools = {
     register,
@@ -94,6 +96,7 @@ const GroupOfCheckboxes = ({
   isDetailsMode,
   isDetailsView,
   isEditView,
+  areDetailsLoaded,
   register,
   setValue,
   watch,
@@ -104,6 +107,7 @@ const GroupOfCheckboxes = ({
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
   const modeAndView = {
+    areDetailsLoaded,
     isAddMode,
     isDetailsMode,
     isDetailsView,

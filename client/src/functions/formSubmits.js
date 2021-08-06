@@ -2,6 +2,8 @@ import { useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
 
+
+
 //updateEntry
 const useUpdateEntry = () => {
   const { id } = useParams()
@@ -32,6 +34,25 @@ const useUpdateEntry = () => {
 
 }
 
+const fetchAddEntry = async (data) => {
+  try {
+    let action = "/api/calendarEntry/add"
+    let options = {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data)
+    }
+    let res = await fetch(action, options)
+    let resObject = await res.json()
+
+    if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
+  }
+  catch (err) {
+    console.log('error adding calendar entry: ', err)
+    alert("There was an error adding your entry. We're fixing it as fast as we can.")
+  }
+}
+
 // addEntry
 const useAddEntry = () => {
   const history = useHistory()
@@ -39,22 +60,7 @@ const useAddEntry = () => {
   const addEntry = async (data) => {
     data.completed = false
 
-    try {
-      let action = "/api/calendarEntry/add"
-      let options = {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(data)
-      }
-      let res = await fetch(action, options)
-      let resObject = await res.json()
-
-      if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
-    }
-    catch (err) {
-      console.log('error adding calendar entry: ', err)
-      alert("There was an error adding your entry. We're fixing it as fast as we can.")
-    }
+    await fetchAddEntry(data)
 
     history.push(`/calendar`)
   }
@@ -69,26 +75,45 @@ const useAddHome = () => {
 
   const addHome = async (data) => {
     data.activated = true
+    let addHomeObject
     
     try {
       let action = "/api/home/add"
-
       let options = {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(data)
       }
-      let res = await fetch(action, options)
-      let resObject = await res.json()
+      let addHomeRes = await fetch(action, options)
+      addHomeObject = await addHomeRes.json()
+      console.log('addHomeObject: ', addHomeObject)
 
-      if (!resObject.success) alert("Your home wasn't added for some reason. Please try again.")
+      if (!addHomeObject.success) return alert("Your home wasn't added for some reason. Please try again.")
 
       userContext.setUserInfo(userInfo => data && { ...userInfo, homes: [...userInfo.homes, data] })
     }
     catch (err) {
       console.log('error adding calendar entry: ', err)
-      alert("There was an error adding your entry. We're fixing it as fast as we can.")
+      return alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
+
+    // add default entries prompting user to scheule recurrence
+
+    let selectedItems = Object.keys(data.homeItems).filter(key => data.homeItems[key])
+    let newCalendarEntries = selectedItems.map(item => {
+      return {
+        completed: false,
+        userId: data.userId,
+        homeId: addHomeObject.homeId,
+        item: item,
+        task: "Decide on schedule",
+        description: "We'll get the right info here eventually!",
+        start: new Date(),
+        end: new Date()
+      }
+    })
+
+    for (let newEntry of newCalendarEntries) await fetchAddEntry(newEntry)
 
     history.push(`/account`)
   }

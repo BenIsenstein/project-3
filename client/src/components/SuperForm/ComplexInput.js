@@ -1,4 +1,5 @@
 import { Label, Textarea, Input, FlexSection, Error } from '../../common'
+import Skeleton from 'react-loading-skeleton'
 
 /* 
 other props might include:
@@ -35,23 +36,28 @@ const ComplexInput = ({
       {...wrapperProps}
     >
   
-      {!props.labelHidden &&                                         // label can be hidden with labelHidden. 
-        <Label htmlFor={name} {...isCheckbox && {margin: '0'}}>
-          {props.labelText || name}
-        </Label>
+      {props.isAddMode || props.areDetailsLoaded || isCustomComponent
+        ? <>
+        {!props.labelHidden && (props.isAddMode || props.areDetailsLoaded) &&                                         // label can be hidden with labelHidden. 
+          <Label htmlFor={name} {...isCheckbox && {margin: '0'}}>
+            {props.labelText || name}
+          </Label>
+        }
+    
+        <Textarea 
+          id={name}
+          name={name}
+          {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
+          {...isCustomComponent && register && { register }}
+          {...forwardErrors && errors && { errors }}
+          {...type && { as: Input, type }}
+          {...props}
+        />
+    
+        {!forwardErrors && errors && <Error>{errors[name]?.message}</Error>}
+      </>
+        : <Skeleton height={20} width={400} />
       }
-  
-      <Textarea 
-        id={name}
-        name={name}
-        {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
-        {...isCustomComponent && register && { register }}
-        {...forwardErrors && errors && { errors }}
-        {...type && { as: Input, type }}
-        {...props}
-      />
-  
-      {!forwardErrors && errors && <Error>{errors[name]?.message}</Error>}
   
     </FlexSection>
   )
