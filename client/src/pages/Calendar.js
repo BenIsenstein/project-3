@@ -6,8 +6,11 @@ import FilterModal from '../components/Filter/FilterModal'
 import { AddIcon, Button, Page, PageContainer, FlexSection } from '../common'
 import './Calendar.css'
 import CalendarView from '../components/CalendarView/CalendarView'
+import { useHandleUserStatus } from "../functions"
+import entry from "react-datetime-picker"
 
 const Calendar = () => {
+  useHandleUserStatus()
   const history = useHistory()
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
@@ -17,7 +20,7 @@ const Calendar = () => {
   //   completed: false
   // })
 
-  const handleFilterChange = (active, completed, all) => {
+  const handleFilterChange = (active, completed, homes, all) => {
     // setChecked({active: active, completed: completed})
     // setCheckedAll(all)
     
@@ -25,7 +28,8 @@ const Calendar = () => {
     // when changing pages/components.
     let filterInfo = {
       active: active,
-      completed: completed
+      completed: completed,
+      homes: homes
     }
     filterContext.setFilterInfo(filterInfo)
   }
@@ -35,9 +39,6 @@ const Calendar = () => {
   const [dates, setDates] = useState([])
   const [filteredDates, setFilteredDates] = useState([])
   const setNoneFound = useMemo(() => () => {setDates([]); setIsDatesEmpty(true)}, [])
-
-  // Effect to log user out if they're not logged in
-  useEffect(() => {if (!userContext.isLoggedIn) history.push('/')}, [userContext.isLoggedIn, history])
 
   // Effect to fetch all entries
   useEffect(() => {
@@ -87,9 +88,38 @@ const Calendar = () => {
   useEffect(() => {
     if (!loaded) return
 
-    const returnAll = entry => true
-    const returnActive = entry => !entry.completed
-    const returnCompleted = entry => entry.completed
+    let homes = filterContext.homes
+    // let homes = [
+    //   // {id: "61099f342ec65716b4b37d96", nickname: "Brentwood"},
+    //   // {id: "6102b61836986f2db048502d", nickname: "Candiac"}
+    // ]
+
+    const returnAll = entry => {
+      if (homes?.length > 0) {
+        // return true && homes.some(object => object.id == entry.homeId)
+        return true && homes.some(object => (object.id == entry.homeId) && (object.status))
+      } else {
+        return true
+      } 
+    }
+    const returnActive = entry => {
+      if (homes?.length > 0) {
+        // return !entry.completed && homes.some(object => object.id == entry.homeId)
+        return !entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
+      } else {
+        return !entry.completed
+      } 
+    }
+    const returnCompleted = entry => {
+      if (homes?.length > 0) {
+        // return entry.completed && homes.some(object => object.id == entry.homeId)
+        return entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
+      } else {
+        return entry.completed
+      }
+    }    
+
+    // const returnHomes = entry => entry.some(object => object.id == entry.homeId) 
 
     setFilteredDates(dates
       .map(date => {
@@ -98,12 +128,13 @@ const Calendar = () => {
         let completed = filterContext.completed
 
         let filteredEntries = date.entries
+
           .filter(entry => 
             active && completed ? returnAll(entry) : 
             active ? returnActive(entry) : 
             completed ? returnCompleted(entry) : 
-            returnActive(entry) 
-        )
+            returnActive(entry)
+          )
 
         return {
           date: date.date, 

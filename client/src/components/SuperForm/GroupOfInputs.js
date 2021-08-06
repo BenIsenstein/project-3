@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { FlexSection, GridSection, Input, Select } from '../../../common'
-import { useIsDateInput } from '../../../functions'
-import { DeleteItemModal, EditItemModal } from '../../Modals/CustomItemModal'
-import DatetimePickerModal from '../../Modals/DatetimePickerModal'
-import ComplexInput from '../ComplexInput/ComplexInput'
+import { useState, useEffect } from 'react'
+import { FlexSection, GridSection, Input, Select, Li } from '../../common'
+import { useIsDateInput } from '../../functions'
+import { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
+import DatetimePickerModal from '../Modals/DatetimePickerModal'
+import ComplexInput from './ComplexInput'
 
 // all props not in the component code are passed to the outside GridSection.
 
@@ -17,6 +17,7 @@ const GroupOfInputs = ({
   setValue,
   watch,
   errors,
+  getValues,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
   const isDateInput = useIsDateInput()
@@ -30,7 +31,8 @@ const GroupOfInputs = ({
     register,
     setValue,
     watch,
-    errors
+    errors,
+    getValues
   }
 
   // - - - - - - - RETURN JSX - - - - - - - - //
@@ -86,7 +88,7 @@ const GroupOfInputs = ({
 }
 
 const GroupOfCheckboxes = ({
-  // GroupOfCheckboxes needs to have 'isCustomComponent' set to true
+  // GroupOfCheckboxes needs to have 'isCustomComponent' set to false?
   inputs, 
   isAddMode,
   isDetailsMode,
@@ -96,6 +98,7 @@ const GroupOfCheckboxes = ({
   setValue,
   watch,
   errors,
+  getValues,
   customItems,
   setCustomItems,
   ...props }) => {
@@ -110,52 +113,69 @@ const GroupOfCheckboxes = ({
     setValue, 
     register,
     watch,
-    errors
+    errors,
+    getValues
   }
 
-  const DefaultCheckbox = ({ readOnly, ...rest }) => <ComplexInput 
+
+  useEffect(() => console.log("customItems: ", customItems), [customItems])
+
+  const checkboxChange = e => {
+    let target = e.target
+    console.log('checkbox event: ', e)
+    console.log('e.target: ', target)
+    console.log('target.value: ', target.value)
+    console.log('getValues()', getValues())
+    console.log('target.checked: ', target.checked)
+  }
+
+  const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
     noFullWidth
     key={rest.index}
-    name={rest.name || props.name}
+    name={`${props.name}.${name}`}
+    labelText={name}
     type="checkbox"
-    defaultChecked
+    onChange={checkboxChange}
+    //defaultChecked={watch(`${props.name}.${name}`)}
     readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-    registerOptions={props.registerOptions}
     wrapperProps={{rowReverse: true, justifyEnd: true}}
     {...formTools}
     {...modeAndView}
     {...rest} 
   />
 
-  const CustomItemCheckbox = ({ wrapperProps, ...rest }) => {
+  const CustomItemCheckbox = ({ wrapperProps, name, ...rest }) => {
     const [editedItem, setEditedItem] = useState()
 
-    return <FlexSection gridColumn="1/2" {...wrapperProps}>
-      <DefaultCheckbox {...rest} />
-      <FlexSection>
-        <EditItemModal 
-          modalContent={<>
-            <p>Editing {rest.labelText || rest.value}</p>
-            <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
-          </>}
-          actionOnConfirm={() => 
-            setCustomItems(customItems.map(item => item.value === rest.value ? { ...item, value: editedItem } : item))
-          }
-        />
-        <DeleteItemModal 
-          {...rest}
-          actionOnConfirm={() => 
-            setCustomItems(customItems.filter(item => item.value !== rest.value))
-          }
-        />
+    return setCustomItems && (
+      <FlexSection gridColumn="1/2" {...wrapperProps}>
+        <DefaultCheckbox {...rest} name={name} />
+        <FlexSection>
+          <EditItemModal 
+            modalContent={<>
+              <p>Editing {rest.labelText || name}</p>
+              <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
+            </>}
+            actionOnConfirm={() => 
+              setCustomItems(customItems.map(item => item.name === name ? { ...item, name: editedItem } : item))
+            }
+          />
+          <DeleteItemModal 
+            {...rest}
+            actionOnConfirm={() => 
+              setCustomItems(customItems.filter(item => item.name !== name))
+            }
+          />
+        </FlexSection>
       </FlexSection>
-    </FlexSection>
+    )
   }
   
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
-    {inputs && inputs.map((input, index) => 
-      input.isCustomItem 
+    {inputs && inputs.map((input, index) => (props.readOnly || input.readOnly)
+      ? watch(`${props.name}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
+      : input.isCustomItem 
         ? <CustomItemCheckbox index={index} {...input} /> 
         : <DefaultCheckbox index={index} {...input} />
     )}
@@ -165,10 +185,10 @@ const GroupOfCheckboxes = ({
 const SuperFormSelect = ({ options, name, ...props }) => { 
   // *SuperFormSelect needs to have "isCustomComponent" set to true.*
   const allProps = {
-    name: name,
-    id: name,
     ...props.register(name, props.registerOptions), 
-    ...props
+    ...props,
+    name: name,
+    id: name
   }
   
   if (!options) return null

@@ -13,18 +13,25 @@ router.post('/add', async (req, res) => {
     }
 })
 
+// get all homes for a user
+router.get('/getbyuser/:id', async (req, res) => {
+  try {res.json(await Home.find({ userId: req.params.id }))} // JSON array is sent back
+  
+  catch (err) {console.log("error getting all activatedhome for user: ", err)}
+})
+
+// get all deactivated homes for a user
+router.get('/getbyuser/deactivated/:id', async (req, res) => {
+try {res.json(await Home.find({ userId: req.params.id, activated: false }))} // JSON array is sent back
+
+catch (err) {console.log("error getting all deactivated home for user: ", err)}
+})
+
 // get all activated homes for a user
 router.get('/getbyuser/activated/:id', async (req, res) => {
     try {res.json(await Home.find({ userId: req.params.id, activated: true }))} // JSON array is sent back
     
     catch (err) {console.log("error getting all activatedhome for user: ", err)}
-})
-
-// get all deactivated homes for a user
-router.get('/getbyuser/deactivated/:id', async (req, res) => {
-  try {res.json(await Home.find({ userId: req.params.id, activated: false }))} // JSON array is sent back
-  
-  catch (err) {console.log("error getting all deactivated home for user: ", err)}
 })
 
 // get a single home

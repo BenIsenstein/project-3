@@ -9,10 +9,12 @@ const FilterProvider = ({ children }) => {
   // const redirectHome = () => history.push('/calendar')
   const [active, setActive] = useState(true)
   const [completed, setCompleted] = useState(false)
+  const [homes, setHomes] = useState([])
 
   const setFilterInfo = (filterInfo) => {
     setActive(filterInfo.active)
     setCompleted(filterInfo.completed)
+    setHomes(filterInfo.homes)
   }
 
   // When USER CONTEXT changes, use the current user account info to
@@ -39,6 +41,7 @@ const FilterProvider = ({ children }) => {
   let contextValue = {
     active,
     completed,
+    homes,
     setFilterInfo
   }
 

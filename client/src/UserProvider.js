@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useHistory, withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import UserContext from './UserContext'
 
 const UserProvider = ({ children }) => {
@@ -7,9 +7,9 @@ const UserProvider = ({ children }) => {
   const redirectHome = () => history.push('/calendar')
   const [user, setUser] = useState()
   const [userName, setUserName] = useState('loading')
-  const [userType, setUserType] = useState(user?.userType)
-  let isLoggedIn = !['loading', 'no_user'].includes(userName) 
-  let isLoading = userName === "loading"
+  const [userType, setUserType] = useState()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const setUserInfo = (userInfo) => {
     let { firstName, lastName, userType } = userInfo
@@ -19,18 +19,31 @@ const UserProvider = ({ children }) => {
     setUserType(userType)
   }
 
+  //informative effect during debugging
+  useEffect(() => {
+    console.log('user: ', user)
+  
+  }, [user])
+
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {
         let response = await fetch('/api/user/getloggedinuser')
         let userObject = await response.json()
 
-        if (userObject.no_user) return setUserName("no_user")
-        console.log('getLoggedInUser userObject: ', userObject)
+        if (userObject.no_user) {
+          setIsLoading(false)
+          return setUserName("no_user")
+        }
 
-        // fetch for all homes here before concatenating with the userObject??
+        // fetch for all homes here before concatenating with the userObject
+        let homesRes = await fetch(`/api/home/getbyuser/${userObject._id}`)
+        let homesArray = await homesRes.json()
+        userObject.homes = homesArray
         
         setUserInfo(userObject)
+        setIsLoggedIn(true)
+        setIsLoading(false)
       }
       catch (err) {
         console.log('error running checkLoggedInUser: ', err)
@@ -39,14 +52,12 @@ const UserProvider = ({ children }) => {
     }
 
     getLoggedInUser()
-  }, [])
+  }, [history])
 
   const logIn = async (data) => {
     let loginOptions = {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     }
 
@@ -55,9 +66,16 @@ const UserProvider = ({ children }) => {
     if (response.status === 401) return alert('Unable to log in. Please make sure your login info is correct.')
     
     let loggedInUser = await response.json()
-    setUserInfo(loggedInUser)
+
+    // fetch for all homes here before concatenating with loggedInUser
+    let homesRes = await fetch(`/api/home/getbyuser/${loggedInUser._id}`)
+    let homesArray = await homesRes.json()
+    loggedInUser.homes = homesArray
     
-    history.push(`/calendar`)
+    setUserInfo(loggedInUser)
+    setIsLoggedIn(true)
+    
+    //history.push(`/calendar`)
   }
 
   const logOut = async () => {
@@ -66,11 +84,12 @@ const UserProvider = ({ children }) => {
       let resObject = await response.json()
 
       if (resObject.isLoggedOutNow) {
+        setIsLoggedIn(false)
         setUser(undefined)
         setUserName('no_user')
         setUserType(undefined)
 
-      history.push(`/`)  
+        //history.push(`/`)  
       }
       else {
         alert('You are still logged in for some reason. Please try logging out again.')
@@ -82,7 +101,6 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  
   let contextValue = {
     user,
     userName,
@@ -96,7 +114,7 @@ const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider value={contextValue}>
-      {children}
+      {!isLoading && children}
     </UserContext.Provider>
   )
 }

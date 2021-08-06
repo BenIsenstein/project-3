@@ -5,11 +5,12 @@ import UserContext from '../UserContext'
 import FilterContext from '../FilterContext'
 import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common"
 import SuperForm from "../components/SuperForm/SuperForm"
-import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs/GroupOfInputs"
-import { useUpdateAccount } from "../functions"
+import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
+import { useHandleUserStatus, useUpdateAccount } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
+  useHandleUserStatus()
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
   const updateAccount = useUpdateAccount()
@@ -20,7 +21,8 @@ const Settings = () => {
   const [checkedAll, setCheckedAll] = useState(false)
   const [checked, setChecked] = useState({
     active: true,
-    completed: false
+    completed: false,
+    homes: []
   })
 
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
@@ -98,7 +100,7 @@ const Settings = () => {
 
           <FormSeparator />
           
-          <FlexSection fullWidth column>
+          {/* <FlexSection fullWidth column>
             {!undergoingNotificationChange &&  
               <Button
                 type="button"
@@ -127,7 +129,7 @@ const Settings = () => {
 
           </FlexSection>
 
-          <FormSeparator />
+          <FormSeparator /> */}
 
           <FlexSection fullWidth justifyCenter>
             <TestEmailButton /> Email me a reminder for my tasks now!
@@ -135,7 +137,7 @@ const Settings = () => {
         
       </PageContainer>
     </Page>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings

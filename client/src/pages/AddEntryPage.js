@@ -2,11 +2,14 @@ import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Page, Button, PageContainer } from '../common'
 import AddEntry from "../components/AddEntry"
+import { useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 
 const AddEntryPage = () => {  
+    useHandleUserStatus()
     const history = useHistory()
     const userContext = useContext(UserContext)
+
 
     return (
         <Page>

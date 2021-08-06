@@ -27,7 +27,6 @@ const SwitchViewButton = styled.button`
     `}
 
     ${props => props.edit && css`
-        margin-left: .6em;
         padding: .2em;
         fill: ${props => props.theme.prm};
         background: none;

@@ -4,8 +4,10 @@ import UserContext from '../UserContext'
 import { Page, PageContainer } from '../common'
 
 import CalendarListView from '../components/CalendarListView/CalendarListView'
+import { useHandleUserStatus } from '../functions'
 
 const Settings = () => {
+    useHandleUserStatus()
     let history = useHistory()
     const [viewMode, setViewMode] = useState('CalendarView')
     const userContext = useContext(UserContext)
