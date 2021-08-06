@@ -96,21 +96,24 @@ const Calendar = () => {
 
     const returnAll = entry => {
       if (homes?.length > 0) {
-        return true && homes.some(object => object.id == entry.homeId)
+        // return true && homes.some(object => object.id == entry.homeId)
+        return true && homes.some(object => (object.id == entry.homeId) && (object.status))
       } else {
         return true
       } 
     }
     const returnActive = entry => {
       if (homes?.length > 0) {
-        return !entry.completed && homes.some(object => object.id == entry.homeId)
+        // return !entry.completed && homes.some(object => object.id == entry.homeId)
+        return !entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
       } else {
         return !entry.completed
       } 
     }
     const returnCompleted = entry => {
       if (homes?.length > 0) {
-        return entry.completed && homes.some(object => object.id == entry.homeId)
+        // return entry.completed && homes.some(object => object.id == entry.homeId)
+        return entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
       } else {
         return entry.completed
       }
@@ -124,8 +127,6 @@ const Calendar = () => {
         let active = filterContext.active
         let completed = filterContext.completed
 
-
-        console.log('date.entries: ', date.entries)
         let filteredEntries = date.entries
 
           .filter(entry => 

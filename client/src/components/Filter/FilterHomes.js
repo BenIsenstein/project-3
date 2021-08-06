@@ -18,12 +18,10 @@ const FilterHomes = ({ item, itemId, defaultStatus, onChangeFunctionToCall }) =>
     return (
         <div>                
             <Checkbox 
-                id={item} 
+                id={itemId} 
                 name={item} 
-                // checked={checked}
-                // checked={currentStatus}
                 // checked={defaultStatus}
-                // defaultChecked={defaultStatus}
+                defaultChecked={defaultStatus}
                 onChange={e => onChangeFunctionToCall(e)}
             />
             <Label htmlFor={item}>
