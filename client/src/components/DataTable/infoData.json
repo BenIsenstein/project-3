@@ -1,5 +1,0 @@
-[
-    { "item": "Furnace", "task": "Filter", "frequency": "180"},
-    { "item": "Furnace", "task": "Inspect", "frequency": "365"},
-    { "item": "Furnace", "task": "Dampers", "frequency": "180"}
-]
