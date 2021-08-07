@@ -3,10 +3,8 @@ import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, Button } from '../common'
 import DeactivateHome from '../components/DeactivateHome'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { homeItemsCheckboxes } from '../variables'
-import CustomItemModal from '../components/Modals/CustomItemModal'
-import ComplexInput from '../components/SuperForm/ComplexInput'
 import { useHandleUserStatus, useUpdateHome } from '../functions'
 
 const HomeDetails = ({activatedHomesLength}) => {
@@ -14,10 +12,28 @@ const HomeDetails = ({activatedHomesLength}) => {
   const { id } = useParams()
   const history = useHistory()
   const updateHome = useUpdateHome()
-  const [customItems, setCustomItems] = useState([])
   const [home, setHome] = useState()
-  
-  const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
+  const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
+  const defaultHomeItems = [
+    "Air Conditioner",
+    "Central Vacuum",    
+    "Ducts",    
+    "Electric & Hydronic Heating",    
+    "Exterior",    
+    "Furnace",
+    "Garage",    
+    "GFCI",    
+    "Gutters",    
+    "Humidifier",  
+    "Interior",      
+    "Irrigation",
+    "Landscape",    
+    "Water Heater",
+    "Water Softener",
+    "Windows",    
+    "Roof",
+    "Smoke/CO Alarms"
+  ]
 
   const inputs = [
     // {
@@ -114,26 +130,19 @@ const HomeDetails = ({activatedHomesLength}) => {
       registerOptions: { required: "You must input a possession date." }
     },
     {
-      ...restOfDefaultItems,
+      name: 'homeItems',
+      labelText: 'Items In Your Home',
+      isCustomComponent: true,
+      as: GroupOfCheckboxes,
       customItems: customItems,
       setCustomItems: setCustomItems,
-      inputs: [...defaultItemsCheckboxes, ...customItems]
+      inputs: [
+        ...defaultHomeItems.map(inputName => {return { name: inputName }}),
+        ...customItems
+      ],
+      defaultInputNames: defaultHomeItems
     }
   ]
-
-  const AddCustomItemModal = () => {
-    const [newItem, setNewItem] = useState()
-
-    return <CustomItemModal 
-      modalContent={<>
-        <p>New item</p>
-        <ComplexInput onChange={event => setNewItem(event.target.value)} />
-      </>}
-      actionOnConfirm={() => 
-        setCustomItems([...customItems, { name: newItem, defaultChecked: true, isCustomItem: true }])
-      }
-    />
-  }
   
   useEffect(() => {
     const fetchHomeDetails = async () => {
@@ -162,7 +171,6 @@ const HomeDetails = ({activatedHomesLength}) => {
           formMode="details"
           detailsUrl={`/api/home/get/${id}`}
           onSubmit={updateHome}
-          BeforeSubmitButtonIfEditView={<AddCustomItemModal />}
         />
         <FlexSection fadeIn fullWidth marginTop1em>
           {home && <DeactivateHome fullWidth fullHeight home={home} activatedHomesLength={activatedHomesLength} />}

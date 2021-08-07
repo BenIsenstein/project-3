@@ -87,13 +87,12 @@ const inputs = [
 
 const SuperForm= ({ 
   formMode, 
-  BackButtonIcon,
   onSubmit, 
   inputs, 
   ...props }) => {
   // - - - - - Handle the most crucial props - - - - -  
-  formMode = formMode || 'add'
-  onSubmit = onSubmit || (() => alert('No onSubmit given to <FormTemplate />'))
+  if (!formMode) formMode = 'add'
+  if (!onSubmit) onSubmit = () => alert('No onSubmit given to <FormTemplate />')
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
   const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
@@ -147,23 +146,25 @@ const SuperForm= ({
         
         // for each input, setValue + add the value to valuesForReset
         for (let { name, ...input } of inputs) {
-          // if the object contains a single input element
+          // if the object contains a single input element:
           if (!['GroupOfInputs', 'GroupOfCheckboxes'].includes(input.as?.name)) {
             setValue(name, details[name])
             valuesForReset[name] = details[name]
           } 
-          // if the object is a <GroupOfInputs /> with an array of inputs
+          // if the object is a <GroupOfInputs /> with an array of inputs:
           else if (input.as?.name === 'GroupOfInputs') {
-            for (let { name } of input.inputs) {
+            input.inputs.forEach(({ name }) => {
               setValue(name, details[name])
               valuesForReset[name] = details[name]
-            }
-            
+            })
           }
-          //if it's a <GroupOfCheckboxes />
+          //if it's a <GroupOfCheckboxes />:
           else if (input.as?.name === 'GroupOfCheckboxes') {
             let checkboxData = details[name]
 
+            // make sure items that fall outside of the checkbox group's 
+            // "defaultInputNames" - ie. they were added by the user -  become a part of 
+            // the 'customItems' state array sitting in the code for the page.
             input.setCustomItems(prevState => [
               ...prevState, 
               ...Object.keys(checkboxData)
@@ -171,11 +172,12 @@ const SuperForm= ({
                 .map(key => {return { name: key, defaultChecked: true, isCustomItem: true }})
             ])
 
+            // declare checkbox names such that their data ends up in an object, 
+            // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
-              console.log(`setting value of ${name}.${key} to ${checkboxData[key]}`)
               setValue(`${name}.${key}`, checkboxData[key])
+              valuesForReset[`${name}.${key}`] = checkboxData[key]
             }
-            
           }
         }
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { FlexSection, GridSection, Input, Select, Li } from '../../common'
 import { useIsDateInput } from '../../functions'
-import { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
+import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
 import ComplexInput from './ComplexInput'
 
@@ -89,101 +89,113 @@ const GroupOfInputs = ({
   </GridSection>
 }
 
-const GroupOfCheckboxes = ({
-  // GroupOfCheckboxes needs to have 'isCustomComponent' set to false?
-  inputs, 
-  isAddMode,
-  isDetailsMode,
-  isDetailsView,
-  isEditView,
-  areDetailsLoaded,
-  register,
-  setValue,
-  watch,
-  errors,
-  getValues,
-  customItems,
-  setCustomItems,
-  ...props }) => {
-  // - - - - - - hooks/variables - - - - - - - //
-  const modeAndView = {
-    areDetailsLoaded,
+
+const useGroupOfCheckboxes = () => {
+  const [customItems, setCustomItems] = useState([])
+
+  const GroupOfCheckboxes = ({
+    // GroupOfCheckboxes needs to have 'isCustomComponent' set to false?
+    inputs, 
     isAddMode,
     isDetailsMode,
     isDetailsView,
-    isEditView
-  }
-  const formTools =  {
-    setValue, 
+    isEditView,
+    areDetailsLoaded,
     register,
+    setValue,
     watch,
     errors,
-    getValues
-  }
-
-
-  useEffect(() => console.log("customItems: ", customItems), [customItems])
-
-  const checkboxChange = e => {
-    let target = e.target
-    console.log('checkbox event: ', e)
-    console.log('e.target: ', target)
-    console.log('target.value: ', target.value)
-    console.log('getValues()', getValues())
-    console.log('target.checked: ', target.checked)
-  }
-
-  const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
-    noFullWidth
-    key={rest.index}
-    name={`${props.name}.${name}`}
-    labelText={name}
-    type="checkbox"
-    onChange={checkboxChange}
-    //defaultChecked={watch(`${props.name}.${name}`)}
-    readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
-    wrapperProps={{rowReverse: true, justifyEnd: true}}
-    {...formTools}
-    {...modeAndView}
-    {...rest} 
-  />
-
-  const CustomItemCheckbox = ({ wrapperProps, name, ...rest }) => {
-    const [editedItem, setEditedItem] = useState()
-
-    return setCustomItems && (
-      <FlexSection gridColumn="1/2" {...wrapperProps}>
+    getValues,
+    ...props }) => {
+    // - - - - - - hooks/variables - - - - - - - //
+    const modeAndView = {
+      areDetailsLoaded,
+      isAddMode,
+      isDetailsMode,
+      isDetailsView,
+      isEditView
+    }
+    const formTools =  {
+      setValue, 
+      register,
+      watch,
+      errors,
+      getValues
+    }
+  
+    const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
+      noFullWidth
+      key={rest.index}
+      name={`${props.name}.${name}`}
+      labelText={name}
+      type="checkbox"
+      readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
+      wrapperProps={{rowReverse: true, justifyEnd: true}}
+      {...formTools}
+      {...modeAndView}
+      {...rest} 
+    />
+  
+    const CustomItemCheckbox = ({ wrapperProps, name, ...rest }) => {
+      const [editedItem, setEditedItem] = useState()
+  
+      return <FlexSection gridColumn="1/2" {...wrapperProps}>
         <DefaultCheckbox {...rest} name={name} />
         <FlexSection>
           <EditItemModal 
             modalContent={<>
               <p>Editing {rest.labelText || name}</p>
-              <ComplexInput onChange={event => setEditedItem(event.target.value)}/>
+              <ComplexInput {...modeAndView} onChange={event => setEditedItem(event.target.value)}/>
             </>}
             actionOnConfirm={() => 
-              setCustomItems(customItems.map(item => item.name === name ? { ...item, name: editedItem } : item))
+              setCustomItems(prevState => prevState.map(item => item.name === name ? { ...item, name: editedItem } : item))
             }
           />
           <DeleteItemModal 
             {...rest}
+            name={name}
             actionOnConfirm={() => 
-              setCustomItems(customItems.filter(item => item.name !== name))
+              setCustomItems(prevState => prevState.filter(item => item.name !== name))
             }
           />
         </FlexSection>
       </FlexSection>
-    )
-  }
+    }
+
+    const AddCustomItemModal = () => {
+      const [newItem, setNewItem] = useState()
   
-  // - - - - - - - RETURN JSX - - - - - - - - //
-  return <GridSection fullWidth {...props}>
-    {inputs && inputs.map((input, index) => (props.readOnly || input.readOnly)
-      ? watch(`${props.name}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
-      : input.isCustomItem 
-        ? <CustomItemCheckbox index={index} {...input} /> 
-        : <DefaultCheckbox index={index} {...input} />
-    )}
-  </GridSection>
+      return <CustomItemModal 
+        modalContent={<>
+          <p>New item</p>
+          <ComplexInput {...modeAndView} onChange={event => setNewItem(event.target.value)} />
+        </>}
+        actionOnConfirm={() => 
+          setCustomItems(prevState => [...prevState, { name: newItem, defaultChecked: true, isCustomItem: true }])
+        }
+      />
+    }
+    
+    // - - - - - - - RETURN JSX - - - - - - - - //
+    return <>
+      <GridSection fullWidth {...props}>
+        {inputs && inputs.map((input, index) => (props.readOnly || input.readOnly)
+          ? watch(`${props.name}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
+          : input.isCustomItem 
+            ? <CustomItemCheckbox index={index} {...input} /> 
+            : <DefaultCheckbox index={index} {...input} />
+        )}
+      </GridSection>
+      
+      {(isAddMode || isEditView) && <AddCustomItemModal />}
+    </>
+  }
+
+  return { 
+    GroupOfCheckboxes,
+    customItems,
+    setCustomItems 
+  }
 }
 
 const SuperFormSelect = ({ options, name, ...props }) => { 
@@ -206,4 +218,4 @@ const SuperFormSelect = ({ options, name, ...props }) => {
 }
 
 export default GroupOfInputs
-export { GroupOfCheckboxes, SuperFormSelect }
+export { useGroupOfCheckboxes, SuperFormSelect }

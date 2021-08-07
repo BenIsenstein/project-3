@@ -1,19 +1,35 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect } from '../components/SuperForm/GroupOfInputs'
-import { homeItemsCheckboxes } from '../variables'
-import CustomItemModal from '../components/Modals/CustomItemModal'
-import ComplexInput from '../components/SuperForm/ComplexInput'
+import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 
 const AddHomePage = () => {
   useHandleUserStatus()
   const userContext = useContext(UserContext)
-  const [customItems, setCustomItems] = useState([])
   const addHome = useAddHome()
-  const { inputs: defaultItemsCheckboxes, ...restOfDefaultItems } = homeItemsCheckboxes
+  const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
+  const defaultHomeItems = [
+    "Air Conditioner",
+    "Central Vacuum",    
+    "Ducts",    
+    "Electric & Hydronic Heating",    
+    "Exterior",    
+    "Furnace",
+    "Garage",    
+    "GFCI",    
+    "Gutters",    
+    "Humidifier",  
+    "Interior",      
+    "Irrigation",
+    "Landscape",    
+    "Water Heater",
+    "Water Softener",
+    "Windows",    
+    "Roof",
+    "Smoke/CO Alarms"
+  ]
   
   const inputs = [
     // {
@@ -110,26 +126,19 @@ const AddHomePage = () => {
       registerOptions: { required: "You must input a possession date." }
     },
     {
-      ...restOfDefaultItems,
+      name: 'homeItems',
+      labelText: 'Items In Your Home',
+      isCustomComponent: true,
+      as: GroupOfCheckboxes,
       customItems: customItems,
       setCustomItems: setCustomItems,
-      inputs: [...defaultItemsCheckboxes, ...customItems]
+      inputs: [
+        ...defaultHomeItems.map(inputName => {return { name: inputName }}),
+        ...customItems
+      ],
+      defaultInputNames: defaultHomeItems
     }
   ]
-
-  const AddCustomItemModal = () => {
-    const [newItem, setNewItem] = useState()
-
-    return <CustomItemModal 
-      modalContent={<>
-        <p>New item</p>
-        <ComplexInput onChange={event => setNewItem(event.target.value)} />
-      </>}
-      actionOnConfirm={() => 
-        setCustomItems([...customItems, { name: newItem, defaultChecked: true, isCustomItem: true }])
-      }
-    />
-  }
 
   return (
     <Page>
@@ -138,7 +147,6 @@ const AddHomePage = () => {
           titleText={userContext.user?.homes?.length ? "New Home" : "Add your first home!"}
           inputs={inputs}
           onSubmit={addHome}
-          BeforeSubmitButton={<AddCustomItemModal />}
         />
       </PageContainer>
     </Page>
