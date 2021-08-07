@@ -8,10 +8,6 @@ import { useHistory } from "react-router-dom"
 export default function InfoTable() {
   const loadingMessage = [{item: 'Loading...', task: "This won't take long!"}]
   const [infoList, setInfoList] = useState(loadingMessage)
-  //  const [infoList, setInfoList] = useState(
-  //  [ { "item": "Furnace", "task": "Filter", "frequency": "180"},
-  //    { "item": "Furnace", "task": "Inspect", "frequency": "365"},
-  //    { "item": "Furnace", "task": "Dampers", "frequency": "180"}])
   
   useEffect(() => {
     const getAllInfo = async () => {
@@ -43,7 +39,7 @@ export default function InfoTable() {
       initialState: {
         sortBy: [
             {
-                id: 'name',
+                id: 'item',
                 desc: false
             }
         ]
@@ -64,9 +60,9 @@ export default function InfoTable() {
         style={{
           display: 'flex', 
           justifyContent: 'center',
-          border: "4px solid #05386B",
+          border: "4px solid #f5f5f5",
           borderRadius: '20px',
-          backgroundColor: '#edf5e1'
+          backgroundColor: '#f5f5f5'
         }}
       >
         <Styles>

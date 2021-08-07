@@ -16,7 +16,7 @@ export const Styles = styled.div`
       :hover {
           background-color: #ddd
       }
-      background-color: #edf5e1
+      background-color: #f5f5f5
     }
 
     .th {
@@ -25,7 +25,7 @@ export const Styles = styled.div`
         padding-bottom: 12px;
         text-align: center;
         background-color: #05386B;
-        color: #edf5e1;
+        color: #f5f5f5;
     },
     .td {
         border: 1px solid #ddd;
