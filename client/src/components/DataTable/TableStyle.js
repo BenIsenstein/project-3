@@ -3,11 +3,11 @@ import styled from 'styled-components'
 export const Styles = styled.div`
   .table {
     font-family: Arial, Helvetica, sans-serif;
-    color:#05386B;
+    color:#5e868c;
     
 
     .tr {
-        text-align: center;
+        text-align: left;
       :last-child {
         .td {
           border-bottom: 0;
@@ -16,19 +16,19 @@ export const Styles = styled.div`
       :hover {
           background-color: #ddd
       }
-      background-color: #f5f5f5
+      background-color: #f5f9fa
     }
 
     .th {
-        font-size: 50%;
+        font-size: 100%;
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: center;
-        background-color: #05386B;
-        color: #f5f5f5;
+        background-color: rgba(243, 219, 207,1);
+        color: #5e868c;
     },
     .td {
-        border: 1px solid #ddd;
+        border: 1px solid rgba(252,242,237,1);
         overflow: hidden;
 
       :last-child {

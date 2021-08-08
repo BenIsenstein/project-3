@@ -12,10 +12,8 @@ export default function InfoTable() {
   useEffect(() => {
     const getAllInfo = async () => {
       try {
-       console.log( "Welcome to our useEffect")
        let response = await fetch("/api/info")
        let resObject = await response.json()
-       console.log("res object is",resObject)
        setInfoList(resObject)
       }
       catch (err) {

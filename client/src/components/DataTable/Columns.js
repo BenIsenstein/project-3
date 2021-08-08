@@ -15,7 +15,7 @@ export const columnHeaders = [
     },
 
     {
-        Header: 'Frequency(in days)',
+        Header: 'Frequency (in days)',
         accessor: 'frequency',
         Filter: NumberRangeColumnFilter,
         disableFilters: true,
