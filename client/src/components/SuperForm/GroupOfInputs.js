@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon } from '../../common'
 import { useIsDateInput } from '../../functions'
 import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
@@ -92,6 +92,9 @@ const GroupOfInputs = ({
 
 const useGroupOfCheckboxes = () => {
   const [customItems, setCustomItems] = useState([])
+  const [allDefaultTasks, setAllDefaultTasks] = useState([])
+  const [allCustomTasks, setAllCustomTasks] = useState([])
+  const fullTaskList = useMemo(() => [...allDefaultTasks, ...allCustomTasks], [allDefaultTasks, allCustomTasks])
 
   const GroupOfCheckboxes = ({
     // GroupOfCheckboxes needs to have 'isCustomComponent' set to false?
@@ -109,6 +112,29 @@ const useGroupOfCheckboxes = () => {
     name: groupName,
     ...props }) => {
     // - - - - - - hooks/variables - - - - - - - //
+  
+
+    useEffect(() => {
+      const getAllInfo = async () => {
+        console.log('calling getAllInfo')
+        try {
+          let response = await fetch("/api/info")
+          let allTasksArray = await response.json()
+
+          setAllDefaultTasks(allTasksArray)
+        }
+        catch (err) {
+          console.log("There was an error loading your table", err)
+        }
+      }
+ 
+      getAllInfo()
+    }, [])
+
+    useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
+    useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])
+    useEffect(() => console.log("fullTaskList: ", fullTaskList), [fullTaskList])
+
     const modeAndView = {
       areDetailsLoaded,
       isAddMode,
@@ -141,6 +167,19 @@ const useGroupOfCheckboxes = () => {
       {...modeAndView}
       {...rest} 
     />
+
+    const DefaultCheckboxAndTasks = (rest) => {
+      const isBoxChecked = watch(`${groupName}.${rest.name}`)
+
+      return <>
+        <DefaultCheckbox {...rest} name={rest.name} /> 
+        {isBoxChecked && <FlexSection gridColumn="1/4">
+          <FlexSection margin="0 0 0 15px">{fullTaskList.filter(task => task.item === rest.name).map(task => <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>)}</FlexSection>
+        </FlexSection>}
+      </>
+    }
+
+
   
     const CustomItemCheckbox = ({ wrapperProps, name, ...rest }) => {
       const [editedItem, setEditedItem] = useState()
@@ -155,7 +194,7 @@ const useGroupOfCheckboxes = () => {
             </>}
             actionOnConfirm={() => {
               const valueOfPrevName = getValues(`${groupName}.${name}`)
-              
+
               setCustomItems(prevState => prevState.map(item => item.name === name ? { ...item, name: editedItem } : item))
               setValue(`${groupName}.${editedItem}`, valueOfPrevName)
             }}
@@ -171,17 +210,36 @@ const useGroupOfCheckboxes = () => {
       </FlexSection>
     }
 
+    const CustomCheckboxAndTasks = (rest) => {
+      const isBoxChecked = watch(`${groupName}.${rest.name}`)
+
+      return <>
+        <CustomItemCheckbox {...rest} name={rest.name} /> 
+        {isBoxChecked && 
+        <FlexSection gridColumn="1/4">
+          <FlexSection margin="0 0 0 15px">
+            {fullTaskList.filter(task => task.item === rest.name).map(task => <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>)}
+          </FlexSection>
+        </FlexSection>}
+      </>
+    }
+
     const AddCustomItemModal = () => {
       const [newItem, setNewItem] = useState()
+      const [newTask, setNewTask] = useState()
+      const [newFrequency, setNewFrequency] = useState()
   
       return <CustomItemModal 
         modalContent={<>
           <p>New item</p>
-          <ComplexInput {...modeAndView} onChange={event => setNewItem(event.target.value)} />
+          <ComplexInput labelText="item" {...modeAndView} onChange={event => setNewItem(event.target.value)} />
+          <ComplexInput labelText="task" {...modeAndView} onChange={event => setNewTask(event.target.value)} />
+          <ComplexInput labelText="frequency (days)" type="number" {...modeAndView} onChange={event => setNewFrequency(event.target.value)} />
         </>}
         actionOnConfirm={() => {
           setCustomItems(prevState => [...prevState, { name: newItem, isCustomItem: true }])
           setValue(`${groupName}.${newItem}`, true)
+          setAllCustomTasks(prevState => [...prevState, { item: newItem, task: newTask, frequency: newFrequency }])
         }}
       />
     }
@@ -198,8 +256,8 @@ const useGroupOfCheckboxes = () => {
         {inputs && allInputs.map((input, index) => (props.readOnly || input.readOnly)
           ? watch(`${groupName}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
           : input.isCustomItem 
-            ? <CustomItemCheckbox index={index} {...input} /> 
-            : <DefaultCheckbox index={index} {...input} />
+            ? <CustomCheckboxAndTasks index={index} {...input} />
+            : <DefaultCheckboxAndTasks index={index} {...input} />
         )}
       </GridSection>
       

@@ -50,6 +50,10 @@ const FlexSection = styled.div`
         margin-top: ${props.marginTop};
     `}
 
+    ${props => props.margin && css`
+        margin: ${props.margin};
+    `}
+
     ${props => props.padding && css`
         padding: ${props.padding};
     `}
