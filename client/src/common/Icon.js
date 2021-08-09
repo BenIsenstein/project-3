@@ -21,6 +21,7 @@ import {FilterList} from '@styled-icons/material-rounded/FilterList'
 import {HomeAdd} from '@styled-icons/fluentui-system-regular/HomeAdd'
 import {RemoveCircle} from '@styled-icons/material-rounded/RemoveCircle'
 import {Share} from '@styled-icons/entypo/Share'
+import {DocumentToolbox} from '@styled-icons/fluentui-system-filled/DocumentToolbox'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -51,6 +52,14 @@ const SettingsIcon = styled(Settings)`
         margin-right: 1em;
     `}
 ` 
+
+const ResourceIcon = styled(DocumentToolbox)`
+    height: 1.6em;
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
+`
 
 const LibraryIcon = styled(Library)`
     height: 1.6em;
@@ -183,4 +192,4 @@ const CloseIcon = styled(Close)`
     cursor: pointer;
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, ResourceIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}

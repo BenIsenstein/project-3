@@ -5,22 +5,22 @@ export const columnHeaders = [
         Header: 'Item',
         accessor: 'item',
         Filter: TypeColumnFilter,
-        sticky: 'left'
+        // width: 120
     },
     {
         Header: 'Task',
         accessor: 'task',
         Filter: TypeColumnFilter,
-        sticky: 'left'
+        disableFilters: true,
+        // width: 120
     },
 
     {
-        Header: 'Frequency (in days)',
+        Header: 'Frequency (days)',
         accessor: 'frequency',
         Filter: NumberRangeColumnFilter,
         disableFilters: true,
-        sticky: 'left',
-        width: 80
+        maxWidth: 90
     },
 ]
 

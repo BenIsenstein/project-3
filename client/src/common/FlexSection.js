@@ -70,7 +70,7 @@ const FlexSection = styled.div`
     @media (min-width: ${props => props.theme.smScreen}) {
         ${props => props.gridColumn && css`
         grid-column: ${props.gridColumn};
-    `}
+        `}
     }
 `
 
