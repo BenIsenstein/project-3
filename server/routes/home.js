@@ -14,6 +14,8 @@ router.post('/add', async (req, res) => {
   }
 })
 
+
+
 // get all homes for a user
 router.get('/getbyuser/:id', async (req, res) => {
   try {res.json(await Home.find({ userId: req.params.id }))} // JSON array is sent back
@@ -41,6 +43,8 @@ router.get('/get/:id', async (req, res) => {
     
     catch (err) {console.log("error getting single home: ", err)}   
 })
+
+// get all custom tasks for user
 
 // update and deactivate home by id
 router.put('/update/:id', async (req, res) => {

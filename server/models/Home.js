@@ -16,7 +16,11 @@ const homeSchema = new mongoose.Schema({
   squareFootage: Number,
   userId: String,
   yearBuilt: Number,
-  colorScheme: Array
+  colorScheme: Array,
+  customTask: [{  
+    item: String,
+    task: String,
+    frequency: Number}]
 })
 
 const Home = mongoose.model("Home", homeSchema)
