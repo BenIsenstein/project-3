@@ -11,9 +11,8 @@ const InfoPage = () => {
  
 
    // return isLoggedInChecked && <Page Background>
-    return  <Page Background>
-      <PageContainer Center mockMobileView>
-          <HouseIcon />
+    return  <Page>
+      <PageContainer>
           <InfoTable /> 
       </PageContainer>
     </Page>

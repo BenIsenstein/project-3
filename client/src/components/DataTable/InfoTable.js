@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react"
 import { useTable, useSortBy, useFilters, useBlockLayout } from "react-table"
 import { useSticky } from 'react-table-sticky'
-import { Styles } from './TableStyle'
+import { TableContainer } from './TableStyle'
 import { columnHeaders } from "./Columns"
 import { useHistory } from "react-router-dom"
 
@@ -12,10 +12,8 @@ export default function InfoTable() {
   useEffect(() => {
     const getAllInfo = async () => {
       try {
-       console.log( "Welcome to our useEffect")
        let response = await fetch("/api/info")
        let resObject = await response.json()
-       console.log("res object is",resObject)
        setInfoList(resObject)
       }
       catch (err) {
@@ -56,18 +54,9 @@ export default function InfoTable() {
     const firstPageRows = rows.slice(0,50)
 
     return (
-      <div 
-        style={{
-          display: 'flex', 
-          justifyContent: 'center',
-          border: "4px solid #f5f5f5",
-          borderRadius: '20px',
-          backgroundColor: '#f5f5f5'
-        }}
-      >
-        <Styles>
-          <div {...getTableProps()} className="table sticky" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 570, height: '660px' }}>
-            <div className="header" style={{margin: '0px'}}>
+        <TableContainer>
+          <div {...getTableProps()} className="sticky">
+            <div className="header">
               {headerGroups.map((headerGroup) => (
                 <div {...headerGroup.getHeaderGroupProps()} className="tr">
                   {headerGroup.headers.map((column) => (
@@ -94,7 +83,6 @@ export default function InfoTable() {
               })}
             </div>
           </div>
-        </Styles>
-      </div>
+        </TableContainer>
       );
     }

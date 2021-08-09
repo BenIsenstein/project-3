@@ -1,72 +1,36 @@
 import styled from 'styled-components'
 
-export const Styles = styled.div`
-  .table {
-    font-family: Arial, Helvetica, sans-serif;
-    color:#05386B;
-    
+export const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: .9em;
 
-    .tr {
-        text-align: center;
-      :last-child {
-        .td {
-          border-bottom: 0;
-        }
-      }
-      :hover {
-          background-color: #ddd
-      }
-      background-color: #f5f5f5
+  .tr {
+    color: ${props => props.theme.contentColor};
+    padding: .4em 0;
+  }
+
+  .sticky {
+    .header {
+      top: 0;
+      background-color: ${props => props.theme.lightBkg};
+      font-weight: 500;
+      position: sticky;
+      z-index: 1;
     }
 
-    .th {
-        font-size: 50%;
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: center;
-        background-color: #05386B;
-        color: #f5f5f5;
-    },
-    .td {
-        border: 1px solid #ddd;
-        overflow: hidden;
+    .body {
+      position: relative;
+      z-index: 0;
 
-      :last-child {
-        border-right: 0;
-      }
-    }
+      .tr {
+        border-bottom: 1px solid ${props => props.theme.titleColor};
 
-    &.sticky {
-      overflow: scroll;
-      .header,
-      .footer {
-        position: sticky;
-        z-index: 1;
-        width: fit-content;
-      }
-
-      .header {
-        top: 0;
-        box-shadow: 0px 3px 3px #ccc;
-      }
-
-
-      .body {
-        position: relative;
-        z-index: 0;
-      }
-
-      [data-sticky-td] {
-        position: sticky;
-      }
-
-      [data-sticky-last-left-td] {
-        box-shadow: 2px 0px 3px #ccc;
-      }
-
-      [data-sticky-first-right-td] {
-        box-shadow: -2px 0px 3px #ccc;
+        &:hover {
+          background-color: ${props => props.theme.prmLt};
+        }        
       }
     }
   }
-`;
+`

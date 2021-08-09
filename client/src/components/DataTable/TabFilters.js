@@ -1,10 +1,11 @@
 import React from 'react'
+import { TableSearchField } from '../../common'
 
 const TypeColumnFilter = ({ column }) => {
     const {filterValue, setFilter } = column
     return (
         <span>
-            <input value={filterValue || ''} onChange={e => setFilter(e.target.value)} placeholder={'Search'} />
+            <TableSearchField value={filterValue || ''} onChange={e => setFilter(e.target.value)} placeholder={'Search'} />
         </span>
     )
 }
@@ -43,7 +44,7 @@ const GlobalFilter = ({ filter, setFilter}) => {
     return (
         <span>
             Search: {' '}
-            <input value={filter || ''} onChange={e => setFilter(e.target.value)} />
+            <TableSearchField value={filter || ''} onChange={e => setFilter(e.target.value)} />
         </span>
     )
 }
@@ -62,12 +63,8 @@ function NumberRangeColumnFilter({
     }, [id, preFilteredRows])
   
     return (
-      <div
-        style={{
-          display: 'flex',
-        }}
-      >
-        <input
+      <div>
+        <TableSearchField
           value={filterValue[0] || ''}
           type="number"
           onChange={e => {
@@ -75,13 +72,13 @@ function NumberRangeColumnFilter({
             setFilter((old = []) => [val ? parseInt(val, 10) : undefined, old[1]])
           }}
           placeholder={`Min (${min})`}
-          style={{
-            width: '70px',
-            marginRight: '0.5rem',
-          }}
+          // style={{
+          //   width: '70px',
+          //   marginRight: '0.5rem',
+          // }}
         />
         to
-        <input
+        <TableSearchField
           value={filterValue[1] || ''}
           type="number"
           onChange={e => {
@@ -89,10 +86,10 @@ function NumberRangeColumnFilter({
             setFilter((old = []) => [old[0], val ? parseInt(val, 10) : undefined])
           }}
           placeholder={`Max (${max})`}
-          style={{
-            width: '70px',
-            marginLeft: '0.5rem',
-          }}
+          // style={{
+          //   width: '70px',
+          //   marginLeft: '0.5rem',
+          // }}
         />
       </div>
     )

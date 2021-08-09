@@ -130,7 +130,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
     <Page>
       <PageContainer flexColumn>
         <SuperForm 
-          titleText="Personal Details"
+          titleText="Profile"
           inputs={accountInputs} 
           formMode='details' 
           detailsUrl='/api/user/getloggedinuser' 

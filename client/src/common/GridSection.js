@@ -4,6 +4,7 @@ import {fadeIn} from './'
 const GridSection = styled.div`
     display: grid;
     grid-template-columns: 1fr;
+    grid-gap: ${props => props.gridGap || "0"};
 
     ${props => props.fullWidth && css`
         width: 100%;
