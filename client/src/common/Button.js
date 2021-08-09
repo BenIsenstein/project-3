@@ -2,7 +2,7 @@ import styled, {css} from 'styled-components'
 import {fadeIn} from './'
 
 const Button = styled.button.attrs(props => ({
-    type: 'button'
+    type: props.type || 'button'
   }))`
     display: flex;
     align-items: center;
