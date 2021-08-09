@@ -4,32 +4,13 @@ import SuperForm from '../components/SuperForm/SuperForm'
 import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
+import { defaultHomeItems } from '../variables'
 
 const AddHomePage = () => {
   useHandleUserStatus()
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
   const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
-  const defaultHomeItems = [
-    "Air Conditioner",
-    "Central Vacuum",    
-    "Ducts",    
-    "Electric & Hydronic Heating",    
-    "Exterior",    
-    "Furnace",
-    "Garage",    
-    "GFCI",    
-    "Gutters",    
-    "Humidifier",  
-    "Interior",      
-    "Irrigation",
-    "Landscape",    
-    "Water Heater",
-    "Water Softener",
-    "Windows",    
-    "Roof",
-    "Smoke/CO Alarms"
-  ]
   
   const inputs = [
     // {
@@ -130,13 +111,8 @@ const AddHomePage = () => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes,
-      customItems: customItems,
       setCustomItems: setCustomItems,
-      inputs: [
-        ...defaultHomeItems.map(inputName => {return { name: inputName }}),
-        ...customItems
-      ],
-      defaultInputNames: defaultHomeItems
+      inputs: defaultHomeItems.map(inputName => {return { name: inputName }})
     }
   ]
 

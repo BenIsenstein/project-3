@@ -1,1 +1,1 @@
-export * from './homeItemsCheckboxes'
+export * from './defaultHomeItems'

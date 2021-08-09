@@ -4,7 +4,7 @@ import { Page, PageContainer, FlexSection, Button } from '../common'
 import DeactivateHome from '../components/DeactivateHome'
 import SuperForm from '../components/SuperForm/SuperForm'
 import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
-import { homeItemsCheckboxes } from '../variables'
+import { defaultHomeItems } from '../variables'
 import { useHandleUserStatus, useUpdateHome } from '../functions'
 
 const HomeDetails = ({activatedHomesLength}) => {
@@ -14,26 +14,6 @@ const HomeDetails = ({activatedHomesLength}) => {
   const updateHome = useUpdateHome()
   const [home, setHome] = useState()
   const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
-  const defaultHomeItems = [
-    "Air Conditioner",
-    "Central Vacuum",    
-    "Ducts",    
-    "Electric & Hydronic Heating",    
-    "Exterior",    
-    "Furnace",
-    "Garage",    
-    "GFCI",    
-    "Gutters",    
-    "Humidifier",  
-    "Interior",      
-    "Irrigation",
-    "Landscape",    
-    "Water Heater",
-    "Water Softener",
-    "Windows",    
-    "Roof",
-    "Smoke/CO Alarms"
-  ]
 
   const inputs = [
     // {
@@ -134,13 +114,9 @@ const HomeDetails = ({activatedHomesLength}) => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes,
-      customItems: customItems,
       setCustomItems: setCustomItems,
-      inputs: [
-        ...defaultHomeItems.map(inputName => {return { name: inputName }}),
-        ...customItems
-      ],
-      defaultInputNames: defaultHomeItems
+      inputs: defaultHomeItems.map(inputName => {return { name: inputName }}),
+      defaultCheckboxNames: defaultHomeItems
     }
   ]
   

@@ -160,21 +160,23 @@ const SuperForm= ({
           }
           //if it's a <GroupOfCheckboxes />:
           else if (input.as?.name === 'GroupOfCheckboxes') {
+            console.log('setting GroupOfCheckbox values again')
             let checkboxData = details[name]
 
             // make sure items that fall outside of the checkbox group's 
-            // "defaultInputNames" - ie. they were added by the user -  become a part of 
-            // the 'customItems' state array sitting in the code for the page.
+            // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
+            // the 'customItems' state array sitting in the component.
             input.setCustomItems(prevState => [
               ...prevState, 
               ...Object.keys(checkboxData)
-                .filter(key => !input.defaultInputNames.includes(key))
-                .map(key => {return { name: key, defaultChecked: true, isCustomItem: true }})
+                .filter(key => !input.defaultCheckboxNames.includes(key))
+                .map(key => {return { name: key, isCustomItem: true }})//
             ])
 
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
+              console.log(`${name}.${key}`)
               setValue(`${name}.${key}`, checkboxData[key])
               valuesForReset[`${name}.${key}`] = checkboxData[key]
             }
@@ -239,6 +241,8 @@ const SuperForm= ({
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
     </FlexSection>
+
+    {/* <Button onClick={() => setValue("homeItems.Custom item 1", false)}>Set custom item 1!</Button> */}
     
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>  
       <GroupOfInputs 

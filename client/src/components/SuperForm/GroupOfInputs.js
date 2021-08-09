@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FlexSection, GridSection, Input, Select, Li } from '../../common'
+import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon } from '../../common'
 import { useIsDateInput } from '../../functions'
 import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
@@ -106,6 +106,7 @@ const useGroupOfCheckboxes = () => {
     watch,
     errors,
     getValues,
+    name: groupName,
     ...props }) => {
     // - - - - - - hooks/variables - - - - - - - //
     const modeAndView = {
@@ -122,11 +123,16 @@ const useGroupOfCheckboxes = () => {
       errors,
       getValues
     }
-  
+
+    const allInputs = [...inputs, ...customItems]
+    const isAddingOrEditing = isAddMode || isEditView
+
+    // declare checkbox names such that their data ends up in an object, 
+    // accessible with the name of the parent <GroupOfCheckboxes />
     const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
       noFullWidth
       key={rest.index}
-      name={`${props.name}.${name}`}
+      name={`${groupName}.${name}`}
       labelText={name}
       type="checkbox"
       readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
@@ -147,9 +153,12 @@ const useGroupOfCheckboxes = () => {
               <p>Editing {rest.labelText || name}</p>
               <ComplexInput {...modeAndView} onChange={event => setEditedItem(event.target.value)}/>
             </>}
-            actionOnConfirm={() => 
+            actionOnConfirm={() => {
+              const valueOfPrevName = getValues(`${groupName}.${name}`)
+              
               setCustomItems(prevState => prevState.map(item => item.name === name ? { ...item, name: editedItem } : item))
-            }
+              setValue(`${groupName}.${editedItem}`, valueOfPrevName)
+            }}
           />
           <DeleteItemModal 
             {...rest}
@@ -170,24 +179,32 @@ const useGroupOfCheckboxes = () => {
           <p>New item</p>
           <ComplexInput {...modeAndView} onChange={event => setNewItem(event.target.value)} />
         </>}
-        actionOnConfirm={() => 
-          setCustomItems(prevState => [...prevState, { name: newItem, defaultChecked: true, isCustomItem: true }])
-        }
+        actionOnConfirm={() => {
+          setCustomItems(prevState => [...prevState, { name: newItem, isCustomItem: true }])
+          setValue(`${groupName}.${newItem}`, true)
+        }}
       />
     }
+
+    const CheckAllButton = () => (
+      <Button text onClick={() => allInputs.forEach(input => setValue(`${groupName}.${input.name}`, true))}>
+        <AddIcon sm />select all
+      </Button>
+    )
     
     // - - - - - - - RETURN JSX - - - - - - - - //
     return <>
       <GridSection fullWidth {...props}>
-        {inputs && inputs.map((input, index) => (props.readOnly || input.readOnly)
-          ? watch(`${props.name}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
+        {inputs && allInputs.map((input, index) => (props.readOnly || input.readOnly)
+          ? watch(`${groupName}.${input.name}`) && <Li gridColumn="1/2" key={index}>{input.name}</Li>
           : input.isCustomItem 
             ? <CustomItemCheckbox index={index} {...input} /> 
             : <DefaultCheckbox index={index} {...input} />
         )}
       </GridSection>
       
-      {(isAddMode || isEditView) && <AddCustomItemModal />}
+      {isAddingOrEditing && <AddCustomItemModal />}
+      {isAddingOrEditing && <CheckAllButton />}
     </>
   }
 
