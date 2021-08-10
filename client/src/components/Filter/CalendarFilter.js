@@ -83,8 +83,16 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
     })
   }
 
+  // The following UseEffect is to ensure that the user cannot uncheck both the
+  // ACTIVE and COMPLETED checkboxes. If a user does so, this logic will force
+  // the ACTIVE checkbox to remain checked.
   useEffect(() => {
-    let areNoneChecked = Object.values(checked).every(entry => entry === false)
+
+    // let areNoneChecked = Object.values(checked).every(entry => entry === false)
+    let areNoneChecked = false
+    if (checked.active === false && checked.completed === false) {
+      areNoneChecked = true
+    }
 
     if (areNoneChecked) toggleCheck('active')
 
@@ -126,7 +134,9 @@ const CalendarFilter = ({ checkedAll, setCheckedAll, checked, setChecked }) => {
               // if this home already exists in the current STATE, use it's current STATUS value.
               if (checked.homes?.length > 0) {
                 let stateHome = checked.homes.find(obj => obj.id === userObject[index]._id)
-                tempStatus = stateHome.status
+                if (stateHome) {
+                  tempStatus = stateHome.status
+                }
               }
               let homeObjectToAdd = {
                 id: userObject[index]._id,

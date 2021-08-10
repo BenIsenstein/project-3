@@ -62,11 +62,10 @@ const sendUserEmail = async (data) => {
             // Retrieve data required for body of email
 
             // First retrieve OVERDUE tasks.
-            // Retrieve data from DB
-            let dbOverdueResponse = await CalendarEntry.find({ userid: data.userid, completed: false, start: { $lt: currentDate.toISOString() }  }, null, {sort: {start: 1}})
+            // Retrieve data from DB          
+            let dbOverdueResponse = await CalendarEntry.find({ userId: data.userid, completed: false, start: { $lt: currentDate.toISOString() }  }, null, {sort: {start: 1}})
             let dbHomeResponse = {}
             let userOverdueTaskList = [{}]
-            console.log("sendemail OVERDUE TASKS size = ", dbOverdueResponse.length)
             if (dbOverdueResponse.length > 0) {
               arrayIndexer = 0
               innerIndexer = 0
@@ -76,13 +75,12 @@ const sendUserEmail = async (data) => {
 
                 //Only use Calendar Entries that are for ACTIVE homes.
                 dbHomeResponse = await Home.findOne({ _id: currentItem.homeId })
-                console.log("sendemail OVERDUE says, dbHomeResponse = ", dbHomeResponse)
                 if (dbHomeResponse?.activated) {
                   userOverdueTaskList[innerIndexer] = {
                     status: "overdue",
                     date: startTime.toDateString(),
                     time: toHoursAndMins(startTime),
-                    house: currentItem.house,
+                    house: dbHomeResponse.nickname,
                     item: currentItem.item,
                     task: currentItem.task
                   }
@@ -99,10 +97,9 @@ const sendUserEmail = async (data) => {
             targetDate = new Date(targetDate).toISOString()
             
             // Retrieve data from DB
-            let dbResponse = await CalendarEntry.find({ userid: data.userid, start: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {start: 1}})
+            let dbResponse = await CalendarEntry.find({ userId: data.userid, start: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {start: 1}})
             
             let userTaskList = [{}]
-            console.log("sendemail next 12 days TASKS size = ", dbResponse.length)
             if (dbResponse.length > 0) {
               arrayIndexer = 0
               innerIndexer = 0
@@ -112,13 +109,12 @@ const sendUserEmail = async (data) => {
 
                 //Only use Calendar Entries that are for ACTIVE homes.
                 dbHomeResponse = await Home.findOne({ _id: currentItem.homeId })
-                console.log("sendemail due in 14 days says, dbHomeResponse = ", dbHomeResponse)
                 if (dbHomeResponse?.activated) {
                   userTaskList[innerIndexer] = {
                     status: "active",
                     date: startTime.toDateString(),
                     time: toHoursAndMins(startTime),
-                    house: currentItem.house,
+                    house: dbHomeResponse.nickname,
                     item: currentItem.item,
                     task: currentItem.task
                   }
