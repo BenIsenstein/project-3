@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { Fragment, useState, useEffect, useMemo } from 'react'
 import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon } from '../../common'
 import { useIsDateInput } from '../../functions'
 import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
@@ -36,6 +36,10 @@ const GroupOfInputs = ({
     errors,
     getValues
   }
+
+  useEffect(() => {
+    return () => console.log('GroupOfInputs unmounted!')
+  }, [])
 
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
@@ -89,15 +93,38 @@ const GroupOfInputs = ({
   </GridSection>
 }
 
-
 const useGroupOfCheckboxes = () => {
   const [customItems, setCustomItems] = useState([])
+  useEffect(() => console.log("customItems: ", customItems), [customItems])
+
   const [allDefaultTasks, setAllDefaultTasks] = useState([])
   const [allCustomTasks, setAllCustomTasks] = useState([])
   const fullTaskList = useMemo(() => [...allDefaultTasks, ...allCustomTasks], [allDefaultTasks, allCustomTasks])
 
+  useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
+  useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])
+  useEffect(() => console.log("fullTaskList: ", fullTaskList), [fullTaskList])
+
+  useEffect(() => {
+    const getAllInfo = async () => {
+      console.log('calling getAllInfo')
+      try {
+        let response = await fetch("/api/info")
+        let allTasksArray = await response.json()
+        setAllDefaultTasks(allTasksArray)
+      }
+      catch (err) {
+        console.log("There was an error loading your table", err)
+      }
+    }
+
+    getAllInfo()
+
+    return () => console.log("getAllInfo effect - unmounting!")
+  }, [])
+  
   const GroupOfCheckboxes = ({
-    // GroupOfCheckboxes needs to have 'isCustomComponent' set to false?
+    // GroupOfCheckboxes needs to have 'isCustomComponent' set to true
     inputs, 
     isAddMode,
     isDetailsMode,
@@ -112,29 +139,6 @@ const useGroupOfCheckboxes = () => {
     name: groupName,
     ...props }) => {
     // - - - - - - hooks/variables - - - - - - - //
-  
-
-    useEffect(() => {
-      const getAllInfo = async () => {
-        console.log('calling getAllInfo')
-        try {
-          let response = await fetch("/api/info")
-          let allTasksArray = await response.json()
-
-          setAllDefaultTasks(allTasksArray)
-        }
-        catch (err) {
-          console.log("There was an error loading your table", err)
-        }
-      }
- 
-      getAllInfo()
-    }, [])
-
-    useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
-    useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])
-    useEffect(() => console.log("fullTaskList: ", fullTaskList), [fullTaskList])
-
     const modeAndView = {
       areDetailsLoaded,
       isAddMode,
@@ -150,14 +154,13 @@ const useGroupOfCheckboxes = () => {
       getValues
     }
 
-    const allInputs = [...inputs, ...customItems]
+    const allInputs = useMemo(() => [...inputs, ...customItems], [inputs])
     const isAddingOrEditing = isAddMode || isEditView
 
     // declare checkbox names such that their data ends up in an object, 
     // accessible with the name of the parent <GroupOfCheckboxes />
     const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
       noFullWidth
-      key={rest.index}
       name={`${groupName}.${name}`}
       labelText={name}
       type="checkbox"
@@ -171,16 +174,22 @@ const useGroupOfCheckboxes = () => {
     const DefaultCheckboxAndTasks = (rest) => {
       const isBoxChecked = watch(`${groupName}.${rest.name}`)
 
-      return <>
+      return <Fragment key={rest.index}>
         <DefaultCheckbox {...rest} name={rest.name} /> 
-        {isBoxChecked && <FlexSection gridColumn="1/4">
-          <FlexSection margin="0 0 0 15px">{fullTaskList.filter(task => task.item === rest.name).map(task => <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>)}</FlexSection>
-        </FlexSection>}
-      </>
+        {isBoxChecked && 
+        <FlexSection gridColumn="1/-1">
+          <FlexSection margin="0 0 0 15px">
+            {fullTaskList
+              .filter(task => task.item === rest.name)
+              .map((task, index) => <Li margin="0 20px 0 0" key={index}>{task.task}: {task.frequency} days</Li>)
+            }
+          
+          </FlexSection>
+        </FlexSection>
+        }
+      </Fragment>
     }
 
-
-  
     const CustomItemCheckbox = ({ wrapperProps, name, ...rest }) => {
       const [editedItem, setEditedItem] = useState()
   
@@ -197,14 +206,16 @@ const useGroupOfCheckboxes = () => {
 
               setCustomItems(prevState => prevState.map(item => item.name === name ? { ...item, name: editedItem } : item))
               setValue(`${groupName}.${editedItem}`, valueOfPrevName)
+              setAllCustomTasks(prevState => prevState.map(task => task.item === name ? { ...task, item: editedItem } : task))
             }}
           />
           <DeleteItemModal 
             {...rest}
             name={name}
-            actionOnConfirm={() => 
+            actionOnConfirm={() => {
               setCustomItems(prevState => prevState.filter(item => item.name !== name))
-            }
+              setAllCustomTasks(prevState => prevState.filter(task => task.item !== name))
+            }}
           />
         </FlexSection>
       </FlexSection>
@@ -213,15 +224,19 @@ const useGroupOfCheckboxes = () => {
     const CustomCheckboxAndTasks = (rest) => {
       const isBoxChecked = watch(`${groupName}.${rest.name}`)
 
-      return <>
+      return <Fragment key={rest.index}>
         <CustomItemCheckbox {...rest} name={rest.name} /> 
         {isBoxChecked && 
-        <FlexSection gridColumn="1/4">
+        <FlexSection gridColumn="1/-1">
           <FlexSection margin="0 0 0 15px">
-            {fullTaskList.filter(task => task.item === rest.name).map(task => <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>)}
+            {fullTaskList
+              .filter(task => task.item === rest.name)
+              .map((task, index) => <Li margin="0 20px 0 0" key={index}>{task.task}: {task.frequency} days</Li>)
+            }
           </FlexSection>
-        </FlexSection>}
-      </>
+        </FlexSection>
+        }
+      </Fragment>
     }
 
     const AddCustomItemModal = () => {
@@ -232,14 +247,41 @@ const useGroupOfCheckboxes = () => {
       return <CustomItemModal 
         modalContent={<>
           <p>New item</p>
-          <ComplexInput labelText="item" {...modeAndView} onChange={event => setNewItem(event.target.value)} />
-          <ComplexInput labelText="task" {...modeAndView} onChange={event => setNewTask(event.target.value)} />
-          <ComplexInput labelText="frequency (days)" type="number" {...modeAndView} onChange={event => setNewFrequency(event.target.value)} />
+          <ComplexInput required labelText="item" {...modeAndView} onChange={event => setNewItem(event.target.value)} />
+          <ComplexInput required labelText="task" {...modeAndView} onChange={event => setNewTask(event.target.value)} />
+          <ComplexInput required labelText="frequency (days)" type="number" {...modeAndView} onChange={event => setNewFrequency(event.target.value)} />
         </>}
         actionOnConfirm={() => {
           setCustomItems(prevState => [...prevState, { name: newItem, isCustomItem: true }])
           setValue(`${groupName}.${newItem}`, true)
           setAllCustomTasks(prevState => [...prevState, { item: newItem, task: newTask, frequency: newFrequency }])
+        }}
+      />
+    }
+
+    const AddCustomTaskModal = () => {
+      const [newItem, setNewItem] = useState()
+      const [newTask, setNewTask] = useState()
+      const [newFrequency, setNewFrequency] = useState()
+  
+      return <CustomItemModal 
+        confirmPrompt="add task"
+        buttonText="add your own task"
+        modalContent={<>
+          <p>New task</p>
+          <ComplexInput name="item" {...modeAndView} 
+            as={() => 
+              <Select value={newItem} onChange={event => setNewItem(event.target.value)}>
+                {allInputs.map(({ name }) => <option value={name} key={name}>{name}</option> )}
+              </Select>
+            }
+          />
+          <ComplexInput required name="task" {...modeAndView} onChange={event => setNewTask(event.target.value)} />
+          <ComplexInput required name="frequency (days)" type="number" {...modeAndView} onChange={event => setNewFrequency(event.target.value)} />
+        </>}
+        actionOnConfirm={() => {
+          setAllCustomTasks(prevState => [...prevState, { item: newItem, task: newTask, frequency: newFrequency }])
+          setValue(`${groupName}.${newItem}`, true)
         }}
       />
     }
@@ -260,8 +302,17 @@ const useGroupOfCheckboxes = () => {
             : <DefaultCheckboxAndTasks index={index} {...input} />
         )}
       </GridSection>
+
+      {allCustomTasks.map((task, index) => 
+        <Fragment key={index}>
+          <ComplexInput name={`customTasks.${index}.item`} labelHidden type="hidden" value={task.item} {...formTools} {...modeAndView} />
+          <ComplexInput name={`customTasks.${index}.task`} labelHidden type="hidden" value={task.task} {...formTools} {...modeAndView} />
+          <ComplexInput name={`customTasks.${index}.frequency`} labelHidden type="hidden" value={task.frequency} {...formTools} {...modeAndView} />
+        </Fragment>
+      )}
       
       {isAddingOrEditing && <AddCustomItemModal />}
+      {isAddingOrEditing && <AddCustomTaskModal />}
       {isAddingOrEditing && <CheckAllButton />}
     </>
   }
@@ -282,12 +333,11 @@ const SuperFormSelect = ({ options, name, ...props }) => {
     id: name
   }
   
-  if (!options) return null
   if (props.readOnly) return <Input {...allProps} />
 
   return <>
     <Select {...allProps}>
-      {options.map(({ value, optionText }) => <option value={value} key={value}>{optionText || value}</option> )}
+      {options && options.map(({ value, optionText }) => <option value={value} key={value}>{optionText || value}</option> )}
     </Select>
   </>
 }

@@ -12,11 +12,11 @@ const CustomItemModal = props => {
       hideConfirmModal={toggleConfirmModal}
       modalContentProps={{column: true}}
       modalContent={props.modalContent}
-      confirmPrompt='Add item'
+      confirmPrompt={props.confirmPrompt || 'Add item'}
       actionOnConfirm={props.actionOnConfirm}
     />
     <Button text type='button' onClick={toggleConfirmModal} {...props}>
-      <AddIcon sm />add your own item      
+      <AddIcon sm />{props.buttonText || "add your own item "}     
     </Button>
   </>
 }

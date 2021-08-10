@@ -176,7 +176,7 @@ const SuperForm= ({
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
-              console.log(`${name}.${key}`)
+              console.log(`setting ${name}.${key}`)
               setValue(`${name}.${key}`, checkboxData[key])
               valuesForReset[`${name}.${key}`] = checkboxData[key]
             }

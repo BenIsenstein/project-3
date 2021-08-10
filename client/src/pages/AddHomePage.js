@@ -122,7 +122,10 @@ const AddHomePage = () => {
         <SuperForm 
           titleText={userContext.user?.homes?.length ? "New Home" : "Add your first home!"}
           inputs={inputs}
-          onSubmit={addHome}
+          onSubmit={data => {
+            console.log(data)
+            //console.log("typeof data.customTasks.item1.task1: ", typeof data.customTasks.item1.task1)
+          }}
         />
       </PageContainer>
     </Page>

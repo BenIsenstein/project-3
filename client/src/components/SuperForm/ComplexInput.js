@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { Label, Textarea, Input, FlexSection, Error } from '../../common'
 import Skeleton from 'react-loading-skeleton'
 
@@ -25,6 +27,12 @@ const ComplexInput = ({
   ...props 
   }) => {
   const isCheckbox = type === 'checkbox'
+
+  useEffect(() => {
+
+    return () => console.log(`ComplexInput with name "${name}" unmounted!`)
+  }, [name])
+
 
   return (
     <FlexSection 
