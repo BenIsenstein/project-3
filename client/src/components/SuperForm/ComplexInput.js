@@ -30,7 +30,7 @@ const ComplexInput = ({
 
   useEffect(() => {
 
-    return () => console.log(`ComplexInput with name "${name}" unmounted!`)
+  //  return () => console.log(`ComplexInput with name "${name}" unmounted!`)
   }, [name])
 
 

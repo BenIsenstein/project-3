@@ -13,7 +13,7 @@ const HomeDetails = ({activatedHomesLength}) => {
   const history = useHistory()
   const updateHome = useUpdateHome()
   const [home, setHome] = useState()
-  const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
+  const { customItems, setCustomItems, GroupOfCheckboxes, setAllCustomTasks } = useGroupOfCheckboxes()
 
   const inputs = [
     // {
@@ -114,7 +114,9 @@ const HomeDetails = ({activatedHomesLength}) => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes,
-      setCustomItems: setCustomItems,
+      setCustomItems: setCustomItems, 
+      setAllCustomTasks: setAllCustomTasks, 
+      homeId:id,
       inputs: defaultHomeItems.map(inputName => {return { name: inputName }}),
       defaultCheckboxNames: defaultHomeItems
     }

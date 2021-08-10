@@ -95,19 +95,19 @@ const GroupOfInputs = ({
 
 const useGroupOfCheckboxes = () => {
   const [customItems, setCustomItems] = useState([])
-  useEffect(() => console.log("customItems: ", customItems), [customItems])
+ // useEffect(() => console.log("customItems: ", customItems), [customItems])
 
   const [allDefaultTasks, setAllDefaultTasks] = useState([])
   const [allCustomTasks, setAllCustomTasks] = useState([])
   const fullTaskList = useMemo(() => [...allDefaultTasks, ...allCustomTasks], [allDefaultTasks, allCustomTasks])
 
-  useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
-  useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])
-  useEffect(() => console.log("fullTaskList: ", fullTaskList), [fullTaskList])
+ // useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
+ // useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])
+ // useEffect(() => console.log("fullTaskList: ", fullTaskList), [fullTaskList])
 
   useEffect(() => {
     const getAllInfo = async () => {
-      console.log('calling getAllInfo')
+     // console.log('calling getAllInfo')
       try {
         let response = await fetch("/api/info")
         let allTasksArray = await response.json()
@@ -120,7 +120,7 @@ const useGroupOfCheckboxes = () => {
 
     getAllInfo()
 
-    return () => console.log("getAllInfo effect - unmounting!")
+   // return () => console.log("getAllInfo effect - unmounting!")
   }, [])
   
   const GroupOfCheckboxes = ({
@@ -320,7 +320,8 @@ const useGroupOfCheckboxes = () => {
   return { 
     GroupOfCheckboxes,
     customItems,
-    setCustomItems 
+    setCustomItems, 
+    setAllCustomTasks
   }
 }
 

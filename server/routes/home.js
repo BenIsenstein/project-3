@@ -46,8 +46,14 @@ router.get('/get/:id', async (req, res) => {
 
 // get all custom tasks for user
 router.get('/getcustomtasksbyhome/:id', async (req, res) => {
-  try {res.json(await Home.find({ customTask: req.params.id  }))} // JSON array is sent back
-  
+  try {
+    let matchingHome = await Home.findOne({ _id: req.params.id  })
+    console.log("matching home is", matchingHome)
+    let customTasksCheckbox = matchingHome.customTasks
+    console.log("customTasks route is?", customTasksCheckbox)
+    res.json(customTasksCheckbox)
+  } // JSON array is sent back
+    
   catch (err) {console.log("error getting all custom tasks for home: ", err)}
 })
 

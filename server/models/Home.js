@@ -17,7 +17,7 @@ const homeSchema = new mongoose.Schema({
   userId: String,
   yearBuilt: Number,
   colorScheme: Array,
-  customTask: [{  
+  customTasks: [{  
     item: String,
     task: String,
     frequency: Number}]
