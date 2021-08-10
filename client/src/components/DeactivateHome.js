@@ -1,12 +1,16 @@
+import React, { useContext } from "react"
 import { useHistory, useParams } from 'react-router-dom'
 import { Button, TrashIcon } from '../common'
 
 import ConfirmModal from './Modals/ConfirmModal'
 import useConfirmModal from './Modals/useConfirmModal'
 
+import FilterContext from '../FilterContext'
+
 const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
   const history = useHistory()
+  const filterContext = useContext(FilterContext)
 
   // activate home
   const activateHome = async () => {    
@@ -39,7 +43,22 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
       let res = await fetch(`/api/home/update/${home._id}`, options)
       let resObject = await res.json()
       
-      if (!resObject.success) return alert("Your home details wasn't deactivated for some reason. Please try again.")
+      if (!resObject.success) { // Update to db was NOT successful
+        return alert("Your home details wasn't deactivated for some reason. Please try again.")
+      } 
+      else {  // Update to db was successful, home is now deactivated.
+        // Update the global FILTER context to remove deactivated home if present.
+        // filter where homeId != deactivated home.
+        let homeArray = filterContext.homes.filter(item => item.id !== home._id)
+        
+        let filterInfo = {
+          active: filterContext.active,
+          completed: filterContext.completed,
+          homes: homeArray
+        }
+        filterContext.setFilterInfo(filterInfo)
+      }
+
       history.push('/account')
     }
     catch(err) {

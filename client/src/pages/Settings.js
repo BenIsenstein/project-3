@@ -35,8 +35,9 @@ const Settings = () => {
     await updateAccount(data, mode)
     // Update the session FILTER state with the new filter preference
     filterContext.setFilterInfo(checked)
-    // Redirect user back to the SETTINGS page.
-    history.push(`/settings`)
+    // Redirect user back to the SETTINGS page (ie stay on current page).
+    // history.push(`/settings`) 
+    history.goBack()
   }
 
 
