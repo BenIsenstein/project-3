@@ -160,23 +160,35 @@ const SuperForm= ({
           }
           //if it's a <GroupOfCheckboxes />:
           else if (input.as?.name === 'GroupOfCheckboxes') {
-            console.log('setting GroupOfCheckbox values again')
+           // console.log('setting GroupOfCheckbox values again')
             let checkboxData = details[name]
 
             // make sure items that fall outside of the checkbox group's 
             // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
             // the 'customItems' state array sitting in the component.
             input.setCustomItems(prevState => [
-              ...prevState, 
               ...Object.keys(checkboxData)
                 .filter(key => !input.defaultCheckboxNames.includes(key))
                 .map(key => {return { name: key, isCustomItem: true }})//
             ])
 
+              try {
+                let response = await fetch(`/api/home/getcustomtasksbyhome/${input.homeId}`)
+                let allCustomTasksArray = await response.json()
+                console.log("allCustomTasksArray is",allCustomTasksArray)
+                input.setAllCustomTasks(allCustomTasksArray)
+
+              }
+              catch (err) {
+                console.log("There was an error loading your custom tasks array", err)
+              }
+            
+            
+        
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
-              console.log(`${name}.${key}`)
+            //  console.log(`setting ${name}.${key}`)
               setValue(`${name}.${key}`, checkboxData[key])
               valuesForReset[`${name}.${key}`] = checkboxData[key]
             }
