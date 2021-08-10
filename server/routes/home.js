@@ -48,7 +48,6 @@ router.get('/get/:id', async (req, res) => {
 router.get('/getcustomtasksbyhome/:id', async (req, res) => {
   try {res.json(await Home.find({ customTask: req.params.id  }))} // JSON array is sent back
   
-
   catch (err) {console.log("error getting all custom tasks for home: ", err)}
 })
 
