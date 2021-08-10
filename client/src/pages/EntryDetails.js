@@ -57,6 +57,10 @@ const EntryDetails = () => {
     {
       name: "description",
       registerOptions: { required: "You must write a description." }
+    },    
+    {
+      name: 'serviceProviderInfo',
+      labelText: 'Service Provider'
     },
     {
       name: "start",
@@ -80,6 +84,10 @@ const EntryDetails = () => {
     {
       name: "completionComments",
       labelText: "comments"
+    },
+    {
+      name: 'cost',
+      labelText: 'Total Cost'
     }
   ]
 

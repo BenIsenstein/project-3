@@ -2,8 +2,6 @@ import { useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
 
-
-
 //updateEntry
 const useUpdateEntry = () => {
   const { id } = useParams()

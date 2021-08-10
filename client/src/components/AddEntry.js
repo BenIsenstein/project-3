@@ -29,6 +29,10 @@ const AddEntry = () => {
       registerOptions: { required: "You must write a description." }
     },
     {
+      name: 'serviceProviderInfo',
+      labelText: 'Service Provider'
+    },
+    {
       name: "start",
       labelText: "starts",
       registerOptions: { required: "You must choose a start date." }

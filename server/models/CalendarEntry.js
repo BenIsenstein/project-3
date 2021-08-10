@@ -12,7 +12,9 @@ const calendarEntrySchema = new mongoose.Schema({
   description: String,
   completed: Boolean,
   dateCompleted: Date,
-  completionComments: String
+  completionComments: String,
+  cost: Number,
+  serviceProviderInfo: String,
 })
   
 // Define functions
@@ -20,7 +22,7 @@ const CalendarEntry = mongoose.model("CalendarEntry", calendarEntrySchema, "Cale
 
 const addCalendarEntry = async (newCalendarEntry) => await newCalendarEntry.save()
 const listAllCalendarEntries = async () => await CalendarEntry.find({}, null, {sort: {start: 1}})
-const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({ userId: id}, null, {sort: {start: 1}})
+const listAllCalendarEntriesByUserId = async (id) => await CalendarEntry.find({userId: id}, null, {sort: {start: 1}})
 const findCalendarEntryById = async (id) => await CalendarEntry.findOne({ _id: id })
 const deleteCalendarEntry = async (id) => await CalendarEntry.deleteOne({ _id: id })
 
