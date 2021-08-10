@@ -3,6 +3,7 @@ const SibApiV3Sdk = require('sib-api-v3-sdk')
 
 const { Tester, listAllTesters, findTesterByEmail } = require('./Tester')
 const { CalendarEntry } = require('./CalendarEntry')
+const { Home } = require('./Home')
 
 // Define functions
 
@@ -33,6 +34,7 @@ const sendUserEmail = async (data) => {
     // collection, and see if the email address provided is valid. If it is
     // NOT a valid email, override it by defaulting to the SiB account owner.
     let lookupResult = await findTesterByEmail(data.email)
+
     if (lookupResult && lookupResult > "") {
       console.log("sendUserEmail model: Found TESTER!")
       targetRecipient = data.email
@@ -53,6 +55,7 @@ const sendUserEmail = async (data) => {
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
             let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
             let arrayIndexer = 0
+            let innerIndexer = 0
             let currentItem = {}
             let startTime = undefined
 
@@ -61,21 +64,30 @@ const sendUserEmail = async (data) => {
             // First retrieve OVERDUE tasks.
             // Retrieve data from DB
             let dbOverdueResponse = await CalendarEntry.find({ userid: data.userid, completed: false, start: { $lt: currentDate.toISOString() }  }, null, {sort: {start: 1}})
-
+            let dbHomeResponse = {}
             let userOverdueTaskList = [{}]
+            console.log("sendemail OVERDUE TASKS size = ", dbOverdueResponse.length)
             if (dbOverdueResponse.length > 0) {
               arrayIndexer = 0
+              innerIndexer = 0
               while (arrayIndexer < dbOverdueResponse.length) {
                 currentItem = dbOverdueResponse[arrayIndexer]
                 startTime = currentItem.start
-                userOverdueTaskList[arrayIndexer] = {
-                  status: "overdue",
-                  date: startTime.toDateString(),
-                  time: toHoursAndMins(startTime),
-                  house: currentItem.house,
-                  item: currentItem.item,
-                  task: currentItem.task
-                }                
+
+                //Only use Calendar Entries that are for ACTIVE homes.
+                dbHomeResponse = await Home.findOne({ _id: currentItem.homeId })
+                console.log("sendemail OVERDUE says, dbHomeResponse = ", dbHomeResponse)
+                if (dbHomeResponse?.activated) {
+                  userOverdueTaskList[innerIndexer] = {
+                    status: "overdue",
+                    date: startTime.toDateString(),
+                    time: toHoursAndMins(startTime),
+                    house: currentItem.house,
+                    item: currentItem.item,
+                    task: currentItem.task
+                  }
+                  innerIndexer += 1                
+                }
                 arrayIndexer += 1
               } 
             }
@@ -90,18 +102,27 @@ const sendUserEmail = async (data) => {
             let dbResponse = await CalendarEntry.find({ userid: data.userid, start: { $gte: currentDate.toISOString(), $lte: targetDate }, completed: false }, null, {sort: {start: 1}})
             
             let userTaskList = [{}]
+            console.log("sendemail next 12 days TASKS size = ", dbResponse.length)
             if (dbResponse.length > 0) {
               arrayIndexer = 0
+              innerIndexer = 0
               while (arrayIndexer < dbResponse.length) {
                 currentItem = dbResponse[arrayIndexer]
                 startTime = currentItem.start
-                userTaskList[arrayIndexer] = {
-                  status: "active",
-                  date: startTime.toDateString(),
-                  time: toHoursAndMins(startTime),
-                  house: currentItem.house,
-                  item: currentItem.item,
-                  task: currentItem.task
+
+                //Only use Calendar Entries that are for ACTIVE homes.
+                dbHomeResponse = await Home.findOne({ _id: currentItem.homeId })
+                console.log("sendemail due in 14 days says, dbHomeResponse = ", dbHomeResponse)
+                if (dbHomeResponse?.activated) {
+                  userTaskList[innerIndexer] = {
+                    status: "active",
+                    date: startTime.toDateString(),
+                    time: toHoursAndMins(startTime),
+                    house: currentItem.house,
+                    item: currentItem.item,
+                    task: currentItem.task
+                  }
+                  innerIndexer += 1
                 }
                 arrayIndexer += 1
               } 
