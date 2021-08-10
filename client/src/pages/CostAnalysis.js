@@ -1,11 +1,12 @@
 import { Page, PageContainer } from '../common'
+import CostChart from '../components/Reports/CostChart'
 
 const CostAnalysis = () => {
 
     return (
         <Page>
             <PageContainer>
-                This is the cost analysis page
+                <CostChart />
             </PageContainer>
         </Page>
     )
