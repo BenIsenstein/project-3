@@ -6,7 +6,7 @@ const defaultHomeItems = [
     "Exterior",    
     "Furnace",
     "Garage",    
-    "GFCI",    
+    "GFCI Outlet",    
     "Gutters",    
     "Humidifier",  
     "Interior",      
