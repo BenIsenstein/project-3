@@ -90,6 +90,10 @@ const Navbar = () => {
                     <CalendarIcon nav />
                     Calendar
                 </NavItem>
+                <NavItem to='/reports' activeClassName>
+                    <ResourceIcon nav />
+                    Reports
+                </NavItem>
                 <NavItem to='/info' activeClassName>
                     <ResourceIcon nav />
                     Resources

@@ -21,6 +21,8 @@ import AddEntryPage from './pages/AddEntryPage'
 import AddHomePage from './pages/AddHomePage'
 import HomeDetails from './pages/HomeDetails'
 import InfoPage from './pages/InfoPage'
+import Reports from './pages/Reports'
+import CostAnalysis from './pages/CostAnalysis'
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -43,6 +45,8 @@ const App = () => {
           <Route path='/new-home' component={AddHomePage} />
           <Route path='/home/:id' render={(...props) => (<HomeDetails {...props} activatedHomesLength={activatedHomesLength} />)} />
           <Route path='/info' component={InfoPage} />
+          <Route exact path='/reports' component={Reports} />
+          <Route path='/reports/cost-analysis' component={CostAnalysis} />
         </Switch>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>
