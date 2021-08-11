@@ -172,6 +172,8 @@ const useGroupOfCheckboxes = () => {
     />
 
     const DefaultCheckboxAndTasks = (rest) => {
+      const [editedTask, setEditedTask] = useState()
+      const [editedFrequency, setEditedFrequency] = useState()
       const isBoxChecked = watch(`${groupName}.${rest.name}`)
 
       return <Fragment key={rest.index}>
@@ -179,11 +181,33 @@ const useGroupOfCheckboxes = () => {
         {isBoxChecked && 
         <FlexSection gridColumn="1/-1">
           <FlexSection margin="0 0 0 15px">
-            {fullTaskList
+            {allDefaultTasks
               .filter(task => task.item === rest.name)
               .map((task, index) => <Li margin="0 20px 0 0" key={index}>{task.task}: {task.frequency} days</Li>)
             }
-          
+            {allCustomTasks
+              .filter(task => task.item === rest.name)
+              .map((task, index) => <Fragment key={index}>
+                <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>
+                <EditItemModal 
+                  modalContent={<>
+                    <p>Editing {`${task.item} - ${task.task}`}</p>
+                    <ComplexInput placeholder={task.task} {...modeAndView} onChange={event => setEditedTask(event.target.value)} labelText="task" />
+                    <ComplexInput placeholder={task.frequency} {...modeAndView} onChange={event => setEditedFrequency(event.target.value)} labelText="frequency (days)" type="number" />
+                  </>}
+                  actionOnConfirm={() => {
+                    setAllCustomTasks(prevState => prevState.map(prevTask => prevTask.task === task.task ? { ...prevTask, task: (editedTask || prevTask.task), frequency: (editedFrequency || prevTask.frequency) } : prevTask))
+                  }}
+                />
+                <DeleteItemModal 
+                  {...task}
+                  name={`${task.item} - ${task.task}`}
+                  actionOnConfirm={() => {
+                    setAllCustomTasks(prevState => prevState.filter(prevTask => prevTask.task !== task.task))
+                  }}
+                />
+              </Fragment>
+            )}
           </FlexSection>
         </FlexSection>
         }
@@ -222,6 +246,8 @@ const useGroupOfCheckboxes = () => {
     }
 
     const CustomCheckboxAndTasks = (rest) => {
+      const [editedTask, setEditedTask] = useState()
+      const [editedFrequency, setEditedFrequency] = useState()
       const isBoxChecked = watch(`${groupName}.${rest.name}`)
 
       return <Fragment key={rest.index}>
@@ -229,10 +255,29 @@ const useGroupOfCheckboxes = () => {
         {isBoxChecked && 
         <FlexSection gridColumn="1/-1">
           <FlexSection margin="0 0 0 15px">
-            {fullTaskList
+            {allCustomTasks
               .filter(task => task.item === rest.name)
-              .map((task, index) => <Li margin="0 20px 0 0" key={index}>{task.task}: {task.frequency} days</Li>)
-            }
+              .map((task, index) => <Fragment key={index}>
+                <Li margin="0 20px 0 0">{task.task}: {task.frequency} days</Li>
+                <EditItemModal 
+                  modalContent={<>
+                    <p>Editing {`${task.item} - ${task.task}`}</p>
+                    <ComplexInput placeholder={task.task} {...modeAndView} onChange={event => setEditedTask(event.target.value)} labelText="task" />
+                    <ComplexInput placeholder={task.frequency} {...modeAndView} onChange={event => setEditedFrequency(event.target.value)} labelText="frequency (days)" type="number" />
+                  </>}
+                  actionOnConfirm={() => {
+                    setAllCustomTasks(prevState => prevState.map(prevTask => prevTask.task === task.task ? { ...prevTask, task: (editedTask || prevTask.task), frequency: (editedFrequency || prevTask.frequency) } : prevTask))
+                  }}
+                />
+                <DeleteItemModal 
+                  {...task}
+                  name={`${task.item} - ${task.task}`}
+                  actionOnConfirm={() => {
+                    setAllCustomTasks(prevState => prevState.filter(prevTask => prevTask.task !== task.task))
+                  }}
+                />
+              </Fragment>
+            )}
           </FlexSection>
         </FlexSection>
         }
