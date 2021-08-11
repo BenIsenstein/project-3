@@ -5,15 +5,14 @@ import UserContext from '../UserContext'
 import FilterContext from '../FilterContext'
 import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common"
 import SuperForm from "../components/SuperForm/SuperForm"
-import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
-import { useHandleUserStatus, useUpdateAccount } from "../functions"
+// import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
+import { useHandleUserStatus } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
   useHandleUserStatus()
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
-  const updateAccount = useUpdateAccount()
   const history = useHistory()
 
   const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
@@ -28,18 +27,51 @@ const Settings = () => {
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
 
   const updateFilterPrefs = async (data) => {
-    data.settings = {}
-    data.settings.filterPrefs = checked
-    let mode = "filterPrefs"
-    // Save the new preferences in User Account SETTINGS
-    await updateAccount(data, mode)
-    // Update the session FILTER state with the new filter preference
-    filterContext.setFilterInfo(checked)
-    // Redirect user back to the SETTINGS page (ie stay on current page).
-    // history.push(`/settings`) 
-    history.goBack()
-  }
+    try {
+      data.settings = {}
+      data.settings.filterPrefs = checked
+      console.log("updateFilterPrefs says, data = ", data)
 
+      // Save the new preferences in User Account SETTINGS
+      // await updateAccount(data, mode)     
+      let userAction = `/api/user/update/settings/filter/${userContext.user._id}`
+      let method = 'put'
+      let headers = { "content-type": "application/json" }
+      let body
+
+      // redefine body with all of the form data
+      body = JSON.stringify(data)
+
+      // send user update request
+      let userRes = await fetch(userAction, { method, headers, body }) 
+      let userObject = await userRes.json()
+
+      if (!userObject.success){
+        console.log("Error trying to update the user account!!!")
+      }
+      else {
+        // Update User Context
+        // Make sure the data for context update includes _id and dateSignedUp
+        // set all context to match the account changes and redirect
+
+        // //let tempUserContextObject = Object.assign({}, userContext.user)
+        // //let tempUserContextObject = {...userContext.user, [settings.filterPrefs]: checked}
+        // let tempUserContextObject = {...userContext.user}
+        // console.log("tempObject = ", tempUserContextObject)
+        // tempUserContextObject.settings.filterPrefs = checked
+        // userContext.setUserInfo(tempUserContextObject)
+
+        // Update the session FILTER state with the new filter preference
+        filterContext.setFilterInfo(checked)
+      }
+      // Stay on the current page, but close the Filter Preference area.
+      setUndergoingPreferenceChange(false)
+    }
+    catch(err) {
+      console.log('Error updating account: ', err)
+      alert("There was an error updating your account Filter Preferences. We're fixing it as fast as we can.")
+    }
+  }
 
   // -----------  PRELOAD USER FILTER PREFERENCES -----------
   // Every time user chooses to work with FILTER preferences, retrieve whatever

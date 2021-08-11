@@ -153,24 +153,12 @@ const useUpdateAccount = () => {
     const history = useHistory()
     const userContext = useContext(UserContext)
    
-    const updateAccount = async (data, mode) => {
+    const updateAccount = async (data) => {
 
         try {
             let isEmailChanged = data.email !== userContext.user.email  
             let authAction = `/api/auth/update/${userContext.user._id}`
-
-            // Call a different API endpoint depending on the MODE input parameter.
-            // If no input parameter was provided, default to the basic "Update User
-            // Account" endpoint. 
-            let userAction = ""
-            switch (mode) {
-              case "filterPrefs": userAction = `/api/user/update/settings/filter/${userContext.user._id}`
-                break;
-              case "notificationPrefs": userAction = `/api/user/update/settings/notifications/${userContext.user._id}`
-                break;
-              default: userAction = `/api/user/update/${userContext.user._id}`
-            }  
-            
+            let userAction = `/api/user/update/${userContext.user._id}`
             let method = 'put'
             let headers = { "content-type": "application/json" }
             let body
