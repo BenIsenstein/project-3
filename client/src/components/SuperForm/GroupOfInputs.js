@@ -314,15 +314,17 @@ const useGroupOfCheckboxes = () => {
         buttonText="add your own task"
         modalContent={<>
           <p>New task</p>
-          <ComplexInput name="item" {...modeAndView} 
+          <ComplexInput 
+            name="item" 
+            {...modeAndView} 
             as={() => 
               <Select value={newItem} onChange={event => setNewItem(event.target.value)}>
                 {allInputs.map(({ name }) => <option value={name} key={name}>{name}</option> )}
               </Select>
             }
           />
-          <ComplexInput required name="task" {...modeAndView} onChange={event => setNewTask(event.target.value)} />
-          <ComplexInput required name="frequency (days)" type="number" {...modeAndView} onChange={event => setNewFrequency(event.target.value)} />
+          <ComplexInput {...modeAndView} onChange={event => setNewTask(event.target.value)} name="task" />
+          <ComplexInput {...modeAndView} onChange={event => setNewFrequency(event.target.value)} name="frequency (days)" type="number" />
         </>}
         actionOnConfirm={() => {
           setAllCustomTasks(prevState => [...prevState, { item: newItem, task: newTask, frequency: newFrequency }])
