@@ -12,7 +12,7 @@ const TestEmailButton = () => {
       method: 'post',
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        "type": "reminder",  // TYPE is choice of: 'test', 'reminder', 'welcome', 'overdue'.
+        "type": "reminder",  // TYPE is choice of: 'test', 'reminder', 'welcome', 'emailChange', 'overdue'.
         "email": `${userContext.user.email}`,
         "userid": `${userContext.user._id}`,
         "firstname": `${userContext.user.firstName}`,

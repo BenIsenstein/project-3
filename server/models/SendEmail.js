@@ -17,7 +17,7 @@ const sendUserEmail = async (data) => {
   }
   
   let messageType = data.type
-  let templateId = 0  // This is the desired SendInBlue email TEMPLATE to be used.
+  let templateId = 0  // Initialize variable. This is the desired SendInBlue email TEMPLATE to be used.
   
   let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
   let sendTestEmail = new SibApiV3Sdk.SendTestEmail(); // SendTestEmail | 
@@ -33,16 +33,16 @@ const sendUserEmail = async (data) => {
     // For single-user email, look up all emails listed in the DB 'testers'
     // collection, and see if the email address provided is valid. If it is
     // NOT a valid email, override it by defaulting to the SiB account owner.
-    let lookupResult = await findTesterByEmail(data.email)
+    // let lookupResult = await findTesterByEmail(data.email)
 
-    if (lookupResult && lookupResult > "") {
-      console.log("sendUserEmail model: Found TESTER!")
-      targetRecipient = data.email
-    }
-    else {  // default to account owner
-      targetRecipient = "artt@shaw.ca"
-    } 
-    sendTestEmail.emailTo = [targetRecipient]
+    // if (lookupResult && lookupResult > "") {
+    //   console.log("sendUserEmail model: Found TESTER!")
+    //   targetRecipient = data.email
+    // }
+    // else {  // default to account owner
+    //   targetRecipient = "artt@shaw.ca"
+    // } 
+    // sendTestEmail.emailTo = [targetRecipient]
     // End of code block intended strictly for TESTING
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 
@@ -51,6 +51,8 @@ const sendUserEmail = async (data) => {
       switch (messageType) {
         case "reminder":
           {
+            templateId = 3
+
             // Define parameters for email API
             apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
             let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
@@ -167,8 +169,68 @@ const sendUserEmail = async (data) => {
           }
           break;
         case "welcome":
-          templateId = 2
+          {
+            templateId = 7
+            // Define parameters for email API
+            apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
+            let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
+
+            console.log("targetRecipient = ", targetRecipient)
+            console.log("data.firstname = ", data.firstname)
+            console.log("data.userid = ", data.userid)
+            console.log("data.activationcode = ", data.activationcode)
+
+            // Define structure and parameters for call to SiB API
+            sendSmtpEmail = {
+              to: [{
+                email: `${targetRecipient}`,
+                name: `${data.firstname}`
+              }],
+              templateId: 7,
+              params: {
+                name: `${data.firstname}`,
+                userid: `${data.userid}`,
+                activationcode: `${data.activationcode}`
+              },
+              headers: {
+                'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2'
+              }
+            }
+            // Trigger API for to send email via SendInBlue
+            console.log("WELCOME email being sent to:", targetRecipient) 
+            await apiInstance.sendTransacEmail(JSON.stringify(sendSmtpEmail))  // Send email via SiB API
+          }
           break;
+          case "emailChange":
+            {
+              templateId = 8
+              // Define parameters for email API
+              apiInstance = new SibApiV3Sdk.TransactionalEmailsApi()
+              let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail(); // Use Send Transactional Email method
+                          
+              // Define structure and parameters for call to SiB API
+              sendSmtpEmail = {
+                to: [{
+                  email: `${targetRecipient}`,
+                  name: `${data.firstname}`
+                }],
+                templateId: 8,
+                params: {
+                  name: `${data.firstname}`,
+                  userid: `${data.userid}`,
+                  activationcode: `${data.activationcode}`
+                },
+                headers: {
+                  'X-Mailin-custom': 'custom_header_1:custom_value_1|custom_header_2:custom_value_2'
+                }
+              }
+              // Trigger API for to send email via SendInBlue
+              console.log("Email Change email being sent to:", targetRecipient) 
+              await apiInstance.sendTransacEmail(JSON.stringify(sendSmtpEmail))  // Send email via SiB API
+            }
+            break;          
+
+
         case "overdue":
           templateId = 1
           break;
