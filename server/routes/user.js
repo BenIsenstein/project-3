@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require("express")
 const passport = require("passport")
 const router = express.Router()
-const { User } = require('../models/User')
+const { User, findUserById } = require('../models/User')
 const Auth = require("../models/Auth")
 
 
@@ -146,6 +146,14 @@ router.put('/update/settings/notifications/:id',
 router.get("/getloggedinuser", (req, res) => {
   console.log('getloggedinuser - req.user: ', req.user)
   res.json(req.user || { no_user: true })
+})
+
+// ----------------------------------- GET USER INFO by ID -----------------------------------
+
+router.get('/get/:id', async (req, res) => {
+  try { res.json(await findUserById(req.params.id)) }
+
+  catch(err) {console.log('ERROR get Calendar Entry by ID:', err)}
 })
 
 module.exports = router
