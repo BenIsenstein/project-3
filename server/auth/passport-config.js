@@ -13,13 +13,21 @@ const verifyUser = async (username, password, done) => {
         if (!authCheck) {
             return done(null, false, { message: 'There is no user with that email.' })
         }
-        else if (await bcrypt.compare(password, authCheck.password)) {
-            console.log(`Password match for user ${authCheck.email}`)
-            // grab the user profile linked to the authenticated email and send it back
-            return done(null, await User.findOne( { email: username } ))
-        }
         else {
-            return done(null, false, { message: 'Password incorrect.' })
+            if (authCheck.confirmed == false) {
+                console.log(`Need to confirm email! Respond to Welcome-Confirm email.`)
+                return done(null, false, { message: 'Still waiting for user to verify email.' })
+            }
+            else {
+                if (await bcrypt.compare(password, authCheck.password)) {
+                    console.log(`Password match for user ${authCheck.email}`)
+                    // grab the user profile linked to the authenticated email and send it back
+                    return done(null, await User.findOne( { email: username } ))
+                }
+                else {
+                    return done(null, false, { message: 'Password incorrect.' })
+                }
+            }
         }
     } 
     catch(e) {

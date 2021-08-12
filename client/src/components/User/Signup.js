@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import UserContext from "../../UserContext"
 import { Form, Button, Label, Input, PasswordInput, Select } from "../../common"
 import { validatePassWithMessage } from "../../functions"
+import stringRandomizer from "../../functions/stringRandomizer"
 
 const Signup = () => {
   let history = useHistory()
@@ -65,24 +66,64 @@ const Signup = () => {
 
       // attempt to create auth document, with the userId from newly created user document
       console.log('fetching to /api/auth/signup')
-      body = JSON.stringify({ ...data, userId: userObject.userId })
+      let randomString = stringRandomizer(10)
+      body = JSON.stringify({ ...data, userId: userObject.userId, confirmCode: randomString, confirmed: false })
       let authResponse = await fetch("/api/auth/signup", { method, headers, body })
       let authObject = await authResponse.json()
 
       // if auth document creation fails, return
       if (!authObject.success) return alertError()
+      else{
+        //alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
+        // Log the user in
+        // console.log('logging in new user')
+        // await userContext.logIn({ username: data.email, password: data.password })
 
-      //alert(`Thanks for signing up ${data.firstName}! You'll be logged in now..`)
+        // Send confirmation email to user via SendInBlue
+        let action = "/api/sendEmail/user"  // For the GROUP email API Endpoint, replace 'user' with 'group'
 
-      // Log the user in
-      console.log('logging in new user')
-      await userContext.logIn({ username: data.email, password: data.password })
+        let options = {
+          method: 'post',
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            "type": "welcome",  // TYPE is choice of: 'test', 'reminder', 'welcome', 'emailChange', 'overdue'.
+            "email": `${data.email}`,
+            "userid": `${userObject.userId}`,
+            "firstname": `${data.firstName}`,
+            "activationcode": `${randomString}`
+          })
+        }
+    
+        try {
+          let res = await fetch(action, options)
+          let resObject = await res.json()
+          console.log("Response from server = ", resObject)
+          if (!resObject.success) alert("Your call to the sendEmail API failed for some reason. Please try again.")
+        }
+        catch (err) {
+          console.log('error calling sendEmail API: ', err)
+          alert("There was an error calling the sendEmail API. We're fixing it as fast as we can.")
+        }
+
+
+        // Send user to the WELCOME page while we await their email confirmation
+        history.push("/welcome")
+
+        // Log the user in
+        // console.log('logging in new user')
+        // await userContext.logIn({ username: data.email, password: data.password })
+
+      }
+
+      
     }
     catch(err) {
       console.log('Error signing up: ', err)
       alert("There was an error signing you up. We're fixing it as fast as we can.")
     }
   }
+
+
 
   function validatePass(password) {
     return (

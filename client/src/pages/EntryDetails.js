@@ -80,8 +80,7 @@ const EntryDetails = () => {
       registerOptions: { required: "You must choose a task." }
     },
     {
-      name: "description",
-      registerOptions: { required: "You must write a description." }
+      name: "notes",
     },    
     { 
       labelText: "Service Provider",

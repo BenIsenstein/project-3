@@ -1,6 +1,7 @@
-import { useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
+
 
 //updateEntry
 const useUpdateEntry = () => {
@@ -70,6 +71,25 @@ const useAddEntry = () => {
 const useAddHome = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
+  const [taskInfo, setTaskInfo] =  useState([])
+
+  useEffect(() => {
+    const getAllInfo = async () => {
+     // console.log('calling getAllInfo')
+      try {
+        let response = await fetch("/api/info")
+        let allTasksArray = await response.json()
+        setTaskInfo(allTasksArray)
+      }
+      catch (err) {
+        console.log("There was an error loading your table", err)
+      }
+    }
+
+    getAllInfo()
+
+   // return () => console.log("getAllInfo effect - unmounting!")
+  }, [])
 
   const addHome = async (data) => {
     data.activated = true
@@ -95,19 +115,26 @@ const useAddHome = () => {
       return alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
 
-    // add default entries prompting user to scheule recurrence
-
+    // add default entries based on industry standards from info table
     let selectedItems = Object.keys(data.homeItems).filter(key => data.homeItems[key])
-    let newCalendarEntries = selectedItems.map(item => {
+    let relevantTasks = taskInfo.filter(task => selectedItems.includes(task.item))
+    relevantTasks = [...relevantTasks,...data.customTasks]
+    let newCalendarEntries = relevantTasks.map(taskObject => {
+     
+      let currentDate = new Date()
+      let defaultDate= new Date(currentDate) 
+        defaultDate.setDate(defaultDate.getDate() + taskObject.frequency  )
+
+
       return {
         completed: false,
         userId: data.userId,
         homeId: addHomeObject.homeId,
-        item: item,
-        task: "Decide on schedule",
-        description: "We'll get the right info here eventually!",
-        start: new Date(),
-        end: new Date()
+        item: taskObject.item,
+        task: taskObject.task,
+        notes: "We'll get the right info here eventually!",
+        start: defaultDate ,
+        end: defaultDate
       }
     })
 
@@ -118,6 +145,14 @@ const useAddHome = () => {
 
   return addHome
 }
+
+//   // create a schedule of new events based on industry/custom frequency
+
+// //   for (every default item.frequency) {
+// //     let tempDate = new Date (new Date().getTime() + (i *24 * 60 * 60 *1000))
+// // }
+// setDates( start, end, [ options ] )
+
 
 // update Home
 const useUpdateHome = () => {

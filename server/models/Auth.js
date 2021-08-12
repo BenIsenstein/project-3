@@ -9,7 +9,10 @@ const authSchema = new mongoose.Schema({
   },
   password: String,
   userId: String,
-  dateLastModified: Date
+  dateLastModified: Date,
+  confirmCode: String,
+  confirmed: Boolean
+
 })
 
 module.exports = mongoose.model('Auth', authSchema);
