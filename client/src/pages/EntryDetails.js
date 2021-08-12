@@ -55,8 +55,7 @@ const EntryDetails = () => {
       maxLength: '50'
     },
     {
-      name: "description",
-      registerOptions: { required: "You must write a description." }
+      name: "notes",
     },    
     {
       name: 'serviceProviderInfo',

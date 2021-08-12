@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/EvolveU-FSD/c6-superheros/issues"
   },
-  "homepage": "https://github.com/EvolveU-FSD/c6-superheros#readme"
+  "homepage": "https://github.com/EvolveU-FSD/c6-superheros#readme",
+  "dependencies": {
+    
+  }
 }
