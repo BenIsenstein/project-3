@@ -11,6 +11,7 @@ const AddHomePage = () => {
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
   const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
+  //const { SuperForm } = useSuperForm()
   
   const inputs = [
     // {
@@ -43,18 +44,18 @@ const AddHomePage = () => {
           isCustomComponent: true, 
           as: SuperFormSelect,
           options: [
-            {value: "BC"},
             {value: "AB"},
+            {value: "BC"},
             {value: "SK"},
-            {value: "MA"},
+            {value: "MB"},
             {value: "ON"},
-            {value: "QB"},
-            {value: "PEI"},
+            {value: "QC"},
+            {value: "PE"},
             {value: "NL"},
             {value: "NB"},
             {value: "NS"},
-            {value: "YK"},
-            {value: "NWT"},
+            {value: "YT"},
+            {value: "NT"},
             {value: "NU"}
           ]
         },

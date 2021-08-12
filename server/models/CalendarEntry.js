@@ -14,7 +14,7 @@ const calendarEntrySchema = new mongoose.Schema({
   dateCompleted: Date,
   completionComments: String,
   cost: Number,
-  serviceProviderInfo: String,
+  serviceProviderInfo: Object,
 })
   
 // Define functions
