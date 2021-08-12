@@ -16,6 +16,9 @@ const AccountDetails = ({setActivatedHomesLength}) => {
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
   const [activatedHomes, setActivatedHomes] = useState([])
   const [deactivatedHomes, setDeactivatedHomes] = useState([])
+  //const { SuperForm: AccountForm } = useSuperForm()
+  //const { SuperForm: PasswordForm } = useSuperForm()
+
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
@@ -124,7 +127,8 @@ const AccountDetails = ({setActivatedHomesLength}) => {
       }
     }
     fetchHomes()
-  }, [userContext.user])
+
+  }, [userContext.user, setActivatedHomesLength])
 
   return (
     <Page>

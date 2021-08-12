@@ -1,22 +1,48 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
-import FormTemplate from '../components/SuperForm/SuperForm'
+import SuperForm from '../components/SuperForm/SuperForm'
 import DeleteEntryButton from '../components/DeleteEntryButton'
 import { useHandleUserStatus, useUpdateEntry } from '../functions'
 import DisplayHomeFromId from '../components/SuperForm/DisplayHomeFromId'
-import { HomeItemsSelect } from '../components/SuperForm/DynamicSelects'
+import { useItemTasksSelect } from '../components/SuperForm/DynamicSelects'
+import GroupOfInputs from '../components/SuperForm/GroupOfInputs'
 
 const EntryDetails = () => {
   useHandleUserStatus()
   const { id } = useParams()
   const history = useHistory()
   const updateEntry = useUpdateEntry()
+  const { selectedTask, ItemTasksSelect } = useItemTasksSelect()
   const [isCompleted, setIsCompleted] = useState(false)
   const [undergoingCompletion, setUndergoingCompletion] = useState(false)
   const [isCompletedHandled, setIsCompletedHandled] = useState(false)
+  // const { SuperForm: DetailsForm } = useSuperForm()
+  // const { SuperForm: CompletionForm, setValue: completionSetValue } = useSuperForm()
+
   const shouldShowCompletion = (isCompleted || undergoingCompletion)
   const getEntryRoute = `/api/calendarEntry/get/${id}`
+
+  const recurrenceDate = useMemo(() => {
+    let tempDate = new Date()
+
+    if (selectedTask?.frequency) tempDate.setDate(tempDate.getDate() + selectedTask?.frequency)
+
+    return tempDate
+
+  }, [selectedTask])
+
+  // useEffect(() => completionSetValue("nextRecurringDate", recurrenceDate), [recurrenceDate, completionSetValue])
+
+
+  useEffect(() => {
+    console.log('recurrenceDate memo. selectedTask?.frequency: ', selectedTask?.frequency)
+    console.log("recurrenceDate: ", recurrenceDate)
+    console.log("typeof recurrenceDate: ", typeof recurrenceDate)
+
+  }, [selectedTask, recurrenceDate])
+  
+  
 
   useEffect(() => {
     const handleIsCompleted = async () => {
@@ -45,22 +71,36 @@ const EntryDetails = () => {
     },
     {
       name: "item",
-      isCustomComponent: true,
-      as: HomeItemsSelect,
-      registerOptions: { required: "You must choose an item." }
+      readOnly: true,
     },
     {
       name: "task",
-      registerOptions: { required: "You must write a task." },
-      maxLength: '50'
+      isCustomComponent: true,
+      as: ItemTasksSelect,
+      registerOptions: { required: "You must choose a task." }
     },
     {
       name: "description",
       registerOptions: { required: "You must write a description." }
     },    
-    {
-      name: 'serviceProviderInfo',
-      labelText: 'Service Provider'
+    { 
+      labelText: "Service Provider",
+      labelProps: { as: "h2", fontSize: '1em' },
+      isCustomComponent: true,
+      forwardErrors: true,
+      as: GroupOfInputs,
+      inputs: [
+        {
+          name: "serviceProviderInfo.name",
+          labelText: "Name",
+          wrapperProps: {gridColumn: '1/2'}
+        },
+        {
+          name: "serviceProviderInfo.phoneNumber",
+          labelText: "Phone Number",
+          wrapperProps: {gridColumn: '3/4'}
+        }
+      ]
     },
     {
       name: "start",
@@ -84,10 +124,18 @@ const EntryDetails = () => {
     {
       name: "completionComments",
       labelText: "comments"
-    },
+    }, 
     {
       name: 'cost',
-      labelText: 'Total Cost'
+      labelText: 'Total Cost',
+      type: 'number'
+    },
+    !isCompleted && {
+      name: "nextRecurringDate",
+      labelText: 'Next Recurring Date',
+      labelProps: { as: "h2", fontSize: '1em' },
+      openModalWithNewDate: true,
+      registerOptions: { value: recurrenceDate },
     }
   ]
 
@@ -107,7 +155,7 @@ const EntryDetails = () => {
   return isCompletedHandled && (
     <Page>
       <PageContainer flexColumn>
-        <FormTemplate
+        <SuperForm
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 
@@ -117,7 +165,7 @@ const EntryDetails = () => {
           AfterTemplate={<CompleteTaskButton />}
         />
         {shouldShowCompletion && <FormSeparator />}
-        <FormTemplate 
+        <SuperForm
           popup
           popupCondition={shouldShowCompletion}
           titleText={isCompleted ? "Completion" : "Complete Task"}

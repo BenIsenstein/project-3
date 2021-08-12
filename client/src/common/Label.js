@@ -14,6 +14,10 @@ const Label = styled.label`
     ${props => props.margin && css`
         margin: ${props.margin};
     `}
+
+    ${props => props.fontSize && css`
+        font-size: ${props.fontSize};
+    `}
 `
 
 export {Label}

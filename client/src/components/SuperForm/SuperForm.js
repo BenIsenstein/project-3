@@ -85,16 +85,19 @@ const inputs = [
   * displayOnly | bool | default: false | if true the PencilIcon disappears, meaning you can effectively have a read-only FlexSection 
 */
 
-const SuperForm= ({ 
+const SuperForm = ({ 
   formMode, 
+  detailsUrl,
   onSubmit, 
   inputs, 
   ...props }) => {
   // - - - - - Handle the most crucial props - - - - -  
+  useEffect(() => () => console.log('SuperFormTemplate unmounted!'), [])
+
   if (!formMode) formMode = 'add'
   if (!onSubmit) onSubmit = () => alert('No onSubmit given to <FormTemplate />')
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
-  const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
+  const { register, errors , handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
   const [viewMode, setViewMode] = useState('details')
@@ -137,17 +140,21 @@ const SuperForm= ({
         
         // fetch details
         if (isMounted) {
-          detailsRes = await fetch(props.detailsUrl)
+          detailsRes = await fetch(detailsUrl)
           details = await detailsRes.json()
         }
 
         // ensure that the value of date-type inputs are made into Date objects
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
+
+        // recursive function to check if the data value is an object, and not an array. for use eventually
+        // const isObjAndNotArray = (item) => (item instanceof Object) && !(item instanceof Array)
         
         // for each input, setValue + add the value to valuesForReset
         for (let { name, ...input } of inputs) {
           // if the object contains a single input element:
           if (!['GroupOfInputs', 'GroupOfCheckboxes'].includes(input.as?.name)) {
+            console.log(`setting ${name} to ${details[name]}`)
             setValue(name, details[name])
             valuesForReset[name] = details[name]
           } 
@@ -172,19 +179,17 @@ const SuperForm= ({
                 .map(key => {return { name: key, isCustomItem: true }})//
             ])
 
-              try {
-                let response = await fetch(`/api/home/getcustomtasksbyhome/${input.homeId}`)
-                let allCustomTasksArray = await response.json()
-                console.log("allCustomTasksArray is",allCustomTasksArray)
-                input.setAllCustomTasks(allCustomTasksArray)
-
-              }
-              catch (err) {
-                console.log("There was an error loading your custom tasks array", err)
-              }
+            // bring in tasks for the home that are delivered by a route
+            // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
+            try {
+              let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${input.homeId}`)
+              let customTasksArray = await customTasksRes.json()
+              input.setAllCustomTasks(customTasksArray)
+            }
+            catch (err) {
+              console.log("There was an error loading your custom tasks array", err)
+            }
             
-            
-        
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
@@ -211,7 +216,7 @@ const SuperForm= ({
     return () => isMounted = false
   }, [
     isDetailsMode, 
-    props.detailsUrl,  
+    detailsUrl,  
     isDateInput,
     setAreDetailsLoaded, 
     setValue, 
@@ -281,5 +286,38 @@ const SuperForm= ({
     {props.AfterTemplate} 
   </FlexSection>
 }
+
+// const useSuperForm = () => {
+//   const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
+
+//   const SuperForm = props => {
+
+//     useEffect(() => () => console.log("SuperForm inside SuperFormTemplate unmounted!"), [])
+
+//     return <SuperFormTemplate 
+//       {...{
+//         register,
+//         errors,
+//         handleSubmit,
+//         setValue,
+//         reset,
+//         watch,
+//         getValues
+//       }} 
+//       {...props}
+//     />
+//   }
+
+//   return {
+//     SuperForm,
+//     register,
+//     errors,
+//     handleSubmit,
+//     setValue,
+//     reset,
+//     watch,
+//     getValues
+//   }
+// }
 
 export default SuperForm

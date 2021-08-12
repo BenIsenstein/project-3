@@ -43,7 +43,11 @@ const GroupOfInputs = ({
 
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
-    {inputs && inputs.map(({ name, readOnly, ...rest }, index) => {
+    {inputs && inputs.map((input, index) => {
+      if (!input) return null
+
+      const { name, readOnly } = input
+
       // every input other than date-types
       if (!isDateInput(name)) return ( 
         <ComplexInput 
@@ -52,7 +56,7 @@ const GroupOfInputs = ({
           readOnly={isDetailsMode ? (isDetailsView || readOnly) : readOnly}
           {...formTools}
           {...modeAndView}
-          {...rest} 
+          {...input} 
         />
       )
         
@@ -64,25 +68,25 @@ const GroupOfInputs = ({
           readOnly 
           {...formTools} 
           {...modeAndView}
-          {...rest}
+          {...input}
         />  
         : (
           <FlexSection 
             key={index} 
-            gridColumn={rest.wrapperProps?.gridColumn || "1/5"} 
-            {...rest.wrapperProps} 
+            gridColumn={input.wrapperProps?.gridColumn || "1/5"} 
+            {...input.wrapperProps} 
             fullWidth
           >
             <ComplexInput
               name={name}        
               {...formTools}
               {...modeAndView}
-              {...rest}
+              {...input}
             />
             <DatetimePickerModal 
               setValue={setValue} 
-              openModalWithNewDate={rest.openModalWithNewDate}
-              modalTitle={rest.modalTitle || "set " + name}
+              openModalWithNewDate={input.openModalWithNewDate}
+              modalTitle={input.modalTitle || "set " + name}
               nameForUpdate={name} 
               margin="0 0 0 5px"
               iconButton 
@@ -109,8 +113,8 @@ const useGroupOfCheckboxes = () => {
     const getAllInfo = async () => {
      // console.log('calling getAllInfo')
       try {
-        let response = await fetch("/api/info")
-        let allTasksArray = await response.json()
+        let allTasksRes = await fetch("/api/info")
+        let allTasksArray = await allTasksRes.json()
         setAllDefaultTasks(allTasksArray)
       }
       catch (err) {

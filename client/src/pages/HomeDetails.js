@@ -14,6 +14,7 @@ const HomeDetails = ({activatedHomesLength}) => {
   const updateHome = useUpdateHome()
   const [home, setHome] = useState()
   const { customItems, setCustomItems, GroupOfCheckboxes, setAllCustomTasks } = useGroupOfCheckboxes()
+  //const { SuperForm } = useSuperForm()
 
   const inputs = [
     // {

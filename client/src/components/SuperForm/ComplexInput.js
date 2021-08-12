@@ -24,6 +24,8 @@ const ComplexInput = ({
   forwardErrors, 
   type, 
   wrapperProps,
+  noRegister,
+  labelProps,
   ...props 
   }) => {
   const isCheckbox = type === 'checkbox'
@@ -47,15 +49,15 @@ const ComplexInput = ({
       {props.isAddMode || props.areDetailsLoaded || isCustomComponent
         ? <>
         {!props.labelHidden && (props.isAddMode || props.areDetailsLoaded) &&                                         // label can be hidden with labelHidden. 
-          <Label htmlFor={name} {...isCheckbox && {margin: '0'}}>
+          <Label htmlFor={name || props.labelText} {...isCheckbox && {margin: '0'}} {...labelProps}>
             {props.labelText || name}
           </Label>
         }
     
         <Textarea 
-          id={name}
-          name={name}
-          {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
+          id={name || props.labelText}
+          name={name || props.labelText}
+          {...!isCustomComponent && register && name && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}
