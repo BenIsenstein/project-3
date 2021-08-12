@@ -63,7 +63,7 @@ const UserProvider = ({ children }) => {
 
     let response = await fetch('/api/auth/login', loginOptions)
 
-    if (response.status === 401) return alert('Unable to log in. Please make sure your login info is correct.')
+    if (response.status === 401) return alert('Unable to log in. Please make sure your email has been confirmed and your login info is correct.')
     
     let loggedInUser = await response.json()
 

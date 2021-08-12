@@ -23,6 +23,9 @@ import HomeDetails from './pages/HomeDetails'
 import InfoPage from './pages/InfoPage'
 import Reports from './pages/Reports'
 import CostAnalysis from './pages/CostAnalysis'
+import Welcome from './pages/Welcome'
+import Confirm from './pages/Confirm'
+
 
 const App = () => {
   const userContext = useContext(UserContext)
@@ -47,6 +50,9 @@ const App = () => {
           <Route path='/info' component={InfoPage} />
           <Route exact path='/reports' component={Reports} />
           <Route path='/reports/cost-analysis' component={CostAnalysis} />
+          <Route path='/welcome' component={Welcome} />
+          <Route path='/confirm' component={Confirm} />
+
         </Switch>
       {userContext.isLoggedIn && <Footer />}
     </ThemeProvider>
