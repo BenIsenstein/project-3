@@ -14,7 +14,7 @@ const Settings = () => {
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
   const history = useHistory()
-
+  //const { SuperForm } = useSuperForm()
   const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
   const [undergoingNotificationChange, setUndergoingNotificationChange] = useState(false)
   const [checkedAll, setCheckedAll] = useState(false)

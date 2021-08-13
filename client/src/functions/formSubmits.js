@@ -189,7 +189,6 @@ const useUpdateAccount = () => {
     const userContext = useContext(UserContext)
    
     const updateAccount = async (data) => {
-
         try {
             let isEmailChanged = data.email !== userContext.user.email  
             let authAction = `/api/auth/update/${userContext.user._id}`

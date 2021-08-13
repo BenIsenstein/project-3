@@ -12,6 +12,7 @@ const AddHomePage = () => {
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
   const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
+  //const { SuperForm } = useSuperForm()
   
   const inputs = [
     // {

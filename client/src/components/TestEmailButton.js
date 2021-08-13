@@ -28,6 +28,7 @@ const TestEmailButton = () => {
       let res = await fetch(action, options)
       let resObject = await res.json()
       console.log("Response from server = ", resObject)
+      alert("Email reminder requested!")
       if (!resObject.success) alert("Your call to the sendEmail API failed for some reason. Please try again.")
     }
     catch (err) {
