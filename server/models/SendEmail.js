@@ -222,7 +222,7 @@ const sendUserEmail = async (data) => {
             }
           }
           // Trigger API for to send email via SendInBlue
-          console.log("Email Change email being sent to:", targetRecipient)
+          console.log("Email Change message being sent to:", targetRecipient)
           let sibRes = await apiInstance.sendTransacEmail(JSON.stringify(sendSmtpEmail))  // Send email via SiB API
           console.log("Response from SendInBlue = ", sibRes)
         }

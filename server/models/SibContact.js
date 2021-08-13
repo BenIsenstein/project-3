@@ -33,10 +33,11 @@ const deleteContact = async (data) => {
 
   // Define structure and parameters for call to SiB API
   let identifier = data.email
-
+  
   // Trigger API for to send email via SendInBlue
-  console.log("Contact to be added in SiB = ", createContactInfo)
-  let sibRes = await apiInstance.deleteContact(JSON.stringify(identifier))  // Send email via SiB API
+  console.log("Contact to be deleted in SiB = ", identifier)
+  // let sibRes = await apiInstance.deleteContact(JSON.stringify(identifier))  // Send email via SiB API
+  let sibRes = await apiInstance.deleteContact(identifier)  // Send email via SiB API
   console.log("Response from SendInBlue = ", sibRes)
   
   // apiInstance.deleteContact(identifier).then(function() {
