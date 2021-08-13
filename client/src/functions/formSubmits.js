@@ -2,6 +2,24 @@ import { useState, useContext, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
 
+async function fetchAddEntry(data) {
+  try {
+    let action = "/api/calendarEntry/add"
+    let options = {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(data)
+    }
+    let res = await fetch(action, options)
+    let resObject = await res.json()
+
+    if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
+  }
+  catch (err) {
+    console.log('error adding calendar entry: ', err)
+    alert("There was an error adding your entry. We're fixing it as fast as we can.")
+  }
+}
 
 //updateEntry
 const useUpdateEntry = () => {
@@ -10,7 +28,11 @@ const useUpdateEntry = () => {
 
   const updateEntry = async (data) => {
     try {
-      if (data.dateCompleted) data.completed = true
+      if (data.dateCompleted) {
+        await fetchAddEntry(data.newCalendarEntry)
+
+        data.completed = true
+      }
 
       let options = {
         method: "put",
@@ -31,25 +53,6 @@ const useUpdateEntry = () => {
 
   return updateEntry
 
-}
-
-const fetchAddEntry = async (data) => {
-  try {
-    let action = "/api/calendarEntry/add"
-    let options = {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data)
-    }
-    let res = await fetch(action, options)
-    let resObject = await res.json()
-
-    if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
-  }
-  catch (err) {
-    console.log('error adding calendar entry: ', err)
-    alert("There was an error adding your entry. We're fixing it as fast as we can.")
-  }
 }
 
 // addEntry

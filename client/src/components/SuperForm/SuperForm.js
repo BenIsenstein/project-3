@@ -5,7 +5,6 @@ import UserContext from '../../UserContext'
 import { PencilIcon, Form, FormSectionTitle, Button, FlexSection } from '../../common'
 import { useIsDateInput } from '../../functions'
 import GroupOfInputs from './GroupOfInputs'
-import Skeleton from 'react-loading-skeleton'
 
 /* 
 NOTES
@@ -256,7 +255,7 @@ const SuperForm = ({
 
     <FlexSection fullWidth spaceBetween>
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
-      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => setViewMode(isEditView ? 'details' : 'edit')} />}                    
+      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => isEditView ? resetForm() : setViewMode('edit')} />}                    
     </FlexSection>
 
     {/* <Button onClick={() => setValue("homeItems.Custom item 1", false)}>Set custom item 1!</Button> */}
@@ -276,7 +275,7 @@ const SuperForm = ({
           <Button fullWidth important type='submit' value='submit'>
             {props.submitText || "Save"}
           </Button>
-          <Button fullWidth type='button' onClick={isEditView ? resetForm : props.addModeCancel || goHome}>
+          <Button fullWidth type='button' onClick={isEditView ? resetForm : (props.addModeCancel || goHome)}>
             {props.cancelText || "Cancel"}
           </Button>                              
         </FlexSection>
