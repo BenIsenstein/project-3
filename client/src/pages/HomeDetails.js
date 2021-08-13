@@ -23,8 +23,10 @@ const HomeDetails = ({activatedHomesLength}) => {
     //   hidden: true,
     // },
     {
-      name: "nickname"
-    },    
+      name: "nickname",
+      
+    },
+        
     {
       name: "address",
       registerOptions: { required: "You must input an address." },

@@ -97,7 +97,7 @@ const Calendar = () => {
     const returnAll = entry => {
       if (homes?.length > 0) {
         // return true && homes.some(object => object.id == entry.homeId)
-        return true && homes.some(object => (object.id === entry.homeId) && (object.status))
+        return true && homes.some(object => (object.id == entry.homeId) && (object.status))
       } else {
         return true
       } 

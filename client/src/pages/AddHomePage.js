@@ -5,6 +5,7 @@ import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../compone
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 import { defaultHomeItems } from '../variables'
+import {TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon} from '../common'
 
 const AddHomePage = () => {
   useHandleUserStatus()
@@ -20,8 +21,28 @@ const AddHomePage = () => {
     //   hidden: true,
     // },
     {
-      name: "nickname"
-    },    
+      name: "nickname",
+      wrapperProps: {gridColumn: '1/2'},
+    }, 
+    {
+      name:"homeIcon",
+      labelText: "home Icon",
+      wrapperProps: {gridColumn: '3/4'},
+      //registerOptions: { required: "You must select a picture." },
+      isCustomComponent: true, 
+      as: SuperFormSelect,
+      options: [
+        {value: 1},
+        {value: 2},
+        {value: 3}, 
+        {value: 4},
+      //  {value: TreehouseIcon},
+      //  {value: BuildingHouseIcon},
+      //  {value: HouseSidingIcon},
+      //  {value: LighthouseIcon}, 
+      //  {value: HouseUserIcon},
+       ]
+    },   
     {
       name: "address",
       registerOptions: { required: "You must input an address." },

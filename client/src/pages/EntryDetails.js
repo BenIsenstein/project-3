@@ -7,6 +7,7 @@ import { useHandleUserStatus, useUpdateEntry } from '../functions'
 import DisplayHomeFromId from '../components/SuperForm/DisplayHomeFromId'
 import { HomeItemsSelect } from '../components/SuperForm/DynamicSelects'
 
+
 const EntryDetails = () => {
   useHandleUserStatus()
   const { id } = useParams()
@@ -43,6 +44,7 @@ const EntryDetails = () => {
       isCustomComponent: true,
       as: DisplayHomeFromId
     },
+ 
     {
       name: "item",
       isCustomComponent: true,
@@ -56,11 +58,8 @@ const EntryDetails = () => {
     },
     {
       name: "notes",
+
     },    
-    {
-      name: 'serviceProviderInfo',
-      labelText: 'Service Provider'
-    },
     {
       name: "start",
       labelText: "starts",
@@ -79,6 +78,10 @@ const EntryDetails = () => {
       openModalWithNewDate: true,
       registerOptions: !isCompleted && { value: new Date() },
       labelText: "date completed"
+    },
+    {
+      name: 'serviceProviderInfo',
+      labelText: 'Service Provider'
     },
     {
       name: "completionComments",
