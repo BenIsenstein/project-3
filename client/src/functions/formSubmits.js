@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext, useEffect, useCallback } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
 import { deleteSiBContact } from './manageSiBContacts'
@@ -96,7 +96,7 @@ const useAddHome = () => {
     // return () => console.log("getAllInfo effect - unmounting!")
   }, [])
 
-  const addHome = async (data) => {
+  const addHome = useCallback(async (data) => {
     data.activated = true
     let addHomeObject
 
@@ -113,7 +113,7 @@ const useAddHome = () => {
 
       if (!addHomeObject.success) return alert("Your home wasn't added for some reason. Please try again.")
 
-      userContext.setUserInfo(userInfo => data && { ...userInfo, homes: [...userInfo.homes, data] })
+      userContext.setUser(user => data && { ...user, homes: [...user.homes, data] })
     }
     catch (err) {
       console.log('error adding calendar entry: ', err)
@@ -122,8 +122,12 @@ const useAddHome = () => {
 
     // add default entries based on industry standards from info table
     let selectedItems = Object.keys(data.homeItems).filter(key => data.homeItems[key])
-    let relevantTasks = taskInfo.filter(task => selectedItems.includes(task.item))
-    relevantTasks = [...relevantTasks, ...data.customTasks]
+    
+    let relevantTasks = [
+      ...taskInfo.filter(task => selectedItems.includes(task.item)), 
+      ...data.customTasks
+    ]
+    
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
       let currentDate = new Date()
@@ -148,18 +152,11 @@ const useAddHome = () => {
     for (let newEntry of newCalendarEntries) await fetchAddEntry(newEntry)
 
     history.push(`/account`)
-  }
+
+  }, [history, taskInfo, userContext])
 
   return addHome
 }
-
-//   // create a schedule of new events based on industry/custom frequency
-
-// //   for (every default item.frequency) {
-// //     let tempDate = new Date (new Date().getTime() + (i *24 * 60 * 60 *1000))
-// // }
-// setDates( start, end, [ options ] )
-
 
 // update Home
 const useUpdateHome = () => {

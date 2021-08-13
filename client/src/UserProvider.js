@@ -109,7 +109,8 @@ const UserProvider = ({ children }) => {
     isLoading,
     logIn,
     logOut,
-    setUserInfo
+    setUserInfo,
+    setUser
   }
 
   return (
