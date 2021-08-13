@@ -85,8 +85,6 @@ const EntryDetails = () => {
       name: "notes",
 
     },    
-<<<<<<< HEAD
-=======
     { 
       labelText: "Service Provider",
       labelProps: { as: "h2", fontSize: '1em' },
@@ -106,7 +104,6 @@ const EntryDetails = () => {
         }
       ]
     },
->>>>>>> 4f9eeca57cee9ce8bebaaa29ebddf125055f4437
     {
       name: "start",
       labelText: "starts",
