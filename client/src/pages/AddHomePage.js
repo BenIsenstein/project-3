@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { Page, PageContainer } from '../common'
+import { Page, PageContainer, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
 import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 import { defaultHomeItems } from '../variables'
-import {TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon} from '../common'
+
 
 const AddHomePage = () => {
   useHandleUserStatus()
@@ -33,15 +33,11 @@ const AddHomePage = () => {
       isCustomComponent: true, 
       as: SuperFormSelect,
       options: [
-        {value: 1},
-        {value: 2},
-        {value: 3}, 
-        {value: 4},
-      //  {value: TreehouseIcon},
-      //  {value: BuildingHouseIcon},
-      //  {value: HouseSidingIcon},
-      //  {value: LighthouseIcon}, 
-      //  {value: HouseUserIcon},
+        {value: 1, optionText:"Hello"},
+        {value: 2, optionText:<BuildingHouseIcon/>},
+        {value: 3, optionText:<HouseSidingIcon/>}, 
+        {value: 4, optionText:<HouseUserIcon/>},
+        {value: 5, optionText:<LighthouseIcon/>},
        ]
     },   
     {
@@ -137,7 +133,7 @@ const AddHomePage = () => {
       inputs: defaultHomeItems.map(inputName => {return { name: inputName }})
     }
   ]
-
+  console.log("icons array",inputs.find(input => input.name==="homeIcon").options[2].optionText)
   return (
     <Page>
       <PageContainer flexColumn>

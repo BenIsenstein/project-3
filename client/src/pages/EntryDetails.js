@@ -34,7 +34,7 @@ const EntryDetails = () => {
       task,
       completed: false,
       start: nextRecurringDate,
-      end: nextRecurringDate
+      end: nextRecurringDate.setHours(13,0,0)
     }
 
     await updateEntry(data)
@@ -42,7 +42,7 @@ const EntryDetails = () => {
   }, [homeId, selectedTask, updateEntry])
 
   const recurrenceDate = useMemo(() => {
-    let tempDate = new Date()
+    let tempDate = new Date(new Date().setHours(12,0,0))
 
     if (selectedTask?.frequency) tempDate.setDate(tempDate.getDate() + selectedTask?.frequency)
 
