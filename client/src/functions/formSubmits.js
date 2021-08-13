@@ -128,6 +128,7 @@ const useAddHome = () => {
 
       let currentDate = new Date()
       let defaultDate = new Date(currentDate)
+      //let defaultDate = new Date(new Date().setHours(12,0,0))).setNumberFormat('MM/dd/yyyy')
       defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
 
 
@@ -135,6 +136,7 @@ const useAddHome = () => {
         completed: false,
         userId: data.userId,
         homeId: addHomeObject.homeId,
+        homeIcon: addHomeObject.homeIcon,
         item: taskObject.item,
         task: taskObject.task,
         notes: "We'll get the right info here eventually!",

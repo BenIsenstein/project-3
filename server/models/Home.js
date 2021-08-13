@@ -8,6 +8,7 @@ const homeSchema = new mongoose.Schema({
   city: String,
   country: String,
   homeItems: Object,
+  homeIcon: Number,
   nickname: String,
   possessionDateByOwner: Date,
   postalCode: String,
