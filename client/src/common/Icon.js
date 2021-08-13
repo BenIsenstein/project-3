@@ -22,6 +22,12 @@ import {HomeAdd} from '@styled-icons/fluentui-system-regular/HomeAdd'
 import {RemoveCircle} from '@styled-icons/material-rounded/RemoveCircle'
 import {Share} from '@styled-icons/entypo/Share'
 import {DocumentToolbox} from '@styled-icons/fluentui-system-filled/DocumentToolbox'
+import {Lighthouse} from '@styled-icons/simple-icons/Lighthouse'
+import {HouseSiding} from '@styled-icons/material-rounded/HouseSiding'
+import {Treehouse} from '@styled-icons/simple-icons/Treehouse'
+import {BuildingHouse} from '@styled-icons/boxicons-solid/BuildingHouse'
+import {HouseUser} from '@styled-icons/fa-solid/HouseUser'
+
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -192,4 +198,32 @@ const CloseIcon = styled(Close)`
     cursor: pointer;
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, ResourceIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon}
+const LighthouseIcon = styled(Lighthouse)`
+    height: 2em;
+    fill: white;
+    cursor: pointer;
+` 
+const HouseSidingIcon = styled(HouseSiding)`
+    height: 2em;
+    fill: white;
+    cursor: pointer;
+`
+
+const TreehouseIcon = styled(Treehouse)`
+    height: 2em;
+    fill: white;
+    cursor: pointer;
+`
+
+const BuildingHouseIcon = styled(BuildingHouse)`
+    height: 2em;
+    fill: white;
+    cursor: pointer;
+`
+const HouseUserIcon = styled(HouseUser)`
+    height: 2em;
+    fill: white;
+    cursor: pointer;  
+`
+
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, ResourceIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon }

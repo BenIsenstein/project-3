@@ -8,6 +8,7 @@ import DisplayHomeFromId from '../components/SuperForm/DisplayHomeFromId'
 import { useItemTasksSelect } from '../components/SuperForm/DynamicSelects'
 import GroupOfInputs from '../components/SuperForm/GroupOfInputs'
 
+
 const EntryDetails = () => {
   useHandleUserStatus()
   const { id } = useParams()
@@ -74,6 +75,7 @@ const EntryDetails = () => {
       isCustomComponent: true,
       as: DisplayHomeFromId
     },
+ 
     {
       name: "item",
       readOnly: true,
@@ -86,26 +88,27 @@ const EntryDetails = () => {
     },
     {
       name: "notes",
+
     },    
-    { 
-      labelText: "Service Provider",
-      labelProps: { as: "h2", fontSize: '1em' },
-      isCustomComponent: true,
-      forwardErrors: true,
-      as: GroupOfInputs,
-      inputs: [
-        {
-          name: "serviceProviderInfo.name",
-          labelText: "Name",
-          wrapperProps: {gridColumn: '1/2'}
-        },
-        {
-          name: "serviceProviderInfo.phoneNumber",
-          labelText: "Phone Number",
-          wrapperProps: {gridColumn: '3/4'}
-        }
-      ]
-    },
+    // { 
+    //   labelText: "Service Provider",
+    //   labelProps: { as: "h2", fontSize: '1em' },
+    //   isCustomComponent: true,
+    //   forwardErrors: true,
+    //   as: GroupOfInputs,
+    //   inputs: [
+    //     {
+    //       name: "serviceProviderInfo.name",
+    //       labelText: "Name",
+    //       wrapperProps: {gridColumn: '1/2'}
+    //     },
+    //     {
+    //       name: "serviceProviderInfo.phoneNumber",
+    //       labelText: "Phone Number",
+    //       wrapperProps: {gridColumn: '3/4'}
+    //     }
+    //   ]
+    // },
     {
       name: "start",
       labelText: "starts",
@@ -124,6 +127,25 @@ const EntryDetails = () => {
       openModalWithNewDate: true,
       registerOptions: !isCompleted && { value: new Date() },
       labelText: "date completed"
+    },
+    { 
+      labelText: "Service Provider",
+      labelProps: { as: "h2", fontSize: '1em' },
+      isCustomComponent: true,
+      forwardErrors: true,
+      as: GroupOfInputs,
+      inputs: [
+        {
+          name: "serviceProviderInfo.name",
+          labelText: "Name",
+          wrapperProps: {gridColumn: '1/2'}
+        },
+        {
+          name: "serviceProviderInfo.phoneNumber",
+          labelText: "Phone Number",
+          wrapperProps: {gridColumn: '3/4'}
+        }
+      ]
     },
     {
       name: "completionComments",
