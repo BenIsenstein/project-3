@@ -238,6 +238,11 @@ const useUpdateAccount = () => {
         // make sure the data for context update includes _id and dateSignedUp
         // set all context to match the account changes and redirect 
         for (let key of ['dateSignedUp', '_id']) data[key] = userContext.user[key]
+        
+        // Preserve HOMES list prior to updating userContext
+        let tempUserData = {...userContext.user}
+        data.homes = tempUserData.homes
+
         userContext.setUserInfo(data)
 
         // Before redirecting user back to the Calendar page, consider
