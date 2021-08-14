@@ -17,15 +17,8 @@ const HomeDetails = ({activatedHomesLength}) => {
   //const { SuperForm } = useSuperForm()
 
   const inputs = [
-    // {
-    //   name: 'activated',
-    //   type: 'checkbox',
-    //   defaultChecked: true,
-    //   hidden: true,
-    // },
     {
-      name: "nickname",
-      
+      name: "nickname"
     },
         
     {

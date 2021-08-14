@@ -1,7 +1,6 @@
 import { SuperFormSelect } from './GroupOfInputs'
 import { useEffect, useState, useContext, useMemo } from 'react'
 import UserContext from '../../UserContext'
-import ComplexInput from './ComplexInput'
 
 // It needs register to plug into SuperForm.
 // register will take care of itself if you include 
