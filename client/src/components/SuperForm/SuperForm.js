@@ -152,13 +152,13 @@ const SuperForm = ({
         // for each input, setValue + add the value to valuesForReset
         for (let { name, ...input } of inputs) {
           // if the object contains a single input element:
-          if (!['GroupOfInputs', 'GroupOfCheckboxes'].includes(input.as?.name)) {
+          if (!['GroupOfInputs', 'GroupOfCheckboxes', 'StartAndEndDates'].includes(input.as?.name)) {
             console.log(`setting ${name} to ${details[name]}`)
             setValue(name, details[name])
             valuesForReset[name] = details[name]
           } 
-          // if the object is a <GroupOfInputs /> with an array of inputs:
-          else if (input.as?.name === 'GroupOfInputs') {
+          // if the object is a <GroupOfInputs /> or <StartAndEndDates /> with an array of inputs:
+          else if (['GroupOfInputs', 'StartAndEndDates'].includes(input.as?.name)) {
             input.inputs.forEach(({ name }) => {
               setValue(name, details[name])
               valuesForReset[name] = details[name]

@@ -37,9 +37,7 @@ const GroupOfInputs = ({
     getValues
   }
 
-  useEffect(() => {
-    return () => console.log('GroupOfInputs unmounted!')
-  }, [])
+  useEffect(() => () => console.log('GroupOfInputs unmounted!'), [])
 
   // - - - - - - - RETURN JSX - - - - - - - - //
   return <GridSection fullWidth {...props}>
@@ -73,23 +71,26 @@ const GroupOfInputs = ({
         : (
           <FlexSection 
             key={index} 
-            gridColumn={input.wrapperProps?.gridColumn || "1/5"} 
+            gridColumn={input.wrapperProps?.gridColumn || "1/-1"} 
             {...input.wrapperProps} 
             fullWidth
           >
             <ComplexInput
-              name={name}        
+              name={name} 
+                     
               {...formTools}
               {...modeAndView}
               {...input}
             />
-            <DatetimePickerModal 
-              setValue={setValue} 
+            <DatetimePickerModal  
               openModalWithNewDate={input.openModalWithNewDate}
-              modalTitle={input.modalTitle || "set " + name}
-              nameForUpdate={name} 
+              modalTitle={input.modalTitle || "set " + (input.labelText || name)}
+              name={name} 
               margin="0 0 0 5px"
               iconButton 
+              {...formTools}
+              {...modeAndView}
+              {...input}
             />
           </FlexSection>
         )

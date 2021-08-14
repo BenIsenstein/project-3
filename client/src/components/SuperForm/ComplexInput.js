@@ -20,7 +20,6 @@ const ComplexInput = ({
   errors, 
   register, 
   isCustomComponent, 
-  shouldRegisterParent,
   forwardErrors, 
   type, 
   wrapperProps,
@@ -30,10 +29,7 @@ const ComplexInput = ({
   }) => {
   const isCheckbox = type === 'checkbox'
 
-  useEffect(() => {
-
-  //  return () => console.log(`ComplexInput with name "${name}" unmounted!`)
-  }, [name])
+  // useEffect(() => () => console.log(`ComplexInput with name "${name}" unmounted!`), [name])
 
 
   return (

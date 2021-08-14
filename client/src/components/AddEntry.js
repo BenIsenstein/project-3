@@ -3,6 +3,7 @@ import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry } from '../functions'
 import UserHomesSelect, { HomeItemsSelect, useItemTasksSelect } from './SuperForm/DynamicSelects'
 import GroupOfInputs from './SuperForm/GroupOfInputs'
+import StartAndEndDates from './SuperForm/StartAndEndDates'
 
 const AddEntry = () => {  
   const history = useHistory()
@@ -51,14 +52,10 @@ const AddEntry = () => {
       ]
     },
     {
-      name: "start",
-      labelText: "starts",
-      registerOptions: { required: "You must choose a start date." }
-    },
-    {
-      name: "end",
-      labelText: "ends",
-      registerOptions: { required: "You must choose an end date." }
+      isCustomComponent: true,
+      forwardErrors: true,
+      readOnly: true,
+      as: StartAndEndDates
     }
   ]
 
@@ -66,7 +63,7 @@ const AddEntry = () => {
     titleText="New Task" 
     inputs={inputs} 
     addModeCancel={history.goBack} 
-    onSubmit={addEntry} 
+    onSubmit={data => console.log(data)} 
   />
 }
 

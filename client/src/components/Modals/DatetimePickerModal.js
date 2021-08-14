@@ -1,11 +1,15 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button, CalendarIcon, StyledDateTimePicker } from '../../common'
 import ConfirmModal from './ConfirmModal'
 import useConfirmModal from './useConfirmModal'
 
-const DatetimePickerModal = ({ isDateRange, ...props }) => {
+const DatetimePickerModal = ({ watch, name, ...props}) => { 
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
-  const [date, setdate] = useState(props.openModalWithNewDate && new Date())
+  const currentValue = watch(name)
+  const [date, setdate] = useState(currentValue || new Date())
+
+  //make sure the modal always opens with the current value of the input element, if it has a value.
+  useEffect(() => setdate(currentValue || new Date()), [currentValue])
 
   const ModalContent = () => <>
     <p>{props.modalTitle}</p>
@@ -23,7 +27,7 @@ const DatetimePickerModal = ({ isDateRange, ...props }) => {
       modalContent={<ModalContent />}
       confirmPrompt='Confirm'
       actionOnConfirm={() => 
-        props.setValue(props.nameForUpdate, date)
+        props.setValue(name, date)
       }
     />
     <Button type='button' onClick={toggleConfirmModal} {...props}>
