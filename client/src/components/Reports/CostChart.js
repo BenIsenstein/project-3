@@ -15,10 +15,15 @@ import CustomTooltip from "./CustomTooltip";
 
 
 const CostChart = () => {
-
+  
   const userContext = useContext(UserContext)
   const [costData, setCostData] = useState([])
   const [startDate, setStartDate] = useState(new Date(2019, 0, 11))
+  
+  // let startDate = new Date(2019, 0, 11)
+  // const endDate = new Date(2021, 9, 15)
+  const currDate = new Date() // get current date
+  const endDate = new Date(currDate.setMonth(currDate.getMonth()+1)) // 1 month from current date
 
   const dateFormatter = date => {
     return format(new Date(date), "dd/MMM");
@@ -75,9 +80,9 @@ const CostChart = () => {
   // const startDate = new Date(2019, 0, 1);
   // const endDate = new Date(2020, 0, 15);
   // const data = [
-  //   ...DataUtils.days(startDate, 10),
-  //   ...DataUtils.days(add(startDate, { months: 2 }), 5),
-  //   ...DataUtils.months(add(startDate, { months: 5 }), 1),
+    //   ...DataUtils.days(startDate, 10),
+    //   ...DataUtils.days(add(startDate, { months: 2 }), 5),
+    //   ...DataUtils.months(add(startDate, { months: 5 }), 1),
   //   ...DataUtils.months(add(startDate, { months: 8 }), 1)
   // ].map(it => ({
   //   date: it.date.getTime(),
@@ -102,17 +107,18 @@ const CostChart = () => {
           for (let index = 0; index < tempData.length; index++) {
             dataObject = tempData[index]
             tempObject = {
-              dateCompleted: new Date(dataObject.dateCompleted).getTime(),
-              cost: dataObject.cost
+              date: new Date(dataObject.dateCompleted).getTime(),
+              val: dataObject.cost
             }
             finalData.push(tempObject)
           }
-          finalData.sort((a, b) => (a.dateCompleted > b.dateCompleted) ? 1 : ((b.dateCompleted > a.dateCompleted) ? -1 : 0))
+          finalData.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
 
+          console.log("Cost Analysis, Final Data Array = ", finalData)
           setCostData(finalData)
 
           // startDate = new Date(finalData[0].dateCompleted);
-          setStartDate(new Date(finalData[0].dateCompleted))
+          setStartDate(new Date(finalData[0].date))
         }
         catch (err) {
           console.log(err)
@@ -126,28 +132,28 @@ const CostChart = () => {
     }
   }, [])
 
-  const endDate = new Date(2021, 8, 15);
   const data = costData
-  //   const data = [
-  //     { dateCompleted: startDate.getTime(), cost: 1000 },
-  //     { dateCompleted: new Date(2019, 4, 30).getTime(), cost: 3000 },
-  //     { dateCompleted: new Date(2019, 5, 30).getTime(), cost: 5000 },
-  //     { dateCompleted: new Date(2019, 6, 21).getTime(), cost: 6000 },
-  //     { dateCompleted: new Date(2019, 6, 28).getTime(), cost: 2000 }
-  //   ];
+    // const data = [
+    //   { date: startDate.getTime(), cost: 1000 },
+    //   { date: new Date(2019, 4, 30).getTime(), val: 3000 },
+    //   { date: new Date(2019, 5, 30).getTime(), val: 5000 },
+    //   { date: new Date(2019, 6, 21).getTime(), val: 6000 },
+    //   { date: new Date(2019, 6, 28).getTime(), val: 2000 }
+    // ];
 
   const domain = [dataMin => dataMin, () => endDate.getTime()];
-  const ticks = getTicks(startDate, endDate, 5);
+  const ticks = getTicks(startDate, endDate, 6);
   const filledData = fillTicksData(ticks, data);
 
   return (
     <div>
-      <p>AreaChart with custom tooltip</p>
+      <p>History of Costs (all homes)</p>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart
           width={900}
           height={250}
-          data={filledData}
+          // data={filledData}
+          data={data}  // take only the normal data list, don't fill in extra values
           margin={{
             top: 10,
             right: 0,
@@ -156,7 +162,8 @@ const CostChart = () => {
           }}
         >
           <XAxis
-            dataKey="dateCompleted"
+            dataKey="date"
+            // dataKey="dateCompleted"
             hasTick
             scale="time"
             tickFormatter={dateFormatter}
@@ -164,11 +171,12 @@ const CostChart = () => {
             domain={domain}
             ticks={ticks}
           />
-          <YAxis tickCount={7} hasTick />
+          <YAxis tickCount={6} hasTick />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
-            dataKey="cost"
+            dataKey="val"
+            // dataKey="cost"
             stroke="#ff7300"
             fill="#ff7300"
             fillOpacity={0.9}
