@@ -120,21 +120,21 @@ const useAddHome = () => {
       return alert("There was an error adding your entry. We're fixing it as fast as we can.")
     }
 
+
     // add default entries based on industry standards from info table
     let selectedItems = Object.keys(data.homeItems).filter(key => data.homeItems[key])
     
     let relevantTasks = [
       ...taskInfo.filter(task => selectedItems.includes(task.item)), 
-      ...data.customTasks
+      ...data.customTasks || []
     ]
     
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
-      let currentDate = new Date()
-      let defaultDate = new Date(currentDate)
+      
+      let defaultDate = new Date(new Date().setHours(12,0,0))
       //let defaultDate = new Date(new Date().setHours(12,0,0))).setNumberFormat('MM/dd/yyyy')
       defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
-
 
       return {
         completed: false,
@@ -145,7 +145,7 @@ const useAddHome = () => {
         task: taskObject.task,
         notes: "We'll get the right info here eventually!",
         start: defaultDate,
-        end: defaultDate
+        end: defaultDate.setHours(13,0,0)
       }
     })
 
@@ -238,6 +238,11 @@ const useUpdateAccount = () => {
         // make sure the data for context update includes _id and dateSignedUp
         // set all context to match the account changes and redirect 
         for (let key of ['dateSignedUp', '_id']) data[key] = userContext.user[key]
+        
+        // Preserve HOMES list prior to updating userContext
+        let tempUserData = {...userContext.user}
+        data.homes = tempUserData.homes
+
         userContext.setUserInfo(data)
 
         // Before redirecting user back to the Calendar page, consider
