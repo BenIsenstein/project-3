@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect, useMemo } from 'react'
-import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon, LighthouseIcon } from '../../common'
+import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon } from '../../common'
 import { useIsDateInput } from '../../functions'
 import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
@@ -103,7 +103,7 @@ const useGroupOfCheckboxes = () => {
 
   const [allDefaultTasks, setAllDefaultTasks] = useState([])
   const [allCustomTasks, setAllCustomTasks] = useState([])
-  const fullTaskList = useMemo(() => [...allDefaultTasks, ...allCustomTasks], [allDefaultTasks, allCustomTasks])
+ // const fullTaskList = useMemo(() => [...allDefaultTasks, ...allCustomTasks], [allDefaultTasks, allCustomTasks])
 
  // useEffect(() => console.log("allDefaultTasks: ", allDefaultTasks), [allDefaultTasks])
  // useEffect(() => console.log("allCustomTasks: ", allCustomTasks), [allCustomTasks])

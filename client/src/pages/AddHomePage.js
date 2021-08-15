@@ -32,13 +32,14 @@ const AddHomePage = () => {
       //registerOptions: { required: "You must select a picture." },
       isCustomComponent: true, 
       as: SuperFormSelect,
-      options: [
-        {value: 1, optionText:"Hello"},
-        {value: 2, optionText:<BuildingHouseIcon/>},
-        {value: 3, optionText:<HouseSidingIcon/>}, 
-        {value: 4, optionText:<HouseUserIcon/>},
-        {value: 5, optionText:<LighthouseIcon/>},
-       ]
+      
+      // options: [
+      //   {value: 1, optionText:<TreehouseIcon/>},
+      //   {value: 2, optionText:<BuildingHouseIcon/>},
+      //   {value: 3, optionText:<HouseSidingIcon/>}, 
+      //   {value: 4, optionText:<HouseUserIcon/>},
+      //   {value: 5, optionText:<LighthouseIcon/>},
+      //  ]
     },   
     {
       name: "address",
@@ -133,7 +134,7 @@ const AddHomePage = () => {
       inputs: defaultHomeItems.map(inputName => {return { name: inputName }})
     }
   ]
-  console.log("icons array",inputs.find(input => input.name==="homeIcon").options[2].optionText)
+
   return (
     <Page>
       <PageContainer flexColumn>
