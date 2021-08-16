@@ -18,8 +18,9 @@ const CostChart = () => {
   
   const userContext = useContext(UserContext)
   const [costData, setCostData] = useState([])
-  const [startDate, setStartDate] = useState(new Date(2019, 0, 11))
-  
+  // const [startDate, setStartDate] = useState(new Date(2019, 0, 11))
+  const [startDate, setStartDate] = useState(new Date())
+
   // let startDate = new Date(2019, 0, 11)
   // const endDate = new Date(2021, 9, 15)
   const currDate = new Date() // get current date
@@ -103,12 +104,15 @@ const CostChart = () => {
           let finalData = []
           let dataObject = {}
           let tempObject = {}
+          let totalCosts = 0
 
           for (let index = 0; index < tempData.length; index++) {
             dataObject = tempData[index]
+            totalCosts = totalCosts + dataObject.cost
             tempObject = {
               date: new Date(dataObject.dateCompleted).getTime(),
-              val: dataObject.cost
+              // val: dataObject.cost
+              val: totalCosts
             }
             finalData.push(tempObject)
           }
@@ -147,7 +151,7 @@ const CostChart = () => {
 
   return (
     <div>
-      <p>History of Costs (all homes)</p>
+      <p>Accumulated Total Costs (all homes)</p>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart
           width={900}
