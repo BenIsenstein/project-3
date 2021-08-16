@@ -190,6 +190,8 @@ const CalendarView = ({ dates, ...props }) => {
       let datesOuterIndexer = 0
       let entriesInnerIndexer = 0
       let taskListIndexer = 0
+      let overrideStartDate = 0
+      let overrideEndDate = 0
 
       while (datesOuterIndexer < dates.length) { // Outer array
         entriesInnerIndexer = 0
@@ -197,10 +199,18 @@ const CalendarView = ({ dates, ...props }) => {
 
         while (entriesInnerIndexer < entries.length) {  // Inner array
           let currentEntry = entries[entriesInnerIndexer]
+
+          // Override the Start and End date-times if the event has been COMPLETED
+          overrideStartDate = currentEntry.start
+          overrideEndDate = currentEntry.end
+          if (currentEntry.completed) {
+            overrideStartDate = currentEntry.dateCompleted
+            overrideEndDate = currentEntry.dateCompleted
+          }
          
           tempTaskList[taskListIndexer] = {
-            start: currentEntry.start,
-            end: currentEntry.end,
+            start: overrideStartDate,
+            end: overrideEndDate,
             house: currentEntry.house,
             title: currentEntry.item + ' - ' + currentEntry.task,
             completed: currentEntry.completed,
