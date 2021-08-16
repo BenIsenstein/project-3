@@ -23,7 +23,7 @@ const PageContainer = styled.div`
     `}
     
     ${props => props.mockMobileView && css`
-        min-height: 90vh;
+        min-height: 80vh;
     `}      
 
     @media (min-width: ${props => props.theme.smScreen}) {

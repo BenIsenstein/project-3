@@ -3,7 +3,7 @@ import { Page, PageContainer} from "../common"
 
 const InfoPage = () => {
 
-    return  <Page>
+    return  <Page noBackground>
       <PageContainer>
           <InfoTable /> 
       </PageContainer>

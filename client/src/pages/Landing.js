@@ -1,13 +1,29 @@
 import styled from 'styled-components'
 import { Page, PageContainer, GridSection, FlexSection, HouseIcon, Button } from "../common"
+import fireplace from '../assets/fireplace.jpg'
 import { useHistory } from 'react-router-dom'
 import { useHandleUserStatus } from "../functions"
-import InfoTable from "../components/DataTable/InfoTable"
+
+const LandingBlock = styled.div`
+  width: 100vw;
+  height: 40em;
+  margin-top: -5em;
+  background-image: url(${fireplace});
+  background-size: cover;
+  background-position: center center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
 
 const LandingTitle = styled.h1`
   width: 80%;
   margin: 3em 0;
   text-align: center;
+  font-size: 3em;
+  color: white;
 `
 
 const Landing = () => {
@@ -15,24 +31,15 @@ const Landing = () => {
     let history = useHistory()
   
     return <Page noBackground>
-      <PageContainer>
-          <GridSection gridTemplateColumns='1fr 4fr' gridGap='20px'>
+      <FlexSection column>
+        <LandingBlock>
+          <LandingTitle>Stay on top of your home maintenance schedule!</LandingTitle>          
+        </LandingBlock>
 
-            <FlexSection column alignCenter style={{marginTop: '6em'}}>            
-              <HouseIcon onClick={() => history.push(`/`)} />
-              {/* <Button constWidth onClick={() => history.push(`/info`)}>Industry Standards</Button> */}
-              <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
-              <Button constWidth onClick={() => history.push(`/signup`)}>CREATE AN ACCOUNT</Button>                 
-            </FlexSection>
-
-            <FlexSection column alignCenter>
-              <LandingTitle>Stay on top of your home maintenance schedule!</LandingTitle>
-              <h4 style={{textAlign: 'center', marginBottom: '1em'}}>Keep your home in excellent shape by following this schedule recommended by industry experts!</h4>
-              <InfoTable />
-            </FlexSection>
-            
-          </GridSection>
-      </PageContainer>
+        <h4 style={{textAlign: 'center', margin: '1em 0'}}>Keep your home in excellent shape by following this schedule recommended by industry experts!</h4>
+        <Button onClick={() => history.push('/info')} style={{marginBottom: '2em'}}>LIST OF MAINTENANCE</Button>
+      </FlexSection>
+   
     </Page>
 }
 

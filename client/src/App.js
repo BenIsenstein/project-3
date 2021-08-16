@@ -8,6 +8,7 @@ import UserContext from './UserContext'
 import './App.css';
 
 import Navbar from './components/Navbar/Navbar'
+import PublicNavbar from './components/Navbar/Navbar-Public'
 import Footer from './components/Navbar/Footer'
 import Landing from './pages/Landing'
 import LoginPage from './pages/LoginPage'
@@ -34,7 +35,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      {userContext.isLoggedIn && <Navbar />}
+      {userContext.isLoggedIn ? <Navbar /> : <PublicNavbar />}
         <Switch>
           <Route exact path='/' component={Landing} />
           <Route path='/login' component={LoginPage} />
@@ -54,7 +55,7 @@ const App = () => {
           <Route path='/confirm' component={Confirm} />
 
         </Switch>
-      {userContext.isLoggedIn && <Footer />}
+      <Footer />
     </ThemeProvider>
   )
 }
