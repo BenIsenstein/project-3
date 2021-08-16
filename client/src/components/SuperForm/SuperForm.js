@@ -146,27 +146,28 @@ const SuperForm = ({
         // ensure that the value of date-type inputs are made into Date objects
         for (let key in details) if (isDateInput(key)) details[key] = new Date(details[key])
 
-        // recursive function to check if the data value is an object, and not an array. for use eventually
-        // const isObjAndNotArray = (item) => (item instanceof Object) && !(item instanceof Array)
+        // function to find the value of an input field, no matter how nested the name is.
+        // breaks nested input names down by dot notation, but works for non-nested input values as well.
+        const findValInDetails = (name) => name?.split('.')?.reduce((curVal, curKey) => curVal[curKey], details)
         
         // for each input, setValue + add the value to valuesForReset
         for (let { name, ...input } of inputs) {
           // if the object contains a single input element:
           if (!['GroupOfInputs', 'GroupOfCheckboxes', 'StartAndEndDates'].includes(input.as?.name)) {
-            console.log(`setting ${name} to ${details[name]}`)
-            setValue(name, details[name])
-            valuesForReset[name] = details[name]
+            console.log(`setting ${name} to ${findValInDetails(name)}`)
+            setValue(name, findValInDetails(name))
+            valuesForReset[name] = findValInDetails(name)
           } 
           // if the object is a <GroupOfInputs /> or <StartAndEndDates /> with an array of inputs:
           else if (['GroupOfInputs', 'StartAndEndDates'].includes(input.as?.name)) {
             input.inputs.forEach(({ name }) => {
-              setValue(name, details[name])
-              valuesForReset[name] = details[name]
+              console.log(`setting ${name} to ${findValInDetails(name)}`)
+              setValue(name, findValInDetails(name))
+              valuesForReset[name] = findValInDetails(name)
             })
           }
           //if it's a <GroupOfCheckboxes />:
           else if (input.as?.name === 'GroupOfCheckboxes') {
-           // console.log('setting GroupOfCheckbox values again')
             let checkboxData = details[name]
 
             // make sure items that fall outside of the checkbox group's 
@@ -175,7 +176,7 @@ const SuperForm = ({
             input.setCustomItems(prevState => [
               ...Object.keys(checkboxData)
                 .filter(key => !input.defaultCheckboxNames.includes(key))
-                .map(key => {return { name: key, isCustomItem: true }})//
+                .map(key => {return { name: key, isCustomItem: true }})
             ])
 
             // bring in tasks for the home that are delivered by a route
@@ -192,7 +193,6 @@ const SuperForm = ({
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
-            //  console.log(`setting ${name}.${key}`)
               setValue(`${name}.${key}`, checkboxData[key])
               valuesForReset[`${name}.${key}`] = checkboxData[key]
             }

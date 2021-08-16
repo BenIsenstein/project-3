@@ -35,12 +35,17 @@ const EntryDetails = () => {
       task,
       completed: false,
       start: nextRecurringDate,
-      end: nextRecurringDate.setHours(13,0,0)
+      end: new Date(nextRecurringDate.setHours(13,0,0))
     }
 
     await updateEntry(data)
 
   }, [homeId, selectedTask, updateEntry])
+
+  const updateCompletion = async (data) => {
+    data.completed = true
+    await updateEntry(data)
+  }
 
   const recurrenceDate = useMemo(() => {
     let tempDate = new Date(new Date().setHours(12,0,0))
@@ -183,11 +188,11 @@ const EntryDetails = () => {
         <SuperForm
           popup
           popupCondition={shouldShowCompletion}
-          titleText={isCompleted ? "Completion" : "Complete Task"}
+          titleText={isCompleted ? "Completed" : "Complete Task"}
           inputs={completionInputs}
           formMode={isCompleted ? "details" : "add"} 
           detailsUrl={getEntryRoute}
-          onSubmit={completeEntry}
+          onSubmit={isCompleted ? updateCompletion : completeEntry}
           addModeCancel={() => setUndergoingCompletion(false)}
         />
         <FlexSection fadeIn fullWidth marginTop1em>

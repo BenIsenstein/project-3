@@ -30,7 +30,8 @@ const useUpdateEntry = () => {
 
   const updateEntry = async (data) => {
     try {
-      if (data.dateCompleted) {
+      // only add a recurring entry if it hasn't been completed before
+      if (data.dateCompleted && !data.completed) {
         await fetchAddEntry(data.newCalendarEntry)
 
         data.completed = true
