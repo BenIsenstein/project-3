@@ -101,28 +101,34 @@ const CostChart = () => {
           let entriesObject = await entriesRes.json()
 
           let tempData = entriesObject?.entryList.filter(data => data.completed === true)
-          let finalData = []
-          let dataObject = {}
-          let tempObject = {}
-          let totalCosts = 0
 
-          for (let index = 0; index < tempData.length; index++) {
-            dataObject = tempData[index]
-            totalCosts = totalCosts + dataObject.cost
-            tempObject = {
-              date: new Date(dataObject.dateCompleted).getTime(),
-              // val: dataObject.cost
-              val: totalCosts
+          if (tempData.length > 0) {
+            let finalData = []
+            let dataObject = {}
+            let tempObject = {}
+            let totalCosts = 0
+
+            for (let index = 0; index < tempData.length; index++) {
+              dataObject = tempData[index]
+              totalCosts = totalCosts + dataObject.cost
+              tempObject = {
+                date: new Date(dataObject.dateCompleted).getTime(),
+                // val: dataObject.cost
+                val: totalCosts
+              }
+              finalData.push(tempObject)
             }
-            finalData.push(tempObject)
+            finalData.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
+
+            console.log("Cost Analysis, Final Data Array = ", finalData)
+            setCostData(finalData)
+
+            // startDate = new Date(finalData[0].dateCompleted);
+            setStartDate(new Date(finalData[0].date))
           }
-          finalData.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
-
-          console.log("Cost Analysis, Final Data Array = ", finalData)
-          setCostData(finalData)
-
-          // startDate = new Date(finalData[0].dateCompleted);
-          setStartDate(new Date(finalData[0].date))
+          else {
+            console.log("Reporting: No completed events found.")
+          }
         }
         catch (err) {
           console.log(err)
