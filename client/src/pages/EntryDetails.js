@@ -139,19 +139,16 @@ const EntryDetails = () => {
       labelText: 'Total Cost',
       type: 'number'
     },
-    (!isCompleted && shouldShowCompletion) && {
+    (!isCompleted) && {
       name: "nextRecurringDate",
       labelText: 'Next Recurring Date',
       labelProps: { as: "h2", fontSize: '1em' },
-      openModalWithNewDate: true,
-      registerOptions: { value: recurrenceDate },
+      recurrenceDate,
+      selectedTask
     }
   ], 
-  [
-    isCompleted, 
-    recurrenceDate, 
-    shouldShowCompletion
-  ])
+  
+  [isCompleted, recurrenceDate, selectedTask])
 
   console.log("")
   console.log("")
