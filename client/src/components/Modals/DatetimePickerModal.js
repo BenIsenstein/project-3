@@ -3,18 +3,35 @@ import { Button, CalendarIcon, StyledDateTimePicker } from '../../common'
 import ConfirmModal from './ConfirmModal'
 import useConfirmModal from './useConfirmModal'
 
-const DatetimePickerModal = ({ watch, name, ...props}) => { 
+const DatetimePickerModal = ({ watch, setValue, selectedTask, recurrenceDate, name, ...props}) => { 
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
   const currentValue = watch(name)
-  const [date, setdate] = useState(currentValue || new Date())
+  const [date, setDate] = useState(currentValue || new Date())
+
+  // in the case of recurrenceDate prop, setValue to that prop's value.
+  // This is meant to take place in a CalendarEntry completion form.
+  useEffect(() => 
+    recurrenceDate && // this is meant to be a recurrenceDate input
+    !currentValue && // the input has a falsy value
+    selectedTask && // a task value has finally loaded in
+    setValue(name, recurrenceDate), 
+
+    [recurrenceDate, selectedTask]
+  )
 
   //make sure the modal always opens with the current value of the input element, if it has a value.
-  useEffect(() => setdate(currentValue || new Date()), [currentValue])
+  useEffect(() => {
+    console.log(`current value of ${name} is ${currentValue}`)
+    setDate(currentValue || new Date())
+
+    return () => console.log(`DatetimePickerModal with name "${name}" unmounted!`)
+
+  }, [currentValue])
 
   const ModalContent = () => <>
     <p>{props.modalTitle}</p>
     <StyledDateTimePicker
-      onChange={setdate}
+      onChange={setDate}
       value={date}
     />
   </>
@@ -26,9 +43,7 @@ const DatetimePickerModal = ({ watch, name, ...props}) => {
       modalContentProps={{column: true}}
       modalContent={<ModalContent />}
       confirmPrompt='Confirm'
-      actionOnConfirm={() => 
-        props.setValue(name, date)
-      }
+      actionOnConfirm={() => setValue(name, date)}
     />
     <Button type='button' onClick={toggleConfirmModal} {...props}>
       { props.iconButton ? <CalendarIcon /> : 'Delete Event' }       
