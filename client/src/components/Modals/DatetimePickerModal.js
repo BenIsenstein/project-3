@@ -3,21 +3,10 @@ import { Button, CalendarIcon, StyledDateTimePicker } from '../../common'
 import ConfirmModal from './ConfirmModal'
 import useConfirmModal from './useConfirmModal'
 
-const DatetimePickerModal = ({ watch, setValue, selectedTask, recurrenceDate, name, ...props}) => { 
+const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, name, ...props}) => { 
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
   const currentValue = watch(name)
   const [date, setDate] = useState(currentValue || new Date())
-
-  // in the case of recurrenceDate prop, setValue to that prop's value.
-  // This is meant to take place in a CalendarEntry completion form.
-  useEffect(() => 
-    recurrenceDate && // this is meant to be a recurrenceDate input
-    !currentValue && // the input has a falsy value
-    selectedTask && // a task value has finally loaded in
-    setValue(name, recurrenceDate), 
-
-    [recurrenceDate, selectedTask]
-  )
 
   //make sure the modal always opens with the current value of the input element, if it has a value.
   useEffect(() => {
@@ -27,6 +16,41 @@ const DatetimePickerModal = ({ watch, setValue, selectedTask, recurrenceDate, na
     return () => console.log(`DatetimePickerModal with name "${name}" unmounted!`)
 
   }, [currentValue])
+
+
+  // - - - - EntryDetails completion effects - - - - - - - - -
+  const dateCompletedValue = watch("dateCompleted")
+
+  // in the case of recurrenceFrequency prop, setValue to the appropriate future date.
+  // This is meant to take place in a CalendarEntry completion form.
+  useEffect(() => { 
+    // the input is meant to be a nextRecurringDate input, 
+    // the frequency value has loaded in,
+    // and the input has a falsy value
+    if (recurrenceFrequency && !currentValue) {
+      let recurrenceDate = new Date(new Date().setHours(12,0,0))
+      recurrenceDate.setDate(recurrenceDate.getDate() + recurrenceFrequency)
+
+      setValue(name, recurrenceDate)
+    }
+  }, [recurrenceFrequency])
+
+  // if the input is 'dateCompleted' and they are completing for the first time, 
+  // start them off with the current date and time.
+  useEffect(() => {
+    if (name === "dateCompleted" && !currentValue && isAddMode) setValue(name, new Date())
+
+  }, [name, currentValue, isAddMode, setValue])
+
+  // watching for user changes to 'dateCompleted' 
+  // and adjusting 'nextRecurringDate' accordingly
+  useEffect(() => {
+    if (!recurrenceFrequency) return
+
+    const recurrenceFrequencyInMs = recurrenceFrequency * 86400000
+
+    setValue("nextRecurringDate", new Date(dateCompletedValue?.getTime() + recurrenceFrequencyInMs))
+  },[dateCompletedValue])
 
   const ModalContent = () => <>
     <p>{props.modalTitle}</p>

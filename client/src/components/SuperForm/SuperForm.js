@@ -148,43 +148,43 @@ const SuperForm = ({
 
         // function to find the value of an input field, no matter how nested the name is.
         // breaks nested input names down by dot notation, but works for non-nested input values as well.
-        const findValInDetails = (name) => name?.split('.')?.reduce((curVal, curKey) => curVal[curKey], details)
+        const findValInDetails = (name) => name?.split('.')?.reduce((curVal, curKey) => curVal && curVal[curKey], details)
         
         // for each input, setValue + add the value to valuesForReset
         for (let { name, ...input } of inputs) {
           // if the object contains a single input element:
-          if (!['GroupOfInputs', 'GroupOfCheckboxes', 'StartAndEndDates'].includes(input.as?.name)) {
+          if (!['GroupOfInputs', 'GroupOfCheckboxes', 'StartAndEndDates'].includes(input?.as?.name)) {
             console.log(`setting ${name} to ${findValInDetails(name)}`)
             setValue(name, findValInDetails(name))
             valuesForReset[name] = findValInDetails(name)
           } 
           // if the object is a <GroupOfInputs /> or <StartAndEndDates /> with an array of inputs:
-          else if (['GroupOfInputs', 'StartAndEndDates'].includes(input.as?.name)) {
-            input.inputs.forEach(({ name }) => {
+          else if (['GroupOfInputs', 'StartAndEndDates'].includes(input?.as?.name)) {
+            input?.inputs?.forEach(({ name }) => {
               console.log(`setting ${name} to ${findValInDetails(name)}`)
               setValue(name, findValInDetails(name))
               valuesForReset[name] = findValInDetails(name)
             })
           }
           //if it's a <GroupOfCheckboxes />:
-          else if (input.as?.name === 'GroupOfCheckboxes') {
+          else if (input?.as?.name === 'GroupOfCheckboxes') {
             let checkboxData = details[name]
 
             // make sure items that fall outside of the checkbox group's 
             // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
             // the 'customItems' state array sitting in the component.
-            input.setCustomItems(prevState => [
+            input?.setCustomItems(prevState => [
               ...Object.keys(checkboxData)
-                .filter(key => !input.defaultCheckboxNames.includes(key))
+                .filter(key => !input?.defaultCheckboxNames?.includes(key))
                 .map(key => {return { name: key, isCustomItem: true }})
             ])
 
             // bring in tasks for the home that are delivered by a route
             // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
             try {
-              let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${input.homeId}`)
+              let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${input?.homeId}`)
               let customTasksArray = await customTasksRes.json()
-              input.setAllCustomTasks(customTasksArray)
+              input?.setAllCustomTasks(customTasksArray)
             }
             catch (err) {
               console.log("There was an error loading your custom tasks array", err)
@@ -207,7 +207,7 @@ const SuperForm = ({
       catch(err) {
         console.log(err)
         alert("There as an error loading your details. We're working on it as fast as we can.")
-        goHome()
+        //goHome()
       }   
     }
     getDetails()

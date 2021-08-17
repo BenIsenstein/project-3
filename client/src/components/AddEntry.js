@@ -55,7 +55,19 @@ const AddEntry = () => {
       isCustomComponent: true,
       forwardErrors: true,
       readOnly: true,
-      as: StartAndEndDates
+      as: StartAndEndDates,
+      inputs: [
+        {
+          name: "start",
+          labelText: "starts",
+          registerOptions: { required: "You must choose a start date." }
+        },
+        {
+          name: "end",
+          labelText: "ends",
+          registerOptions: { required: "You must choose an end date." }
+        }
+      ]
     }
   ]
 

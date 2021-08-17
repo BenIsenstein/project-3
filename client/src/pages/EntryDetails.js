@@ -47,15 +47,6 @@ const EntryDetails = () => {
     await updateEntry(data)
   }
 
-  const recurrenceDate = useMemo(() => {
-    let tempDate = new Date(new Date().setHours(12,0,0))
-
-    if (selectedTask?.frequency) tempDate.setDate(tempDate.getDate() + selectedTask?.frequency)
-
-    return tempDate
-
-  }, [selectedTask])
-
   useEffect(() => {
     const handleIsCompleted = async () => {
       try {
@@ -81,7 +72,6 @@ const EntryDetails = () => {
       isCustomComponent: true,
       as: DisplayHomeFromId
     },
- 
     {
       name: "item",
       readOnly: true,
@@ -100,61 +90,75 @@ const EntryDetails = () => {
       forwardErrors: true,
       readOnly: true,
       as: StartAndEndDates,
-      inputs: [{ name: 'start' }, { name: 'end' }]
+      inputs: [
+        {
+          name: "start",
+          labelText: "starts",
+          registerOptions: { required: "You must choose a start date." }
+        },
+        {
+          name: "end",
+          labelText: "ends",
+          registerOptions: { required: "You must choose an end date." }
+        }
+      ]
     }
   ]
 
-  const completionInputs = useMemo(() => [
-    {
-      name: "dateCompleted",
-      openModalWithNewDate: true,
-      registerOptions: !isCompleted && { value: new Date() },
-      labelText: "date completed"
-    },
-    { 
-      labelText: "Service Provider",
-      labelProps: { as: "h2", fontSize: '1em' },
-      isCustomComponent: true,
-      forwardErrors: true,
-      as: GroupOfInputs,
-      inputs: [
-        {
-          name: "serviceProviderInfo.name",
-          labelText: "Name",
-          wrapperProps: {gridColumn: '1/2'}
-        },
-        {
-          name: "serviceProviderInfo.phoneNumber",
-          labelText: "Phone Number",
-          wrapperProps: {gridColumn: '3/4'}
-        }
-      ]
-    },
-    {
-      name: "completionComments",
-      labelText: "comments"
-    }, 
-    {
-      name: 'cost',
-      labelText: 'Total Cost',
-      type: 'number'
-    },
-    (!isCompleted) && {
+  const completionInputs = useMemo(() => {
+    const completionInputs = [
+      {
+        name: "dateCompleted",
+        labelText: "date completed",
+        registerOptions: { required: "You must select a date completed." },
+        isCompleted: isCompleted
+      },
+      { 
+        labelText: "Service Provider",
+        labelProps: { as: "h2", fontSize: '1em' },
+        isCustomComponent: true,
+        forwardErrors: true,
+        as: GroupOfInputs,
+        inputs: [
+          {
+            name: "serviceProviderInfo.name",
+            labelText: "Name",
+            wrapperProps: {gridColumn: '1/2'}
+          },
+          {
+            name: "serviceProviderInfo.phoneNumber",
+            labelText: "Phone Number",
+            wrapperProps: {gridColumn: '3/4'}
+          }
+        ]
+      },
+      {
+        name: "completionComments",
+        labelText: "comments"
+      }, 
+      {
+        name: 'cost',
+        labelText: 'Total Cost',
+        type: 'number'
+      }
+    ]
+
+    if (!isCompleted) completionInputs.push({
       name: "nextRecurringDate",
       labelText: 'Next Recurring Date',
       labelProps: { as: "h2", fontSize: '1em' },
-      recurrenceDate,
-      selectedTask
-    }
-  ], 
-  
-  [isCompleted, recurrenceDate, selectedTask])
+      recurrenceFrequency: selectedTask?.frequency
+    })
+
+    console.log("completionInputs: ", completionInputs)
+    return completionInputs 
+  }, 
+
+  [isCompleted, selectedTask])
 
   console.log("")
   console.log("")
   console.log('selectedTask?.frequency: ', selectedTask?.frequency)
-  console.log("recurrenceDate: ", recurrenceDate)
-  console.log("completionInputs: ", completionInputs)
 
   const CompleteTaskButton = () => !shouldShowCompletion && (
       <Button 
