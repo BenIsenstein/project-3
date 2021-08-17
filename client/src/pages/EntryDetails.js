@@ -47,15 +47,6 @@ const EntryDetails = () => {
     await updateEntry(data)
   }
 
-  const recurrenceDate = useMemo(() => {
-    let tempDate = new Date(new Date().setHours(12,0,0))
-
-    if (selectedTask?.frequency) tempDate.setDate(tempDate.getDate() + selectedTask?.frequency)
-
-    return tempDate
-
-  }, [selectedTask])
-
   useEffect(() => {
     const handleIsCompleted = async () => {
       try {
@@ -81,7 +72,6 @@ const EntryDetails = () => {
       isCustomComponent: true,
       as: DisplayHomeFromId
     },
- 
     {
       name: "item",
       readOnly: true,
@@ -100,64 +90,75 @@ const EntryDetails = () => {
       forwardErrors: true,
       readOnly: true,
       as: StartAndEndDates,
-      inputs: [{ name: 'start' }, { name: 'end' }]
+      inputs: [
+        {
+          name: "start",
+          labelText: "starts",
+          registerOptions: { required: "You must choose a start date." }
+        },
+        {
+          name: "end",
+          labelText: "ends",
+          registerOptions: { required: "You must choose an end date." }
+        }
+      ]
     }
   ]
 
-  const completionInputs = useMemo(() => [
-    {
-      name: "dateCompleted",
-      openModalWithNewDate: true,
-      registerOptions: !isCompleted && { value: new Date() },
-      labelText: "date completed"
-    },
-    { 
-      labelText: "Service Provider",
-      labelProps: { as: "h2", fontSize: '1em' },
-      isCustomComponent: true,
-      forwardErrors: true,
-      as: GroupOfInputs,
-      inputs: [
-        {
-          name: "serviceProviderInfo.name",
-          labelText: "Name",
-          wrapperProps: {gridColumn: '1/2'}
-        },
-        {
-          name: "serviceProviderInfo.phoneNumber",
-          labelText: "Phone Number",
-          wrapperProps: {gridColumn: '3/4'}
-        }
-      ]
-    },
-    {
-      name: "completionComments",
-      labelText: "comments"
-    }, 
-    {
-      name: 'cost',
-      labelText: 'Total Cost',
-      type: 'number'
-    },
-    (!isCompleted && shouldShowCompletion) && {
+  const completionInputs = useMemo(() => {
+    const completionInputs = [
+      {
+        name: "dateCompleted",
+        labelText: "date completed",
+        registerOptions: { required: "You must select a date completed." },
+        isCompleted: isCompleted
+      },
+      { 
+        labelText: "Service Provider",
+        labelProps: { as: "h2", fontSize: '1em' },
+        isCustomComponent: true,
+        forwardErrors: true,
+        as: GroupOfInputs,
+        inputs: [
+          {
+            name: "serviceProviderInfo.name",
+            labelText: "Name",
+            wrapperProps: {gridColumn: '1/2'}
+          },
+          {
+            name: "serviceProviderInfo.phoneNumber",
+            labelText: "Phone Number",
+            wrapperProps: {gridColumn: '3/4'}
+          }
+        ]
+      },
+      {
+        name: "completionComments",
+        labelText: "comments"
+      }, 
+      {
+        name: 'cost',
+        labelText: 'Total Cost',
+        type: 'number'
+      }
+    ]
+
+    if (!isCompleted) completionInputs.push({
       name: "nextRecurringDate",
       labelText: 'Next Recurring Date',
       labelProps: { as: "h2", fontSize: '1em' },
-      openModalWithNewDate: true,
-      registerOptions: { value: recurrenceDate },
-    }
-  ], 
-  [
-    isCompleted, 
-    recurrenceDate, 
-    shouldShowCompletion
-  ])
+      recurrenceFrequency: selectedTask?.frequency
+    })
+
+    console.log("completionInputs: ", completionInputs)
+    return completionInputs 
+  }, 
+
+  [isCompleted, selectedTask])
 
   console.log("")
   console.log("")
   console.log('selectedTask?.frequency: ', selectedTask?.frequency)
-  console.log("recurrenceDate: ", recurrenceDate)
-  console.log("completionInputs: ", completionInputs)
 
   const CompleteTaskButton = () => !shouldShowCompletion && (
       <Button 
@@ -172,10 +173,79 @@ const EntryDetails = () => {
       </Button>      
   )
 
+  const FindLocalServicesButton = () => {
+        // example URL = https://www.google.com/maps/search/?api=1&query=service+provider+roof+inspect+Calgary+AB
+        let URL = "https://www.google.com/maps/search/?api=1&query=service+provider"
+
+        // Capture the city and country from the Home's address.
+        let city = 'Calgary'
+        let country = 'Canada'
+    
+        // Capture the Item and Task related to the event.
+        let urlSearchItem = 'roof'
+        let urlItemPased = 'roof'
+        let urlSearchTask = 'inspect the roof'
+        let urlTaskParsed = 'inspect+the+roof'
+    
+        // If HOME is populated...
+        URL = URL + '+' + city + '+' + country
+        // If ITEM is populated...
+        URL = URL + '+' + urlItemPased
+        // If TASK is populated...
+        URL = URL + '+' + urlTaskParsed
+
+    return (
+      <Button 
+        fadeIn
+        margin="1em 0 0 0"
+        type='button'
+        // justify-content= 'flex-end'
+        // text-align= 'left'
+        // align-items= 'left' 
+        onClick={() => window.open(URL)}
+      >
+        Find Local Services
+      </Button>     
+    )
+  }
+
+  // const findByGoogle = () => {
+  //   // example URL = https://www.google.com/maps/search/?api=1&query=service+provider+roof+inspect+Calgary+AB
+  //   let URL = "https://www.google.com/maps/search/?api=1&query=service+provider+"
+
+  //   // Capture the city and country from the Home's address.
+  //   let city = 'Calgary'
+  //   let country = 'Canada'
+
+  //   // Capture the Item and Task related to the event.
+  //   let urlSearchItem = 'roof'
+  //   let urlItemPased = 'roof'
+  //   let urlSearchTask = 'inspect the roof'
+  //   let urlTaskParsed = 'inspect+the+roof'
+
+  //   URL = URL + '+' + city + '+' + country + '+' + urlItemPased + '+' + urlTaskParsed
+  //   // window.open(URL, "_blank")
+  //   window.open(URL)
+  // }
+    
+    
   return isCompletedHandled && (
     <Page>
       <PageContainer flexColumn>
+        {/* <Button 
+          important 
+          // fullWidth 
+          fadeIn
+          // margin="1em 0 0 0"
+          // margin="1em"
+          type='button' 
+          onClick={findByGoogle()}
+        >
+          Find Local Services
+        </Button> */}
+
         <SuperForm
+          BeforeTemplate={<FindLocalServicesButton />}
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 

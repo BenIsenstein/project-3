@@ -7,7 +7,20 @@ const Reports = () => {
     return (
         <Page>
             <PageContainer>
-                <Button onClick={() => history.push('/reports/cost-analysis')}>COST ANALYSIS!!!!</Button>
+                <h1>DATA ANALYTICS</h1>
+                <br></br>
+                <br></br>
+                Available Reports: <br></br>
+                <br></br>
+                <Button onClick={() => history.push('/reports/cost-analysis')}>COSTS-TO-DATE</Button>
+                <br></br>
+                <br></br>
+                Under Construction:
+                <ul>
+                    <li>Average Monthly Costs</li>
+                    <li>Expenditure Forecast</li>
+                    <li>Cost Comparison by Home</li>
+                </ul>
             </PageContainer>
         </Page>
     )
