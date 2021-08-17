@@ -21,7 +21,7 @@ const Input = styled.input`
     ${props => props.readOnly && css`
         border: none;
         padding: .4em 0;
-        cursor: pointer;
+        cursor: default;
 
         &:focus {
             padding: .4em 0;
