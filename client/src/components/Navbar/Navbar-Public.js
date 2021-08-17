@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import logo from '../../assets/taskr-logo.png'
-import { HouseIcon, Button, FlexSection } from "../../common"
+import { Button, FlexSection } from "../../common"
 
 const NavbarContainer = styled.div`
     width: 100%;
@@ -21,7 +21,7 @@ const PublicHeader = styled.div`
 `
 
 const Logo = styled.img`
-    height: 50%;
+    height: 40%;
     transition: all .2s ease-in-out;
     cursor: pointer;
 
@@ -40,8 +40,8 @@ const PublicNavbar = () => {
                     <Logo src={logo} onClick={() => history.push(`/`)}/>
                 </FlexSection>
                 <FlexSection>
-                    <Button important style={{marginRight: '1em'}} onClick={() => history.push(`/login`)}>LOG IN</Button>
-                    <Button onClick={() => history.push(`/signup`)}>SIGN UP</Button>                     
+                   <Button style={{marginRight: '1em'}} onClick={() => history.push(`/signup`)}>SIGN UP</Button>     
+                   <Button important  onClick={() => history.push(`/login`)}>LOG IN</Button>                                    
                 </FlexSection>
             </PublicHeader>
         </NavbarContainer>

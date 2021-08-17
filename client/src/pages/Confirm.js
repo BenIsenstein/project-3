@@ -63,23 +63,11 @@ const Confirm = () => {
   },[])  //empty guard array. Only run this useEffect ONCE at time of initial render!
 
   return (
-    <Page>
+    <Page noBackground>
       <PageContainer>
-
-        <FlexSection fullWidth justifyCenter>
-          Confirming valid email address and attempting to activate your account...
-        </FlexSection>
-
-        <FlexSection fullWidth justifyCenter>
-          <br></br>
-          <p>This page should refresh and send you to the LOG IN page automatically.</p>
-          <p>If not, please click on the button below.</p>
-          <br></br>
-        </FlexSection>
-
-          <Button important constWidth onClick={() => history.push(`/login`)}>LOG IN</Button>
-          {/* <Button onClick={() => history.push('/login')}>LOG IN</Button> */}
-
+          <p>Confirming valid email address and activating your account...</p>
+          <br/>
+          <p>If you are not redirected to login within 5 seconds, please click Log In.</p>
       </PageContainer>
     </Page>
   )
