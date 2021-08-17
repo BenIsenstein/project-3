@@ -19,7 +19,7 @@ const NavbarContainer = styled.div`
 `
 
 const NavMenu = styled.nav`
-    background: ${props => props.theme.scd};
+    background: ${props => props.theme.scdLt};
     width: auto;
     height: 100vh;
     display: flex;
