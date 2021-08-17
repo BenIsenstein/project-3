@@ -9,7 +9,7 @@ const calendarEntrySchema = new mongoose.Schema({
   end: Date,
   item: String,
   task: String,
-  description: String,
+  notes: String,
   completed: Boolean,
   dateCompleted: Date,
   completionComments: String,
