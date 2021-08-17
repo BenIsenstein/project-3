@@ -4,7 +4,7 @@ import ConfirmModal from './ConfirmModal'
 import useConfirmModal from './useConfirmModal'
 import { isValidDate } from "../../functions"
 
-const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, name, ...props}) => { 
+const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, isCompleted, name, ...props}) => { 
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
   const currentValue = watch(name)
   const [modalDate, setModalDate] = useState(currentValue || new Date())
@@ -14,7 +14,7 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
   useEffect(() => setMostRecentValidDate(prevState => isValidDate(currentValue) ? currentValue : prevState), [currentValue])
 
   // ensuring all date inputs have invalid date values handled
-  useEffect(() => {if (!isValidDate(currentValue)) return setValue(name, mostRecentValidDate)})
+  useEffect(() => !isValidDate(currentValue) && setValue(name, mostRecentValidDate), [currentValue])
 
   //make sure the modal always opens with the current value of the input element, if it has a value.
   useEffect(() => {
@@ -43,9 +43,9 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
   // if the input is 'dateCompleted' and they are completing for the first time, 
   // start them off with the current date and time.
   useEffect(() => {
-    if (name === "dateCompleted" && !currentValue && isAddMode) setValue(name, new Date())
+    if (name === "dateCompleted" && !currentValue && !isCompleted) setValue("dateCompleted", new Date())
 
-  }, [name, currentValue, isAddMode, setValue])
+  }, [name, currentValue, setValue, isCompleted])
 
   // watching for user changes to 'dateCompleted' 
   // and adjusting 'nextRecurringDate' accordingly

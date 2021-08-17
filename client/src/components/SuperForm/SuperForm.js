@@ -71,6 +71,7 @@ const inputs = [
 - formMode | str | default: 'add' | can be either 'add' or 'details'
 - titleText | str | default: null | Appears just below the back button, above the inputs
 - titleTag | str, React component | default: <P></P> | Can make the title of the template into any native html element, or a React component.
+- openInEditView | bool | default: undefined | can choose to open a details mode form in editable view.
 
 - ADD MODE:
   *  addModeCancel | func | default: history.push('/') | a customizable function that fires on clicking the 'cancel' button. 
@@ -82,11 +83,13 @@ const inputs = [
 - DETAILS MODE:
   * detailsUrl | str | default: undefined | is crucial to fetch info for the template dynamically
   * displayOnly | bool | default: false | if true the PencilIcon disappears, meaning you can effectively have a read-only FlexSection 
+  * editViewCancel | func | default: undefined | function that can overide the cancel button onClick() in edit view of details form.
 */
 
 const SuperForm = ({ 
   formMode, 
   detailsUrl,
+  openInEditView,
   onSubmit, 
   inputs, 
   ...props }) => {
@@ -99,7 +102,7 @@ const SuperForm = ({
   const { register, errors , handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
-  const [viewMode, setViewMode] = useState('details')
+  const [viewMode, setViewMode] = useState(openInEditView ? 'edit' : 'details')
   const [resetValues, setResetValues] = useState({})
   const userContext = useContext(UserContext)
   const history = useHistory()
@@ -125,6 +128,9 @@ const SuperForm = ({
     errors,
     getValues
   }
+
+  // Account for changes to 'openInEditView'
+  useEffect(() => !openInEditView && setViewMode('details'), [openInEditView])
 
   // Effect to conditionally bring in entry and populate fields
   useEffect(() => {
@@ -248,17 +254,13 @@ const SuperForm = ({
   if (isAddMode) register('userId', { value: userContext.user?._id })
 
   // - - - - - - RETURN JSX - - - - - - - - - - - //
-  //if (isDetailsMode && !areDetailsLoaded) return "Loading..." 
-  
   return <FlexSection fullWidth column fadeIn {...props}>
     {props.BeforeTemplate} 
 
     <FlexSection fullWidth spaceBetween>
       <FormSectionTitle as={props.titleTag}>{props.titleText}</FormSectionTitle>
-      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={() => isEditView ? resetForm() : setViewMode('edit')} />}                    
+      {!props.displayOnly && isDetailsMode && <PencilIcon onClick={isEditView ? (props.editViewCancel || resetForm) : (() => setViewMode('edit'))} />}                    
     </FlexSection>
-
-    {/* <Button onClick={() => setValue("homeItems.Custom item 1", false)}>Set custom item 1!</Button> */}
     
     <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>  
       <GroupOfInputs 
@@ -275,7 +277,14 @@ const SuperForm = ({
           <Button fullWidth important type='submit' value='submit'>
             {props.submitText || "Save"}
           </Button>
-          <Button fullWidth type='button' onClick={isEditView ? resetForm : (props.addModeCancel || goHome)}>
+          <Button 
+            fullWidth 
+            type='button' 
+            onClick={isEditView 
+              ? (props.editViewCancel || resetForm) 
+              : (props.addModeCancel || goHome)
+            }
+          >
             {props.cancelText || "Cancel"}
           </Button>                              
         </FlexSection>
