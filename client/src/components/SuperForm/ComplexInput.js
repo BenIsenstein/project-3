@@ -61,7 +61,7 @@ const ComplexInput = ({
         <Textarea 
           id={name || props.labelText}
           name={name || props.labelText}
-          {...!isCustomComponent && register && name && isNumber ? numberRegisterMethods : registerMethods}  
+          {...!isCustomComponent && register && name && (isNumber ? numberRegisterMethods : registerMethods)}  
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}
