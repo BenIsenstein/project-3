@@ -28,9 +28,17 @@ const ComplexInput = ({
   ...props 
   }) => {
   const isCheckbox = type === 'checkbox'
+  const isNumber = type === 'number'
 
-  // useEffect(() => () => console.log(`ComplexInput with name "${name}" unmounted!`), [name])
-
+  // ensuring the wheel behaviour is disabled on number inputs
+  const registerMethods = register && register(name, !isCheckbox && props.registerOptions) // only apply registerOptions if it isn't a checkbox. 
+  const numberRegisterMethods = register && {
+    ...registerMethods,
+    ref: elem => {
+      elem?.addEventListener("wheel", event => event.preventDefault(), {passive: false})
+      registerMethods?.ref(elem)
+    }
+  }
 
   return (
     <FlexSection 
@@ -53,7 +61,7 @@ const ComplexInput = ({
         <Textarea 
           id={name || props.labelText}
           name={name || props.labelText}
-          {...!isCustomComponent && register && name && register(name, !isCheckbox && props.registerOptions)}  // only apply registerOptions if it isn't a checkbox. 
+          {...!isCustomComponent && register && name && isNumber ? numberRegisterMethods : registerMethods}  
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}

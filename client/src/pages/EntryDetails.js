@@ -139,7 +139,8 @@ const EntryDetails = () => {
       {
         name: 'cost',
         labelText: 'Total Cost',
-        type: 'number'
+        type: 'number',
+        step: '0.01'
       }
     ]
 

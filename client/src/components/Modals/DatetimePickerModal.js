@@ -50,6 +50,7 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
     const recurrenceFrequencyInMs = recurrenceFrequency * 86400000
 
     setValue("nextRecurringDate", new Date(dateCompletedValue?.getTime() + recurrenceFrequencyInMs))
+  
   },[dateCompletedValue])
 
   const ModalContent = () => <>
