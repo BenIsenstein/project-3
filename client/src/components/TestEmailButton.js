@@ -19,7 +19,7 @@ const TestEmailButton = () => {
         "home": "79 Panora Hts",
         "item": "Gutters",
         "task": "this is the task",
-        "description": "task described",
+        "notes": "task described",
         "date": "date to be performed"
       })
     }

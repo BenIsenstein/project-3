@@ -1,10 +1,6 @@
-import { useHistory } from 'react-router-dom'
-import { Page, PageContainer, FlexSection, Button, FormSectionTitle } from "../common"
+import { Page, PageContainer, FlexSection, FormSectionTitle } from "../common"
 
 const Welcome = () => {
-
-  const history = useHistory()
-
     return  <Page noBackground>
       <PageContainer>
 
