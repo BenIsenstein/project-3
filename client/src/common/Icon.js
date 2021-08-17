@@ -27,7 +27,7 @@ import {HouseSiding} from '@styled-icons/material-rounded/HouseSiding'
 import {Treehouse} from '@styled-icons/simple-icons/Treehouse'
 import {BuildingHouse} from '@styled-icons/boxicons-solid/BuildingHouse'
 import {HouseUser} from '@styled-icons/fa-solid/HouseUser'
-
+import {Graph} from '@styled-icons/octicons/Graph'
 
 const EyeIcon = styled(Eye)`
     height: 1.6em;
@@ -60,6 +60,14 @@ const SettingsIcon = styled(Settings)`
 ` 
 
 const ResourceIcon = styled(DocumentToolbox)`
+    height: 1.6em;
+
+    ${props => props.nav && css`
+        margin-right: 1em;
+    `}
+`
+
+const GraphIcon = styled(Graph)`
     height: 1.6em;
 
     ${props => props.nav && css`
@@ -226,4 +234,4 @@ const HouseUserIcon = styled(HouseUser)`
     cursor: pointer;  
 `
 
-export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, ResourceIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon }
+export {EyeIcon, EyeSlashIcon, ListIcon, PersonIcon, SettingsIcon, ResourceIcon, LibraryIcon, CalendarIcon, NextIcon, BackIcon, AddIcon, HomeAddIcon, FilterIcon, TrashIcon, HouseIcon, PencilIcon, ShareIcon, RemoveIcon, ExitIcon, CheckIcon, EnvelopeIcon, MenuIcon, CloseIcon, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon, GraphIcon }
