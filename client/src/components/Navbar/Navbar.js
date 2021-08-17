@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
 import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator, ResourceIcon, GraphIcon } from "../../common"
+import logo from '../../assets/taskr-logo.png'
 
 import UserContext from '../../UserContext'
 
@@ -9,7 +10,6 @@ const NavbarContainer = styled.div`
     padding: 0 1em;
     height: 2.6em;
     display: flex;
-    justify-content: flex-end;
     align-items: center;
 
     ${props => props.hamburger && css`
@@ -19,7 +19,7 @@ const NavbarContainer = styled.div`
 `
 
 const NavMenu = styled.nav`
-    background: ${props => props.theme.bkgColor};
+    background: ${props => props.theme.scd};
     width: auto;
     height: 100vh;
     display: flex;
@@ -39,11 +39,10 @@ const NavMenu = styled.nav`
 
 const NavItem = styled(NavLink)`
     height: 2em;
-    color: ${props => props.theme.prmLt};
+    color: white;
     text-decoration: none;
-    margin: 1em 2.4em 0 2em;
-    display: flex;
-    align-items: center;
+    margin: 1em 2em 0 2em;
+    align-self: flex-start;
     cursor: pointer;
 
     &:hover {
@@ -52,6 +51,16 @@ const NavItem = styled(NavLink)`
 
     &.${props => props.activeClassName} {
         color: ${props => props.theme.prm};
+    }
+`
+
+const Logo = styled.img`
+    height: 60%;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.05);
     }
 `
 
@@ -78,7 +87,7 @@ const Navbar = () => {
 
     return <>
         <NavbarContainer hamburger>
-            <HouseIcon nav onClick={() => history.push(`/calendar`)}/>
+            <Logo src={logo} onClick={() => history.push(`/calendar`)}/>
             <MenuIcon onClick={showSidebar} />
         </NavbarContainer>
         <NavMenu active={sidebar} onClick={showSidebar} ref={ref}>
@@ -102,10 +111,6 @@ const Navbar = () => {
                     <ResourceIcon nav />
                     Resources
                 </NavItem>
-                {/* <NavItem to='/library' activeClassName>
-                    <LibraryIcon nav />
-                    Tasks Library
-                </NavItem> */}
             </FlexSection>
             <FlexSection column style={{marginBottom: '2em'}}>
                 <NavItem to='/account' activeClassName>

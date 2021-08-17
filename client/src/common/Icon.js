@@ -138,13 +138,10 @@ const TrashIcon = styled(Trash)`
 `
 
 const HouseIcon = styled(House)`
-    height: 10em;
-    fill: ${props => props.theme.prm};
-    cursor: pointer;
+    height: 1.6em;
 
     ${props => props.nav && css`
-        height: 2em;
-        fill: white;
+        margin-right: 1em;
     `}
 `
 
@@ -196,7 +193,7 @@ const EnvelopeIcon = styled(Envelope)`
 
 const MenuIcon = styled(Menu)`
     height: 2em;
-    fill: white;
+    fill: ${props => props.theme.prm};
     cursor: pointer;
 `
 

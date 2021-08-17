@@ -56,8 +56,7 @@ const Homes = ({setActivatedHomesLength}) => {
           {activatedHomes.map((home, index) => {
             return (
               <FlexSection key={index}>
-                <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
-                <ShareIcon />
+                <SwitchViewButton edit style={{marginRight: '.6em'}}><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
                 <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
               </FlexSection>
             )
@@ -70,8 +69,7 @@ const Homes = ({setActivatedHomesLength}) => {
             {deactivatedHomes.map((home, index) => {
               return (
                 <FlexSection key={index}>
-                  <SwitchViewButton edit><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
-                  <ShareIcon />
+                  <SwitchViewButton edit style={{marginRight: '.6em'}}><PencilIcon onClick={() => history.push(`/home/${home._id}`)} /></SwitchViewButton>
                   <p>{home.nickname} - {home.address}, {home.city} {home.province}, {home.postalCode}</p>
                 </FlexSection>
               )
