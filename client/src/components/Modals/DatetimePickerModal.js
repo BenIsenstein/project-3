@@ -8,6 +8,13 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
   const { isConfirmModalShowing, toggleConfirmModal } = useConfirmModal()
   const currentValue = watch(name)
   const [modalDate, setModalDate] = useState(currentValue || new Date())
+  const [mostRecentValidDate, setMostRecentValidDate] = useState(currentValue, new Date())
+
+  // tracking the last valid date value
+  useEffect(() => setMostRecentValidDate(prevState => isValidDate(currentValue) ? currentValue : prevState), [currentValue])
+
+  // ensuring all date inputs have invalid date values handled
+  useEffect(() => {if (!isValidDate(currentValue)) return setValue(name, mostRecentValidDate)})
 
   //make sure the modal always opens with the current value of the input element, if it has a value.
   useEffect(() => {
@@ -44,17 +51,19 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
   // and adjusting 'nextRecurringDate' accordingly
   useEffect(() => {
     if (!recurrenceFrequency) return
+    if (!isValidDate(dateCompletedValue)) return
 
     const recurrenceFrequencyInMs = recurrenceFrequency * 86400000
 
-    setValue("nextRecurringDate", new Date(dateCompletedValue?.getTime() + recurrenceFrequencyInMs))
+    setValue("nextRecurringDate", new Date(new Date(dateCompletedValue?.getTime() + recurrenceFrequencyInMs).setHours(12,0,0)))
   
   },[dateCompletedValue])
 
   const ModalContent = () => <>
     <p>{props.modalTitle}</p>
     <StyledDateTimePicker
-      isCalendarOpen={true}
+      autoFocus
+      closeWidgets
       onChange={setModalDate}
       value={modalDate}
     />

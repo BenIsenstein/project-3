@@ -30,6 +30,9 @@ const ComplexInput = ({
   const isCheckbox = type === 'checkbox'
   const isNumber = type === 'number'
 
+  // const currentValue = props.watch(name)
+  // useEffect(() => console.log(`value of ${name} is: `, currentValue), [currentValue])
+
   // ensuring the wheel behaviour is disabled on number inputs
   const registerMethods = register && register(name, !isCheckbox && props.registerOptions) // only apply registerOptions if it isn't a checkbox. 
   const numberRegisterMethods = register && {
@@ -61,7 +64,7 @@ const ComplexInput = ({
         <Textarea 
           id={name || props.labelText}
           name={name || props.labelText}
-          {...!isCustomComponent && register && name && (isNumber ? numberRegisterMethods : registerMethods)}  
+          {...(!isCustomComponent && register && name) && (isNumber ? numberRegisterMethods : registerMethods)}  
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}
