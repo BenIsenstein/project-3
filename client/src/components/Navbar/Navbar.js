@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import styled, {css} from 'styled-components'
-import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator, ResourceIcon } from "../../common"
+import { HouseIcon, MenuIcon, CloseIcon, PersonIcon, CalendarIcon, LibraryIcon, SettingsIcon, ExitIcon, FlexSection, FormSeparator, ResourceIcon, GraphIcon } from "../../common"
 
 import UserContext from '../../UserContext'
 
@@ -82,7 +82,7 @@ const Navbar = () => {
             <MenuIcon onClick={showSidebar} />
         </NavbarContainer>
         <NavMenu active={sidebar} onClick={showSidebar} ref={ref}>
-            <FlexSection column>
+            <FlexSection column >
                 <NavbarContainer style={{alignSelf: 'flex-end'}}>
                     <CloseIcon />
                 </NavbarContainer>
@@ -90,8 +90,12 @@ const Navbar = () => {
                     <CalendarIcon nav />
                     Calendar
                 </NavItem>
+                <NavItem to='/homes' activeClassName>
+                    <HouseIcon nav />
+                    Homes
+                </NavItem>
                 <NavItem to='/reports' activeClassName>
-                    <ResourceIcon nav />
+                    <GraphIcon nav />
                     Reports
                 </NavItem>
                 <NavItem to='/info' activeClassName>

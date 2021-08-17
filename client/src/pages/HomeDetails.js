@@ -148,7 +148,8 @@ const HomeDetails = ({activatedHomesLength}) => {
         />
         <FlexSection fadeIn fullWidth marginTop1em>
           {home && <DeactivateHome fullWidth fullHeight home={home} activatedHomesLength={activatedHomesLength} />}
-          <Button fullWidth onClick={() => history.push(`/account`)}>BACK TO ACCOUNT</Button>
+          {/* <Button fullWidth onClick={() => history.push(`/account`)}>BACK TO ACCOUNT</Button> */}
+          <Button fullWidth onClick={() => history.goBack()}>BACK</Button>
         </FlexSection>
       </PageContainer>
     </Page>

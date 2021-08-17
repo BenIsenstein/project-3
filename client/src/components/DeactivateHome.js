@@ -24,7 +24,8 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
       let resObject = await res.json()
       
       if (!resObject.success) return alert("Your home details wasn't activated for some reason. Please try again.")
-      history.push('/account')
+      // history.push('/account')
+      history.goBack()
     }
     catch(err) {
       console.log('error updating calendar entry: ', err)
@@ -59,7 +60,8 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
         filterContext.setFilterInfo(filterInfo)
       }
 
-      history.push('/account')
+      // history.push('/account')
+      history.goBack()
     }
     catch(err) {
       console.log('error updating calendar entry: ', err)

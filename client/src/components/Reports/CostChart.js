@@ -157,6 +157,7 @@ const CostChart = () => {
 
   return (
     <div>
+      <h1>COSTS-TO-DATE</h1>
       <p>Accumulated Total Costs (all homes)</p>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart

@@ -152,7 +152,12 @@ const useAddHome = () => {
 
     for (let newEntry of newCalendarEntries) await fetchAddEntry(newEntry)
 
-    history.push(`/account`)
+    if (userContext.user.homes?.length > 0) { // Only navigate to ACCOUNT page if this is the user's FIRST home
+      history.goBack()
+    }
+    else {
+      history.push(`/account`)
+    }
 
   }, [history, taskInfo, userContext])
 
@@ -176,7 +181,8 @@ const useUpdateHome = () => {
       let resObject = await res.json()
 
       if (!resObject.success) return alert("Your home details wasn't updated for some reason. Please try again.")
-      history.push('/account')
+      // history.push('/account')
+      history.goBack()
     }
     catch (err) {
       console.log('error updating calendar entry: ', err)

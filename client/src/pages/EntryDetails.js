@@ -172,10 +172,79 @@ const EntryDetails = () => {
       </Button>      
   )
 
+  const FindLocalServicesButton = () => {
+        // example URL = https://www.google.com/maps/search/?api=1&query=service+provider+roof+inspect+Calgary+AB
+        let URL = "https://www.google.com/maps/search/?api=1&query=service+provider"
+
+        // Capture the city and country from the Home's address.
+        let city = 'Calgary'
+        let country = 'Canada'
+    
+        // Capture the Item and Task related to the event.
+        let urlSearchItem = 'roof'
+        let urlItemPased = 'roof'
+        let urlSearchTask = 'inspect the roof'
+        let urlTaskParsed = 'inspect+the+roof'
+    
+        // If HOME is populated...
+        URL = URL + '+' + city + '+' + country
+        // If ITEM is populated...
+        URL = URL + '+' + urlItemPased
+        // If TASK is populated...
+        URL = URL + '+' + urlTaskParsed
+
+    return (
+      <Button 
+        fadeIn
+        margin="1em 0 0 0"
+        type='button'
+        // justify-content= 'flex-end'
+        // text-align= 'left'
+        // align-items= 'left' 
+        onClick={() => window.open(URL)}
+      >
+        Find Local Services
+      </Button>     
+    )
+  }
+
+  // const findByGoogle = () => {
+  //   // example URL = https://www.google.com/maps/search/?api=1&query=service+provider+roof+inspect+Calgary+AB
+  //   let URL = "https://www.google.com/maps/search/?api=1&query=service+provider+"
+
+  //   // Capture the city and country from the Home's address.
+  //   let city = 'Calgary'
+  //   let country = 'Canada'
+
+  //   // Capture the Item and Task related to the event.
+  //   let urlSearchItem = 'roof'
+  //   let urlItemPased = 'roof'
+  //   let urlSearchTask = 'inspect the roof'
+  //   let urlTaskParsed = 'inspect+the+roof'
+
+  //   URL = URL + '+' + city + '+' + country + '+' + urlItemPased + '+' + urlTaskParsed
+  //   // window.open(URL, "_blank")
+  //   window.open(URL)
+  // }
+    
+    
   return isCompletedHandled && (
     <Page>
       <PageContainer flexColumn>
+        {/* <Button 
+          important 
+          // fullWidth 
+          fadeIn
+          // margin="1em 0 0 0"
+          // margin="1em"
+          type='button' 
+          onClick={findByGoogle()}
+        >
+          Find Local Services
+        </Button> */}
+
         <SuperForm
+          BeforeTemplate={<FindLocalServicesButton />}
           titleText="Details"
           inputs={entryDetailsInputs} 
           formMode='details' 
