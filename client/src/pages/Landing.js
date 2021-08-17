@@ -40,19 +40,12 @@ import { useHandleUserStatus } from "../functions"
 
 const LandingTitle = styled.h1`
   width: 80%;
-<<<<<<< Updated upstream
-  margin: 3em 0;
-  text-align: center;
-  font-size: 3em;
-  color: azure;
-=======
   text-align: right;
   font-size: 2em;
   text-transform: uppercase;
   line-height: .8em;
   color: white;
   text-shadow: 1px 1px 3px #858585;
->>>>>>> Stashed changes
 `
 
 const Landing = () => {
