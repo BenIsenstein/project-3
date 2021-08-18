@@ -38,6 +38,10 @@ const LandingTitle = styled.h1`
   line-height: .8em;
   color: white;
   text-shadow: 1px 1px 3px #858585;
+
+  @media (min-width: ${props => props.theme.smScreen}) {
+    font-size: 3em;
+  }
 `
 
 const IntroBlock = styled.div`
