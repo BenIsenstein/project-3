@@ -150,7 +150,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
           addModeCancel={() => setUndergoingPasswordChange(false)}
         />
 
-        <FormSeparator />
+        {/* <FormSeparator />
 
         <FlexSection alignCenter>
           <FormSectionTitle style={{margin: '0 0 .2em 0'}}>Manage Home(s)</FormSectionTitle>
@@ -179,7 +179,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
               </FlexSection>
             )
           })}
-        </>}
+        </>} */}
       </PageContainer>
     </Page>
   )

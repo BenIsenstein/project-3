@@ -75,7 +75,7 @@ const AddEntry = () => {
     titleText="New Task" 
     inputs={inputs} 
     addModeCancel={history.goBack} 
-    onSubmit={data => console.log(data)} 
+    onSubmit={addEntry} 
   />
 }
 

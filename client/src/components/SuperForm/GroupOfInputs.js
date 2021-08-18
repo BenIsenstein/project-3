@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect, useMemo } from 'react'
-import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon } from '../../common'
+import { FlexSection, GridSection, Input, Select, Li, Button, AddIcon, StyledDateTimePicker } from '../../common'
 import { useIsDateInput } from '../../functions'
 import CustomItemModal, { DeleteItemModal, EditItemModal } from '../Modals/CustomItemModal'
 import DatetimePickerModal from '../Modals/DatetimePickerModal'
@@ -76,14 +76,19 @@ const GroupOfInputs = ({
             fullWidth
           >
             <ComplexInput
-              name={name} 
-                     
+              name={name}    
+              as={() => <StyledDateTimePicker
+                disableCalendar
+                disableClock
+                onChange={e => setValue(name, e)}
+                value={watch(name)}
+              />}    
               {...formTools}
               {...modeAndView}
               {...input}
             />
+        
             <DatetimePickerModal  
-              openModalWithNewDate={input.openModalWithNewDate}
               modalTitle={input.modalTitle || "set " + (input.labelText || name)}
               name={name} 
               margin="0 0 0 5px"

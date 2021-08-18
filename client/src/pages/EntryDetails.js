@@ -24,6 +24,10 @@ const EntryDetails = () => {
   // const { SuperForm: CompletionForm, setValue: completionSetValue } = useSuperForm()
   const shouldShowCompletion = (isCompleted || undergoingCompletion)
   const getEntryRoute = `/api/calendarEntry/get/${id}`
+  
+  // - - - - - LOGS TO FIND OUT ISCOMPLETED, SHOULdSHOWCOMPLETION - - - - -
+  console.log("isCompleted: ", isCompleted)
+  console.log("shouldShowCompletion: ", shouldShowCompletion)
 
   const completeEntry = useCallback(async (data) => {
     const { item, task } = selectedTask
@@ -140,7 +144,8 @@ const EntryDetails = () => {
       {
         name: 'cost',
         labelText: 'Total Cost',
-        type: 'number'
+        type: 'number',
+        step: '0.01'
       }
     ]
 
@@ -154,7 +159,6 @@ const EntryDetails = () => {
     console.log("completionInputs: ", completionInputs)
     return completionInputs 
   }, 
-
   [isCompleted, selectedTask])
 
   console.log("")
@@ -191,13 +195,15 @@ const EntryDetails = () => {
         <SuperForm
           popup
           popupCondition={shouldShowCompletion}
-          titleText={isCompleted ? "Completed" : "Complete Task"}
+          openInEditView={!isCompleted}
+          editViewCancel={!isCompleted && (() => setUndergoingCompletion(false))}
+          titleText={!isCompleted ? "Complete Task" : "Completed"}
           inputs={completionInputs}
-          formMode={isCompleted ? "details" : "add"} 
+          formMode={"details"} 
           detailsUrl={getEntryRoute}
-          onSubmit={isCompleted ? updateCompletion : completeEntry}
-          addModeCancel={() => setUndergoingCompletion(false)}
+          onSubmit={!isCompleted ? completeEntry : updateCompletion}
         />
+        <FormSeparator />
         <FlexSection fadeIn fullWidth marginTop1em>
           <DeleteEntryButton fullWidth fullHeight entryId={id} />
           <Button fullWidth onClick={() => history.push(`/calendar`)}>BACK TO CALENDAR</Button>
