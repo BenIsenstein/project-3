@@ -108,6 +108,9 @@ const CostChart = () => {
             let tempObject = {}
             let totalCosts = 0
 
+            // First SORT the data by dateCompleted
+            tempData.sort((a, b) => (a.dateCompleted > b.dateCompleted) ? 1 : ((b.dateCompleted > a.dateCompleted) ? -1 : 0))
+
             for (let index = 0; index < tempData.length; index++) {
               dataObject = tempData[index]
               totalCosts = totalCosts + dataObject.cost
@@ -118,9 +121,7 @@ const CostChart = () => {
               }
               finalData.push(tempObject)
             }
-            finalData.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
 
-            console.log("Cost Analysis, Final Data Array = ", finalData)
             setCostData(finalData)
 
             // startDate = new Date(finalData[0].dateCompleted);
