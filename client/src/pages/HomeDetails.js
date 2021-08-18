@@ -144,7 +144,7 @@ const HomeDetails = ({activatedHomesLength}) => {
           inputs={inputs}
           formMode="details"
           detailsUrl={`/api/home/get/${id}`}
-          onSubmit={updateHome}
+          onSubmit={data => console.log(data)}  //updateHome
         />
         <FlexSection fadeIn fullWidth marginTop1em>
           {home && <DeactivateHome fullWidth fullHeight home={home} activatedHomesLength={activatedHomesLength} />}

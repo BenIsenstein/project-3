@@ -99,7 +99,7 @@ const SuperForm = ({
   if (!formMode) formMode = 'add'
   if (!onSubmit) onSubmit = () => alert('No onSubmit given to <FormTemplate />')
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
-  const { register, errors , handleSubmit, setValue, reset, watch, getValues } = useForm({})
+  const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
   const [viewMode, setViewMode] = useState(openInEditView ? 'edit' : 'details')
@@ -179,7 +179,7 @@ const SuperForm = ({
             // make sure items that fall outside of the checkbox group's 
             // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
             // the 'customItems' state array sitting in the component.
-            input?.setCustomItems(prevState => [
+            input?.setCustomItems([
               ...Object.keys(checkboxData)
                 .filter(key => !input?.defaultCheckboxNames?.includes(key))
                 .map(key => {return { name: key, isCustomItem: true }})
@@ -199,6 +199,7 @@ const SuperForm = ({
             // declare checkbox names such that their data ends up in an object, 
             // accessible with the name of the parent <GroupOfCheckboxes />
             for (let key in checkboxData) {
+              console.log(`setting ${name}.${key} to ${checkboxData[key]}`)
               setValue(`${name}.${key}`, checkboxData[key])
               valuesForReset[`${name}.${key}`] = checkboxData[key]
             }
