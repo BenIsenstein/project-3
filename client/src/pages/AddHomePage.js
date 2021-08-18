@@ -32,14 +32,14 @@ const AddHomePage = () => {
       //registerOptions: { required: "You must select a picture." },
       isCustomComponent: true, 
       as: SuperFormSelect,
-      
-      // options: [
-      //   {value: 1, optionText:<TreehouseIcon/>},
-      //   {value: 2, optionText:<BuildingHouseIcon/>},
-      //   {value: 3, optionText:<HouseSidingIcon/>}, 
-      //   {value: 4, optionText:<HouseUserIcon/>},
-      //   {value: 5, optionText:<LighthouseIcon/>},
-      //  ]
+      options:[
+        {value: "\u0394"},
+        {value: "\u03A8"},
+        {value: "\u03A6"},
+        {value: "\u03B4"},
+        {value: "\u03BB"},
+        {value: "\u03C0"}
+      ]
     },   
     {
       name: "address",
@@ -104,6 +104,7 @@ const AddHomePage = () => {
         {value: "Condo"},
         {value: "Duplex"},
         {value: "Mobile Home"},
+     
       ]
     },
     {

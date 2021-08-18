@@ -20,6 +20,11 @@ export const TableContainer = styled.div`
       z-index: 1;
     }
 
+    .header {
+        top: 0;
+        box-shadow: 0px 3px 3px #ccc;
+      }
+
     .body {
       position: relative;
       z-index: 0;
@@ -29,7 +34,19 @@ export const TableContainer = styled.div`
 
         &:hover {
           background-color: ${props => props.theme.prmLt};
-        }        
+        } 
+
+        [data-sticky-td] {
+        position: sticky;
+      }
+
+      [data-sticky-last-left-td] {
+        box-shadow: 2px 0px 3px #ccc;
+      }
+
+      [data-sticky-first-right-td] {
+        box-shadow: -2px 0px 3px #ccc;
+      }       
       }
     }
   }

@@ -3,10 +3,8 @@ import { Page, PageContainer} from "../common"
 
 const InfoPage = () => {
 
-    return  <Page noBackground>
-      <PageContainer>
+    return  <Page fadeIn fullWidth marginTop1em>    
           <InfoTable /> 
-      </PageContainer>
     </Page>
     
 }
