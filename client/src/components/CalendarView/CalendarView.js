@@ -175,6 +175,7 @@ const CalendarView = ({ dates, ...props }) => {
   const [overdueList, setOverdueList] = useState([{}])
   const [completedList, setCompletedList] = useState([{}])
   const [upcomingList, setUpcomingList] = useState([{}])
+  const [initDate, setInitDate] = useState((new Date()).toISOString())
     
     useEffect(() => {
       // Re-build the list of events. Events are currently grouped
@@ -192,6 +193,7 @@ const CalendarView = ({ dates, ...props }) => {
       let taskListIndexer = 0
       let overrideStartDate = 0
       let overrideEndDate = 0
+      let tempInitDate = ""
 
       while (datesOuterIndexer < dates.length) { // Outer array
         entriesInnerIndexer = 0
@@ -206,6 +208,9 @@ const CalendarView = ({ dates, ...props }) => {
           if (currentEntry.completed) {
             overrideStartDate = currentEntry.dateCompleted
             overrideEndDate = currentEntry.dateCompleted
+          }
+          else { // Task has not been completed, so capture the event's START date
+            if (tempInitDate == "") tempInitDate = currentEntry.start.toISOString()
           }
          
           tempTaskList[taskListIndexer] = {
@@ -240,7 +245,13 @@ const CalendarView = ({ dates, ...props }) => {
       setOverdueList(tempOverdueList)
       setCompletedList(tempCompletedList)
       setUpcomingList(tempUpcomingList)
-
+      if (tempInitDate > "") {
+        setInitDate(tempInitDate)
+        // Calendar has already rendered, so force it to focus on
+        // this new date instead of the current date
+        let calendarApi = calendarComponentRef.current.getApi()
+        calendarApi.gotoDate(tempInitDate)
+      }
     }, [dates])
 
     const handleEventClick = (arg) => history.push(`/task/${arg.event._def.extendedProps._id}`)
@@ -255,12 +266,15 @@ const CalendarView = ({ dates, ...props }) => {
             <FullCalendar
                 plugins={[ dayGridPlugin, interactionPlugin, listPlugin, timeGridPlugin ]}
                 ref = {calendarComponentRef}
+                // initialDate="2020-10-01"
+                // initialDate="2022-02-12T20:00:00.506Z"
+                initialDate= {initDate}
                 initialView="listYear"  // LIST view
                 // initialView="dayGridMonth"  // MONTH view
                 // initialView="dayGridDay"  // DAY view
                 // initialView="timeGridDay"  // DAY view with TIMES
                 weekends={true}
-                firstDay={1}
+                firstDay={0}
                 // businessHours={true}
                 businessHours={{
                  daysOfWeek: [ 1, 2, 3, 4, 5 ], // Monday - Friday
