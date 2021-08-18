@@ -4,7 +4,8 @@ import { Button, FlexSection } from '../../common'
 
 import './ConfirmModal.css'
 
-const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, confirmPrompt, actionOnConfirm, ...props }) => {
+// const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, confirmPrompt, actionOnConfirm, ...props }) => {
+const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, confirmPrompt, actionOnConfirm, actionOnCancel, ...props }) => {
 
   // buttonResponse = false
   if(isConfirmModalShowing) {
@@ -33,7 +34,8 @@ const ConfirmModal = ({ isConfirmModalShowing, hideConfirmModal, modalContent, c
                   {confirmPrompt}
                 </Button>
                 <Button fullWidth important onClick={()=> {
-                  hideConfirmModal()
+                  hideConfirmModal();
+                  actionOnCancel();
                 }}>
                   Cancel
                 </Button>

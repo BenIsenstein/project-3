@@ -77,6 +77,7 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
             modalContent="This action removes this home from your calendar. Do you wish to proceed?"
             confirmPrompt='Deactivate'
             actionOnConfirm={deactivateHome}
+            actionOnCancel={()=>{}}
           />
           <Button 
             icon={props.iconButton} 
@@ -97,6 +98,7 @@ const DeactivateHome = ({ home, activatedHomesLength, ...props }) => {
             modalContent="This action brings this home back on your calendar. Do you wish to proceed?"
             confirmPrompt='Activate'
             actionOnConfirm={activateHome}
+            actionOnCancel={()=>{}}
           />
           <Button 
             icon={props.iconButton} 

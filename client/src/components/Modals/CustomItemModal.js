@@ -14,6 +14,7 @@ const CustomItemModal = props => {
       modalContent={props.modalContent}
       confirmPrompt={props.confirmPrompt || 'Add item'}
       actionOnConfirm={props.actionOnConfirm}
+      actionOnCancel={()=>{}}
     />
     <Button text type='button' onClick={toggleConfirmModal} {...props}>
       <AddIcon sm />{props.buttonText || "add your own item "}     
@@ -32,6 +33,7 @@ const EditItemModal = props => {
       modalContent={props.modalContent}
       confirmPrompt="Edit"
       actionOnConfirm={props.actionOnConfirm}
+      actionOnCancel={()=>{}}
     />
     <Button text type='button' onClick={toggleConfirmModal} {...props}>
       <PencilIcon sm /> 
@@ -50,6 +52,7 @@ const DeleteItemModal = props => {
       modalContent={`Are you sure you want to delete "${props.labelText || props.name}"?`}
       confirmPrompt="Delete"
       actionOnConfirm={props.actionOnConfirm}
+      actionOnCancel={()=>{}}
     />
     <Button text type='button' onClick={toggleConfirmModal} {...props}>
       <TrashIcon sm /> 

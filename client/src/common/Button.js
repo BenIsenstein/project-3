@@ -15,11 +15,32 @@ const Button = styled.button.attrs(props => ({
     font-weight: lighter;
     color: ${props => props.theme.prm};
     text-transform: uppercase;
-    // transition: background 0.4s linear;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    
+    &:after {
+        background: #fff;
+        content: "";
+        height: 155px;
+        left: -75px;
+        opacity: .2;
+        position: absolute;
+        top: -50px;
+        transform: rotate(35deg);
+        transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+        width: 50px;
+        z-index: -10;
+      }
 
     &:hover {
         border: 1px solid ${props => props.theme.prmDk};
         color: ${props => props.theme.prmDk};
+
+        &:after {
+            left: 120%;
+            transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
     }
 
     ${props => props.important && css`
