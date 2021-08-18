@@ -75,9 +75,9 @@ const GroupOfInputs = ({
             {...input.wrapperProps} 
             fullWidth
           >
-            <ComplexInput
-              name={name}    
-              as={() => <StyledDateTimePicker
+            <ComplexInput  
+              name={name}
+              as={(dateProps) => <StyledDateTimePicker
                 disableCalendar
                 disableClock
                 onChange={e => setValue(name, e)}
@@ -87,7 +87,6 @@ const GroupOfInputs = ({
               {...modeAndView}
               {...input}
             />
-        
             <DatetimePickerModal  
               modalTitle={input.modalTitle || "set " + (input.labelText || name)}
               name={name} 
@@ -117,7 +116,7 @@ const useGroupOfCheckboxes = () => {
 
   useEffect(() => {
     const getAllInfo = async () => {
-     // console.log('calling getAllInfo')
+     console.log('calling getAllInfo')
       try {
         let allTasksRes = await fetch("/api/info")
         let allTasksArray = await allTasksRes.json()
@@ -130,7 +129,7 @@ const useGroupOfCheckboxes = () => {
 
     getAllInfo()
 
-   // return () => console.log("getAllInfo effect - unmounting!")
+   return () => console.log("getAllInfo effect - unmounting!")
   }, [])
   
   const GroupOfCheckboxes = ({
@@ -164,12 +163,15 @@ const useGroupOfCheckboxes = () => {
       getValues
     }
 
+    useEffect(() => () => console.log('GroupOfCheckboxes unmounting!'), [])
+
     const allInputs = useMemo(() => [...inputs, ...customItems], [inputs])
     const isAddingOrEditing = isAddMode || isEditView
 
     // declare checkbox names such that their data ends up in an object, 
     // accessible with the name of the parent <GroupOfCheckboxes />
-    const DefaultCheckbox = ({ readOnly, name, ...rest }) => <ComplexInput 
+    const DefaultCheckbox = ({ readOnly, name, ...rest }) => {
+      return <ComplexInput 
       noFullWidth
       name={`${groupName}.${name}`}
       labelText={name}
@@ -179,7 +181,7 @@ const useGroupOfCheckboxes = () => {
       {...formTools}
       {...modeAndView}
       {...rest} 
-    />
+    />}
 
     const DefaultCheckboxAndTasks = (rest) => {
       const [editedTask, setEditedTask] = useState()
@@ -235,6 +237,7 @@ const useGroupOfCheckboxes = () => {
               <p>Editing {rest.labelText || name}</p>
               <ComplexInput {...modeAndView} onChange={event => setEditedItem(event.target.value)}/>
             </>}
+
             actionOnConfirm={() => {
               const valueOfPrevName = getValues(`${groupName}.${name}`)
 
@@ -243,6 +246,7 @@ const useGroupOfCheckboxes = () => {
               setAllCustomTasks(prevState => prevState.map(task => task.item === name ? { ...task, item: editedItem } : task))
             }}
           />
+
           <DeleteItemModal 
             {...rest}
             name={name}

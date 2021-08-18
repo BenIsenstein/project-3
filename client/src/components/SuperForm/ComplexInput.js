@@ -23,15 +23,20 @@ const ComplexInput = ({
   forwardErrors, 
   type, 
   wrapperProps,
-  noRegister,
   labelProps,
   ...props 
   }) => {
   const isCheckbox = type === 'checkbox'
   const isNumber = type === 'number'
 
-  // const currentValue = props.watch(name)
-  // useEffect(() => console.log(`value of ${name} is: `, currentValue), [currentValue])
+  
+  useEffect(() => {
+    // statement to choose which inputs to see unmounting announcement for
+    if (!["homeItems.Air Conditioner", 'address'].includes(name)) return 
+     
+    return () => console.log(`ComplexInput with name ${name} unmounted!`)
+
+  }, [])
 
   // ensuring the wheel behaviour is disabled on number inputs
   const registerMethods = register && register(name, !isCheckbox && props.registerOptions) // only apply registerOptions if it isn't a checkbox. 
@@ -64,7 +69,7 @@ const ComplexInput = ({
         <Textarea 
           id={name || props.labelText}
           name={name || props.labelText}
-          {...(!isCustomComponent && register && name) && (isNumber ? numberRegisterMethods : registerMethods)}  
+          {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}

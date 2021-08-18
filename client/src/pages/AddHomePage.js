@@ -1,30 +1,22 @@
 import { useContext } from 'react'
 import { Page, PageContainer, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes, SimpleGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 import { defaultHomeItems } from '../variables'
-
 
 const AddHomePage = () => {
   useHandleUserStatus()
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
-  const { customItems, setCustomItems, GroupOfCheckboxes } = useGroupOfCheckboxes()
-  //const { SuperForm } = useSuperForm()
+  const { GroupOfCheckboxes } = useGroupOfCheckboxes()
   
   const inputs = [
-    // {
-    //   name: 'activated',
-    //   type: 'checkbox',
-    //   defaultChecked: true,
-    //   hidden: true,
-    // },
     {
       name: "nickname",
       wrapperProps: {gridColumn: '1/2'},
-    }, 
+    },  
     {
       name:"homeIcon",
       labelText: "home Icon",
@@ -40,7 +32,7 @@ const AddHomePage = () => {
       //   {value: 4, optionText:<HouseUserIcon/>},
       //   {value: 5, optionText:<LighthouseIcon/>},
       //  ]
-    },   
+    },    
     {
       name: "address",
       registerOptions: { required: "You must input an address." },
@@ -129,8 +121,7 @@ const AddHomePage = () => {
       name: 'homeItems',
       labelText: 'Items In Your Home',
       isCustomComponent: true,
-      as: GroupOfCheckboxes,
-      setCustomItems: setCustomItems,
+      as: GroupOfCheckboxes, 
       inputs: defaultHomeItems.map(inputName => {return { name: inputName }})
     }
   ]
@@ -141,7 +132,7 @@ const AddHomePage = () => {
         <SuperForm 
           titleText={userContext.user?.homes?.length ? "New Home" : "Add your first home!"}
           inputs={inputs}
-          onSubmit={addHome}
+          onSubmit={data => console.log(data)} //addHome
         />
       </PageContainer>
     </Page>

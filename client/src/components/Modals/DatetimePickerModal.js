@@ -23,6 +23,11 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
 
   }, [currentValue])
 
+  // - - - - - "possessionDateByOwner" - - - - - - - - - - -
+  const possessionDateValue = watch("possessionDateByOwner")
+
+  useEffect(() => name==="possessionDateByOwner" && !possessionDateValue && setValue(name, new Date()), [possessionDateValue])
+
   // - - - - EntryDetails completion effects - - - - - - - - -
   const dateCompletedValue = watch("dateCompleted")
 
@@ -62,7 +67,6 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
   const ModalContent = () => <>
     <p>{props.modalTitle}</p>
     <StyledDateTimePicker
-      autoFocus
       closeWidgets
       onChange={setModalDate}
       value={modalDate}
