@@ -51,6 +51,7 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
         modalContent="Do you really wish to delete this task?"
         confirmPrompt='Delete'
         actionOnConfirm={DeleteEntry}
+        actionOnCancel={()=>{}}
       />
       <Button 
         icon={props.iconButton} 
