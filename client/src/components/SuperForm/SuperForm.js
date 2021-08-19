@@ -165,44 +165,12 @@ const SuperForm = ({
             valuesForReset[name] = findValInDetails(name)
           } 
           // if the object is a <GroupOfInputs /> or <StartAndEndDates /> with an array of inputs:
-          else if (['GroupOfInputs', 'StartAndEndDates'].includes(input?.as?.name)) {
+          else {
             input?.inputs?.forEach(({ name }) => {
               console.log(`setting ${name} to ${findValInDetails(name)}`)
               setValue(name, findValInDetails(name))
               valuesForReset[name] = findValInDetails(name)
             })
-          }
-          //if it's a <GroupOfCheckboxes />:
-          else if (input?.as?.name === 'GroupOfCheckboxes') {
-            let checkboxData = details[name]
-
-            // make sure items that fall outside of the checkbox group's 
-            // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
-            // the 'customItems' state array sitting in the component.
-            input?.setCustomItems([
-              ...Object.keys(checkboxData)
-                .filter(key => !input?.defaultCheckboxNames?.includes(key))
-                .map(key => {return { name: key, isCustomItem: true }})
-            ])
-
-            // bring in tasks for the home that are delivered by a route
-            // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
-            try {
-              let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${input?.homeId}`)
-              let customTasksArray = await customTasksRes.json()
-              input?.setAllCustomTasks(customTasksArray)
-            }
-            catch (err) {
-              console.log("There was an error loading your custom tasks array", err)
-            }
-            
-            // declare checkbox names such that their data ends up in an object, 
-            // accessible with the name of the parent <GroupOfCheckboxes />
-            for (let key in checkboxData) {
-              console.log(`setting ${name}.${key} to ${checkboxData[key]}`)
-              setValue(`${name}.${key}`, checkboxData[key])
-              valuesForReset[`${name}.${key}`] = checkboxData[key]
-            }
           }
         }
 
