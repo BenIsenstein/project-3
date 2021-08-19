@@ -99,7 +99,7 @@ const SuperForm = ({
   if (!formMode) formMode = 'add'
   if (!onSubmit) onSubmit = () => alert('No onSubmit given to <FormTemplate />')
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
-  const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
+  const { register, unregister, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
   const [viewMode, setViewMode] = useState(openInEditView ? 'edit' : 'details')
@@ -123,6 +123,7 @@ const SuperForm = ({
   }
   const formTools = {
     register,
+    unregister,
     setValue,
     watch,
     errors,
