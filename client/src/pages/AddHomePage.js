@@ -25,6 +25,7 @@ const AddHomePage = () => {
       isCustomComponent: true, 
       as: SuperFormSelect,
       options:[
+        {value: ""},
         {value: "\u0394"},
         {value: "\u03A8"},
         {value: "\u03A6"},
