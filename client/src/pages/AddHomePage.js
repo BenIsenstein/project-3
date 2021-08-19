@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Page, PageContainer, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon } from '../common'
+import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
 import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes, SimpleGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
@@ -34,15 +34,7 @@ const AddHomePage = () => {
         {value: "\u03C0"}
       ]
     },   
-      
-      // options: [
-      //   {value: 1, optionText:<TreehouseIcon/>},
-      //   {value: 2, optionText:<BuildingHouseIcon/>},
-      //   {value: 3, optionText:<HouseSidingIcon/>}, 
-      //   {value: 4, optionText:<HouseUserIcon/>},
-      //   {value: 5, optionText:<LighthouseIcon/>},
-      //  ]
-    //},    
+          
     {
       name: "address",
       registerOptions: { required: "You must input an address." },
@@ -106,7 +98,6 @@ const AddHomePage = () => {
         {value: "Condo"},
         {value: "Duplex"},
         {value: "Mobile Home"},
-     
       ]
     },
     {

@@ -97,7 +97,7 @@ const Calendar = () => {
     const returnAll = entry => {
       if (homes?.length > 0) {
         // return true && homes.some(object => object.id == entry.homeId)
-        return true && homes.some(object => (object.id == entry.homeId) && (object.status))
+        return true && homes.some(object =>  (object.id === entry.homeIcon) && (object.id === entry.homeId) && (object.status))
       } else {
         return true
       } 
@@ -105,7 +105,7 @@ const Calendar = () => {
     const returnActive = entry => {
       if (homes?.length > 0) {
         // return !entry.completed && homes.some(object => object.id == entry.homeId)
-        return !entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
+        return !entry.completed && homes.some(object =>(object.id === entry.homeIcon) && (object.id === entry.homeId) && (object.status))
       } else {
         return !entry.completed
       } 
@@ -113,8 +113,8 @@ const Calendar = () => {
     const returnCompleted = entry => {
       if (homes?.length > 0) {
         // return entry.completed && homes.some(object => object.id == entry.homeId)
-        return entry.completed && homes.some(object => (object.id == entry.homeId) && (object.status))
-      } else {
+        return entry.completed && homes.some(object => (object.id === entry.homeIcon) && (object.id === entry.homeId) && (object.status))
+      } else { 
         return entry.completed
       }
     }    
