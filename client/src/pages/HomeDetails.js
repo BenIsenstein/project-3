@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, Button } from '../common'
 import DeactivateHome from '../components/DeactivateHome'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect, GroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { defaultHomeItems } from '../variables'
 import { useHandleUserStatus, useUpdateHome } from '../functions'
 
@@ -13,8 +13,6 @@ const HomeDetails = ({activatedHomesLength}) => {
   const history = useHistory()
   const updateHome = useUpdateHome()
   const [home, setHome] = useState()
-  const { customItems, setCustomItems, GroupOfCheckboxes, setAllCustomTasks } = useGroupOfCheckboxes()
-  //const { SuperForm } = useSuperForm()
 
   const inputs = [
     {
@@ -110,10 +108,9 @@ const HomeDetails = ({activatedHomesLength}) => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes,
-      setCustomItems: setCustomItems, 
-      setAllCustomTasks: setAllCustomTasks, 
-      homeId:id,
-      inputs: defaultHomeItems.map(inputName => {return { name: inputName }}),
+      homeId: id,
+      detailsUrl: `/api/home/get/${id}`,
+      inputs: defaultHomeItems.map(inputName => {return { name: `homeItems.${inputName}` }}),
       defaultCheckboxNames: defaultHomeItems
     }
   ]
@@ -128,8 +125,8 @@ const HomeDetails = ({activatedHomesLength}) => {
       }  
       catch (err) {
         alert(`
-            There was an error loading your home details. 
-            We're fixing it as fast as we can.
+          There was an error loading your home details. 
+          We're fixing it as fast as we can.
         `)
       }
     }

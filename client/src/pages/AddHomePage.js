@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Page, PageContainer, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
-import GroupOfInputs, { SuperFormSelect, useGroupOfCheckboxes, SimpleGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
+import GroupOfInputs, { SuperFormSelect, GroupOfCheckboxes, SimpleGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
 import UserContext from '../UserContext'
 import { defaultHomeItems } from '../variables'
@@ -10,7 +10,7 @@ const AddHomePage = () => {
   useHandleUserStatus()
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
-  const { GroupOfCheckboxes } = useGroupOfCheckboxes()
+  
   
   const inputs = [
     {
@@ -122,7 +122,7 @@ const AddHomePage = () => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes, 
-      inputs: defaultHomeItems.map(inputName => {return { name: inputName }})
+      inputs: defaultHomeItems.map(inputName => {return { name: `homeItems.${inputName}` }})
     }
   ]
 
