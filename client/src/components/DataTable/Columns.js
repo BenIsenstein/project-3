@@ -20,8 +20,8 @@ export const columnHeaders = [
         accessor: 'frequency',
         Filter: NumberRangeColumnFilter,
         disableFilters: true,
-       // maxWidth: 110,
-        marginright: 0
+        maxWidth: 110,
+        
     },
 ]
 
