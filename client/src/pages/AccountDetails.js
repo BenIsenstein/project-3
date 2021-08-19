@@ -43,18 +43,18 @@ const AccountDetails = ({setActivatedHomesLength}) => {
           readOnly: true,
           labelText: "Member since"           
         },
-        {
-          name: "userType",
-          registerOptions: { required: "You must select an account type." },
-          labelText: "You are a",
-          isCustomComponent: true, 
-          as: SuperFormSelect,
-          options: [
-            {value: "Home Manager"},
-            {value: "Service Provider"},
-            {value: "Insurance Provider"},
-          ]
-        }
+        // {
+        //   name: "userType",
+        //   registerOptions: { required: "You must select an account type." },
+        //   labelText: "You are a",
+        //   isCustomComponent: true, 
+        //   as: SuperFormSelect,
+        //   options: [
+        //     {value: "Home Manager"},
+        //     {value: "Service Provider"},
+        //     {value: "Insurance Provider"},
+        //   ]
+        // }
       ]
     },
     {

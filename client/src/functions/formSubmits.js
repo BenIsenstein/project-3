@@ -133,9 +133,10 @@ const useAddHome = () => {
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
       
-      let defaultDate = new Date(new Date().setHours(12,0,0))
+      let defaultDate = new Date(new Date())
       //let defaultDate = new Date(new Date().setHours(12,0,0))).setNumberFormat('MM/dd/yyyy')
       defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
+      
 
       return {
         completed: false,
@@ -145,7 +146,7 @@ const useAddHome = () => {
         item: taskObject.item,
         task: taskObject.task,
         notes: "We'll get the right info here eventually!",
-        start: defaultDate,
+        start: defaultDate.setHours(12,0,0),
         end: defaultDate.setHours(13,0,0)
       }
     })

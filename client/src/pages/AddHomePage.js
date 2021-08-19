@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { Page, PageContainer, TreehouseIcon, BuildingHouseIcon, HouseSidingIcon, LighthouseIcon, HouseUserIcon } from '../common'
+import { Page, PageContainer } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
 import GroupOfInputs, { SuperFormSelect, GroupOfCheckboxes, SimpleGroupOfCheckboxes } from '../components/SuperForm/GroupOfInputs'
 import { useAddHome, useHandleUserStatus } from '../functions'
@@ -24,15 +24,17 @@ const AddHomePage = () => {
       //registerOptions: { required: "You must select a picture." },
       isCustomComponent: true, 
       as: SuperFormSelect,
-      
-      // options: [
-      //   {value: 1, optionText:<TreehouseIcon/>},
-      //   {value: 2, optionText:<BuildingHouseIcon/>},
-      //   {value: 3, optionText:<HouseSidingIcon/>}, 
-      //   {value: 4, optionText:<HouseUserIcon/>},
-      //   {value: 5, optionText:<LighthouseIcon/>},
-      //  ]
-    },    
+      options:[
+        {value: ""},
+        {value: "\u0394"},
+        {value: "\u03A8"},
+        {value: "\u03A6"},
+        {value: "\u03B4"},
+        {value: "\u03BB"},
+        {value: "\u03C0"}
+      ]
+    },   
+          
     {
       name: "address",
       registerOptions: { required: "You must input an address." },
