@@ -8,6 +8,7 @@ import SuperForm from "../components/SuperForm/SuperForm"
 // import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
 import { useHandleUserStatus, useUpdateICS } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
+import ClipboardJS from 'clipboard'
 
 const Settings = () => {
   useHandleUserStatus()
@@ -105,6 +106,26 @@ const Settings = () => {
   },[undergoingPreferenceChange])
 
 
+  const CopyLink = () => {
+    const clipboard = new ClipboardJS('.About-button')
+    clipboard.on('success', (event) => {
+      alert(`'${event.text}' has been copied to your clipboard.`)
+      event.clearSelection()
+    })
+
+    return (
+      <div>
+        {/* localhost:3000/api/calFile/icsLink/{userContext.user.calFileId}.ics */}
+        <Button
+          className="About-button"
+          data-clipboard-text={`localhost:3000/api/calFile/icsLink/${userContext.user.calFileId}.ics`}
+        >
+          Copy ICS Link      
+        </Button>
+      </div>
+    )
+  }
+
   return (
     <Page>
       <PageContainer flexColumn>
@@ -171,13 +192,7 @@ const Settings = () => {
           <FormSeparator />
           <FlexSection column fullWidth justifyCenter>
             <p>Find the link to your ICS file here:</p>
-            {userContext.user.calFileId &&
-              <div>
-                  localhost:3000/api/calFile/icsLink/{userContext.user.calFileId}.ics
-              </div>
-            }   
-            <p>(Tip: Use this link when adding a calendar to your favorite calendar app.)</p>
-            
+            {userContext.user.calFileId && <CopyLink />}
           </FlexSection>
 
       </PageContainer>
