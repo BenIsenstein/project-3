@@ -15,6 +15,7 @@ const GroupOfInputs = ({
   isEditView,
   areDetailsLoaded,
   register,
+  unregister,
   setValue,
   watch,
   errors,
@@ -31,6 +32,7 @@ const GroupOfInputs = ({
   }
   const formTools = {
     register,
+    unregister,
     setValue,
     watch,
     errors,
@@ -114,6 +116,7 @@ const GroupOfCheckboxes = ({
   isEditView,
   areDetailsLoaded,
   register,
+  unregister,
   setValue,
   watch,
   errors,
@@ -131,6 +134,7 @@ const GroupOfCheckboxes = ({
   const formTools =  {
     setValue, 
     register,
+    unregister,
     watch,
     errors,
     getValues
@@ -170,14 +174,17 @@ const GroupOfCheckboxes = ({
         setCustomItems(
           Object.keys(homeDetails[groupName])
             .filter(key => !defaultCheckboxNames?.includes(key))
-            .map(key => {return { name: key, isCustomItem: true }})
+            .map(key => {return { name: `${groupName}.${key}`, isCustomItem: true }})
         )
+
+        console.log('customTasks: ', homeDetails.customTasks)
+        setAllCustomTasks(homeDetails.customTasks)
 
         // bring in tasks for the home that are delivered by a route
         // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
-        let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${homeId}`)
-        let customTasksArray = await customTasksRes.json()
-        setAllCustomTasks(customTasksArray)
+        // let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${homeId}`)
+        // let customTasksArray = await customTasksRes.json()
+        // setAllCustomTasks(customTasksArray)
       }
       catch(err) {
         console.log(err)
@@ -231,6 +238,7 @@ const GroupOfCheckboxes = ({
                   <ComplexInput placeholder={task.frequency} {...modeAndView} onChange={event => setEditedFrequency(event.target.value)} labelText="frequency (days)" type="number" />
                 </>}
                 actionOnConfirm={() => {
+                  unregister(`customTasks.${index}`)
                   setAllCustomTasks(prevState => prevState.map(prevTask => prevTask.task === task.task ? { ...prevTask, task: (editedTask || prevTask.task), frequency: (editedFrequency || prevTask.frequency) } : prevTask))
                 }}
               />
@@ -238,6 +246,7 @@ const GroupOfCheckboxes = ({
                 {...task}
                 name={`${task.item} - ${task.task}`}
                 actionOnConfirm={() => {
+                  unregister(`customTasks.${index}`)
                   setAllCustomTasks(prevState => prevState.filter(prevTask => prevTask.task !== task.task))
                 }}
               />
@@ -263,16 +272,20 @@ const GroupOfCheckboxes = ({
           </>}
           actionOnConfirm={() => {
             const valueOfPrevName = getValues(name)
+            unregister(name)
             setCustomItems(prevState => prevState.map(item => item.name === name ? { ...item, name: `${groupName}.${editedItem}`} : item))
             setValue(`${groupName}.${editedItem}`, valueOfPrevName)
+            allCustomTasks.forEach((task, index) => {if (task.item === itemName) unregister(`customTasks.${index}`)})
             setAllCustomTasks(prevState => prevState.map(task => task.item === itemName ? { ...task, item: editedItem } : task))
           }}
         />
         <DeleteItemModal 
           {...rest}
-          name={name}
+          name={itemName}
           actionOnConfirm={() => {
+            unregister(name)
             setCustomItems(prevState => prevState.filter(item => item.name !== name))
+            allCustomTasks.forEach((task, index) => {if (task.item === itemName) unregister(`customTasks.${index}`)})
             setAllCustomTasks(prevState => prevState.filter(task => task.item !== itemName))
           }}
         />
@@ -302,6 +315,7 @@ const GroupOfCheckboxes = ({
                   <ComplexInput placeholder={task.frequency} {...modeAndView} onChange={event => setEditedFrequency(event.target.value)} labelText="frequency (days)" type="number" />
                 </>}
                 actionOnConfirm={() => {
+                  unregister(`customTasks.${index}`)
                   setAllCustomTasks(prevState => prevState.map(prevTask => prevTask.task === task.task ? { ...prevTask, task: (editedTask || prevTask.task), frequency: (editedFrequency || prevTask.frequency) } : prevTask))
                 }}
               />
@@ -309,6 +323,7 @@ const GroupOfCheckboxes = ({
                 {...task}
                 name={`${task.item} - ${task.task}`}
                 actionOnConfirm={() => {
+                  unregister(`customTasks.${index}`)
                   setAllCustomTasks(prevState => prevState.filter(prevTask => prevTask.task !== task.task))
                 }}
               />
@@ -354,7 +369,7 @@ const GroupOfCheckboxes = ({
           name="item" 
           {...modeAndView} 
           as={() => 
-            <Select onChange={event => setNewItem(event.target.value)}>
+            <Select value={newItem} onChange={event => setNewItem(event.target.value)}>
               {allItems.map(({ name }) => <option value={name} key={name}>{makeItemName(name)}</option>)}
             </Select>
           }

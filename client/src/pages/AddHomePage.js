@@ -11,7 +11,6 @@ const AddHomePage = () => {
   const userContext = useContext(UserContext)
   const addHome = useAddHome()
   
-  
   const inputs = [
     {
       name: "nickname",
@@ -34,7 +33,6 @@ const AddHomePage = () => {
         {value: "\u03C0"}
       ]
     },   
-          
     {
       name: "address",
       registerOptions: { required: "You must input an address." },

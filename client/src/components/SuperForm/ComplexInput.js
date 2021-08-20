@@ -39,8 +39,8 @@ const ComplexInput = ({
   }, [])
 
   // ensuring the wheel behaviour is disabled on number inputs
-  // const registerMethods = register && register(name, !isCheckbox && props.registerOptions) // only apply registerOptions if it isn't a checkbox. 
-  // const numberRegisterMethods = register && {
+  // const registerMethods = !isCustomComponent && register && register(name, !isCheckbox && props.registerOptions) // only apply registerOptions if it isn't a checkbox. 
+  // const numberRegisterMethods = !isCustomComponent && register && {
   //   ...registerMethods,
   //   ref: elem => {
   //     elem?.addEventListener("wheel", event => event.preventDefault(), {passive: false})
@@ -69,7 +69,7 @@ const ComplexInput = ({
         <Textarea   
           id={name || props.labelText}
           name={name || props.labelText}
-          {...!isCustomComponent && register && register(name, !isCheckbox && props.registerOptions)}  
+          {...!isCustomComponent && register && register(name, { shouldUnregister: true, ...isCheckbox ? {} : props.registerOptions })}  
           {...isCustomComponent && register && { register }}
           {...forwardErrors && errors && { errors }}
           {...type && { as: Input, type }}
