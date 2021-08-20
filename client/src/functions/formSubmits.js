@@ -3,31 +3,45 @@ import { useHistory, useParams } from 'react-router-dom'
 import UserContext from '../UserContext'
 import { deleteSiBContact } from './manageSiBContacts'
 import stringRandomizer from './stringRandomizer'
+import { useUpdateICS } from '.'
 
-const fetchAddEntry = async (data) => {
-  try {
-    let action = "/api/calendarEntry/add"
-    let options = {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data)
+const useFetchAddEntry = () => {
+
+  let updateICS = useUpdateICS()
+
+  const fetchAddEntry = async (data) => {
+    try {
+      let action = "/api/calendarEntry/add"
+      let options = {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(data)
+      }
+      let res = await fetch(action, options)
+      let resObject = await res.json()
+
+      if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
+      else {
+        await updateICS()
+      }
     }
-    let res = await fetch(action, options)
-    let resObject = await res.json()
+    catch (err) {
+      console.log('error adding calendar entry: ', err)
+      alert("There was an error adding your entry. We're fixing it as fast as we can.")
+    }
+  }
 
-    if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
-  }
-  catch (err) {
-    console.log('error adding calendar entry: ', err)
-    alert("There was an error adding your entry. We're fixing it as fast as we can.")
-  }
+  return fetchAddEntry
+
 }
 
 //updateEntry
 const useUpdateEntry = () => {
   const { id } = useParams()
   const history = useHistory()
-
+  let fetchAddEntry = useFetchAddEntry()
+  let updateICS = useUpdateICS()
+  
   const updateEntry = async (data) => {
     try {
       // only add a recurring entry if it hasn't been completed before
@@ -46,6 +60,7 @@ const useUpdateEntry = () => {
       let resObject = await res.json()
 
       if (!resObject.success) return alert("Your entry wasn't updated for some reason. Please try again.")
+      await updateICS()
       history.goBack()
     }
     catch (err) {
@@ -61,6 +76,7 @@ const useUpdateEntry = () => {
 // addEntry
 const useAddEntry = () => {
   const history = useHistory()
+  let fetchAddEntry = useFetchAddEntry()
 
   const addEntry = async (data) => {
     data.completed = false
@@ -78,6 +94,7 @@ const useAddHome = () => {
   const history = useHistory()
   const userContext = useContext(UserContext)
   const [taskInfo, setTaskInfo] = useState([])
+  let fetchAddEntry = useFetchAddEntry()
 
   useEffect(() => {
     const getAllInfo = async () => {
@@ -124,19 +141,19 @@ const useAddHome = () => {
 
     // add default entries based on industry standards from info table
     let selectedItems = Object.keys(data.homeItems).filter(key => data.homeItems[key])
-    
+
     let relevantTasks = [
-      ...taskInfo.filter(task => selectedItems.includes(task.item)), 
+      ...taskInfo.filter(task => selectedItems.includes(task.item)),
       ...data.customTasks || []
     ]
-    
+
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
-      
+
       let defaultDate = new Date(new Date())
       //let defaultDate = new Date(new Date().setHours(12,0,0))).setNumberFormat('MM/dd/yyyy')
       defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
-      
+
 
       return {
         completed: false,
@@ -146,8 +163,8 @@ const useAddHome = () => {
         item: taskObject.item,
         task: taskObject.task,
         notes: "We'll get the right info here eventually!",
-        start: defaultDate.setHours(12,0,0),
-        end: defaultDate.setHours(13,0,0)
+        start: defaultDate.setHours(12, 0, 0),
+        end: defaultDate.setHours(13, 0, 0)
       }
     })
 
@@ -182,7 +199,7 @@ const useUpdateHome = () => {
       let resObject = await res.json()
 
       if (!resObject.success) return alert("Your home details wasn't updated for some reason. Please try again.")
-    //   history.push('/account')
+      //   history.push('/account')
       history.goBack()
     }
     catch (err) {
@@ -246,9 +263,9 @@ const useUpdateAccount = () => {
         // make sure the data for context update includes _id and dateSignedUp
         // set all context to match the account changes and redirect 
         for (let key of ['dateSignedUp', '_id']) data[key] = userContext.user[key]
-        
+
         // Preserve HOMES list prior to updating userContext
-        let tempUserData = {...userContext.user}
+        let tempUserData = { ...userContext.user }
         data.homes = tempUserData.homes
 
         userContext.setUserInfo(data)
