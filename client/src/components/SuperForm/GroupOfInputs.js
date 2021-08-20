@@ -174,14 +174,17 @@ const GroupOfCheckboxes = ({
         setCustomItems(
           Object.keys(homeDetails[groupName])
             .filter(key => !defaultCheckboxNames?.includes(key))
-            .map(key => {return { name: key, isCustomItem: true }})
+            .map(key => {return { name: `${groupName}.${key}`, isCustomItem: true }})
         )
+
+        console.log('customTasks: ', homeDetails.customTasks)
+        setAllCustomTasks(homeDetails.customTasks)
 
         // bring in tasks for the home that are delivered by a route
         // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
-        let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${homeId}`)
-        let customTasksArray = await customTasksRes.json()
-        setAllCustomTasks(customTasksArray)
+        // let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${homeId}`)
+        // let customTasksArray = await customTasksRes.json()
+        // setAllCustomTasks(customTasksArray)
       }
       catch(err) {
         console.log(err)
