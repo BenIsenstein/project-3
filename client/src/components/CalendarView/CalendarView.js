@@ -217,7 +217,7 @@ const CalendarView = ({ dates, ...props }) => {
             start: overrideStartDate,
             end: overrideEndDate,
             house: currentEntry.house,
-            title: currentEntry.item + ' - ' + currentEntry.task,
+            title: currentEntry.homeIcon + ' | ' + currentEntry.item + ' - ' + currentEntry.task,
             completed: currentEntry.completed,
             _id: currentEntry._id
           }
@@ -323,7 +323,7 @@ const CalendarView = ({ dates, ...props }) => {
                   {
                     // events: eventList,
                     events: upcomingList,
-                    color: 'deepskyblue',     // blue
+                    color: 'light blue',     // blue
                   }
                 ]}
                 headerToolbar={{

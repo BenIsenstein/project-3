@@ -31,26 +31,9 @@ const AddEntry = () => {
     },
     {
       name: "notes",
+      placeholder: "< ...service providers, description, etc  >"
     },
-    { 
-      labelText: "Service Provider",
-      labelProps: { as: "h2", fontSize: '1em' },
-      isCustomComponent: true,
-      forwardErrors: true,
-      as: GroupOfInputs,
-      inputs: [
-        {
-          name: "serviceProviderInfo.name",
-          labelText: "Name",
-          wrapperProps: {gridColumn: '1/2'}
-        },
-        {
-          name: "serviceProviderInfo.phoneNumber",
-          labelText: "Phone Number",
-          wrapperProps: {gridColumn: '3/4'}
-        }
-      ]
-    },
+   
     {
       isCustomComponent: true,
       forwardErrors: true,
