@@ -3,10 +3,10 @@ import { useEffect, useState, useContext, useMemo } from "react"
 import { useHistory } from 'react-router-dom'
 import UserContext from '../UserContext'
 import FilterContext from '../FilterContext'
-import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator } from "../common"
+import { Page, PageContainer, Button, FlexSection, FormSectionTitle, FormSeparator, CalendarIcon } from "../common"
 import SuperForm from "../components/SuperForm/SuperForm"
 // import GroupOfInputs, { GroupOfCheckboxes, SuperFormSelect } from "../components/SuperForm/GroupOfInputs"
-import { useHandleUserStatus } from "../functions"
+import { useHandleUserStatus, useUpdateICS } from "../functions"
 import CalendarFilter from '../components/Filter/CalendarFilter'
 
 const Settings = () => {
@@ -14,6 +14,7 @@ const Settings = () => {
   const userContext = useContext(UserContext)
   const filterContext = useContext(FilterContext)
   const history = useHistory()
+  const updateICS = useUpdateICS()
   //const { SuperForm } = useSuperForm()
   const [undergoingPreferenceChange, setUndergoingPreferenceChange] = useState(false)
   const [undergoingNotificationChange, setUndergoingNotificationChange] = useState(false)
@@ -23,7 +24,7 @@ const Settings = () => {
     completed: false,
     homes: []
   })
-
+  
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
 
   const updateFilterPrefs = async (data) => {
@@ -167,7 +168,24 @@ const Settings = () => {
           <FlexSection fullWidth justifyCenter>
             <TestEmailButton /> Email me a reminder for my tasks now!
           </FlexSection>
-        
+
+          <FormSeparator />
+
+          <FlexSection fullWidth justifyCenter>
+            <CalendarIcon onClick = {updateICS} /> Generate an ICS file for adding to my Calendar
+          </FlexSection>
+
+          <FormSeparator />
+          <FlexSection fullWidth justifyCenter>
+            {userContext.user.calFileId &&
+              <div>
+                <p>Find the link to your ICS file here:</p>
+                  localhost:3000/api/calFile/link/{userContext.user.calFileId}.ics
+              </div>
+            }   
+            
+          </FlexSection>
+
       </PageContainer>
     </Page>
   )

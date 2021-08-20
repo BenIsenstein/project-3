@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
   //     type: String
   //   }
   // },
-  dateSignedUp: Date
+  dateSignedUp: Date,
+  calFileId: String
 })
   
 userSchema.methods.validPassword = function (pwd) {

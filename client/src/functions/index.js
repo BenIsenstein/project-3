@@ -7,4 +7,4 @@ export * from './manageSiBContacts'
 export * from './isValidDate'
 export * from './datetimePickerHooks'
 export * from './useGetAllInfo'
-
+export * from './useUpdateICS'
