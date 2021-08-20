@@ -172,7 +172,10 @@ const Settings = () => {
           <FormSeparator />
 
           <FlexSection fullWidth justifyCenter>
-            <CalendarIcon onClick = {updateICS} /> Generate an ICS file for adding to my Calendar
+            <CalendarIcon onClick = {() => {
+                alert("ICS file updated!");
+                updateICS();
+                }} /> Generate an ICS file for adding to my Calendar
           </FlexSection>
 
           <FormSeparator />

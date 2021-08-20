@@ -157,7 +157,7 @@ const useAddHome = () => {
       history.goBack()
     }
     else {
-      history.push(`/account`)
+      history.push(`/calendar`)
     }
 
   }, [history, taskInfo, userContext])

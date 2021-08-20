@@ -38,17 +38,14 @@ router.post('/create/', async (req, res) => {
       while (arrayIndexer < taskListRes.length) {
         currentItem = taskListRes[arrayIndexer]
 
+        // Convert start and end times from ISO into
+        // ics file standard arrary [YYYY, MM, DD, hr, min]
         startString = currentItem.start.toISOString().substring(0, 10) + '-' + currentItem.start.toISOString().substring(11, 16)
         startString = startString.replace(':', '-')
         startArray = startString.split('-').map(Number)
         endString = currentItem.end.toISOString().substring(0, 10) + '-' + currentItem.end.toISOString().substring(11, 16)
         endString = endString.replace(':', '-')
         endArray = endString.split('-').map(Number)
-
-
-        // Convert startTime to ics compatible ARRAY in format [YYYY, M, D, Hour, Min]
-        
-        
 
         // Only use Calendar Entries that are for ACTIVE homes.
         dbHomeResponse = await Home.findOne({ _id: currentItem.homeId })
@@ -68,14 +65,12 @@ router.post('/create/', async (req, res) => {
       }
     }
 
-    console.log("User event list = ", calendarEntries)
-
     // Create the user's ICS file
     ics.createEvents(calendarEntries,
       // ics.createEvents(
       //   [
       //     {
-      //       title: 'Dinner with Micky',
+      //       title: 'Dinner with Mickey',
       //       description: 'Nightly thing I do',
       //       busyStatus: 'FREE',
       //       start: [2021, 8, 15, 6, 30],
