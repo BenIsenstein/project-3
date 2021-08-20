@@ -1,6 +1,7 @@
 import React from "react"
 import { useHistory } from 'react-router-dom'
 import { Button, TrashIcon } from '../common'
+import { useUpdateICS } from "../functions"
 
 import ConfirmModal from './Modals/ConfirmModal'
 import useConfirmModal from './Modals/useConfirmModal'
@@ -10,7 +11,7 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
   const {isConfirmModalShowing, toggleConfirmModal} = useConfirmModal()
 
   let history = useHistory()
-  
+  let updateICS = useUpdateICS()
   async function DeleteEntry() {
     try {
       let response = await fetch(`/api/calendarEntry/delete/${entryId}`,
@@ -28,6 +29,10 @@ const DeleteEntryButton = ({ entryId, reRenderList, ...props }) => {
           alert("Your entry wasn't deleted for some reason. We're working on it.")
         }
         else { // Deletion was successful. Refresh page or redirect back to calendar.
+          
+          // Update user's ICS file
+          await updateICS()
+
           if (reRenderList) { // Call reRenderList function if it was provided in props
             reRenderList()
           }
