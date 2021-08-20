@@ -52,7 +52,11 @@ const Calendar = () => {
         let list = entriesObject.entryList
         let datesArray = []
         // prepare list by making 'start' into a Date object
-        list.every(entry => entry.start = new Date(entry.start))
+        console.log("Usercontext is ", userContext?.user?.homes)
+        list.forEach(entry => { 
+          entry.start = new Date(entry.start)
+          entry.homeIcon = userContext?.user?.homes.find(home => home._id === entry.homeId)?.homeIcon
+          })
 
         if (!list.length) return setNoneFound()
 
@@ -97,7 +101,7 @@ const Calendar = () => {
     const returnAll = entry => {
       if (homes?.length > 0) {
         // return true && homes.some(object => object.id == entry.homeId)
-        return true && homes.some(object =>  (object.id === entry.homeIcon) && (object.id === entry.homeId) && (object.status))
+        return true && homes.some(object => (object.id === entry.homeId) && (object.status))
       } else {
         return true
       } 

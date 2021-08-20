@@ -5,6 +5,8 @@ const defaultHomeItems = [
     "Electric & Hydronic Heating",    
     "Exterior",    
     "Furnace",
+    "Fireplace- Gas",
+    "Fireplace- Wood",
     "Garage",    
     "GFCI Outlet",    
     "Gutters",    
