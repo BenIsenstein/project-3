@@ -172,7 +172,10 @@ const Settings = () => {
           <FormSeparator />
 
           <FlexSection fullWidth justifyCenter>
-            <CalendarIcon onClick = {updateICS} /> Generate an ICS file for adding to my Calendar
+            <CalendarIcon onClick = {() => {
+                alert("ICS file updated!");
+                updateICS();
+                }} /> Generate an ICS file for adding to my Calendar
           </FlexSection>
 
           <FormSeparator />
@@ -180,7 +183,8 @@ const Settings = () => {
             {userContext.user.calFileId &&
               <div>
                 <p>Find the link to your ICS file here:</p>
-                  localhost:3000/api/calFile/link/{userContext.user.calFileId}.ics
+                  localhost:3000/api/calFile/icsLink/{userContext.user.calFileId}.ics
+                <p>(Tip: Use this link when adding a calendar to your favorite calendar app.)</p>
               </div>
             }   
             

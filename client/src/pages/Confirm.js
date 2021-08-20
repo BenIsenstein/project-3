@@ -48,7 +48,7 @@ const Confirm = () => {
 
           }
           else {
-            return alert("Your AUTH entry wasn't updated for some reason. Please try again.")
+            console.log("AUTH entry wasn't updated for some reason.")
           }
         }
         else {
