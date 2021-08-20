@@ -120,30 +120,41 @@ router.post('/create/', async (req, res) => {
 
 
 // ----------------------------------------------------------------------------
-// GET file stored in GridFS
-router.get('/link/:fileID', (req, res) => {
-console.log("You've reached the GET API for ics files!!!")
-  let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
-    chuckSizeBytes: 1024,
-    bucketName: 'calFile'
-  })
+// STREAM / DOWNLOAD file stored in GridFS
+router.get('/icsLink/:fileID', async (req, res) => {
+  try {
+    let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+      chuckSizeBytes: 1024,
+      bucketName: 'calFile'
+    })
 
-  let realFileName = req.params.fileID + '.ics'
+    // Search for file in the GridFS database. When found, capture its '_id' value.
+    let resFind = await CalFile.findOne({ filename: req.params.fileID })
 
-  // Search for file in the GridFS database. When found, capture its '_id' value.
-  let resFind = CalFile.findOne({ filename: realFileName })
+    if (resFind) {
+      // Using the '_id' value from above, convert it into 'ObjectId' format.
+      let actualFileId = resFind._id
 
-  if (resFind) {
-    console.log("ICS file exists, attempting to retrieve it...")
-    // Using the '_id' value from above, convert it into 'ObjectId' format.
-    let actualFileId = resFind._id
-    const formattedID = mongoose.Types.ObjectId(actualFileId)
+      const downloadID = mongoose.Types.ObjectId(actualFileId);
+      // let findCursor = gridFSbucket.find({_id: req.params.fileID})
+      let findCursor = gridFSbucket.find({ _id: downloadID })
 
-    // Pass object stream to requestor    
-    gridFSbucket.openDownloadStream(pictureID)
-      .pipe(res)
+      findCursor.toArray()
+        .then((results) => {
+          gridFSbucket.openDownloadStream(downloadID)
+          .pipe(res)
+        })
+      // res.send("")
+    }
+    else {
+      // no file found, nothing to delete.
+      res.json({ Success: true, Message: 'No file to delete' })
+    }
   }
-
+  catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error")
+  }
 })
 
 
