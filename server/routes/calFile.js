@@ -26,7 +26,7 @@ router.post('/create/', async (req, res) => {
     // Build array of user's calendar entries, but only the incomplete ones, and only
     // for homes that are active.
     let taskListRes = await CalendarEntry.find({ userId: userId, completed: false }, null, { sort: { start: 1 } })
-    let calendarEntries = [{}]
+    let calendarEntries = []
     let startString = ""
     let startArray = []
     let endString = ""
@@ -52,7 +52,7 @@ router.post('/create/', async (req, res) => {
         if (dbHomeResponse?.activated) {
           calendarEntries[innerIndexer] = {
             title: 'TASKr Home: ' + dbHomeResponse.nickname + ' - ' + currentItem.item,
-            description: currentItem.task + ' : ' + currentItem.description,
+            description: currentItem.task + ' : ' + currentItem.notes,
             busyStatus: 'FREE',
             // startInputType: 'utc',
             start: startArray,
@@ -65,50 +65,63 @@ router.post('/create/', async (req, res) => {
       }
     }
 
-    // Create the user's ICS file
-    ics.createEvents(calendarEntries,
-      // ics.createEvents(
-      //   [
-      //     {
-      //       title: 'Dinner with Mickey',
-      //       description: 'Nightly thing I do',
-      //       busyStatus: 'FREE',
-      //       start: [2021, 8, 15, 6, 30],
-      //       duration: { minutes: 50 }
-      //     },
-      //     {
-      //       title: 'Lunch with Wolverine',
-      //       start: [2021, 10, 15, 12, 15],
-      //       duration: { minutes: 45 }
-      //     },
-      //     {
-      //       title: 'Dinner with Goofy',
-      //       start: [2021, 9, 15, 12, 15],
-      //       duration: { hours: 1, minutes: 30 }
-      //     }
-      //   ],
-      (error, value) => {
-        if (error) {
-          console.log("Error on validation = ", error)
+    if (calendarEntries.length > 0) {
+
+      // Create the user's ICS file
+      ics.createEvents(calendarEntries,
+        // ics.createEvents(
+        //   [
+        //     {
+        //       title: 'Dinner with Mickey',
+        //       description: 'Nightly thing I do',
+        //       busyStatus: 'FREE',
+        //       start: [2021, 8, 15, 6, 30],
+        //       duration: { minutes: 50 }
+        //     },
+        //     {
+        //       title: 'Lunch with Wolverine',
+        //       start: [2021, 10, 15, 12, 15],
+        //       duration: { minutes: 45 }
+        //     },
+        //     {
+        //       title: 'Dinner with Goofy',
+        //       start: [2021, 9, 15, 12, 15],
+        //       duration: { hours: 1, minutes: 30 }
+        //     }
+        //   ],
+        (error, value) => {
+          if (error) {
+            console.log("Error on validation = ", error)
+          }
+
+          // Write file to temporary folder to give it a path for using GridFS stream
+          writeFileSync(`tempICS/${fileName}`, value)
+
+          fs.createReadStream(`tempICS/${fileName}`)
+            .pipe(gridfsbucket.openUploadStream(fileName))
+            .on('error', () => {
+              console.log("Error occured uploading file to database:" + error)
+            })
+            .on('finish', () => {
+              console.log("Done uploading ICS file to database")
+            })
+
+          // Clean up the temporary file, it is no longer needed.
+          fs.unlinkSync(`tempICS/${fileName}`)
+
         }
-
-        // Write file to temporary folder to give it a path for using GridFS stream
-        writeFileSync(`tempICS/${fileName}`, value)
-
-        fs.createReadStream(`tempICS/${fileName}`)
-          .pipe(gridfsbucket.openUploadStream(fileName))
-          .on('error', () => {
-            console.log("Error occured uploading file to database:" + error)
-          })
-          .on('finish', () => {
-            console.log("Done uploading ICS file to database")
-          })
-
-        // Clean up the temporary file, it is no longer needed.
-        fs.unlinkSync(`tempICS/${fileName}`)
-
-      }
-    )
+      )
+    }
+    else{ // Empty calendar list. Create an empty ICS file for the user.
+      fs.createReadStream("tempICS/EmptyICS_DoNotDelete.ics")
+      .pipe(gridfsbucket.openUploadStream(fileName))
+      .on('error', () => {
+        console.log("Error occured uploading file to database:" + error)
+      })
+      .on('finish', () => {
+        console.log("Done uploading ICS file to database")
+      })
+    }
 
     res.json({ success: true })
   }
@@ -120,7 +133,7 @@ router.post('/create/', async (req, res) => {
 
 
 // ----------------------------------------------------------------------------
-// STREAM / DOWNLOAD file stored in GridFS
+// DOWNLOAD file stored in GridFS
 router.get('/icsLink/:fileID', async (req, res) => {
   try {
     let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
@@ -135,16 +148,22 @@ router.get('/icsLink/:fileID', async (req, res) => {
       // Using the '_id' value from above, convert it into 'ObjectId' format.
       let actualFileId = resFind._id
 
+      // let read_stream = gfs.createReadStream({_id: actualFileId})
+      // let imgFile = fs.createWriteStream("images/logos/logo.jpg")
+      // let write_stream = read_stream.pipe(res)
+
       const downloadID = mongoose.Types.ObjectId(actualFileId);
+
       // let findCursor = gridFSbucket.find({_id: req.params.fileID})
       let findCursor = gridFSbucket.find({ _id: downloadID })
 
       findCursor.toArray()
         .then((results) => {
+          res.setHeader('Content-disposition', 'attachment; filename=' + req.params.fileID);
+          res.setHeader('Content-type', 'text/calendar')
           gridFSbucket.openDownloadStream(downloadID)
-          .pipe(res)
+            .pipe(res)
         })
-      // res.send("")
     }
     else {
       // no file found, nothing to delete.
