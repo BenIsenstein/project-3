@@ -118,7 +118,7 @@ const Settings = () => {
         {/* localhost:3000/api/calFile/icsLink/{userContext.user.calFileId}.ics */}
         <Button
           className="About-button"
-          data-clipboard-text={`localhost:3000/api/calFile/icsLink/${userContext.user.calFileId}.ics`}
+          data-clipboard-text={`https://taskr-1.herokuapp.com/api/calFile/icsLink/${userContext.user.calFileId}.ics`}
         >
           Copy ICS Link      
         </Button>
