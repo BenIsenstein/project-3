@@ -52,7 +52,7 @@ router.post('/create/', async (req, res) => {
         if (dbHomeResponse?.activated) {
           calendarEntries[innerIndexer] = {
             title: 'TASKr Home: ' + dbHomeResponse.nickname + ' - ' + currentItem.item,
-            description: currentItem.task + ' : ' + currentItem.description,
+            description: currentItem.task + ' : ' + currentItem.notes,
             busyStatus: 'FREE',
             // startInputType: 'utc',
             start: startArray,
@@ -120,31 +120,37 @@ router.post('/create/', async (req, res) => {
 
 
 // ----------------------------------------------------------------------------
-// STREAM / DOWNLOAD file stored in GridFS
+// DOWNLOAD file stored in GridFS
 router.get('/icsLink/:fileID', async (req, res) => {
   try {
     let gridFSbucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
       chuckSizeBytes: 1024,
       bucketName: 'calFile'
     })
-
+    
     // Search for file in the GridFS database. When found, capture its '_id' value.
     let resFind = await CalFile.findOne({ filename: req.params.fileID })
-
+    
     if (resFind) {
       // Using the '_id' value from above, convert it into 'ObjectId' format.
       let actualFileId = resFind._id
 
+      // let read_stream = gfs.createReadStream({_id: actualFileId})
+      // let imgFile = fs.createWriteStream("images/logos/logo.jpg")
+      // let write_stream = read_stream.pipe(res)
+      
       const downloadID = mongoose.Types.ObjectId(actualFileId);
+      
+
       // let findCursor = gridFSbucket.find({_id: req.params.fileID})
       let findCursor = gridFSbucket.find({ _id: downloadID })
-
+      
       findCursor.toArray()
         .then((results) => {
+          // res.send("")
           gridFSbucket.openDownloadStream(downloadID)
           .pipe(res)
         })
-      // res.send("")
     }
     else {
       // no file found, nothing to delete.
