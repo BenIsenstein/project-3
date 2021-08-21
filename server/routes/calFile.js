@@ -141,13 +141,13 @@ router.get('/icsLink/:fileID', async (req, res) => {
       
       const downloadID = mongoose.Types.ObjectId(actualFileId);
       
-
       // let findCursor = gridFSbucket.find({_id: req.params.fileID})
       let findCursor = gridFSbucket.find({ _id: downloadID })
-      
+
       findCursor.toArray()
         .then((results) => {
-          // res.send("")
+          res.setHeader('Content-disposition', 'attachment; filename=' + req.params.fileID);
+          res.setHeader('Content-type', 'text/calendar')
           gridFSbucket.openDownloadStream(downloadID)
           .pipe(res)
         })
