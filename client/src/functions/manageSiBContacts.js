@@ -16,7 +16,7 @@ const addSiBContact = async (email, firstName, lastName) => {
   }
   catch (err) {
     console.log('error calling addSiBContact API: ', err)
-    alert("There was an error calling the addSiBContact API. We're fixing it as fast as we can.")
+    // alert("There was an error calling the addSiBContact API. We're fixing it as fast as we can.")
   }
 }
 
@@ -36,7 +36,7 @@ const deleteSiBContact = async (email) => {
   }
   catch (err) {
     console.log('Error calling deleteSiBContact API: ', err)
-    alert("There was an error calling the deleteSiBContact API. We're fixing it as fast as we can.")
+    // alert("There was an error calling the deleteSiBContact API. We're fixing it as fast as we can.")
   }
 }
 
