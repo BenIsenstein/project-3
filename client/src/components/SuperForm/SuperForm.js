@@ -162,6 +162,7 @@ const SuperForm = ({
         for (let { name, ...input } of inputs) {
           // if the object contains a single input element:
           if (!['GroupOfInputs', 'GroupOfCheckboxes', 'StartAndEndDates'].includes(input?.as?.name)) {
+            console.log("input?.as?.name: ", input?.as?.name)
             console.log(`setting ${name} to ${findValInDetails(name)}`)
             setValue(name, findValInDetails(name))
             valuesForReset[name] = findValInDetails(name)
