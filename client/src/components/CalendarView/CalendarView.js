@@ -323,7 +323,7 @@ const CalendarView = ({ dates, ...props }) => {
                   {
                     // events: eventList,
                     events: upcomingList,
-                    color: 'light blue',     // blue
+                    color: 'deepskyblue',     // blue
                   }
                 ]}
                 headerToolbar={{

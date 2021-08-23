@@ -28,6 +28,15 @@ const Settings = () => {
   
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
 
+  const cancelChanges = () => {
+    let tempStateObject = {
+      active: filterContext.active,
+      completed: filterContext.completed,
+      homes: filterContext.homes
+    }
+    setChecked(tempStateObject)
+  }
+
   const updateFilterPrefs = async (data) => {
     try {
       data.settings = {}
@@ -118,7 +127,7 @@ const Settings = () => {
         {/* localhost:3000/api/calFile/icsLink/{userContext.user.calFileId}.ics */}
         <Button
           className="About-button"
-          data-clipboard-text={`localhost:3000/api/calFile/icsLink/${userContext.user.calFileId}.ics`}
+          data-clipboard-text={`https://taskr-1.herokuapp.com/api/calFile/icsLink/${userContext.user.calFileId}.ics`}
         >
           Copy ICS Link      
         </Button>
@@ -148,7 +157,10 @@ const Settings = () => {
               BeforeSubmitButton={<CalendarFilterWithProps />}
               titleText="Filters"
               onSubmit={updateFilterPrefs}
-              addModeCancel={() => setUndergoingPreferenceChange(false)}
+              addModeCancel={() => {
+                setUndergoingPreferenceChange(false);
+                cancelChanges();
+              }}
             />
            
           </FlexSection>

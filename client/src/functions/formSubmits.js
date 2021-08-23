@@ -187,7 +187,7 @@ const useAddHome = () => {
         homeIcon: addHomeObject.homeIcon,
         item: taskObject.item,
         task: taskObject.task,
-        notes: "We'll get the right info here eventually!",
+        notes: "",
         start: defaultDate.setHours(12, 0, 0),
         end: defaultDate.setHours(13, 0, 0)
       }

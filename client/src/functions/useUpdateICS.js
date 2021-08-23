@@ -37,14 +37,21 @@ const useUpdateICS = () => {
         calendarId = userContext.user.calFileId
       }
 
-      // Delete any existing file with same name.
-      let apiForDel = `/api/calFile/delete/${calendarId}`
-      let delOptions = {
-        method: "DELETE",
-        headers: { "content-type": "application/json" },
-      }
-      let delRes = await fetch(apiForDel, delOptions)
-      let delObject = await delRes.json()
+      // ----------------------------------------------------------
+      // // The following section of code that was responsible for
+      // // deleting the old ICS file prior to replacement, has been
+      // // relocated within the '/api/calFile/create' route so it
+      // // can be performed conditionally.
+      // //
+      // // Delete any existing file with same name.
+      // let apiForDel = `/api/calFile/delete/${calendarId}`
+      // let delOptions = {
+      //   method: "DELETE",
+      //   headers: { "content-type": "application/json" },
+      // }
+      // let delRes = await fetch(apiForDel, delOptions)
+      // let delObject = await delRes.json()
+      // ----------------------------------------------------------
 
       // Recreate the new ICS file by calling the API
       let apiLocation = "/api/calFile/create"
