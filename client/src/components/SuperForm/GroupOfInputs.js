@@ -20,6 +20,7 @@ const GroupOfInputs = ({
   watch,
   errors,
   getValues,
+  setResetValues,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
   const isDateInput = useIsDateInput()
@@ -36,7 +37,8 @@ const GroupOfInputs = ({
     setValue,
     watch,
     errors,
-    getValues
+    getValues,
+    setResetValues
   }
 
   useEffect(() => () => console.log('GroupOfInputs unmounted!'), [])
@@ -121,6 +123,7 @@ const GroupOfCheckboxes = ({
   watch,
   errors,
   getValues,
+  setResetValues,
   name: groupName,
   ...props }) => {
   // - - - - - - hooks/variables - - - - - - - //
@@ -165,26 +168,37 @@ const GroupOfCheckboxes = ({
       if (!isMounted) return
 
       try {
+        let customItemValuesForReset = {}
+
         // fetch details to call 'setCustomItems'
         let homeDetailsRes = await fetch(detailsUrl)
         let homeDetails = await homeDetailsRes.json()
+
+        // function to find the value of an input field, no matter how nested the name is.
+        // breaks nested input names down by dot notation, but works for non-nested input values as well.
+        const findValInDetails = (name) => name?.split('.')?.reduce((curVal, curKey) => curVal && curVal[curKey], homeDetails)
+
         // make sure items that fall outside of the checkbox group's 
         // "defaultCheckboxNames" - ie. they were added by the user -  become a part of 
         // the 'customItems' state array sitting in the component.
-        setCustomItems(
-          Object.keys(homeDetails[groupName])
-            .filter(key => !defaultCheckboxNames?.includes(key))
-            .map(key => {return { name: `${groupName}.${key}`, isCustomItem: true }})
-        )
+        let customItemsToSet = Object.keys(homeDetails[groupName])
+          .filter(key => !defaultCheckboxNames?.includes(key))
+          .map(key => {return { name: `${groupName}.${key}`, isCustomItem: true }})
+
+        setCustomItems(customItemsToSet)
+
+        customItemsToSet.forEach(({ name }) => {
+          console.log(`setting custom item ${name} to ${findValInDetails(name)}`)
+          setValue(name, findValInDetails(name))
+          customItemValuesForReset[name] = findValInDetails(name)
+        })
+
+        setResetValues(prevState => {return { ...prevState, ...customItemValuesForReset }})
 
         console.log('customTasks: ', homeDetails.customTasks)
         setAllCustomTasks(homeDetails.customTasks)
 
-        // bring in tasks for the home that are delivered by a route
-        // and call the 'setAllCustomTasks' method internal to the <GroupOfCheckboxes />
-        // let customTasksRes = await fetch(`/api/home/getcustomtasksbyhome/${homeId}`)
-        // let customTasksArray = await customTasksRes.json()
-        // setAllCustomTasks(customTasksArray)
+
       }
       catch(err) {
         console.log(err)
@@ -356,7 +370,7 @@ const GroupOfCheckboxes = ({
   }
 
   const AddCustomTaskModal = () => {
-    const [newItem, setNewItem] = useState()
+    const [newItem, setNewItem] = useState(allItems[0].name)
     const [newTask, setNewTask] = useState()
     const [newFrequency, setNewFrequency] = useState()
 
@@ -391,9 +405,9 @@ const GroupOfCheckboxes = ({
   )
   
   // - - - - - - - RETURN JSX - - - - - - - - //
-  return <>
+  return areDetailsLoaded && <>
     <GridSection fullWidth {...props}>
-      {inputs && allItems.map((input, index) => (props.readOnly || input.readOnly)
+      {allItems.map((input, index) => (props.readOnly || input.readOnly)
         ? watch(input.name) && <Li gridColumn="1/2" key={index}>{makeItemName(input.name)}</Li>
         : input.isCustomItem 
           ? <CustomCheckboxAndTasks index={index} {...input} />

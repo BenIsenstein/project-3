@@ -21,7 +21,8 @@ const homeSchema = new mongoose.Schema({
   customTasks: [{  
     item: String,
     task: String,
-    frequency: Number}]
+    frequency: Number
+  }]
 })
 
 const Home = mongoose.model("Home", homeSchema)

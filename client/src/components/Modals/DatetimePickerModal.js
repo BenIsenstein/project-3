@@ -26,7 +26,7 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
 
   // - - - - - Custom app-specific effects - - - - - - - 
 
-  usePossessionDateByOwner(watch, setValue, name)
+  usePossessionDateByOwner(watch, setValue, isAddMode, name)
 
   useEntryDetailsCompletion(watch, setValue, name, currentValue, recurrenceFrequency, isCompleted, isValidDate)
   

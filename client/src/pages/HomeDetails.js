@@ -13,12 +13,48 @@ const HomeDetails = ({activatedHomesLength}) => {
   const history = useHistory()
   const updateHome = useUpdateHome()
   const [home, setHome] = useState()
+  
+  useEffect(() => {
+    const fetchHomeDetails = async () => {
+      try {
+        let homeRes = await fetch(`/api/home/get/${id}`)
+        let homeObject = await homeRes.json()
+        
+        setHome(homeObject)
+      }  
+      catch (err) {
+        alert(`
+          There was an error loading your home details. 
+          We're fixing it as fast as we can.
+        `)
+      }
+    }
+    fetchHomeDetails()
+  }, [id])
 
   const inputs = [
     {
-      name: "nickname"
+      name: "nickname",
+      wrapperProps: {gridColumn: '1/2'}
     },
-        
+    {
+      name:"homeIcon",
+      labelText: "home Icon",
+      wrapperProps: {gridColumn: '3/4'},
+      //registerOptions: { required: "You must select a picture." },
+      isCustomComponent: true, 
+      as: SuperFormSelect,
+      asName: "SuperFormSelect",
+      options:[
+        {value: ""},
+        {value: "\u0394"},
+        {value: "\u03A8"},
+        {value: "\u03A6"},
+        {value: "\u03B4"},
+        {value: "\u03BB"},
+        {value: "\u03C0"}
+      ]
+    },   
     {
       name: "address",
       registerOptions: { required: "You must input an address." },
@@ -119,23 +155,6 @@ const HomeDetails = ({activatedHomesLength}) => {
     }
   ]
   
-  useEffect(() => {
-    const fetchHomeDetails = async () => {
-      try {
-        let homeRes = await fetch(`/api/home/get/${id}`)
-        let homeObject = await homeRes.json()
-        
-        setHome(homeObject)
-      }  
-      catch (err) {
-        alert(`
-          There was an error loading your home details. 
-          We're fixing it as fast as we can.
-        `)
-      }
-    }
-    fetchHomeDetails()
-  }, [id])
 
   return (
     <Page>
@@ -145,11 +164,10 @@ const HomeDetails = ({activatedHomesLength}) => {
           inputs={inputs}
           formMode="details"
           detailsUrl={`/api/home/get/${id}`}
-          onSubmit={data => console.log(data)}  //updateHome
+          onSubmit={updateHome} 
         />
         <FlexSection fadeIn fullWidth marginTop1em>
           {home && <DeactivateHome fullWidth fullHeight home={home} activatedHomesLength={activatedHomesLength} />}
-          {/* <Button fullWidth onClick={() => history.push(`/account`)}>BACK TO ACCOUNT</Button> */}
           <Button fullWidth onClick={() => history.goBack()}>BACK</Button>
         </FlexSection>
       </PageContainer>

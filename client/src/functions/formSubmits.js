@@ -247,8 +247,10 @@ const useUpdateHome = () => {
       let allTasksToAdd = [...selectedItemsTasks, ...customTasksNewlyAdded]
 
       allTasksToAdd.forEach(async (task) => {
-        let recurrenceDateStart = new Date(new Date().setHours(12,0,0))
-        recurrenceDateStart.setDate(recurrenceDateStart.getDate() + task.frequency)
+        console.log(`adding calendarEntry for task: "${task.task} ${task.item}"`)
+
+        let recurrenceDate = new Date(new Date())
+        recurrenceDate.setDate(recurrenceDate.getDate() + task.frequency)
 
         const entry = { 
           userId: userContext.user?._id,
@@ -257,8 +259,8 @@ const useUpdateHome = () => {
           task: task.task,
           completed: false,
           homeIcon: data.homeIcon,
-          start: recurrenceDateStart,
-          end: new Date(recurrenceDateStart.setHours(13,0,0))
+          start: recurrenceDate.setHours(12, 0, 0),
+          end: recurrenceDate.setHours(13, 0, 0)
         }
 
         await fetchAddEntry(entry)
@@ -267,9 +269,12 @@ const useUpdateHome = () => {
       //delete all tasks for the items now unchecked, and custom tasks removed
       let unselectedItemsEntries = entriesList.filter(entry => itemsNewlyUnselected.includes(entry.item))
       let removedCustomTasksEntries = entriesList.filter(entry => customTasksNewlyRemoved.find(task => task.item===entry.item && task.task===entry.task))
-      let entryIdsToDelete = unselectedItemsEntries.concat(removedCustomTasksEntries).map(entry => entry._id)
-
-      entryIdsToDelete.forEach(async (id) => await deleteEntry(id))  
+      let entriesToDelete = [...unselectedItemsEntries, ...removedCustomTasksEntries]
+      
+      entriesToDelete.forEach(async (entry) => {
+        console.log(`deleting calendarEntry for task: "${entry.task} ${entry.item}"`)
+        await deleteEntry(entry._id)
+      })  
     }  
     catch (err) {
       console.log('error submitting new calendar entries: ', err)
@@ -277,6 +282,8 @@ const useUpdateHome = () => {
     }
 
     // - - - UPDATE THE HOME DOCUMENT - - - //
+    console.log("updating home now")
+
     try {
       let options = {
         method: "put",

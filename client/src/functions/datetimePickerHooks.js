@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
 
-const usePossessionDateByOwner = (watch, setValue, name) => {
+const usePossessionDateByOwner = (watch, setValue, isAddMode, name) => {
   const possessionDateValue = watch("possessionDateByOwner")
+  const shouldSetPossessionDate = (name==="possessionDateByOwner" && !possessionDateValue && isAddMode)
 
-  useEffect(() => name==="possessionDateByOwner" && !possessionDateValue && setValue(name, new Date()), [possessionDateValue])
+  useEffect(() => shouldSetPossessionDate && setValue(name, new Date()), [possessionDateValue])
 }
 
 

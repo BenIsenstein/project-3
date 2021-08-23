@@ -128,7 +128,8 @@ const SuperForm = ({
     setValue,
     watch,
     errors,
-    getValues
+    getValues,
+    setResetValues
   }
 
   // Account for changes to 'openInEditView'
@@ -179,7 +180,7 @@ const SuperForm = ({
         }
 
         if (isMounted) {
-          setResetValues(valuesForReset)
+          setResetValues(prevState => {return { ...prevState, ...valuesForReset }})
           setAreDetailsLoaded(true)
         }
       }
@@ -235,7 +236,7 @@ const SuperForm = ({
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={isEditView ? (props.editViewCancel || resetForm) : (() => setViewMode('edit'))} />}                    
     </FlexSection>
     
-    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => {setIsSubmitting(true); await onSubmit(data)})}>  
+    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => {setIsSubmitting(true); await onSubmit(data); setIsSubmitting(false)})}>  
       <GroupOfInputs 
         inputs={inputs}
         {...modeAndView}
@@ -247,8 +248,8 @@ const SuperForm = ({
 
       {(isAddMode || isEditView) && 
         <FlexSection fullWidth marginTop1em>
-          <Button fullWidth important type={!isSubmitting ? 'submit' : 'button'} value='submit'>
-            {props.submitText || "Save"}
+          <Button fullWidth important type='submit' value='submit' disabled={isSubmitting}>
+            {isSubmitting ? "Please wait" : (props.submitText || "Save")}
           </Button>
           <Button 
             fullWidth 
@@ -267,38 +268,5 @@ const SuperForm = ({
     {props.AfterTemplate} 
   </FlexSection>
 }
-
-// const useSuperForm = () => {
-//   const { register, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
-
-//   const SuperForm = props => {
-
-//     useEffect(() => () => console.log("SuperForm inside SuperFormTemplate unmounted!"), [])
-
-//     return <SuperFormTemplate 
-//       {...{
-//         register,
-//         errors,
-//         handleSubmit,
-//         setValue,
-//         reset,
-//         watch,
-//         getValues
-//       }} 
-//       {...props}
-//     />
-//   }
-
-//   return {
-//     SuperForm,
-//     register,
-//     errors,
-//     handleSubmit,
-//     setValue,
-//     reset,
-//     watch,
-//     getValues
-//   }
-// }
 
 export default SuperForm
