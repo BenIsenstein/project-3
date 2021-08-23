@@ -101,6 +101,7 @@ const SuperForm = ({
   // - - - - - - - - - - - Hooks - - - - - - - - - - -
   const { register, unregister, formState: { errors }, handleSubmit, setValue, reset, watch, getValues } = useForm({})
   const [areDetailsLoaded, setAreDetailsLoaded] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasBeenChanged, setHasBeenChanged] = useState(false)
   const [viewMode, setViewMode] = useState(openInEditView ? 'edit' : 'details')
   const [resetValues, setResetValues] = useState({})
@@ -232,7 +233,7 @@ const SuperForm = ({
       {!props.displayOnly && isDetailsMode && <PencilIcon onClick={isEditView ? (props.editViewCancel || resetForm) : (() => setViewMode('edit'))} />}                    
     </FlexSection>
     
-    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => await onSubmit(data))}>  
+    <Form {...props.formProps} onSubmit={handleSubmit(async (data) => {setIsSubmitting(true); await onSubmit(data)})}>  
       <GroupOfInputs 
         inputs={inputs}
         {...modeAndView}
@@ -244,7 +245,7 @@ const SuperForm = ({
 
       {(isAddMode || isEditView) && 
         <FlexSection fullWidth marginTop1em>
-          <Button fullWidth important type='submit' value='submit'>
+          <Button fullWidth important type={!isSubmitting ? 'submit' : 'button'} value='submit'>
             {props.submitText || "Save"}
           </Button>
           <Button 

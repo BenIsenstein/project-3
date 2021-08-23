@@ -272,10 +272,8 @@ const useUpdateHome = () => {
       entryIdsToDelete.forEach(async (id) => await deleteEntry(id))  
     }  
     catch (err) {
-      alert(`
-        There was an error loading your home details. 
-        We're fixing it as fast as we can.
-      `)
+      console.log('error submitting new calendar entries: ', err)
+      alert("There was an error updating your home details. We're fixing it as fast as we can.")
     }
 
     // - - - UPDATE THE HOME DOCUMENT - - - //
@@ -293,11 +291,10 @@ const useUpdateHome = () => {
       history.goBack()
     }
     catch (err) {
-      console.log('error updating calendar entry: ', err)
+      console.log('error updating home: ', err)
       alert("There was an error updating your home details. We're fixing it as fast as we can.")
     }
 
-    
   }
 
   return updateHome

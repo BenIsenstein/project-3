@@ -27,8 +27,8 @@ router.post('/create/', async (req, res) => {
     // Search for the same ICS file in the GridFS database. If found, capture its '_id' value.
     let gridFSRecordId = ""
     let resFileSearch = await CalFile.findOne({ filename: wholeFileName })
-    if (resFileSearch._id) {
-      gridFSRecordId = resFileSearch._id
+    if (resFileSearch?._id) {
+      gridFSRecordId = resFileSearch?._id
     }
 
     // Build array of user's calendar entries, but only the incomplete ones, and only
@@ -152,7 +152,7 @@ router.post('/create/', async (req, res) => {
                 })
 
               // Clean up the temporary file if it exists, it is no longer needed.
-              fs.unlinkSync(tempFilePath)
+              //fs.unlinkSync(tempFilePath)
               console.log("Temporary ICS file deleted from 'tempICS' folder.")
 
             }
