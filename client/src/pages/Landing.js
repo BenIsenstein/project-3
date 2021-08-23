@@ -103,6 +103,7 @@ const LinkText = styled.h3`
   width: 60%;
   color: ${props => props.theme.titleColor};
   transition: all 1s ease;
+  text-decoration: underline;
 
   &:hover {
     transform: scale(1.1);
