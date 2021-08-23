@@ -4,6 +4,7 @@ import UserContext from '../UserContext'
 import { deleteSiBContact } from './manageSiBContacts'
 import stringRandomizer from './stringRandomizer'
 import { useUpdateICS } from '.'
+import { useGetAllInfo } from './useGetAllInfo'
 
 const useFetchAddEntry = () => {
 
@@ -32,7 +33,6 @@ const useFetchAddEntry = () => {
   }
 
   return fetchAddEntry
-
 }
 
 //updateEntry
@@ -89,6 +89,34 @@ const useAddEntry = () => {
   return addEntry
 }
 
+const useDeleteEntry = () => { 
+  let history = useHistory()
+  let updateICS = useUpdateICS()
+
+  const deleteEntry = async (entryId) => {
+    try {
+      let options = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      }
+      let response = await fetch(`/api/calendarEntry/delete/${entryId}`, options)
+      if (!response) return console.log("Error on DELETE method.")
+  
+      let resObject = await response.json()
+      if (!resObject.success) return alert("Your entry wasn't deleted for some reason. We're working on it.")
+    
+      // Deletion was successful. redirect back to calendar.
+      await updateICS() // Update user's ICS file
+      history.push(`/calendar`)      
+    }
+    catch (err) {
+      console.log("Problem DELETING entry!")
+    }
+  }
+
+  return deleteEntry
+}
+
 // addHome
 const useAddHome = () => {
   const history = useHistory()
@@ -130,7 +158,7 @@ const useAddHome = () => {
       console.log('addHomeObject: ', addHomeObject)
 
       if (!addHomeObject.success) return alert("Your home wasn't added for some reason. Please try again.")
-
+      // THIS IS THE BROKEN LINE OF CODE THAT ISNT ADDING THE NEW HOME TO USER CONTEXT
       userContext.setUser(user => data && { ...user, homes: [...user.homes, data] })
     }
     catch (err) {
@@ -149,11 +177,8 @@ const useAddHome = () => {
 
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
-
       let defaultDate = new Date(new Date())
-      //let defaultDate = new Date(new Date().setHours(12,0,0))).setNumberFormat('MM/dd/yyyy')
       defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
-
 
       return {
         completed: false,
@@ -186,9 +211,71 @@ const useAddHome = () => {
 const useUpdateHome = () => {
   const { id } = useParams()
   const history = useHistory()
+  const userContext = useContext(UserContext)
+  const deleteEntry = useDeleteEntry()
+  const fetchAddEntry = useFetchAddEntry()
+  const defaultTasks = useGetAllInfo()
 
   const updateHome = async (data) => {
+    // - - - DEAL WITH NEWLY SELECTED AND UNSELECTED ITEMS - - - //
+    try {
+      // fetch all calendar entries for current authenticated user
+      let entriesRes = await fetch(`/api/calendarEntry/getbyuser/${userContext.user?._id}`)
+      let entriesObject = await entriesRes.json()
+      
+      //fetch for the home in its former state
+      let homeRes = await fetch(`/api/home/get/${id}`)
+      let homeObject = await homeRes.json()
+      
+      //variables 
+      let entriesList = entriesObject.entryList.filter(entry => entry.homeId === id)
+      let oldHomeItems = homeObject.homeItems
+      let newHomeItems = data.homeItems
+      let oldCustomTasks = homeObject.customTasks || []
+      let newCustomTasks = data.customTasks || []
+   
+      //do a diff comparison between old and new custom tasks
+      let customTasksNewlyAdded = newCustomTasks.filter(newTask => !oldCustomTasks.find(oldTask => oldTask.item===newTask.item && oldTask.task===newTask.task))
+      let customTasksNewlyRemoved = oldCustomTasks.filter(oldTask => !newCustomTasks.find(newTask => newTask.item===oldTask.item && newTask.task===oldTask.task))
+      
+      //do a diff comparison between old and new selected items
+      let itemsNewlySelected = Object.keys(newHomeItems).filter(itemName => newHomeItems[itemName] && !oldHomeItems[itemName])
+      let itemsNewlyUnselected = Object.keys(oldHomeItems).filter(itemName => oldHomeItems[itemName] && !newHomeItems[itemName])
 
+      //add all tasks for the items now selected, and custom tasks added
+      let selectedItemsTasks = defaultTasks.filter(task => itemsNewlySelected.includes(task.item))
+      selectedItemsTasks.concat(customTasksNewlyAdded).forEach(async (task) => {
+        let recurrenceDateStart = new Date(new Date().setHours(12,0,0))
+        recurrenceDateStart.setDate(recurrenceDateStart.getDate() + task.frequency)
+
+        const entry = { 
+          userId: userContext.user?._id,
+          homeId: id,
+          item: task.item,
+          task: task.task,
+          completed: false,
+          start: recurrenceDateStart,
+          end: new Date(recurrenceDateStart.setHours(13,0,0))
+        }
+
+        await fetchAddEntry(entry)
+      })
+      
+      //delete all tasks for the items now unchecked, and custom tasks removed
+      let unselectedItemsEntries = entriesList.filter(entry => itemsNewlyUnselected.includes(entry.item))
+      let removedCustomTasksEntries = entriesList.filter(entry => customTasksNewlyRemoved.find(task => task.item===entry.item && task.task===entry.task))
+      let entryIdsToDelete = unselectedItemsEntries.concat(removedCustomTasksEntries).map(entry => entry._id)
+
+      entryIdsToDelete.forEach(async (id) => await deleteEntry(id))  
+    }  
+    catch (err) {
+      alert(`
+        There was an error loading your home details. 
+        We're fixing it as fast as we can.
+      `)
+    }
+
+    // - - - UPDATE THE HOME DOCUMENT - - - //
     try {
       let options = {
         method: "put",
@@ -206,10 +293,11 @@ const useUpdateHome = () => {
       console.log('error updating calendar entry: ', err)
       alert("There was an error updating your home details. We're fixing it as fast as we can.")
     }
+
+    
   }
 
   return updateHome
-
 }
 
 // updateAccount submit function
@@ -378,6 +466,7 @@ export {
   useChangePassword,
   useAddEntry,
   useUpdateEntry,
+  useDeleteEntry,
   useAddHome,
   useUpdateHome
 }

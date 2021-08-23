@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Page, PageContainer, FlexSection, FormSeparator, Button } from '../common'
 import SuperForm from '../components/SuperForm/SuperForm'
@@ -9,43 +9,38 @@ import { useItemTasksSelect } from '../components/SuperForm/DynamicSelects'
 import GroupOfInputs from '../components/SuperForm/GroupOfInputs'
 import StartAndEndDates from '../components/SuperForm/StartAndEndDates'
 import FindServicesButton from '../components/FindServicesButton'
-
+import UserContext from '../UserContext'
 
 const EntryDetails = () => {
   useHandleUserStatus()
   const { id } = useParams()
   const history = useHistory()
+  const userContext = useContext(UserContext)
   const updateEntry = useUpdateEntry()
   const { homeId, selectedTask, ItemTasksSelect } = useItemTasksSelect()
   const [isCompleted, setIsCompleted] = useState(false)
   const [undergoingCompletion, setUndergoingCompletion] = useState(false)
   const [isCompletedHandled, setIsCompletedHandled] = useState(false)
-  // const { SuperForm: DetailsForm } = useSuperForm()
-  // const { SuperForm: CompletionForm, setValue: completionSetValue } = useSuperForm()
+ 
   const shouldShowCompletion = (isCompleted || undergoingCompletion)
   const getEntryRoute = `/api/calendarEntry/get/${id}`
-  
-  // - - - - - LOGS TO FIND OUT ISCOMPLETED, SHOULdSHOWCOMPLETION - - - - -
-  console.log("isCompleted: ", isCompleted)
-  console.log("shouldShowCompletion: ", shouldShowCompletion)
 
   const completeEntry = useCallback(async (data) => {
     const { item, task } = selectedTask
-    const { nextRecurringDate, userId } = data
 
     data.newCalendarEntry = { 
-      userId,
+      userId: userContext.user?._id,
       homeId,
       item,
       task,
       completed: false,
-      start: nextRecurringDate,
-      end: new Date(nextRecurringDate.setHours(13,0,0))
+      start: data.nextRecurringDate,
+      end: new Date(data.nextRecurringDate.setHours(13,0,0))
     }
 
     await updateEntry(data)
 
-  }, [homeId, selectedTask, updateEntry])
+  }, [homeId, selectedTask, userContext.user, updateEntry])
 
   const updateCompletion = async (data) => {
     data.completed = true
@@ -156,14 +151,9 @@ const EntryDetails = () => {
       recurrenceFrequency: selectedTask?.frequency
     })
 
-    console.log("completionInputs: ", completionInputs)
     return completionInputs 
   }, 
   [isCompleted, selectedTask])
-
-  console.log("")
-  console.log("")
-  console.log('selectedTask?.frequency: ', selectedTask?.frequency)
 
   const CompleteTaskButton = () => !shouldShowCompletion && (
       <Button 

@@ -19,12 +19,6 @@ const UserProvider = ({ children }) => {
     setUserType(userType)
   }
 
-  //informative effect during debugging
-  useEffect(() => {
-    console.log('user: ', user)
-  
-  }, [user])
-
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {
