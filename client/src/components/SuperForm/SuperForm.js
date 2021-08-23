@@ -169,6 +169,7 @@ const SuperForm = ({
           // if the object is a <GroupOfInputs /> or <StartAndEndDates /> with an array of inputs:
           else {
             input?.inputs?.forEach(({ name }) => {
+              console.log("input?.as?.name: ", input?.as?.name)
               console.log(`setting ${name} to ${findValInDetails(name)}`)
               setValue(name, findValInDetails(name))
               valuesForReset[name] = findValInDetails(name)
