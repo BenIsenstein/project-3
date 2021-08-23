@@ -152,6 +152,7 @@ router.post('/create/', async (req, res) => {
                 })
 
               // Clean up the temporary file if it exists, it is no longer needed.
+              
               fs.unlinkSync(tempFilePath)
               console.log("Temporary ICS file deleted from 'tempICS' folder.")
 
