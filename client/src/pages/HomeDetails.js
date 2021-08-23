@@ -27,6 +27,7 @@ const HomeDetails = ({activatedHomesLength}) => {
       isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
+      asName: "GroupOfInputs",
       inputs: [
         {
           name: "city",
@@ -39,6 +40,7 @@ const HomeDetails = ({activatedHomesLength}) => {
           registerOptions: { required: "You must select a province." },
           isCustomComponent: true, 
           as: SuperFormSelect,
+          asName: "SuperFormSelect",
           options: [
             {value: "BC"},
             {value: "AB"},
@@ -75,6 +77,7 @@ const HomeDetails = ({activatedHomesLength}) => {
       registerOptions: { required: "You must select a building type." },
       isCustomComponent: true, 
       as: SuperFormSelect,
+      asName: "SuperFormSelect",
       options: [
         {value: "House"},
         {value: "Row/Townhouse"},
@@ -108,6 +111,7 @@ const HomeDetails = ({activatedHomesLength}) => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes,
+      asName: "GroupOfCheckboxes",
       homeId: id,
       detailsUrl: `/api/home/get/${id}`,
       inputs: defaultHomeItems.map(inputName => {return { name: `homeItems.${inputName}` }}),

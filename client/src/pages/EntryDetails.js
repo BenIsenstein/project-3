@@ -70,7 +70,8 @@ const EntryDetails = () => {
       name: "homeId",
       labelText: "home",
       isCustomComponent: true,
-      as: DisplayHomeFromId
+      as: DisplayHomeFromId,
+      asName: "DisplayHomeFromId"
     },
     {
       name: "item",
@@ -80,16 +81,19 @@ const EntryDetails = () => {
       name: "task",
       isCustomComponent: true,
       as: ItemTasksSelect,
+      asName: "ItemTasksSelect",
       registerOptions: { required: "You must choose a task." }
     },
     {
-      name: "notes"
+      name: "notes",
+      placeholder: "< ...service providers, description, etc  >"
     },    
     {
       isCustomComponent: true,
       forwardErrors: true,
       readOnly: true,
       as: StartAndEndDates,
+      asName: "StartAndEndDates",
       inputs: [
         {
           name: "start",
@@ -119,6 +123,7 @@ const EntryDetails = () => {
         isCustomComponent: true,
         forwardErrors: true,
         as: GroupOfInputs,
+        asName: "GroupOfInputs",
         inputs: [
           {
             name: "serviceProviderInfo.name",

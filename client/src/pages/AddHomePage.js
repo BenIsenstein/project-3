@@ -23,6 +23,7 @@ const AddHomePage = () => {
       //registerOptions: { required: "You must select a picture." },
       isCustomComponent: true, 
       as: SuperFormSelect,
+      asName: "SuperFormSelect",
       options:[
         {value: ""},
         {value: "\u0394"},
@@ -41,6 +42,7 @@ const AddHomePage = () => {
       isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
+      asName: "GroupOfInputs",
       inputs: [
         {
           name: "city",
@@ -53,6 +55,7 @@ const AddHomePage = () => {
           registerOptions: { required: "You must select a province." },
           isCustomComponent: true, 
           as: SuperFormSelect,
+          asName: "SuperFormSelect",
           options: [
             {value: "AB"},
             {value: "BC"},
@@ -89,6 +92,7 @@ const AddHomePage = () => {
       registerOptions: { required: "You must select a building type." },
       isCustomComponent: true, 
       as: SuperFormSelect,
+      asName: "SuperFormSelect",
       options: [
         {value: "House"},
         {value: "Row/Townhouse"},
@@ -122,6 +126,7 @@ const AddHomePage = () => {
       labelText: 'Items In Your Home',
       isCustomComponent: true,
       as: GroupOfCheckboxes, 
+      asName: "GroupOfCheckboxes",
       inputs: defaultHomeItems.map(inputName => {return { name: `homeItems.${inputName}` }})
     }
   ]

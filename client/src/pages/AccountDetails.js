@@ -16,9 +16,6 @@ const AccountDetails = ({setActivatedHomesLength}) => {
   const [undergoingPasswordChange, setUndergoingPasswordChange] = useState(false)
   const [activatedHomes, setActivatedHomes] = useState([])
   const [deactivatedHomes, setDeactivatedHomes] = useState([])
-  //const { SuperForm: AccountForm } = useSuperForm()
-  //const { SuperForm: PasswordForm } = useSuperForm()
-
 
   const ChangePasswordButton = () => !undergoingPasswordChange && <>
     <FlexSection fullWidth justifyStart marginTop1em>
@@ -37,6 +34,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
       isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
+      asName: "GroupOfInputs",
       inputs: [
         {
           name: "dateSignedUp",
@@ -61,6 +59,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
       isCustomComponent: true,
       forwardErrors: true,
       as: GroupOfInputs,
+      asName: "GroupOfInputs",
       inputs: [
         {
           name: "firstName",
@@ -94,6 +93,7 @@ const AccountDetails = ({setActivatedHomesLength}) => {
       labelText: "New password",
       isCustomComponent: true,
       as: ToggleVisibleInput,
+      asName: "ToggleVisibleInput",
       margin: "0 5px 0 0", 
       registerOptions: { 
         required: "You must input your new password.", 

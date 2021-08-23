@@ -16,17 +16,20 @@ const AddEntry = () => {
       name: "homeId",
       labelText: "home",
       isCustomComponent: true,
-      as: UserHomesSelect
+      as: UserHomesSelect,
+      asName: "UserHomesSelect",
     },
     {
       name: "item",
       isCustomComponent: true,
-      as: HomeItemsSelect
+      as: HomeItemsSelect,
+      asName: "HomeItemsSelect",
     },
     {
       name: "task",
       isCustomComponent: true,
       as: ItemTasksSelect,
+      asName: "ItemTasksSelect",
       registerOptions: { required: "You must choose a task." }
     },
     {
@@ -39,6 +42,7 @@ const AddEntry = () => {
       forwardErrors: true,
       readOnly: true,
       as: StartAndEndDates,
+      asName: "StartAndEndDates",
       inputs: [
         {
           name: "start",
