@@ -244,7 +244,9 @@ const useUpdateHome = () => {
 
       //add all tasks for the items now selected, and custom tasks added
       let selectedItemsTasks = defaultTasks.filter(task => itemsNewlySelected.includes(task.item))
-      selectedItemsTasks.concat(customTasksNewlyAdded).forEach(async (task) => {
+      let allTasksToAdd = [...selectedItemsTasks, ...customTasksNewlyAdded]
+
+      allTasksToAdd.forEach(async (task) => {
         let recurrenceDateStart = new Date(new Date().setHours(12,0,0))
         recurrenceDateStart.setDate(recurrenceDateStart.getDate() + task.frequency)
 
@@ -254,6 +256,7 @@ const useUpdateHome = () => {
           item: task.item,
           task: task.task,
           completed: false,
+          homeIcon: data.homeIcon,
           start: recurrenceDateStart,
           end: new Date(recurrenceDateStart.setHours(13,0,0))
         }
