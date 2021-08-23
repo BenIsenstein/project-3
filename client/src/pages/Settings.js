@@ -28,6 +28,15 @@ const Settings = () => {
   
   const CalendarFilterWithProps = () => <CalendarFilter checkedAll={checkedAll} setCheckedAll={setCheckedAll} checked={checked} setChecked={setChecked}/>
 
+  const cancelChanges = () => {
+    let tempStateObject = {
+      active: filterContext.active,
+      completed: filterContext.completed,
+      homes: filterContext.homes
+    }
+    setChecked(tempStateObject)
+  }
+
   const updateFilterPrefs = async (data) => {
     try {
       data.settings = {}
@@ -148,7 +157,10 @@ const Settings = () => {
               BeforeSubmitButton={<CalendarFilterWithProps />}
               titleText="Filters"
               onSubmit={updateFilterPrefs}
-              addModeCancel={() => setUndergoingPreferenceChange(false)}
+              addModeCancel={() => {
+                setUndergoingPreferenceChange(false);
+                cancelChanges();
+              }}
             />
            
           </FlexSection>
