@@ -105,41 +105,12 @@ router.post('/create/', async (req, res) => {
 
           // Write file to temporary folder to give it a path for using GridFS stream
           writeFileSync(tempFilePath, value)
-
           fs.exists(tempFilePath, (exists) => {
-            if (exists) { // Continue only if temporary ICS file was created.
+            if (exists) { // Set flag to indicate temp file was created.
+              console.log("Temp ICS file was created.")
 
               //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-              // Before writing the new ICS file to the database, delete
-              // the user's existing one if it exists. If we don't do this
-              // the user will end up with multiple ICS files, each with
-              // a different document _id, and the GET route will not know
-              // which one to stream back to the user's calendar app
-              // upon api request.
-
-              if (gridFSRecordId !== "") { // Previous ICS record exists in gridFS
-                console.log("Earlier version of the ICS file already exists in DB, attempting to delete...")
-                const fileObjId = mongoose.Types.ObjectId(gridFSRecordId)
-                let cursor = gridfsBucket.find({ _id: fileObjId })
-                let fileCheck
-                cursor.toArray()
-                  .then((results) => {
-                    fileCheck = results.length
-                    if (fileCheck === 0) {
-                      console.log(`Tried to delete the old version of ${wholeFileName} from database, but file not found.`)
-                    }
-                    else {
-                      gridfsBucket.delete(fileObjId)
-                      // await fileObjId.remove()
-                      console.log(`Successfully deleted OLD ics file ${wholeFileName} from database.`)
-                    }
-                  })
-              }
-              else {
-                console.log(`Initial DB query for the _id of ${wholeFileName} found nothing. No file to delete.`)
-              }
-
-              //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+              // Write the new ICS file to the database.
               // Stream data from the temp file into new file in GridFS.
               console.log("Attempting to create newly updated ICS file in database...")
               fs.createReadStream(tempFilePath)
@@ -149,17 +120,38 @@ router.post('/create/', async (req, res) => {
                 })
                 .on('finish', () => {
                   console.log("Done uploading ICS file to database")
+
+                  // Clean up the temporary file because it is no longer needed.
+                  fs.unlinkSync(tempFilePath)  // delete the temp ICS file
+                  console.log('Temp ICS file deleted!')
+
+                  // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                  // Delete user's previously existing ICS file from the database if it exists.
+                  if (gridFSRecordId !== "") { // Previous ICS record exists in gridFS
+                    console.log("Earlier version of the ICS file already exists in DB, attempting to delete...")
+                    const fileObjId = mongoose.Types.ObjectId(gridFSRecordId)
+                    let cursor = gridfsBucket.find({ _id: fileObjId })
+                    let fileCheck
+                    cursor.toArray()
+                      .then((results) => {
+                        fileCheck = results.length
+                        if (fileCheck === 0) {
+                          console.log(`Tried to delete the old version of ${wholeFileName} from database, but file not found.`)
+                        }
+                        else {
+                          gridfsBucket.delete(fileObjId)
+                          // await fileObjId.remove()
+                          console.log(`Successfully deleted OLD ics file ${wholeFileName} from database.`)
+                        }
+                      })
+                  }
+                  else {
+                    console.log(`Initial DB query for the _id of ${wholeFileName} found nothing. No file to delete.`)
+                  }
                 })
-
-              // Clean up the temporary file if it exists, it is no longer needed.
-              
-              fs.unlinkSync(tempFilePath)
-              console.log("Temporary ICS file deleted from 'tempICS' folder.")
-
             }
             else console.log("NOTE: Temp ICS file should have been created but was not!!!")
           })
-
         }
       )
     }
