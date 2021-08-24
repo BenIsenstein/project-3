@@ -97,6 +97,10 @@ const Button = styled.button.attrs(props => ({
 
     ${props => props.noBorder && css`
         border: none;
+
+        &:hover {
+            border: none;
+        }
     `}
 
     ${props => props.inline && css`
