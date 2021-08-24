@@ -405,14 +405,14 @@ const GroupOfCheckboxes = ({
   )
   
   // - - - - - - - RETURN JSX - - - - - - - - //
-  return areDetailsLoaded && <>
+  return (isAddMode || areDetailsLoaded) && <>
     <GridSection fullWidth {...props}>
       {allItems.map((input, index) => (props.readOnly || input.readOnly)
         ? watch(input.name) && <Li gridColumn="1/2" key={index}>{makeItemName(input.name)}</Li>
         : input.isCustomItem 
           ? <CustomCheckboxAndTasks index={index} {...input} />
           : <DefaultCheckboxAndTasks index={index} {...input} />
-      )}
+      )} 
     </GridSection>
     {allCustomTasks.map((task, index) => 
       <Fragment key={index}>

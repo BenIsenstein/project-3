@@ -231,26 +231,40 @@ const useUpdateHome = () => {
       let entriesList = entriesObject.entryList.filter(entry => entry.homeId === id)
       let oldHomeItems = homeObject.homeItems
       let newHomeItems = data.homeItems
+      console.log("oldHomeItems: ", oldHomeItems)
+      console.log("newHomeItems: ", newHomeItems)
+
       let oldCustomTasks = homeObject.customTasks || []
       let newCustomTasks = data.customTasks || []
+      console.log("oldCustomTasks: ", oldCustomTasks)
+      console.log("newCustomTasks: ", newCustomTasks)
    
       //do a diff comparison between old and new custom tasks
       let customTasksNewlyAdded = newCustomTasks.filter(newTask => !oldCustomTasks.find(oldTask => oldTask.item===newTask.item && oldTask.task===newTask.task))
       let customTasksNewlyRemoved = oldCustomTasks.filter(oldTask => !newCustomTasks.find(newTask => newTask.item===oldTask.item && newTask.task===oldTask.task))
-      
+      console.log("customTasksNewlyAdded: ", customTasksNewlyAdded)
+      console.log("customTasksNewlyRemoved: ", customTasksNewlyRemoved)
+
       //do a diff comparison between old and new selected items
       let itemsNewlySelected = Object.keys(newHomeItems).filter(itemName => newHomeItems[itemName] && !oldHomeItems[itemName])
       let itemsNewlyUnselected = Object.keys(oldHomeItems).filter(itemName => oldHomeItems[itemName] && !newHomeItems[itemName])
+      console.log("itemsNewlySelected: ", itemsNewlySelected)
+      console.log("itemsNewlyUnselected: ", itemsNewlyUnselected)
 
       //add all tasks for the items now selected, and custom tasks added
       let selectedItemsTasks = defaultTasks.filter(task => itemsNewlySelected.includes(task.item))
       let allTasksToAdd = [...selectedItemsTasks, ...customTasksNewlyAdded]
+      console.log("allTasksToAdd: ", allTasksToAdd)
 
       allTasksToAdd.forEach(async (task) => {
-        console.log(`adding calendarEntry for task: "${task.task} ${task.item}"`)
+        console.log(`adding calendarEntry for task: "${task.item} - ${task.task}"`)
+        console.log("task.frequency: ", task.frequency)
 
         let recurrenceDate = new Date(new Date())
+        console.log("recurrenceDate first init: ", recurrenceDate)
+
         recurrenceDate.setDate(recurrenceDate.getDate() + task.frequency)
+        console.log("recurrenceDate after adding frequency: ", recurrenceDate)
 
         const entry = { 
           userId: userContext.user?._id,
@@ -272,7 +286,7 @@ const useUpdateHome = () => {
       let entriesToDelete = [...unselectedItemsEntries, ...removedCustomTasksEntries]
       
       entriesToDelete.forEach(async (entry) => {
-        console.log(`deleting calendarEntry for task: "${entry.task} ${entry.item}"`)
+        console.log(`deleting calendarEntry for task: "${entry.item} - ${entry.task}"`)
         await deleteEntry(entry._id)
       })  
     }  
