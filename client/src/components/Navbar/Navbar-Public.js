@@ -4,7 +4,6 @@ import logo from '../../assets/taskr-logo.png'
 import { Button, FlexSection } from "../../common"
 
 const NavbarContainer = styled.div`
-    width: 100%;
     height: 3em;
     background: transparent;
     display: flex;
@@ -19,12 +18,12 @@ const NavbarContainer = styled.div`
 `
 
 const PublicHeader = styled.div`
-    width: 95%;
+    width: 95vw;
     display: flex;
     justify-content: space-between;
 
     @media (min-width: ${props => props.theme.smScreen}) {
-        width: 80%;
+        width: 80vw;
     }
 `
 

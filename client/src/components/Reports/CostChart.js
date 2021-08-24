@@ -157,7 +157,7 @@ const CostChart = () => {
   const filledData = fillTicksData(ticks, data);
 
   return (
-    <div>
+    <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1>COSTS-TO-DATE</h1>
       <p>Accumulated Total Costs (all homes)</p>
       <ResponsiveContainer width="100%" height={400}>

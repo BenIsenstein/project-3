@@ -34,8 +34,8 @@ const EntryDetails = () => {
       item,
       task,
       completed: false,
-      start: data.nextRecurringDate,
-      end: new Date(data.nextRecurringDate.setHours(13,0,0))
+      start: data.nextRecurringDate.setHours(12,0,0),
+      end: data.nextRecurringDate.setHours(13,0,0)
     }
 
     await updateEntry(data)

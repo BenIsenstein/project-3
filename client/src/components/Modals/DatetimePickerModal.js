@@ -49,7 +49,7 @@ const DatetimePickerModal = ({ watch, setValue, isAddMode, recurrenceFrequency, 
       actionOnConfirm={() => setValue(name, modalDate)}
       actionOnCancel={()=>{}}
     />
-    <Button type='button' onClick={toggleConfirmModal} {...props}>
+    <Button type='button' noBorder onClick={toggleConfirmModal} {...props}>
       { props.iconButton ? <CalendarIcon /> : 'Delete Event' }       
     </Button>
   </>

@@ -19,6 +19,7 @@ const StyledDateTimePicker = styled(DateTimePicker).attrs(props => ({
     border: 1px solid ${props => props.theme.prm};
     border-radius: 6px;
     outline: none;
+    z-index: 2;
     
     &:focus {
         padding: .4em .6em;

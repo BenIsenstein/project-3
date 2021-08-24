@@ -155,10 +155,12 @@ const useAddHome = () => {
       }
       let addHomeRes = await fetch(action, options)
       addHomeObject = await addHomeRes.json()
+      data._id = addHomeObject.homeId
+
       console.log('addHomeObject: ', addHomeObject)
 
       if (!addHomeObject.success) return alert("Your home wasn't added for some reason. Please try again.")
-      // THIS IS THE BROKEN LINE OF CODE THAT ISNT ADDING THE NEW HOME TO USER CONTEXT
+      
       userContext.setUser(user => data && { ...user, homes: [...user.homes, data] })
     }
     catch (err) {

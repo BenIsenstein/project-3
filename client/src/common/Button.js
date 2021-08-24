@@ -95,6 +95,10 @@ const Button = styled.button.attrs(props => ({
         margin: ${props.margin};
     `}
 
+    ${props => props.noBorder && css`
+        border: none;
+    `}
+
     ${props => props.inline && css`
         margin: 0 0 0 .6em;
         border: none;
