@@ -1,12 +1,31 @@
-# Introduction
+# Introduction - TASKr
 
-Made from Greg Fenton's SUPERHOEROES template.
+Team TYTHON welcomes you to its InceptionU - Project 3 submission... TASKr.
+Our team consists of members Art Treleaven (dev), Ben Isenstein (dev), Chloe Silvester (dev), Donna Dempsey (dev), and Tony Enerson (Product Owner / Scrum Master).
 
-This project is a MERN (MongoDB, ExpressJS, ReactJS, Node.js) application made
+THE CHALLENGE
+Household tasks never getting done? Whether forgetting the schedule or not knowing what to do, maintaining a home or managing a few can be challenging but we have an answer!
+
+OUR SOLUTION
+Now with TASKr, the recurring home management app, your maintenance tasks are only a
+click away. Upon creation of an account, you create your digital home with a customizable list of tasks based on industry-recognized standards.
+Notifications, lists and calendars are among the views you have to remind yourself of upcoming tasks and we’ll help you keep records once you are finished. We can even assist with finding service providers and tracking your costs, no matter how many homes you manage. 
+
+
+# Background
+
+The TASKr project began from the same REACT mono-repo structure of Greg Fenton's SUPERHOEROES template.
+It is a MERN (MongoDB, ExpressJS, ReactJS, Node.js) application made
 of two processes:
    1. an Express "server" providing API support for retrieving and submitting
    data from the backend
-   1. a React "client" providing a web-based UI
+   2. a React "client" providing a web-based UI
+
+
+# Using the online app
+
+TASKr has been deployed to the web using HEROKU, and can be launched using the following URL.
+https://taskr-1.herokuapp.com/
 
 
 # Working with this Codebase
@@ -35,123 +54,4 @@ You can run MongoDB locally on your machine or you can sign up for a no-cost(!)
 account at `https://www.mongodb.com/`.
 
 Once you have your MongoDB instance set up, simply edit the login information
-that is found in `server/models/db.js` under the comment `// SETUP MONGO/MONGOOSE`.
-
-For example, if you are using a local install you might set:
-
-```js
-const mongoUser = 'dbUser';
-const mongoPasswd = 'hideMe!!';
-const mongoDBName = 'my_mongo_db';
-const mongoServer = 'localhost:27017';
-```
-
-You might add the initial data used in the public MongoDB instance:
-
-```js
-[
-  {name: "Batwoman", nickname: null, alterego: "Kate Kane", sidekick: "Batgirl"},
-  {name: "Bat-Girl", nickname: null, alterego: "Betty Kane", sidekick: null},
-  {name: "Batman", nickname: "The Batman", alterego: "Bruce Wayne", sidekick: "Robin"},
-  {name: "Robin", nickname: "The Boy Wonder", alterego: "Dick Grayson", sidekick: null},
-]
-```
-
-# How this project was created
-
-> **NOTE**: you only want to review this section if you are going to create
-an entirely new project leveraging the same technologies and approach used for
-this project
-
-> **DOUBLE NOTE**: Tony manually modified this project since the creation, specifically removing the default index.js route, removing the jade view engine, and removing bin/www in lieu of a simpler use of server.js. If you follow the below steps you will end up with something that works but looks a bit different than what is checked in.
-
-Here are the command-line steps taken to create the initial version of this project:
-```bash
-$ mkdir superheroes
-$ cd superheroes
-$ npx create-react-app --use-npm client
-$ npx express-generator server
-$ rm -rf client/.git client/.gitignore client/yarn.k
-$ rm server/.gitignore
-$ cat <<- EOF > .gitignore
-# DIRECTORIES TO IGNORE
-**/.pnp/
-**/build/
-**/coverage/
-**/jspm_packages/
-**/logs/
-**/node_modules/
-**/pids/
-**/typings/
-**/.npm/
-
-# FILES TO IGNORE
-*.log
-*.pid
-*.pid.lock
-*.seed
-*.tgz
-.DS_Store
-.env.*.local
-.env.local
-.eslintcache
-.node_repl_history
-.yarn-integrity
-.next
-EOF
-$ cat <<- EOF > client/.env
-PORT=4444
-EOF
-$ git init
-$ git add .
-$ git status
-   On branch main
-   
-   No commits yet
-   
-   Changes to be committed:
-     (use "git rm --cached <file>..." to unstage)
-          new file:   .gitignore
-          new file:   README.md
-          new file:   client/.env
-          new file:   client/README.md
-          new file:   client/package-lock.json
-          new file:   client/package.json
-          new file:   client/public/favicon.ico
-          new file:   client/public/index.html
-          new file:   client/public/logo192.png
-          new file:   client/public/logo512.png
-          new file:   client/public/manifest.json
-          new file:   client/public/robots.txt
-          new file:   client/src/App.css
-          new file:   client/src/App.js
-          new file:   client/src/App.test.js
-          new file:   client/src/index.css
-          new file:   client/src/index.js
-          new file:   client/src/logo.svg
-          new file:   client/src/reportWebVitals.js
-          new file:   client/src/setupTests.js
-          new file:   server/app.js
-          new file:   server/bin/www
-          new file:   server/package.json
-          new file:   server/public/stylesheets/style.css
-          new file:   server/routes/index.js
-          new file:   server/routes/users.js
-          new file:   server/views/error.jade
-          new file:   server/views/index.jade
-          new file:   server/views/layout.jade
-$ git commit -m "initialize the project"
-```
-
-Now, we additionally enabled `nodemon` to reload the server code when it gets
-edited.  To do that:
-```bash
-$ cd server
-$ npm install --save-dev nodemon
-$ perl -p -i -e 's/"start": "node /"start": "nodemon /' package.json
-$ git add package.json 
-$ git commit -m "adding nodemon to speed development"
-$ cd ..
-```
-# mono-repo-template
-# project-3
+that is found in `server/models/db.js` using a locally stored ".env" file to store your unique and confidential connection string.

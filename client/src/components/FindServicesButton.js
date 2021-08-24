@@ -73,6 +73,7 @@ const FindServicesButton = ({ taskId }) => {
       urlSearchString = urlSearchString.replace(' ', '+')
       urlSearchString = urlSearchString.replace('-', '+')
       urlSearchString = urlSearchString.replace('/', '+')
+      urlSearchString = urlSearchString.replace('&', '+')
 
       // Append the remainder of the search string onto the static portion of the URL
       URL = URL + urlSearchString
