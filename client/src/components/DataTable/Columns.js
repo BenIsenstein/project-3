@@ -1,18 +1,27 @@
 import { TypeColumnFilter, NumberRangeColumnFilter } from "./TabFilters";
 
+const mediaQuery = window.matchMedia('(min-width: 641px)')
+let textFieldWidth = 130
+let numberFieldWidth = 80
+
+if (mediaQuery.matches) {
+    textFieldWidth = 250
+    numberFieldWidth = 150
+}
+
 export const columnHeaders = [
     {
         Header: 'Item',
         accessor: 'item',
         Filter: TypeColumnFilter,
-        // width: 120
+        width: textFieldWidth
     },
     {
         Header: 'Task',
         accessor: 'task',
         Filter: TypeColumnFilter,
         disableFilters: true,
-        // width: 120
+        width: textFieldWidth
     },
 
     {
@@ -20,8 +29,7 @@ export const columnHeaders = [
         accessor: 'frequency',
         Filter: NumberRangeColumnFilter,
         disableFilters: true,
-        maxWidth: 110,
-        
+        maxWidth: numberFieldWidth
     },
 ]
 
