@@ -187,7 +187,7 @@ const useAddHome = () => {
         completed: false,
         userId: data.userId,
         homeId: addHomeObject.homeId,
-        homeIcon: addHomeObject.homeIcon,
+        homeIcon: addHomeObject.homeIcon, 
         item: taskObject.item,
         task: taskObject.task,
         notes: "",
@@ -198,15 +198,15 @@ const useAddHome = () => {
 
     for (let newEntry of newCalendarEntries) await fetchAddEntry(newEntry)
 
+    // update user's ICS file
+    await updateICS()
+
     if (userContext.user.homes?.length > 0) { // Only navigate to ACCOUNT page if this is the user's FIRST home
       history.goBack()
     }
     else {
       history.push(`/calendar`)
     }
-
-    // update user's ICS file
-    await updateICS()
 
   }, [history, taskInfo, userContext])
 
@@ -315,12 +315,11 @@ const useUpdateHome = () => {
       let resObject = await res.json()
 
       if (!resObject.success) return alert("Your home details wasn't updated for some reason. Please try again.")
-      //   history.push('/account')
-      history.goBack()
-
+      
       // update user's ICS file
       await updateICS()
 
+      history.goBack()
     }
     catch (err) {
       console.log('error updating home: ', err)

@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 import SuperForm from './SuperForm/SuperForm'
-import { useAddEntry } from '../functions'
+import { useAddEntry, useUpdateICS } from '../functions'
 import UserHomesSelect, { HomeItemsSelect, useItemTasksSelect } from './SuperForm/DynamicSelects'
 import GroupOfInputs from './SuperForm/GroupOfInputs'
 import StartAndEndDates from './SuperForm/StartAndEndDates'
@@ -8,6 +8,7 @@ import StartAndEndDates from './SuperForm/StartAndEndDates'
 const AddEntry = () => {  
   const history = useHistory()
   const addEntry = useAddEntry()
+  const updateICS = useUpdateICS()
   const { ItemTasksSelect } = useItemTasksSelect()
   //const { SuperForm } = useSuperForm()
   
@@ -62,7 +63,7 @@ const AddEntry = () => {
     titleText="New Task" 
     inputs={inputs} 
     addModeCancel={history.goBack} 
-    onSubmit={addEntry} 
+    onSubmit={async (data) => {await addEntry(data); await updateICS()}} 
   />
 }
 
