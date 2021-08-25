@@ -91,7 +91,7 @@ const useAddEntry = () => {
 
 const useDeleteEntry = () => { 
   let history = useHistory()
-  let updateICS = useUpdateICS()
+  //let updateICS = useUpdateICS()
 
   const deleteEntry = async (entryId) => {
     try {
@@ -106,7 +106,7 @@ const useDeleteEntry = () => {
       if (!resObject.success) return alert("Your entry wasn't deleted for some reason. We're working on it.")
     
       // Deletion was successful. redirect back to calendar.
-      await updateICS() // Update user's ICS file
+      //await updateICS() // Update user's ICS file
       history.push(`/calendar`)      
     }
     catch (err) {
@@ -181,7 +181,7 @@ const useAddHome = () => {
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
       let defaultDate = new Date()
-      
+
       defaultDate.setDate(parseInt(defaultDate.getDate()) + parseInt(taskObject.frequency))
 
       return {
