@@ -8,7 +8,7 @@ import { useGetAllInfo } from './useGetAllInfo'
 
 const useFetchAddEntry = () => {
 
-  let updateICS = useUpdateICS()
+  // let updateICS = useUpdateICS()
 
   const fetchAddEntry = async (data) => {
     try {
@@ -22,9 +22,9 @@ const useFetchAddEntry = () => {
       let resObject = await res.json()
 
       if (!resObject.success) alert("Your entry wasn't added for some reason. Please try again.")
-      else {
-        await updateICS()
-      }
+      // else {
+      //   await updateICS()
+      // }
     }
     catch (err) {
       console.log('error adding calendar entry: ', err)
@@ -123,6 +123,7 @@ const useAddHome = () => {
   const userContext = useContext(UserContext)
   const [taskInfo, setTaskInfo] = useState([])
   let fetchAddEntry = useFetchAddEntry()
+  let updateICS = useUpdateICS()
 
   useEffect(() => {
     const getAllInfo = async () => {
@@ -204,6 +205,9 @@ const useAddHome = () => {
       history.push(`/calendar`)
     }
 
+    // update user's ICS file
+    await updateICS()
+
   }, [history, taskInfo, userContext])
 
   return addHome
@@ -217,6 +221,7 @@ const useUpdateHome = () => {
   const deleteEntry = useDeleteEntry()
   const fetchAddEntry = useFetchAddEntry()
   const defaultTasks = useGetAllInfo()
+  let updateICS = useUpdateICS()
 
   const updateHome = async (data) => {
     // - - - DEAL WITH NEWLY SELECTED AND UNSELECTED ITEMS - - - //
@@ -312,6 +317,10 @@ const useUpdateHome = () => {
       if (!resObject.success) return alert("Your home details wasn't updated for some reason. Please try again.")
       //   history.push('/account')
       history.goBack()
+
+      // update user's ICS file
+      await updateICS()
+
     }
     catch (err) {
       console.log('error updating home: ', err)

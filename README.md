@@ -4,10 +4,12 @@ Team TYTHON welcomes you to its InceptionU - Project 3 submission... TASKr.
 
 Our team consists of members Art Treleaven (dev), Ben Isenstein (dev), Chloe Silvester (dev), Donna Dempsey (dev), and Tony Enerson (Product Owner / Scrum Master).
 
-## THE CHALLENGE
+THE CHALLENGE
+=============
 Household tasks never getting done? Whether forgetting the schedule or not knowing what to do, maintaining a home or managing a few can be challenging, but we have an answer!
 
-## OUR SOLUTION
+OUR SOLUTION
+============
 Now with TASKr, the recurring home management app, your maintenance tasks are only a
 click away. Upon creation of an account, you create your digital home with a customizable list of tasks based on industry-recognized standards.
 Notifications, lists and calendars are among the views you have to remind yourself of upcoming tasks and we’ll help you keep records once you are finished. We can even assist with finding service providers and tracking your costs, no matter how many homes you manage. 
