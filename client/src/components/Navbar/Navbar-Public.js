@@ -9,8 +9,8 @@ const NavbarContainer = styled.div`
     background: transparent;
     display: flex;
     justify-content: center;
-    // position: sticky;
-    // top: 0;
+    position: sticky;
+    top: 0;
     z-index: 5;
 
     @media (min-width: ${props => props.theme.smScreen}) {
@@ -29,7 +29,7 @@ const PublicHeader = styled.div`
 `
 
 const Logo = styled.img`
-    height: 60%;
+    height: 1.8em;
     transition: all 1s ease;
     cursor: pointer;
 
@@ -38,7 +38,7 @@ const Logo = styled.img`
     }
 
     @media (min-width: ${props => props.theme.smScreen}) {
-        height: 40%;
+        height: 2em;
     }
 `
 
