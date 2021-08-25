@@ -158,7 +158,7 @@ const CostChart = () => {
 
   return (
     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h1>COSTS-TO-DATE</h1>
+      <h2>COSTS-TO-DATE</h2>
       <p>Accumulated Total Costs (all homes)</p>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart
@@ -182,16 +182,17 @@ const CostChart = () => {
             type="number"
             domain={domain}
             ticks={ticks}
+            tick={{fontSize: '.8em'}}
           />
-          <YAxis tickCount={6} hasTick />
+          <YAxis tickCount={6} hasTick tick={{fontSize: '.8em'}} />
           <Tooltip content={<CustomTooltip />} />
           <Area
             type="monotone"
             dataKey="val"
             // dataKey="cost"
-            stroke="#ff7300"
-            fill="#ff7300"
-            fillOpacity={0.9}
+            stroke="#5e868c"
+            fill="#759ba1"
+            fillOpacity={0.4}
           />
         </AreaChart>
       </ResponsiveContainer>
