@@ -52,17 +52,17 @@ const Calendar = () => {
         let list = entriesObject.entryList
         let datesArray = []
         // prepare list by making 'start' into a Date object
-        console.log(" ")
-        console.log(" ")
-        console.log("Usercontext homes array is ", userContext?.user?.homes)
-        console.log("adding homeIcon to each calendar entry")
+        // console.log(" ")
+        // console.log(" ")
+        // console.log("Usercontext homes array is ", userContext?.user?.homes)
+        // console.log("adding homeIcon to each calendar entry")
 
         list.forEach(entry => { 
-          console.log(" ")
-          console.log(" ")
-          console.log("entry.homeId: ", entry.homeId)
-          console.log("found matching home: ", userContext?.user?.homes.find(home => home._id === entry.homeId))
-          console.log("matching homeIcon: ", userContext?.user?.homes.find(home => home._id === entry.homeId)?.homeIcon)
+          // console.log(" ")
+          // console.log(" ")
+          // console.log("entry.homeId: ", entry.homeId)
+          // console.log("found matching home: ", userContext?.user?.homes.find(home => home._id === entry.homeId))
+          // console.log("matching homeIcon: ", userContext?.user?.homes.find(home => home._id === entry.homeId)?.homeIcon)
 
           entry.start = new Date(entry.start)
           entry.homeIcon = userContext?.user?.homes.find(home => home._id === entry.homeId)?.homeIcon

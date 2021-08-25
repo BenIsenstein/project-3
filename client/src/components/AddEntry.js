@@ -2,7 +2,6 @@ import { useHistory } from 'react-router-dom'
 import SuperForm from './SuperForm/SuperForm'
 import { useAddEntry, useUpdateICS } from '../functions'
 import UserHomesSelect, { HomeItemsSelect, useItemTasksSelect } from './SuperForm/DynamicSelects'
-import GroupOfInputs from './SuperForm/GroupOfInputs'
 import StartAndEndDates from './SuperForm/StartAndEndDates'
 
 const AddEntry = () => {  
@@ -10,7 +9,6 @@ const AddEntry = () => {
   const addEntry = useAddEntry()
   const updateICS = useUpdateICS()
   const { ItemTasksSelect } = useItemTasksSelect()
-  //const { SuperForm } = useSuperForm()
   
   const inputs = [
     {
@@ -37,7 +35,6 @@ const AddEntry = () => {
       name: "notes",
       placeholder: "< ...service providers, description, etc  >"
     },
-   
     {
       isCustomComponent: true,
       forwardErrors: true,
