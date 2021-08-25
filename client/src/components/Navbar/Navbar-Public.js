@@ -4,13 +4,13 @@ import logo from '../../assets/taskr-logo.png'
 import { Button, FlexSection } from "../../common"
 
 const NavbarContainer = styled.div`
-    width: 100vw;
+    width: 100%;
     height: 3em;
     background: transparent;
     display: flex;
     justify-content: center;
-    position: sticky;
-    top: 0;
+    // position: sticky;
+    // top: 0;
     z-index: 5;
 
     @media (min-width: ${props => props.theme.smScreen}) {
@@ -46,7 +46,7 @@ const PublicNavbar = () => {
     let history = useHistory()
 
     return <>
-        <NavbarContainer hamburger>
+        <NavbarContainer>
             <PublicHeader>
                 <FlexSection>
                     <Logo src={logo} onClick={() => history.push(`/`)}/>
