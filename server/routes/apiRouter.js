@@ -9,6 +9,7 @@ const infoRouter = require('./taskInfo')
 const sibContactRouter = require('./sibContact')
 const calFileRouter = require('./calFile')
 
+
 router.use('/auth', authRouter)
 router.use('/user', userRouter)
 router.use('/calendarEntry', calendarEntryRouter)
@@ -17,5 +18,6 @@ router.use('/home', homeRouter)
 router.use('/info', infoRouter)
 router.use('/sibContact', sibContactRouter)
 router.use('/calFile', calFileRouter)
+
 
 module.exports = router
