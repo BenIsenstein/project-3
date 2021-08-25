@@ -4,6 +4,7 @@ import logo from '../../assets/taskr-logo.png'
 import { Button, FlexSection } from "../../common"
 
 const NavbarContainer = styled.div`
+    width: 100%;
     height: 3em;
     background: transparent;
     display: flex;
@@ -18,17 +19,17 @@ const NavbarContainer = styled.div`
 `
 
 const PublicHeader = styled.div`
-    width: 95vw;
+    width: 95%;
     display: flex;
     justify-content: space-between;
 
     @media (min-width: ${props => props.theme.smScreen}) {
-        width: 80vw;
+        width: 80%;
     }
 `
 
 const Logo = styled.img`
-    height: 60%;
+    height: 1.8em;
     transition: all 1s ease;
     cursor: pointer;
 
@@ -37,7 +38,7 @@ const Logo = styled.img`
     }
 
     @media (min-width: ${props => props.theme.smScreen}) {
-        height: 40%;
+        height: 2em;
     }
 `
 
@@ -45,7 +46,7 @@ const PublicNavbar = () => {
     let history = useHistory()
 
     return <>
-        <NavbarContainer hamburger>
+        <NavbarContainer>
             <PublicHeader>
                 <FlexSection>
                     <Logo src={logo} onClick={() => history.push(`/`)}/>

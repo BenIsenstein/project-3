@@ -1,7 +1,7 @@
 import styled, {css} from 'styled-components'
 
-const FormSectionTitle = styled.span`
-    font-weight: bold;
+const FormSectionTitle = styled.h2`
+    font-size: 1em;
     color: ${props => props.theme.titleColor}
 
     ${props => props.margin && css`
