@@ -9,6 +9,7 @@ const PageContainer = styled.div`
     background-color: ${props => props.theme.bkg};
     border-radius: 10px;
     animation: ${fadeIn} 0.4s linear;
+    overflow: auto;
 
     ${props => props.flexColumn && css`
         display: flex;

@@ -81,14 +81,14 @@ const HomeDetails = ({activatedHomesLength}) => {
             {value: "BC"},
             {value: "AB"},
             {value: "SK"},
-            {value: "MA"},
+            {value: "MB"},
             {value: "ON"},
             {value: "QB"},
             {value: "PEI"},
             {value: "NL"},
             {value: "NB"},
             {value: "NS"},
-            {value: "YK"},
+            {value: "YT"},
             {value: "NWT"},
             {value: "NU"}
           ]
