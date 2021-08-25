@@ -180,8 +180,9 @@ const useAddHome = () => {
 
     let newCalendarEntries = relevantTasks.map(taskObject => {
 
-      let defaultDate = new Date(new Date())
-      defaultDate.setDate(defaultDate.getDate() + taskObject.frequency)
+      let defaultDate = new Date()
+      
+      defaultDate.setDate(parseInt(defaultDate.getDate()) + parseInt(taskObject.frequency))
 
       return {
         completed: false,
