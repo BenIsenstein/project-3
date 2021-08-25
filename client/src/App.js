@@ -27,6 +27,7 @@ import CostAnalysis from './pages/CostAnalysis'
 import Welcome from './pages/Welcome'
 import Confirm from './pages/Confirm'
 import Homes from './pages/Homes'
+import About from './pages/About'
 
 
 const App = () => {
@@ -55,7 +56,7 @@ const App = () => {
           <Route path='/welcome' component={Welcome} />
           <Route path='/confirm' component={Confirm} />
           <Route path='/homes' render={(...props) => (<Homes {...props} setActivatedHomesLength={setActivatedHomesLength} />)} />
-
+          <Route path='/about' component={About} />
 
         </Switch>
       <Footer />
